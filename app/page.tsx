@@ -505,7 +505,7 @@ export default function Home() {
           </ul>
         </div>
         <div className="reveal reveal-delay-1">
-          <h2 className="section-title" style={{fontSize:'2rem'}}>Bring<br /><em>These Yourself</em></h2>
+          <h2 className="section-title" style={{fontSize:'2rem'}}>What to<br /><em>Bring</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>A few essentials to sort before you arrive.</p>
           <ul className="included-list not">
             <li><span className="icon">✦</span> International flights</li>
