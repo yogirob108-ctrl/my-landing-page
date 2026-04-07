@@ -403,6 +403,7 @@ export default function Home() {
               <li>Yak milking & daily routines</li>
               <li>Horse handling & riding practice</li>
               <li>Cultural exchange & shared meals</li>
+              <li style={{opacity:1, color:'var(--gold)'}}>Optional: van day trip to nearby historic sites & waterfalls</li>
             </ul>
           </div>
           <div className="itin-card reveal reveal-delay-1">
