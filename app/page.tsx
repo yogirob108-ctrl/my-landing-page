@@ -548,7 +548,7 @@ export default function Home() {
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">Application</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'2rem'}}>Tell Us<br /><em>About You</em></h2>
-          <form className="booking-form" onSubmit={(e) => { e.preventDefault(); const btn = e.currentTarget.querySelector('.submit-btn') as HTMLButtonElement; btn.textContent = '✓ Request Received — We\'ll be in touch soon'; btn.disabled = true; }}>
+          <form className="booking-form" action="https://formspree.io/f/xnjorabj" method="POST">
             <div className="form-grid">
               <div className="form-group"><label className="form-label">First Name</label><input className="form-input" type="text" placeholder="First name" required /></div>
               <div className="form-group"><label className="form-label">Last Name</label><input className="form-input" type="text" placeholder="Last name" required /></div>
