@@ -497,7 +497,7 @@ export default function Home() {
           <h2 className="section-title">Everything<br /><em>You Need</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,500 covers the full experience. No hidden costs.</p>
           <ul className="included-list">
-            <li><span className="icon">✦</span> Transport: capital city to village & return</li>
+            <li><span className="icon">✦</span> Transportation from Bat-Ulzii to the ger village & return</li>
             <li><span className="icon">✦</span> Host family accommodation (traditional gers)</li>
             <li><span className="icon">✦</span> 3 traditional Mongolian meals per day</li>
             <li><span className="icon">✦</span> Guided 4-day horseback trek</li>
