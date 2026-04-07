@@ -494,7 +494,7 @@ export default function Home() {
       <section className="included">
         <div className="reveal">
           <span className="section-eyebrow">What&apos;s Included</span>
-          <h2 className="section-title">Everything<br /><em>You Need</em></h2>
+          <h2 className="section-title">Everything<br /><em>Included</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,500 covers the full experience. No hidden costs.</p>
           <ul className="included-list">
             <li><span className="icon">✦</span> Transportation from Bat-Ulzii to the ger village & return</li>
