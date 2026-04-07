@@ -510,12 +510,12 @@ export default function Home() {
           <h2 className="section-title" style={{fontSize:'2rem'}}>Bring<br /><em>These Yourself</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>A few essentials to sort before you arrive.</p>
           <ul className="included-list not">
-            <li>International flights</li>
-            <li>Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
-            <li>Camping gear & sleeping bag</li>
-            <li>Personal snacks & trail food</li>
-            <li>Appropriate clothing for riding</li>
-            <li>Personal medications</li>
+            <li><span className="icon">✦</span> International flights</li>
+            <li><span className="icon">✦</span> Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
+            <li><span className="icon">✦</span> Camping gear & sleeping bag</li>
+            <li><span className="icon">✦</span> Personal snacks & trail food</li>
+            <li><span className="icon">✦</span> Appropriate clothing for riding</li>
+            <li><span className="icon">✦</span> Personal medications</li>
           </ul>
           <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
             <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver and provide proof of travel insurance before the trip begins.</p>
