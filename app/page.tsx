@@ -359,6 +359,52 @@ export default function Home() {
         <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Riding along the river" loading="lazy" /></div>
         <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Riding along the river" loading="lazy" /></div>
       </div>
+      {/* GETTING THERE */}
+      <section style={{background:'var(--ink)', padding:'8rem 6rem'}}>
+        <div className="reveal">
+          <span className="section-eyebrow">Getting There</span>
+          <h2 className="section-title">Your Journey<br /><em>Starts in UB</em></h2>
+        </div>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'6rem', marginTop:'3rem', alignItems:'start'}}>
+          <div className="reveal">
+            <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Use the apps below to find the right route and purchase your ticket.</p>
+            <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Coordinate your arrival time directly via WhatsApp before departure.</p>
+            <div style={{marginTop:'2.5rem', padding:'1.5rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
+              <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.8rem'}}>Need Help?</p>
+              <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7}}>Contact us on WhatsApp and we'll help you sort out your bus and coordinate pickup with the family.</p>
+              <a href="https://wa.me/18582317131" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', marginTop:'1rem', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
+                WhatsApp Us →
+              </a>
+            </div>
+          </div>
+          <div className="reveal reveal-delay-1">
+            <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1.5rem'}}>Recommended Apps</p>
+            <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
+              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
+                <div style={{width:'48px', height:'48px', background:'#f97316', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>🚌</div>
+                <div>
+                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UB Smart Bus</p>
+                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Find bus routes and schedules from Ulaanbaatar to the countryside</p>
+                </div>
+              </div>
+              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
+                <div style={{width:'48px', height:'48px', background:'#eab308', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>🚕</div>
+                <div>
+                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UBCab</p>
+                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Get around Ulaanbaatar before your departure</p>
+                </div>
+              </div>
+              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
+                <div style={{width:'48px', height:'48px', background:'#6366f1', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>💳</div>
+                <div>
+                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UBCARD</p>
+                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Load credit for bus payments in the city</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* INCLUDED */}
       <section className="included">
         <div className="reveal">
