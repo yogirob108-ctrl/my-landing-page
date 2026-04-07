@@ -601,6 +601,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section style={{background:'var(--ink)', padding:'7rem 2rem'}}>
+        <div style={{maxWidth:'760px', margin:'0 auto'}}>
+          <div className="reveal" style={{marginBottom:'4rem'}}>
+            <span className="section-eyebrow">FAQ</span>
+            <h2 className="section-title">Common<br /><em>Questions</em></h2>
+          </div>
+          {[
+            {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
+            {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete."},
+            {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
+            {q:'Do I need a visa?', a:'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.'},
+            {q:"What's the weather like in June?", a:'Expect warm days between 60–75°F and cool nights. Pack layers — mornings and evenings on the steppe can get cold.'},
+            {q:'What do we eat?', a:'Three traditional Mongolian meals are provided daily. Meals are meat-heavy but vegetarian options can be accommodated — let us know in your booking form.'},
+            {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas. Starlink internet is available while staying at the ger village.'},
+            {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
+            {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
+            {q:'What is your cancellation policy?', a:'The $450 deposit is non-refundable. The remaining balance of $1,050 is due before departure and is also non-refundable within 30 days of the trip start date.'},
+          ].map(({q, a}, i) => (
+            <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
+              <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
+              <p style={{fontSize:'0.875rem', color:'var(--mist)', lineHeight:1.75, opacity:0.8}}>{a}</p>
+            </div>
+          ))}
+          <div style={{borderTop:'1px solid rgba(200,169,110,0.15)'}} />
+        </div>
+      </section>
+
       <footer>
         <div>
           <div className="footer-logo">8 Lakes Tours</div>
