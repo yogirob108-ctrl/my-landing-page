@@ -375,6 +375,7 @@ export default function Home() {
           </blockquote>
           <p className="section-body">8 Lakes Tours exists through a close collaboration with a Mongolian nomadic family who host and guide every journey. Guests stay with them, eat with them, ride with them, and learn from generations of knowledge that no guidebook can teach.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Every booking directly and fairly supports the host family. This is sustainable tourism done honestly.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>Our host family is led by Ganbold, a deeply respected nomadic horseman whose family has called the Orkhon Valley home for generations. We first met Ganbold while learning to ride and trek across Mongolia — his family welcomed us with the same warmth and generosity they extend to every guest. Their knowledge of the land, the horses, and the nomadic way of life is unmatched. This partnership was built on mutual respect and a shared belief that meaningful travel should benefit the people and places it touches.</p>
         </div>
         <div style={{display:'flex', flexDirection:'column'}}>
           <div className="partnership-img reveal">
