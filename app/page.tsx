@@ -339,7 +339,7 @@ export default function Home() {
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">What This Is</span>
           <h2 className="section-title">Mongolia<br /><em>Beyond Tourism</em></h2>
-          <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, help milk yaks, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
+          <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is built for people who want to be somewhere real — not just pass through it.</p>
           <div style={{marginTop:'2.5rem', display:'flex', gap:'2rem', flexWrap:'wrap'}}>
             <div><span style={{fontFamily:"'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Beginner</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Riders Welcome</p></div>
