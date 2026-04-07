@@ -619,7 +619,7 @@ export default function Home() {
             {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas. Starlink internet is available while staying at the ger village.'},
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
-            {q:'What is your cancellation policy?', a:'The $450 deposit is non-refundable. The remaining balance of $1,050 is due before departure and is also non-refundable within 30 days of the trip start date.'},
+            {q:'What is your cancellation policy?', a:'The $450 deposit is non-refundable. The remaining balance of $1,050 is paid directly to the host family in cash upon arrival.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
