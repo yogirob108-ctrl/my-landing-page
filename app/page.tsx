@@ -254,9 +254,6 @@ export default function Home() {
       <section className="intro" id="experience">
         <div className="intro-img reveal">
           <img src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" loading="lazy" />
-          <div className="intro-img-accent">
-            <img src="/images/gers.jpg" alt="Traditional gers on the steppe" loading="lazy" />
-          </div>
         </div>
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">What This Is</span>
