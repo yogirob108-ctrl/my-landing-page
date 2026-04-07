@@ -493,7 +493,6 @@ export default function Home() {
       {/* INCLUDED */}
       <section className="included">
         <div className="reveal">
-          <span className="section-eyebrow">What&apos;s Included</span>
           <h2 className="section-title">Everything<br /><em>Included</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,500 covers the full experience. No hidden costs.</p>
           <ul className="included-list">
@@ -506,7 +505,6 @@ export default function Home() {
           </ul>
         </div>
         <div className="reveal reveal-delay-1">
-          <span className="section-eyebrow">Not Included</span>
           <h2 className="section-title" style={{fontSize:'2rem'}}>Bring<br /><em>These Yourself</em></h2>
           <p className="section-body" style={{marginBottom:'2rem'}}>A few essentials to sort before you arrive.</p>
           <ul className="included-list not">
