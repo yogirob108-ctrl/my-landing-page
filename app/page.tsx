@@ -216,6 +216,8 @@ export default function Home() {
           footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 3rem 2rem; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
+          .partnership-img { min-height: unset; }
+          .partnership-img img { height: auto; object-fit: contain; }
           .form-grid { grid-template-columns: 1fr; }
           .intro-img-accent { display: none; }
         }
