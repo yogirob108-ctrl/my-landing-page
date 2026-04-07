@@ -489,9 +489,7 @@ export default function Home() {
                 <label className="form-label">Preferred Tour Date</label>
                 <select className="form-select">
                   <option value="">Select date</option>
-                  <option>Date Option 1 — TBD</option>
-                  <option>Date Option 2 — TBD</option>
-                  <option>Date Option 3 — TBD</option>
+                  <option>June 22–30</option>
                   <option>Custom Group Date</option>
                 </select>
               </div>
