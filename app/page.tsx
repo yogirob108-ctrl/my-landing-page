@@ -297,8 +297,13 @@ export default function Home() {
           <p className="section-body">8 Lakes Tours exists through a close collaboration with a Mongolian nomadic family who host and guide every journey. Guests stay with them, eat with them, ride with them, and learn from generations of knowledge that no guidebook can teach.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Every booking directly and fairly supports the host family. This is sustainable tourism done honestly.</p>
         </div>
-        <div className="partnership-img reveal">
-          <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
+        <div style={{display:'flex', flexDirection:'column'}}>
+          <div className="partnership-img reveal">
+            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
+          </div>
+          <div className="partnership-img reveal">
+            <img src="/images/partnership2.jpg" alt="Mongolian host family partnership" loading="lazy" />
+          </div>
         </div>
       </section>
 
