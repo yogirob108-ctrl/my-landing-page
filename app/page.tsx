@@ -130,7 +130,7 @@ export default function Home() {
         }
         .hero-bg {
           position: absolute; inset: 0;
-          background-image: url('/images/hero.jpg');
+          background-image: url('/images/hero.webp');
           background-size: cover; background-position: center 30%;
           animation: heroZoom 12s ease-out forwards;
         }
@@ -334,7 +334,7 @@ export default function Home() {
       {/* INTRO */}
       <section className="intro" id="experience">
         <div className="intro-img reveal">
-          <img src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" loading="lazy" />
+          <img src="/images/guide.webp" alt="Mongolian horseman in traditional dress" loading="lazy" />
         </div>
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">What This Is</span>
@@ -352,11 +352,11 @@ export default function Home() {
       {/* PHOTO STRIP */}
       <div className="photo-strip">
         {[
-          {src:'/images/riding1.jpg', caption:'The Open Steppe'},
-          {src:'/images/water-crossing.jpg', caption:'River Crossings'},
-          {src:'/images/landscape1.jpg', caption:'Alpine Lakes Region'},
-          {src:'/images/gers.jpg', caption:'Life Inside a Ger'},
-          {src:'/images/sunset.jpg', caption:'Steppe Sunsets'},
+          {src:'/images/riding1.webp', caption:'The Open Steppe'},
+          {src:'/images/water-crossing.webp', caption:'River Crossings'},
+          {src:'/images/landscape1.webp', caption:'Alpine Lakes Region'},
+          {src:'/images/gers.webp', caption:'Life Inside a Ger'},
+          {src:'/images/sunset.webp', caption:'Steppe Sunsets'},
         ].map((item) => (
           <div className="strip-item" key={item.src}>
             <img src={item.src} alt={item.caption} loading="lazy" />
@@ -379,10 +379,10 @@ export default function Home() {
         </div>
         <div style={{display:'flex', flexDirection:'column'}}>
           <div className="partnership-img reveal">
-            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
+            <img src="/images/family.webp" alt="Group photo with Mongolian host family" loading="lazy" />
           </div>
           <div className="partnership-img reveal">
-            <img src="/images/partnership2.jpg" alt="Mongolian host family partnership" loading="lazy" />
+            <img src="/images/partnership2.webp" alt="Mongolian host family partnership" loading="lazy" />
           </div>
         </div>
       </section>
@@ -435,14 +435,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><img src="/images/lake.jpg" alt="Eight Lakes region Mongolia" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding2.jpg" alt="Riding through the valley" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic1.jpg" alt="Traditional Mongolian ger" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic2.jpg" alt="Sunburst over the steppe" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="The journey van" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Panorama at sunset" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Riding along the river" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Riding along the river" loading="lazy" /></div>
+        <div className="mosaic-item tall"><img src="/images/lake.webp" alt="Eight Lakes region Mongolia" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding2.webp" alt="Riding through the valley" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic1.webp" alt="Traditional Mongolian ger" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic2.webp" alt="Sunburst over the steppe" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic3.webp" alt="The journey van" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic4.webp" alt="Panorama at sunset" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding3.webp" alt="Riding along the river" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic5.webp" alt="Riding along the river" loading="lazy" /></div>
       </div>
       {/* GETTING THERE */}
       <section style={{background:'var(--ink)', padding:'8rem 6rem'}}>
