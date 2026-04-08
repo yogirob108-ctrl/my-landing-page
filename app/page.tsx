@@ -120,7 +120,7 @@ export default function Home() {
           font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
           color: var(--cream); text-decoration: none;
           border: 1px solid rgba(245,240,232,0.4); padding: 0.6rem 1.4rem;
-          transition: all 0.3s ease;
+          transition: all 0.3s ease; white-space: nowrap;
         }
         .nav-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
 
