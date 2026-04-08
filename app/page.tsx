@@ -267,6 +267,8 @@ export default function Home() {
         .submit-btn:hover { background: var(--rust); color: var(--cream); }
         .submit-btn:disabled { background: var(--sage); color: var(--cream); cursor: default; }
 
+        .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
+        .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
         .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 6rem; }
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
@@ -293,6 +295,8 @@ export default function Home() {
           .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
           .mosaic-item.tall { grid-row: span 1; }
           footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 3rem 2rem; }
+          .getting-there-section { padding: 4rem 1.5rem; }
+          .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
           .partnership-img { min-height: unset; }
@@ -445,12 +449,12 @@ export default function Home() {
         <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Riding along the river" loading="lazy" /></div>
       </div>
       {/* GETTING THERE */}
-      <section style={{background:'var(--ink)', padding:'8rem 6rem'}}>
+      <section className="getting-there-section">
         <div className="reveal">
           <span className="section-eyebrow">Getting There</span>
           <h2 className="section-title">Your Journey<br /><em>Starts in UB</em></h2>
         </div>
-        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'6rem', marginTop:'3rem', alignItems:'start'}}>
+        <div className="getting-there-grid">
           <div className="reveal">
             <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Use the apps below to find the right route and purchase your ticket.</p>
             <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Coordinate your arrival time directly via WhatsApp before departure.</p>
