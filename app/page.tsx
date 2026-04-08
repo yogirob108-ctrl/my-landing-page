@@ -457,9 +457,14 @@ export default function Home() {
             <div style={{marginTop:'2.5rem', padding:'1.5rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
               <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.8rem'}}>Need Help?</p>
               <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7}}>Contact us on WhatsApp and we'll help you sort out your bus and coordinate pickup with the family.</p>
-              <a href="https://wa.me/18582317131" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', marginTop:'1rem', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
-                WhatsApp Us →
-              </a>
+              <div style={{display:'flex', flexDirection:'column', gap:'0.6rem', marginTop:'1rem'}}>
+                <a href="https://wa.me/18582317131" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
+                  WhatsApp Us →
+                </a>
+                <a href="https://wa.me/97699800165" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
+                  WhatsApp Ganbold (+976 99 800 165) →
+                </a>
+              </div>
             </div>
           </div>
           <div className="reveal reveal-delay-1">
