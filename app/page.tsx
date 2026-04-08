@@ -287,8 +287,7 @@ export default function Home() {
         @media (max-width: 900px) {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
-          .hero { align-items: flex-start; }
-          .hero-content { padding: 6rem 2rem 0; }
+          .hero-content { padding: 0 2rem 5rem; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .itinerary-grid { grid-template-columns: 1fr; }
