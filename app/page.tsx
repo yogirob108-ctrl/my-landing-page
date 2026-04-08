@@ -153,7 +153,7 @@ export default function Home() {
         }
         .hero-eyebrow {
           font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
-          color: var(--gold); margin-bottom: 1.2rem;
+          color: #000; margin-bottom: 1.2rem;
         }
         .hero-title {
           font-family: 'Cormorant Garamond', serif;
