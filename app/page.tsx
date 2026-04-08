@@ -423,11 +423,11 @@ export default function Home() {
             <span className="itin-days">8–9</span>
             <span className="itin-tag">Days 8 – 9</span>
             <h3 className="itin-title">Village Return & Farewell</h3>
-            <p className="itin-desc">Return to the village for rest, shared meals, and reflection. Organized transportation back to the capital city included.</p>
+            <p className="itin-desc">Return to the village for rest, shared meals, and reflection. Organized transportation back to Bat-Ulzii included.</p>
             <ul className="itin-list">
               <li>Final meals with host family</li>
               <li>Rest & reflection</li>
-              <li>Return transport to capital</li>
+              <li>Return transport to Bat-Ulzii</li>
             </ul>
           </div>
         </div>
