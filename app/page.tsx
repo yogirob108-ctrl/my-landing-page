@@ -153,7 +153,7 @@ export default function Home() {
         }
         .hero-eyebrow {
           font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
-          color: #000; margin-bottom: 1.2rem; font-weight: 400;
+          color: #000; margin-bottom: 1.2rem; font-weight: 400; text-shadow: 0 0 12px rgba(255,255,255,0.6), 0 1px 4px rgba(0,0,0,0.8);
         }
         .hero-title {
           font-family: 'Cormorant Garamond', serif;
@@ -288,7 +288,6 @@ export default function Home() {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
           .hero-content { padding: 0 2rem 5rem; }
-          .hero-eyebrow { text-shadow: 0 0 12px rgba(255,255,255,0.6), 0 1px 4px rgba(0,0,0,0.8); }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .itinerary-grid { grid-template-columns: 1fr; }
