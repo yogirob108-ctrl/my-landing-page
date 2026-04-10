@@ -62,7 +62,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
               Cancel
             </button>
             <a
-              href={canProceed ? 'https://www.paypal.com/paypalme/RobertZaher1/450' : undefined}
+              href={canProceed ? 'https://paypal.me/RobertZaher1/450' : undefined}
               target="_blank"
               rel="noopener noreferrer"
               onClick={canProceed ? onAgree : e => e.preventDefault()}
