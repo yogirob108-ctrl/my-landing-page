@@ -4,7 +4,7 @@ import Script from 'next/script';
 
 function StripeBuyButton() {
   return (
-    <div dangerouslySetInnerHTML={{__html: `<stripe-buy-button buy-button-id="buy_btn_1TKXn9QL3EU4PMBSkfFyQxQK" publishable-key="pk_test_51TKXi5QL3EU4PMBSibYDqbWMcTwLNbWNGkXKTrhsHspSRgwzdQyexiLgQQBwbbU3OZrIiAnFOWsD0nypCduGgpMe00N3tb8cOK"></stripe-buy-button>`}} />
+    <div dangerouslySetInnerHTML={{__html: `<stripe-buy-button buy-button-id="buy_btn_1TKXn9QL3EU4PMBSkfFyQxQK" publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"></stripe-buy-button>`}} />
   );
 }
 
