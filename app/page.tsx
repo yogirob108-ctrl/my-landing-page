@@ -69,6 +69,9 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
             )}
             {canProceed && (
               <div style={{display:'flex',gap:'0.8rem'}}>
+                <div onClick={onAgree} style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <StripeBuyButton />
+                </div>
                 <a
                   href="https://paypal.me/RobertZaher1/450"
                   target="_blank"
@@ -78,9 +81,6 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
                 >
                   Pay via PayPal →
                 </a>
-                <div onClick={onAgree} style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                  <StripeBuyButton />
-                </div>
               </div>
             )}
             <button
@@ -615,6 +615,9 @@ export default function Home() {
                 A <strong style={{color:'var(--cream)'}}>$450 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,050</strong> is paid in cash directly to the host family upon arrival.
               </p>
               <div style={{display:'flex', gap:'0.8rem', justifyContent:'center', flexWrap:'wrap'}}>
+                <div onClick={() => setShowWaiver(true)} style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <StripeBuyButton />
+                </div>
                 <button
                   type="button"
                   onClick={() => setShowWaiver(true)}
@@ -623,9 +626,6 @@ export default function Home() {
                 >
                   Pay via PayPal →
                 </button>
-                <div onClick={() => setShowWaiver(true)} style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                  <StripeBuyButton />
-                </div>
               </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
