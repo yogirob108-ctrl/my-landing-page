@@ -576,6 +576,25 @@ export default function Home() {
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">Application</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'2rem'}}>Tell Us<br /><em>About You</em></h2>
+          <div style={{marginBottom:'2rem', padding:'1.5rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.35)', borderRadius:'4px'}}>
+            <p style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
+            <div style={{display:'flex', flexDirection:'column', gap:'0.6rem'}}>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.07)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px'}}>
+                <div>
+                  <p style={{fontSize:'1rem', fontFamily:"'Cormorant Garamond', serif", color:'var(--cream)', fontWeight:400, marginBottom:'0.15rem'}}>June 22 – 30, 2026</p>
+                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.7}}>9 Days · 8 Nights · Orkhon Valley, Mongolia</p>
+                </div>
+                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
+              </div>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.03)', border:'1px solid rgba(200,169,110,0.1)', borderRadius:'3px'}}>
+                <div>
+                  <p style={{fontSize:'1rem', fontFamily:"'Cormorant Garamond', serif", color:'var(--mist)', fontWeight:400, marginBottom:'0.15rem'}}>Custom Group Date</p>
+                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5}}>Private booking · Contact us to arrange</p>
+                </div>
+                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--mist)', opacity:0.5, whiteSpace:'nowrap'}}>On Request</span>
+              </div>
+            </div>
+          </div>
           <form className="booking-form" action="https://formspree.io/f/xnjorabj" method="POST">
             <div className="form-grid">
               <div className="form-group"><label className="form-label">First Name</label><input className="form-input" type="text" placeholder="First name" required /></div>
