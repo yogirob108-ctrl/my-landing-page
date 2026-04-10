@@ -1,12 +1,7 @@
 "use client";
 import { useState } from 'react';
-import Script from 'next/script';
 
-function StripeBuyButton() {
-  return (
-    <div dangerouslySetInnerHTML={{__html: `<stripe-buy-button buy-button-id="buy_btn_1TKXn9QL3EU4PMBSkfFyQxQK" publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"></stripe-buy-button>`}} />
-  );
-}
+const STRIPE_LINK = 'https://buy.stripe.com/cNi3coc6RgPK50saip0gw00';
 
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
   const [signature, setSignature] = useState('');
@@ -69,9 +64,15 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
             )}
             {canProceed && (
               <div style={{display:'flex',gap:'0.8rem'}}>
-                <div onClick={onAgree} style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                  <StripeBuyButton />
-                </div>
+                <a
+                  href={STRIPE_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onAgree}
+                  style={{flex:1,padding:'0.8rem',background:'#635bff',border:'1px solid #635bff',color:'#fff',fontSize:'0.75rem',letterSpacing:'0.15em',textTransform:'uppercase',cursor:'pointer',borderRadius:'3px',textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center'}}
+                >
+                  Pay via Stripe →
+                </a>
                 <a
                   href="https://paypal.me/RobertZaher1/450"
                   target="_blank"
@@ -615,9 +616,14 @@ export default function Home() {
                 A <strong style={{color:'var(--cream)'}}>$450 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,050</strong> is paid in cash directly to the host family upon arrival.
               </p>
               <div style={{display:'flex', gap:'0.8rem', justifyContent:'center', flexWrap:'wrap'}}>
-                <div onClick={() => setShowWaiver(true)} style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                  <StripeBuyButton />
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowWaiver(true)}
+                  className="submit-btn"
+                  style={{background:'#635bff', borderColor:'#635bff', cursor:'pointer', flex:'1', minWidth:'160px'}}
+                >
+                  Pay via Stripe →
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowWaiver(true)}
@@ -684,7 +690,6 @@ export default function Home() {
           if (nav) nav.style.background = window.scrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
         });
       `}} />
-      <Script src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
     </>
   );
 }
