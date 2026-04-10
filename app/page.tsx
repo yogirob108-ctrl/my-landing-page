@@ -1,5 +1,12 @@
 "use client";
 import { useState } from 'react';
+import Script from 'next/script';
+
+function StripeBuyButton() {
+  return (
+    <div dangerouslySetInnerHTML={{__html: `<stripe-buy-button buy-button-id="buy_btn_1TKXn9QL3EU4PMBSkfFyQxQK" publishable-key="pk_test_51TKXi5QL3EU4PMBSibYDqbWMcTwLNbWNGkXKTrhsHspSRgwzdQyexiLgQQBwbbU3OZrIiAnFOWsD0nypCduGgpMe00N3tb8cOK"></stripe-buy-button>`}} />
+  );
+}
 
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
   const [signature, setSignature] = useState('');
@@ -71,15 +78,9 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
                 >
                   Pay via PayPal →
                 </a>
-                <a
-                  href="https://buy.stripe.com/test_6oU00lfvQ3D48fQbVQ1kA00"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={onAgree}
-                  style={{flex:1,padding:'0.8rem',background:'#635bff',border:'1px solid #635bff',color:'#fff',fontSize:'0.75rem',letterSpacing:'0.15em',textTransform:'uppercase',cursor:'pointer',borderRadius:'3px',textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4rem'}}
-                >
-                  Pay via Stripe →
-                </a>
+                <div onClick={onAgree} style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <StripeBuyButton />
+                </div>
               </div>
             )}
             <button
@@ -622,14 +623,9 @@ export default function Home() {
                 >
                   Pay via PayPal →
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowWaiver(true)}
-                  className="submit-btn"
-                  style={{background:'#635bff', borderColor:'#635bff', cursor:'pointer', flex:'1', minWidth:'160px'}}
-                >
-                  Pay via Stripe →
-                </button>
+                <div onClick={() => setShowWaiver(true)} style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <StripeBuyButton />
+                </div>
               </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
@@ -688,6 +684,7 @@ export default function Home() {
           if (nav) nav.style.background = window.scrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
         });
       `}} />
+      <Script src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
     </>
   );
 }
