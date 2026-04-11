@@ -686,7 +686,7 @@ export default function Home() {
               <span style={{fontSize:'1.2rem'}}>💬</span>
               <div style={{textAlign:'left'}}>
                 <p style={{fontSize:'0.6rem', letterSpacing:'0.25em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.25rem'}}>WhatsApp</p>
-                <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>+1 (858) 231-7131</p>
+                <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>Robert · +1 (858) 231-7131</p>
               </div>
             </a>
           </div>
