@@ -74,7 +74,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
                   Pay via Stripe →
                 </a>
                 <a
-                  href="https://paypal.me/RobertZaher1/450"
+                  href="https://paypal.me/RobertZaher1/510"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={onAgree}
@@ -647,15 +647,18 @@ export default function Home() {
                 A <strong style={{color:'var(--cream)'}}>$510 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,189</strong> is paid in cash directly to the host family upon arrival.
               </p>
               <div style={{display:'flex', gap:'0.8rem', justifyContent:'center', flexWrap:'wrap'}}>
-                <stripe-buy-button
-                  buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
-                  publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
-                />
+                <div style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'stretch'}}>
+                  <stripe-buy-button
+                    buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
+                    publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
+                    style={{width:'100%'}}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setShowWaiver(true)}
                   className="submit-btn"
-                  style={{background:'#0070ba', borderColor:'#0070ba', cursor:'pointer', flex:'1', minWidth:'160px'}}
+                  style={{background:'#0070ba', borderColor:'#0070ba', cursor:'pointer', flex:'1', minWidth:'160px', height:'48px', boxSizing:'border-box'}}
                 >
                   Pay via PayPal →
                 </button>
