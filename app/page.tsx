@@ -63,26 +63,15 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
               </div>
             )}
             {canProceed && (
-              <div style={{display:'flex',gap:'0.8rem'}}>
-                <a
-                  href={STRIPE_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={onAgree}
-                  style={{flex:1,padding:'0.8rem',background:'#635bff',border:'1px solid #635bff',color:'#fff',fontSize:'0.75rem',letterSpacing:'0.15em',textTransform:'uppercase',cursor:'pointer',borderRadius:'3px',textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center'}}
-                >
-                  Pay via Stripe →
-                </a>
-                <a
-                  href="https://paypal.me/RobertZaher1/510"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={onAgree}
-                  style={{flex:1,padding:'0.8rem',background:'#0070ba',border:'1px solid #0070ba',color:'#fff',fontSize:'0.75rem',letterSpacing:'0.15em',textTransform:'uppercase',cursor:'pointer',borderRadius:'3px',textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4rem'}}
-                >
-                  Pay via PayPal →
-                </a>
-              </div>
+              <a
+                href={STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onAgree}
+                style={{display:'flex',alignItems:'center',justifyContent:'center',padding:'0.8rem',background:'#635bff',border:'1px solid #635bff',color:'#fff',fontSize:'0.75rem',letterSpacing:'0.15em',textTransform:'uppercase',cursor:'pointer',borderRadius:'3px',textDecoration:'none'}}
+              >
+                Pay via Stripe →
+              </a>
             )}
             <button
               onClick={onClose}
@@ -646,23 +635,11 @@ export default function Home() {
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
                 A <strong style={{color:'var(--cream)'}}>$510 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,189</strong> is paid in cash directly to the host family upon arrival.
               </p>
-              <div style={{display:'flex', gap:'0.8rem', justifyContent:'center', flexWrap:'wrap'}}>
-                <div style={{flex:'1', minWidth:'160px', display:'flex', alignItems:'stretch'}}>
-                  <stripe-buy-button
-                    buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
-                    publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
-                    style={{width:'100%'}}
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowWaiver(true)}
-                  className="submit-btn"
-                  style={{background:'#0070ba', borderColor:'#0070ba', cursor:'pointer', flex:'1', minWidth:'160px', height:'48px', boxSizing:'border-box'}}
-                >
-                  Pay via PayPal →
-                </button>
-              </div>
+              <stripe-buy-button
+                buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
+                publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
+                style={{display:'block', width:'100%'}}
+              />
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
           </form>
