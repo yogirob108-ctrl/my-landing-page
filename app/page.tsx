@@ -327,7 +327,7 @@ export default function Home() {
       {/* NAV */}
       <nav id="main-nav">
         <a href="#" className="nav-logo">8 Lakes Tours</a>
-        <a href="#book" className="nav-cta">Reserve a Spot</a>
+        <a href="#book" className="nav-cta">Reserve</a>
       </nav>
 
       {/* HERO */}
