@@ -182,6 +182,8 @@ export default function Home() {
         }
         .hero-title em { font-style: italic; color: var(--gold); }
         .hero-sub { font-size: 1rem; line-height: 1.7; color: var(--mist); max-width: 520px; margin-bottom: 2.5rem; }
+        .hero-sub .mobile-line { display: none; }
+        .hero-sub .desktop-line { display: inline; }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -308,9 +310,16 @@ export default function Home() {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
           .hero-content { padding: 0 2rem 5rem; }
+          .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
+          .hero-sub .mobile-line { display: inline; }
+          .hero-sub .desktop-line { display: none; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .itinerary-grid { grid-template-columns: 1fr; }
+          .itin-tag { font-size: 0.75rem; }
+          .itin-title { font-size: 2rem; }
+          .itin-desc { font-size: 1rem; }
+          .itin-list li { font-size: 0.95rem; }
           .photo-strip { height: 40vw; min-height: 200px; }
           .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
           .mosaic-item.tall { grid-row: span 1; }
@@ -339,7 +348,10 @@ export default function Home() {
         <div className="hero-content">
           <p className="hero-eyebrow">Orkhon Valley & Eight Lakes Region · Mongolia</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
-          <p className="hero-sub">A 9-day immersive journey into nomadic Mongolian life — riding on horseback through one of the world&apos;s last great wildernesses, hosted by a family whose roots run as deep as the land itself.</p>
+          <p className="hero-sub">
+            <span className="mobile-line">9 days on horseback through Mongolia&apos;s last great wilderness.</span>
+            <span className="desktop-line">A 9-day immersive journey into nomadic Mongolian life — riding on horseback through one of the world&apos;s last great wildernesses, hosted by a family whose roots run as deep as the land itself.</span>
+          </p>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">Book Your Journey</a>
             <a href="#experience" className="btn-ghost">Explore the Experience</a>
@@ -352,7 +364,7 @@ export default function Home() {
         <div className="stat reveal"><span className="stat-num">9</span><span className="stat-label">Days / 8 Nights</span></div>
         <div className="stat reveal reveal-delay-1"><span className="stat-num">8</span><span className="stat-label">Max Guests</span></div>
         <div className="stat reveal reveal-delay-2"><span className="stat-num">4</span><span className="stat-label">Days on Horseback</span></div>
-        <div className="stat reveal reveal-delay-3"><span className="stat-num">$1,500</span><span className="stat-label">Per Person</span></div>
+        <div className="stat reveal reveal-delay-3"><span className="stat-num">$1,699</span><span className="stat-label">Per Person</span></div>
       </div>
 
       {/* INTRO */}
@@ -523,7 +535,7 @@ export default function Home() {
       <section className="included">
         <div className="reveal">
           <h2 className="section-title">What&apos;s<br /><em>Included</em></h2>
-          <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,500 covers the full experience. No hidden costs.</p>
+          <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,699 covers the full experience. No hidden costs.</p>
           <ul className="included-list">
             <li><span className="icon">✦</span> Transportation from Bat-Ulzii to the ger village & return</li>
             <li><span className="icon">✦</span> Host family accommodation (traditional gers)</li>
@@ -557,10 +569,10 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
-          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $1,500 per person — limited to 8 participants.</p>
+          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $1,699 per person — limited to 8 participants.</p>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">Founding Rate — Limited Availability</span>
-            <div className="price-amount">$1,500</div>
+            <div className="price-amount">$1,699</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights</div>
             <div className="price-note">A deposit is required to hold your spot. Remaining balance due before departure. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
@@ -632,17 +644,13 @@ export default function Home() {
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'4px', textAlign:'center'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                A <strong style={{color:'var(--cream)'}}>$450 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,050</strong> is paid in cash directly to the host family upon arrival.
+                A <strong style={{color:'var(--cream)'}}>$510 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,189</strong> is paid in cash directly to the host family upon arrival.
               </p>
               <div style={{display:'flex', gap:'0.8rem', justifyContent:'center', flexWrap:'wrap'}}>
-                <button
-                  type="button"
-                  onClick={() => setShowWaiver(true)}
-                  className="submit-btn"
-                  style={{background:'#635bff', borderColor:'#635bff', cursor:'pointer', flex:'1', minWidth:'160px'}}
-                >
-                  Pay via Stripe →
-                </button>
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
+                  publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
+                />
                 <button
                   type="button"
                   onClick={() => setShowWaiver(true)}
@@ -710,7 +718,7 @@ export default function Home() {
             {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas. Starlink internet is available while staying at the ger village.'},
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
-            {q:'What is your cancellation policy?', a:'The $450 deposit is non-refundable. The remaining balance of $1,050 is paid directly to the host family in cash upon arrival.'},
+            {q:'What is your cancellation policy?', a:'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
