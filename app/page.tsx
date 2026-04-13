@@ -338,7 +338,7 @@ export default function Home() {
           <p className="hero-eyebrow">Orkhon Valley & Eight Lakes Region · Mongolia</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
           <p className="hero-sub">
-            <span className="mobile-line">9 days on horseback through Mongolia&apos;s last great wilderness.</span>
+            <span className="mobile-line">9 days in one of the last truly wild places on earth.</span>
             <span className="desktop-line">A 9-day immersive journey into nomadic Mongolian life — riding on horseback through one of the world&apos;s last great wildernesses, hosted by a family whose roots run as deep as the land itself.</span>
           </p>
           <div className="hero-actions">
@@ -559,6 +559,10 @@ export default function Home() {
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
           <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $1,699 per person — limited to 8 participants.</p>
+          <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
+            <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
+            <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
+          </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">Founding Rate — Limited Availability</span>
             <div className="price-amount">$1,699</div>
@@ -640,6 +644,7 @@ export default function Home() {
                 publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
                 style={{display:'block', width:'100%'}}
               />
+              <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', textAlign:'center', marginTop:'0.6rem', opacity:0.8}}>Founders rate — price increases after the first tour</p>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
           </form>
