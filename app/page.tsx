@@ -418,7 +418,12 @@ export default function Home() {
           <span className="section-eyebrow">The Journey</span>
           <h2 className="section-title">Nine Days,<br /><em>One Lifetime</em></h2>
         </div>
-        <div className="itinerary-grid">
+        <div className="reveal" style={{maxWidth:'720px', margin:'2.5rem auto 0', padding:'2rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'4px', textAlign:'center'}}>
+          <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Your Hosts</p>
+          <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:300, color:'var(--cream)', marginBottom:'0.8rem'}}>Ganbold Sandagdorj &amp; Family</p>
+          <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.8, opacity:0.85}}>Ganbold is a third-generation nomadic herder whose family has lived and worked this land for decades. His son Suma, now in his twenties, grew up on horseback and has spent years leading tourists through the valley — including regular horseback riding excursions for Mongolian travellers around Ulaan Tsutgalan. When you arrive, you are not checking into a lodge. You are joining a family.</p>
+        </div>
+        <div className="itinerary-grid" style={{marginTop:'2.5rem'}}>
           <div className="itin-card reveal">
             <span className="itin-days">1–3</span>
             <span className="itin-tag">Days 1 – 3</span>
@@ -703,6 +708,8 @@ export default function Home() {
             {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas. Starlink internet is available while staying at the ger village.'},
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
+            {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
+            {q:'How does the cash payment work?', a:'Your $510 deposit is paid online to secure your spot. The remaining $1,189 balance is paid directly to the host family upon your arrival in Mongolia — either in Mongolian tögrög or USD, whichever is more convenient for you. There are no hidden fees or additional charges.'},
             {q:'What is your cancellation policy?', a:'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
