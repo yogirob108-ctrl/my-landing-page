@@ -394,17 +394,11 @@ export default function Home() {
       <section className="partnership" style={{padding:0}}>
         <div className="partnership-text reveal">
           <span className="section-eyebrow">Our Local Partnership</span>
-          <h2 className="section-title">Built Together,<br /><em>Not For</em></h2>
-          <blockquote className="partnership-quote">
-            &ldquo;This experience is not operated for the community — it is created with them.&rdquo;
-          </blockquote>
-          <p className="section-body">8 Lakes Tours exists through a close collaboration with the Sandagdorj family — Ganbold, a third-generation nomadic herder whose family has called the Orkhon Valley home for generations, and his son Suma, now in his twenties, who grew up on horseback and has spent years leading tourists through the valley, including regular riding excursions for Mongolian travellers around Ulaan Tsutgalan.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>We first met Ganbold while learning to ride and trek across Mongolia. His family welcomed us with the same warmth and generosity they extend to every guest. Their knowledge of the land, the horses, and the nomadic way of life is unmatched — guests stay with them, eat with them, ride with them, and learn from generations of knowledge that no guidebook can teach.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>Every booking directly and fairly supports the family. When you arrive, you are not checking into a lodge. You are joining a family. This is sustainable tourism done honestly.</p>
-          <blockquote style={{marginTop:'1.8rem', paddingLeft:'1.2rem', borderLeft:'2px solid var(--gold)', fontFamily:"'Cormorant Garamond', serif", fontSize:'1.05rem', fontWeight:300, color:'var(--mist)', lineHeight:1.8, fontStyle:'italic'}}>
-            &ldquo;I was travelling solo through Mongolia when I stumbled across Ganbold&rsquo;s family. I hadn&rsquo;t planned to stop — but their hospitality made leaving feel impossible. We rode together, shared meals, and sat around the fire long after the sun had set. By the end of that week I knew I wanted others to experience exactly this. Ganbold and Suma were just as eager. This trip is the result of that conversation.&rdquo;
-            <span style={{display:'block', marginTop:'0.8rem', fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', fontStyle:'normal', color:'var(--gold)', opacity:0.8}}>— Robert, Founder</span>
-          </blockquote>
+          <h2 className="section-title">The Family<br /><em>Behind It</em></h2>
+          <p className="section-body">I met Ganbold while trekking solo through Mongolia. I hadn&apos;t planned to stay — but his family pulled me in with the kind of warmth that&apos;s hard to explain and impossible to forget. We rode together, shared meals, and spent evenings around the fire talking about the land, the horses, and the life they&apos;ve built here across three generations.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>Ganbold&apos;s son Suma grew up in this valley and has been guiding riders through it for years — he knows every trail, every animal, every shift in the weather. When I floated the idea of bringing small groups out here, both of them lit up. This trip exists because they wanted it to.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking goes directly to them. That part matters to me.</p>
+          <p style={{marginTop:'1.4rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.7}}>— Robert, Founder</p>
         </div>
         <div style={{display:'flex', flexDirection:'column'}}>
           <div className="partnership-img reveal">
