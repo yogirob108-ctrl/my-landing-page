@@ -398,9 +398,9 @@ export default function Home() {
           <blockquote className="partnership-quote">
             &ldquo;This experience is not operated for the community — it is created with them.&rdquo;
           </blockquote>
-          <p className="section-body">8 Lakes Tours exists through a close collaboration with a Mongolian nomadic family who host and guide every journey. Guests stay with them, eat with them, ride with them, and learn from generations of knowledge that no guidebook can teach.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>Every booking directly and fairly supports the host family. This is sustainable tourism done honestly.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>Our host family is led by Ganbold, a deeply respected nomadic horseman whose family has called the Orkhon Valley home for generations. We first met Ganbold while learning to ride and trek across Mongolia — his family welcomed us with the same warmth and generosity they extend to every guest. Their knowledge of the land, the horses, and the nomadic way of life is unmatched. This partnership was built on mutual respect and a shared belief that meaningful travel should benefit the people and places it touches.</p>
+          <p className="section-body">8 Lakes Tours exists through a close collaboration with the Sandagdorj family — Ganbold, a third-generation nomadic herder whose family has called the Orkhon Valley home for generations, and his son Suma, now in his twenties, who grew up on horseback and has spent years leading tourists through the valley, including regular riding excursions for Mongolian travellers around Ulaan Tsutgalan.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>We first met Ganbold while learning to ride and trek across Mongolia. His family welcomed us with the same warmth and generosity they extend to every guest. Their knowledge of the land, the horses, and the nomadic way of life is unmatched — guests stay with them, eat with them, ride with them, and learn from generations of knowledge that no guidebook can teach.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>Every booking directly and fairly supports the family. When you arrive, you are not checking into a lodge. You are joining a family. This is sustainable tourism done honestly.</p>
         </div>
         <div style={{display:'flex', flexDirection:'column'}}>
           <div className="partnership-img reveal">
@@ -418,12 +418,7 @@ export default function Home() {
           <span className="section-eyebrow">The Journey</span>
           <h2 className="section-title">Nine Days,<br /><em>One Lifetime</em></h2>
         </div>
-        <div className="reveal" style={{maxWidth:'720px', margin:'2.5rem auto 0', padding:'2rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'4px', textAlign:'center'}}>
-          <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Your Hosts</p>
-          <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.4rem', fontWeight:300, color:'var(--cream)', marginBottom:'0.8rem'}}>Ganbold Sandagdorj &amp; Family</p>
-          <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.8, opacity:0.85}}>Ganbold is a third-generation nomadic herder whose family has lived and worked this land for decades. His son Suma, now in his twenties, grew up on horseback and has spent years leading tourists through the valley — including regular horseback riding excursions for Mongolian travellers around Ulaan Tsutgalan. When you arrive, you are not checking into a lodge. You are joining a family.</p>
-        </div>
-        <div className="itinerary-grid" style={{marginTop:'2.5rem'}}>
+        <div className="itinerary-grid">
           <div className="itin-card reveal">
             <span className="itin-days">1–3</span>
             <span className="itin-tag">Days 1 – 3</span>
