@@ -360,6 +360,7 @@ export default function Home() {
       <section className="intro" id="experience">
         <div className="intro-img reveal">
           <img src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" loading="lazy" />
+          <span style={{position:'absolute', bottom:'1rem', left:'1rem', fontSize:'0.62rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(245,240,232,0.75)', background:'rgba(14,12,9,0.55)', padding:'0.35rem 0.7rem', backdropFilter:'blur(4px)', pointerEvents:'none'}}>Suma — Your Guide</span>
         </div>
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">What This Is</span>
