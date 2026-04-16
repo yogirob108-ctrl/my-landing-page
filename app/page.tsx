@@ -643,7 +643,6 @@ export default function Home() {
                 publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
                 style={{display:'block', width:'100%'}}
               />
-              <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', textAlign:'center', marginTop:'0.6rem', opacity:0.8}}>Founders rate — price increases after the first tour</p>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
           </form>
