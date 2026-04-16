@@ -88,10 +88,9 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
-  const [waiverChecked, setWaiverChecked] = useState(false);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
   const [signature, setSignature] = useState('');
-  const canPay = waiverChecked && signature.trim().length > 1;
+  const canPay = signature.trim().length > 1;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -676,10 +675,6 @@ export default function Home() {
             </div>
             <div className="form-group"><label className="form-label">Dietary Restrictions</label><input className="form-input" type="text" placeholder="None, vegetarian, allergies, etc." /></div>
             <div className="form-group"><label className="form-label">Special Notes or Questions</label><textarea className="form-textarea" placeholder="Anything else we should know?"></textarea></div>
-            <label className="form-check">
-              <input type="checkbox" required checked={waiverChecked} onChange={e => setWaiverChecked(e.target.checked)} />
-              <span>I agree to sign the liability waiver before departure</span>
-            </label>
             <label className="form-check"><input type="checkbox" required /><span>I confirm I will obtain personal travel insurance before the trip</span></label>
 
             {/* Collapsible Waiver */}
@@ -747,7 +742,7 @@ export default function Home() {
                     }}
                   >
                     <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(14,12,9,0.85)', padding:'0.5rem 1rem', pointerEvents:'none'}}>
-                      {!waiverChecked ? 'Please check the liability waiver box above' : 'Please type your full name as a signature above'}
+                      Please type your full name as a signature above
                     </p>
                   </div>
                 )}
