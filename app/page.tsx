@@ -113,7 +113,7 @@ export default function Home() {
           '@type': 'Organization',
           name: '8 Lakes Tours',
           url: 'https://www.8lakestours.com',
-          email: '8lakestours@gmail.com',
+          email: 'info@8lakestours.com',
           founder: { '@type': 'Person', name: 'Robert Zaher' },
         },
         location: {
@@ -700,13 +700,13 @@ export default function Home() {
           </div>
           <div className="reveal" style={{display:'flex', flexDirection:'column', gap:'1rem', alignItems:'center'}}>
             <a
-              href="mailto:8lakestours@gmail.com"
+              href="mailto:info@8lakestours.com"
               style={{display:'flex', alignItems:'center', gap:'1rem', width:'100%', maxWidth:'380px', padding:'1.2rem 1.8rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.25)', borderRadius:'4px', textDecoration:'none', transition:'border-color 0.3s', color:'inherit'}}
             >
               <span style={{fontSize:'1.2rem'}}>✉</span>
               <div style={{textAlign:'left'}}>
                 <p style={{fontSize:'0.6rem', letterSpacing:'0.25em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.25rem'}}>Email</p>
-                <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>8lakestours@gmail.com</p>
+                <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>info@8lakestours.com</p>
               </div>
             </a>
           </div>
