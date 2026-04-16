@@ -675,7 +675,6 @@ export default function Home() {
             </div>
             <div className="form-group"><label className="form-label">Dietary Restrictions</label><input className="form-input" type="text" placeholder="None, vegetarian, allergies, etc." /></div>
             <div className="form-group"><label className="form-label">Special Notes or Questions</label><textarea className="form-textarea" placeholder="Anything else we should know?"></textarea></div>
-            <label className="form-check"><input type="checkbox" required /><span>I confirm I will obtain personal travel insurance before the trip</span></label>
 
             {/* Collapsible Waiver */}
             <div style={{border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px', overflow:'hidden'}}>
