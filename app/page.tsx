@@ -88,6 +88,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
+  const [waiverChecked, setWaiverChecked] = useState(false);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -672,18 +673,36 @@ export default function Home() {
             </div>
             <div className="form-group"><label className="form-label">Dietary Restrictions</label><input className="form-input" type="text" placeholder="None, vegetarian, allergies, etc." /></div>
             <div className="form-group"><label className="form-label">Special Notes or Questions</label><textarea className="form-textarea" placeholder="Anything else we should know?"></textarea></div>
-            <label className="form-check"><input type="checkbox" required /><span>I agree to sign the liability waiver before departure</span></label>
+            <label className="form-check">
+              <input type="checkbox" required checked={waiverChecked} onChange={e => setWaiverChecked(e.target.checked)} />
+              <span>I agree to sign the liability waiver before departure</span>
+            </label>
             <label className="form-check"><input type="checkbox" required /><span>I confirm I will obtain personal travel insurance before the trip</span></label>
-            <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'4px', textAlign:'center'}}>
+            <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${waiverChecked ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
                 A <strong style={{color:'var(--cream)'}}>$510 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,189</strong> is paid in cash directly to the host family upon arrival.
               </p>
-              <stripe-buy-button
-                buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
-                publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
-                style={{display:'block', width:'100%'}}
-              />
+              <div style={{position:'relative'}}>
+                <stripe-buy-button
+                  buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
+                  publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
+                  style={{display:'block', width:'100%', opacity: waiverChecked ? 1 : 0.35, transition:'opacity 0.3s'}}
+                />
+                {!waiverChecked && (
+                  <div
+                    style={{position:'absolute', inset:0, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}
+                    onClick={() => {
+                      const cb = document.querySelector<HTMLInputElement>('input[type="checkbox"]');
+                      cb?.focus();
+                      const label = cb?.closest('label');
+                      label?.animate([{outline:'2px solid rgba(200,169,110,0.8)'},{outline:'2px solid transparent'}], {duration:800, iterations:2});
+                    }}
+                  >
+                    <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(14,12,9,0.85)', padding:'0.5rem 1rem', pointerEvents:'none'}}>Please agree to the liability waiver above</p>
+                  </div>
+                )}
+              </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
           </form>
