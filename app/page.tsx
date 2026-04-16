@@ -529,15 +529,7 @@ export default function Home() {
             <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Coordinate your arrival time directly via WhatsApp before departure.</p>
             <div style={{marginTop:'2.5rem', padding:'1.5rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
               <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.8rem'}}>Need Help?</p>
-              <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7}}>Contact us on WhatsApp and we'll help you sort out your bus and coordinate pickup with the family.</p>
-              <div style={{display:'flex', flexDirection:'column', gap:'0.6rem', marginTop:'1rem'}}>
-                <a href="https://wa.me/18582317131" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
-                  Robert — English-Speaking Support →
-                </a>
-                <a href="https://wa.me/97699800165" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', background:'#25D366', color:'#fff', padding:'0.8rem 1.6rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', textDecoration:'none', fontWeight:500}}>
-                  Ganbold — Local Mongolian Contact →
-                </a>
-              </div>
+              <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7, fontStyle:'italic'}}>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
             </div>
           </div>
           <div className="reveal reveal-delay-1">
