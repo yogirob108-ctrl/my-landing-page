@@ -748,7 +748,7 @@ export default function Home() {
           <div className="footer-logo">8 Lakes Tours</div>
           <div className="footer-tagline">Nomadic Horse Trek · Mongolia</div>
         </div>
-        <div className="footer-note">© 2025 8 Lakes Tours · All rights reserved</div>
+        <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
       </footer>
 
       {showWaiver && <WaiverModal onClose={() => setShowWaiver(false)} onAgree={() => setShowWaiver(false)} />}
