@@ -717,18 +717,6 @@ export default function Home() {
                 <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>8lakestours@gmail.com</p>
               </div>
             </a>
-            <a
-              href="https://wa.me/18582317131"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{display:'flex', alignItems:'center', gap:'1rem', width:'100%', maxWidth:'380px', padding:'1.2rem 1.8rem', background:'rgba(200,169,110,0.06)', border:'1px solid rgba(200,169,110,0.25)', borderRadius:'4px', textDecoration:'none', transition:'border-color 0.3s', color:'inherit'}}
-            >
-              <span style={{fontSize:'1.2rem'}}>💬</span>
-              <div style={{textAlign:'left'}}>
-                <p style={{fontSize:'0.6rem', letterSpacing:'0.25em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.25rem'}}>WhatsApp</p>
-                <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>Robert · +1 (858) 231-7131</p>
-              </div>
-            </a>
           </div>
         </div>
       </section>
