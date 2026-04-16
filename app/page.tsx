@@ -88,8 +88,57 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'TouristTrip',
+        name: '8 Lakes Tours — Nomadic Horse Trek Mongolia',
+        description: '9-day immersive horseback trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
+        url: 'https://www.8lakestours.com',
+        image: 'https://www.8lakestours.com/images/hero.jpg',
+        touristType: 'Adventure travellers seeking authentic nomadic experiences',
+        itinerary: {
+          '@type': 'ItemList',
+          numberOfItems: 9,
+        },
+        offers: {
+          '@type': 'Offer',
+          price: '1699',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/LimitedAvailability',
+          validFrom: '2026-01-01',
+        },
+        provider: {
+          '@type': 'Organization',
+          name: '8 Lakes Tours',
+          url: 'https://www.8lakestours.com',
+          email: '8lakestours@gmail.com',
+          founder: { '@type': 'Person', name: 'Robert Zaher' },
+        },
+        location: {
+          '@type': 'Place',
+          name: 'Orkhon Valley & Naiman Nuur, Mongolia',
+          geo: { '@type': 'GeoCoordinates', latitude: 46.8, longitude: 102.2 },
+        },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
+          { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete." } },
+          { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
+          { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
+          { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
+          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.' } },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
@@ -326,7 +375,7 @@ export default function Home() {
 
       {/* NAV */}
       <nav id="main-nav">
-        <a href="#" className="nav-logo">8 Lakes Tours</a>
+        <a href="/" className="nav-logo">8 Lakes Tours</a>
         <a href="#book" className="nav-cta">Reserve</a>
       </nav>
 
@@ -466,7 +515,7 @@ export default function Home() {
         <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="The journey van" loading="lazy" /></div>
         <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Panorama at sunset" loading="lazy" /></div>
         <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Riding along the river" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Riding along the river" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Nomadic herders crossing open steppe" loading="lazy" /></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">

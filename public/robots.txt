@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /.next/
+
+Sitemap: https://www.8lakestours.com/sitemap.xml
