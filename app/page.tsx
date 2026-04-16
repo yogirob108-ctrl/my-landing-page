@@ -433,7 +433,7 @@ export default function Home() {
           {src:'/images/riding1.jpg', caption:'The Open Steppe'},
           {src:'/images/water-crossing.jpg', caption:'River Crossings'},
           {src:'/images/landscape1.jpg', caption:'Alpine Lakes Region'},
-          {src:'/images/gers.jpg', caption:'Life Inside a Ger'},
+          {src:'/images/gers.jpg', caption:'Your Home on the Steppe'},
           {src:'/images/sunset.jpg', caption:'Steppe Sunsets'},
         ].map((item) => (
           <div className="strip-item" key={item.src}>
