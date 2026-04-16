@@ -89,6 +89,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
   const [waiverChecked, setWaiverChecked] = useState(false);
+  const [waiverExpanded, setWaiverExpanded] = useState(false);
   const [signature, setSignature] = useState('');
   const canPay = waiverChecked && signature.trim().length > 1;
   const jsonLd = {
@@ -680,6 +681,39 @@ export default function Home() {
               <span>I agree to sign the liability waiver before departure</span>
             </label>
             <label className="form-check"><input type="checkbox" required /><span>I confirm I will obtain personal travel insurance before the trip</span></label>
+
+            {/* Collapsible Waiver */}
+            <div style={{border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px', overflow:'hidden'}}>
+              <button
+                type="button"
+                onClick={() => setWaiverExpanded(v => !v)}
+                style={{width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0.9rem 1.1rem', background:'rgba(200,169,110,0.05)', border:'none', cursor:'pointer', textAlign:'left'}}
+              >
+                <span style={{fontSize:'0.65rem', letterSpacing:'0.25em', textTransform:'uppercase', color:'var(--gold)'}}>Read Liability Waiver</span>
+                <span style={{fontSize:'0.75rem', color:'var(--gold)', transition:'transform 0.3s', display:'inline-block', transform: waiverExpanded ? 'rotate(180deg)' : 'rotate(0deg)'}}>▼</span>
+              </button>
+              {waiverExpanded && (
+                <div style={{padding:'1.2rem 1.4rem', fontSize:'0.8rem', color:'var(--mist)', lineHeight:1.8, borderTop:'1px solid rgba(200,169,110,0.15)', maxHeight:'320px', overflowY:'auto'}}>
+                  <p style={{marginBottom:'0.8rem'}}>Please read this waiver carefully. By signing below, you acknowledge and agree to the following terms:</p>
+                  {[
+                    ['1. Nature of Activity', '8 Lakes Tours operates multi-day horseback trekking expeditions in remote wilderness areas of Mongolia. These activities take place in the Orkhon Valley and surrounding steppe, far from medical facilities, emergency services, and modern infrastructure. Participants acknowledge that this is an inherently adventurous and physically demanding experience.'],
+                    ['2. Horseback Riding Risks', 'Horseback riding carries inherent risks including, but not limited to: falling from or being thrown by a horse, being kicked or bitten, collision with obstacles, and unpredictable animal behaviour. Horses are living animals and may react in unexpected ways regardless of rider experience. Participants ride at their own risk and must follow all instructions from their guide at all times.'],
+                    ['3. Remote Wilderness Travel', 'Travel takes place in remote, off-grid terrain with no road access, no mobile phone coverage, and no nearby emergency services. In the event of injury or illness, evacuation may take many hours or longer. Participants must be in adequate physical health to undertake the journey and must disclose any pre-existing medical conditions to their guide prior to departure.'],
+                    ['4. Medical Emergencies', '8 Lakes Tours and its guides carry basic first aid supplies but are not medical professionals. In the event of a serious medical emergency, all costs associated with evacuation, treatment, and repatriation are the sole responsibility of the participant. 8 Lakes Tours accepts no liability for injury, illness, or death arising from participation in this tour.'],
+                    ['5. Travel Insurance Requirement', 'Comprehensive travel insurance is mandatory for all participants. Your policy must include coverage for: emergency medical treatment, emergency evacuation and repatriation, horseback riding and adventure activities, and trip cancellation or interruption. 8 Lakes Tours reserves the right to deny participation to anyone without adequate coverage.'],
+                    ['6. Release of Liability', 'In consideration of being permitted to participate in this tour, I hereby release, waive, discharge, and covenant not to sue 8 Lakes Tours, its guides, the host family, their agents, employees, and representatives from any and all liability, claims, demands, or causes of action arising out of or related to any loss, damage, injury, or death, whether caused by negligence or otherwise, that may be sustained by me while participating in this tour.'],
+                    ['7. Assumption of Risk', 'I expressly acknowledge and assume all risks associated with this tour, including those resulting from the actions, inactions, or negligence of 8 Lakes Tours or any other party. I confirm that I am physically and mentally capable of participating in this activity, that I have not been advised otherwise by a medical professional, and that I undertake this activity entirely at my own risk.'],
+                  ].map(([heading, body]) => (
+                    <div key={heading} style={{marginTop:'0.9rem'}}>
+                      <p style={{fontSize:'0.6rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.3rem'}}>{heading}</p>
+                      <p>{body}</p>
+                    </div>
+                  ))}
+                  <p style={{marginTop:'0.9rem', fontStyle:'italic', opacity:0.7}}>This waiver is binding upon myself, my heirs, executors, administrators, and assigns. I have read this document in full and understand its contents.</p>
+                </div>
+              )}
+            </div>
+
             <div style={{marginTop:'1rem'}}>
               <label style={{fontSize:'0.65rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', display:'block', marginBottom:'0.5rem'}}>Digital Signature — Type Your Full Name</label>
               <input
