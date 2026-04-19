@@ -653,6 +653,13 @@ export default function Home() {
                 </div>
                 <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
               </div>
+              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.07)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px'}}>
+                <div>
+                  <p style={{fontSize:'1rem', fontFamily:"'Cormorant Garamond', serif", color:'var(--cream)', fontWeight:400, marginBottom:'0.15rem'}}>August 4 – 12, 2026</p>
+                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.7}}>9 Days · 8 Nights · Orkhon Valley, Mongolia</p>
+                </div>
+                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
+              </div>
               <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.03)', border:'1px solid rgba(200,169,110,0.1)', borderRadius:'3px'}}>
                 <div>
                   <p style={{fontSize:'1rem', fontFamily:"'Cormorant Garamond', serif", color:'var(--mist)', fontWeight:400, marginBottom:'0.15rem'}}>Custom Group Date</p>
