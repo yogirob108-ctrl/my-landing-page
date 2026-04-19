@@ -688,6 +688,7 @@ export default function Home() {
                 <select className="form-select" name="tour_date">
                   <option value="">Select date</option>
                   <option>June 22–30</option>
+                  <option>August 4–12</option>
                   <option>Custom Group Date</option>
                 </select>
               </div>
