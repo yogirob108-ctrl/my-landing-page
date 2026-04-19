@@ -780,6 +780,13 @@ export default function Home() {
               </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
+            <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.4, textAlign:'center', lineHeight:1.6, marginTop:'0.5rem'}}>
+              By submitting this form you agree to our{' '}
+              <a href="/terms" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Terms &amp; Conditions</a>
+              {' '}and{' '}
+              <a href="/privacy" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Privacy Policy</a>.
+              Your data will be used solely to process your booking enquiry.
+            </p>
           </form>
         </div>
       </section>
@@ -842,7 +849,13 @@ export default function Home() {
           <div className="footer-logo">8 Lakes Tours</div>
           <div className="footer-tagline">Nomadic Horse Trek · Mongolia</div>
         </div>
-        <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
+        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'0.6rem'}}>
+          <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
+          <div style={{display:'flex', gap:'1.2rem'}}>
+            <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.5, textDecoration:'none'}}>Terms &amp; Conditions</a>
+            <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.5, textDecoration:'none'}}>Privacy Policy</a>
+          </div>
+        </div>
       </footer>
 
       {showWaiver && <WaiverModal onClose={() => setShowWaiver(false)} onAgree={() => setShowWaiver(false)} />}
