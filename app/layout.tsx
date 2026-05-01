@@ -94,6 +94,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-E9PW7T08LZ" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-E9PW7T08LZ');
+        `}</Script>
         <Script src="https://js.stripe.com/v3/buy-button.js" strategy="lazyOnload" />
       </body>
     </html>
