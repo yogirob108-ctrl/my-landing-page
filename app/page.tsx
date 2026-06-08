@@ -85,7 +85,7 @@ function formatApproxUsd(amountUsd: number, currency: CurrencyCode) {
   const converted = amountUsd * DISPLAY_EXCHANGE_RATES[currency];
   const rounded = currency === 'MNT' ? Math.round(converted / 1000) * 1000 : Math.round(converted);
 
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,
@@ -205,6 +205,43 @@ export default function Home() {
 
   useEffect(() => {
     setPricing(getLocalizedPricing());
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const revealElements = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
+
+    root.classList.add('js-reveal');
+
+    if (!('IntersectionObserver' in window)) {
+      revealElements.forEach(el => el.classList.add('visible'));
+      return () => root.classList.remove('js-reveal');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    revealElements.forEach(el => observer.observe(el));
+
+    const updateNavBackground = () => {
+      const nav = document.getElementById('main-nav');
+      if (nav) nav.style.background = window.scrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
+    };
+
+    updateNavBackground();
+    window.addEventListener('scroll', updateNavBackground, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', updateNavBackground);
+      root.classList.remove('js-reveal');
+    };
   }, []);
 
   const submitToFormspree = async (form: HTMLFormElement) => {
@@ -473,8 +510,9 @@ export default function Home() {
         .footer-tagline { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 0.3rem; }
         .footer-note { font-size: 0.75rem; color: var(--mist); opacity: 0.4; }
 
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .js-reveal .reveal { opacity: 0; transform: translateY(40px); }
+        .js-reveal .reveal.visible { opacity: 1; transform: translateY(0); }
         .reveal-delay-1 { transition-delay: 0.1s; }
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
@@ -995,19 +1033,6 @@ export default function Home() {
 
       {showWaiver && <WaiverModal onClose={() => setShowWaiver(false)} onAgree={() => setShowWaiver(false)} />}
 
-      <script dangerouslySetInnerHTML={{__html: `
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
-          });
-        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        window.addEventListener('scroll', () => {
-          const nav = document.getElementById('main-nav');
-          if (nav) nav.style.background = window.scrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
-        });
-      `}} />
     </>
   );
 }
