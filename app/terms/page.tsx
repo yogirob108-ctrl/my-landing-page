@@ -31,15 +31,15 @@ export default function TermsAndConditions() {
           },
           {
             title: '2. Booking & Deposit',
-            body: 'A non-refundable deposit of $510 USD (approximately 30% of the total tour price) is required to confirm your place. Your spot is not guaranteed until the deposit has been received and confirmed by us. The remaining balance of $1,189 USD is due upon arrival in Mongolia and is paid directly to the host family in cash (USD, Euros, or Mongolian tögrög).',
+            body: 'A non-refundable deposit of approximately 30% of the total tour price is required to confirm your place. Your spot is not guaranteed until the deposit has been received and confirmed by us. Where available, prices may be displayed and charged in your local currency through Stripe. The remaining balance is due upon arrival in Mongolia and is paid directly to the host family in cash (USD, Euros, or Mongolian tögrög).',
           },
           {
             title: '3. Tour Price',
-            body: 'The current tour price is $1,699 USD per person for the 9-day / 8-night programme. This includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The current base tour price is $1,699 USD per person for the 9-day / 8-night programme, or the local-currency equivalent shown at checkout where supported. This includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
-            body: 'The $510 deposit is non-refundable under all circumstances. If you cancel more than 60 days before your departure date, no further charges apply. If you cancel within 60 days of departure, the full tour price becomes due. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
+            body: 'The deposit is non-refundable under all circumstances. If you cancel more than 60 days before your departure date, no further charges apply. If you cancel within 60 days of departure, the full tour price becomes due. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
           },
           {
             title: '5. Travel Insurance',
