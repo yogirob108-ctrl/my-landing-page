@@ -1,7 +1,109 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://buy.stripe.com/cNi3coc6RgPK50saip0gw00';
+
+const BASE_PRICE_USD = 1699;
+const BASE_DEPOSIT_USD = 510;
+const BASE_BALANCE_USD = 1189;
+
+type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
+
+type LocalizedPricing = {
+  currency: CurrencyCode;
+  countryLabel: string;
+  tourPrice: string;
+  deposit: string;
+  balance: string;
+};
+
+const CURRENCY_BY_REGION: Record<string, CurrencyCode> = {
+  US: 'USD',
+  CA: 'USD',
+  GB: 'GBP',
+  IE: 'EUR',
+  AT: 'EUR',
+  BE: 'EUR',
+  HR: 'EUR',
+  CY: 'EUR',
+  EE: 'EUR',
+  FI: 'EUR',
+  FR: 'EUR',
+  DE: 'EUR',
+  GR: 'EUR',
+  IT: 'EUR',
+  LV: 'EUR',
+  LT: 'EUR',
+  LU: 'EUR',
+  MT: 'EUR',
+  NL: 'EUR',
+  PT: 'EUR',
+  SK: 'EUR',
+  SI: 'EUR',
+  ES: 'EUR',
+  RU: 'RUB',
+  MN: 'MNT',
+};
+
+const COUNTRY_LABEL_BY_CURRENCY: Record<CurrencyCode, string> = {
+  USD: 'USD pricing',
+  EUR: 'Europe pricing',
+  GBP: 'UK pricing',
+  RUB: 'Russia pricing',
+  MNT: 'Mongolia pricing',
+};
+
+const DISPLAY_EXCHANGE_RATES: Record<CurrencyCode, number> = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.79,
+  RUB: 90,
+  MNT: 3450,
+};
+
+function detectRegion(): string | undefined {
+  if (typeof navigator !== 'undefined') {
+    const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
+    for (const locale of locales) {
+      try {
+        const region = new Intl.Locale(locale).region;
+        if (region) return region.toUpperCase();
+      } catch {
+        // Ignore malformed browser locale strings.
+      }
+    }
+  }
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timezone?.startsWith('Europe/')) return 'NL';
+  if (timezone?.startsWith('America/')) return 'US';
+  if (timezone === 'Asia/Ulaanbaatar') return 'MN';
+  return undefined;
+}
+
+function formatApproxUsd(amountUsd: number, currency: CurrencyCode) {
+  const converted = amountUsd * DISPLAY_EXCHANGE_RATES[currency];
+  const rounded = currency === 'MNT' ? Math.round(converted / 1000) * 1000 : Math.round(converted);
+
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0,
+  }).format(rounded);
+}
+
+function getLocalizedPricing(): LocalizedPricing {
+  const region = detectRegion();
+  const currency = region ? CURRENCY_BY_REGION[region] ?? 'USD' : 'USD';
+
+  return {
+    currency,
+    countryLabel: COUNTRY_LABEL_BY_CURRENCY[currency],
+    tourPrice: formatApproxUsd(BASE_PRICE_USD, currency),
+    deposit: formatApproxUsd(BASE_DEPOSIT_USD, currency),
+    balance: formatApproxUsd(BASE_BALANCE_USD, currency),
+  };
+}
 
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
   const [signature, setSignature] = useState('');
@@ -92,7 +194,18 @@ export default function Home() {
   const [signature, setSignature] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
+  const [pricing, setPricing] = useState<LocalizedPricing>({
+    currency: 'USD',
+    countryLabel: COUNTRY_LABEL_BY_CURRENCY.USD,
+    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'USD'),
+    deposit: formatApproxUsd(BASE_DEPOSIT_USD, 'USD'),
+    balance: formatApproxUsd(BASE_BALANCE_USD, 'USD'),
+  });
   const canPay = signature.trim().length > 1;
+
+  useEffect(() => {
+    setPricing(getLocalizedPricing());
+  }, []);
 
   const submitToFormspree = async (form: HTMLFormElement) => {
     if (formSubmitted) return;
@@ -152,7 +265,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.' } },
+          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'A 30% deposit is non-refundable. The remaining balance is paid directly to the host family in cash upon arrival.' } },
         ],
       },
     ],
@@ -397,12 +510,12 @@ export default function Home() {
 
       {/* NAV */}
       <nav id="main-nav">
-        <a href="/" className="nav-logo">8 Lakes Tours</a>
+        <a href="#top" className="nav-logo">8 Lakes Tours</a>
         <a href="#book" className="nav-cta">Reserve</a>
       </nav>
 
       {/* HERO */}
-      <div className="hero">
+      <div className="hero" id="top">
         <div className="hero-bg"></div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
@@ -424,7 +537,7 @@ export default function Home() {
         <div className="stat reveal"><span className="stat-num">9</span><span className="stat-label">Days / 8 Nights</span></div>
         <div className="stat reveal reveal-delay-1"><span className="stat-num">8</span><span className="stat-label">Max Guests</span></div>
         <div className="stat reveal reveal-delay-2"><span className="stat-num">4</span><span className="stat-label">Days on Horseback</span></div>
-        <div className="stat reveal reveal-delay-3"><span className="stat-num">$1,699</span><span className="stat-label">Per Person</span></div>
+        <div className="stat reveal reveal-delay-3"><span className="stat-num">{pricing.tourPrice}</span><span className="stat-label">Per Person</span></div>
       </div>
 
       {/* INTRO */}
@@ -586,7 +699,7 @@ export default function Home() {
       <section className="included">
         <div className="reveal">
           <h2 className="section-title">What&apos;s<br /><em>Included</em></h2>
-          <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,699 covers the full experience. No hidden costs.</p>
+          <p className="section-body" style={{marginBottom:'2rem'}}>Your {pricing.tourPrice} covers the full experience. No hidden costs.</p>
           <ul className="included-list">
             <li><span className="icon">✦</span> Transportation from Bat-Ulzii to the ger village & return</li>
             <li><span className="icon">✦</span> Host family accommodation (traditional gers)</li>
@@ -620,16 +733,16 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
-          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $1,699 per person — limited to 8 participants.</p>
+          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of {pricing.tourPrice} per person — limited to 8 participants.</p>
           <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
           </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">Founding Rate — Limited Availability</span>
-            <div className="price-amount">$1,699</div>
-            <div className="price-per">Per Person · 9 Days / 8 Nights</div>
-            <div className="price-note">A deposit is required to hold your spot. Remaining balance due before departure. Custom group dates available on request.</div>
+            <div className="price-amount">{pricing.tourPrice}</div>
+            <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
+            <div className="price-note">Prices are localized from a $1,699 USD base rate for easier browsing. Stripe confirms the final payment currency and amount securely at checkout. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
                 <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
@@ -677,6 +790,9 @@ export default function Home() {
             </div>
           </div>
           <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitToFormspree(e.currentTarget); }}>
+            <input type="hidden" name="display_currency" value={pricing.currency} />
+            <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
+            <input type="hidden" name="display_deposit" value={pricing.deposit} />
             <div className="form-grid">
               <div className="form-group"><label className="form-label">First Name</label><input className="form-input" name="first_name" type="text" placeholder="First name" required /></div>
               <div className="form-group"><label className="form-label">Last Name</label><input className="form-input" name="last_name" type="text" placeholder="Last name" required /></div>
@@ -775,7 +891,10 @@ export default function Home() {
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                A <strong style={{color:'var(--cream)'}}>$510 deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>$1,189</strong> is paid in cash directly to the host family upon arrival.
+                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is paid in cash directly to the host family upon arrival.
+              </p>
+              <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.6, lineHeight:1.6, marginBottom:'1rem'}}>
+                Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
               </p>
               <div style={{position:'relative'}} onClick={() => { const form = document.querySelector<HTMLFormElement>('.booking-form'); if (form) submitToFormspree(form); }}>
                 <stripe-buy-button
@@ -813,7 +932,7 @@ export default function Home() {
           <div className="reveal">
             <span className="section-eyebrow">Get In Touch</span>
             <h2 className="section-title">Have a<br /><em>Question?</em></h2>
-            <p className="section-body" style={{marginTop:'1rem', marginBottom:'3rem'}}>We're happy to answer anything before you book — whether it's about the route, the horses, visa requirements, or packing. Reach out and we'll get back to you promptly.</p>
+            <p className="section-body" style={{marginTop:'1rem', marginBottom:'3rem'}}>We&apos;re happy to answer anything before you book — whether it&apos;s about the route, the horses, visa requirements, or packing. Reach out and we&apos;ll get back to you promptly.</p>
           </div>
           <div className="reveal" style={{display:'flex', flexDirection:'column', gap:'1rem', alignItems:'center'}}>
             <a
