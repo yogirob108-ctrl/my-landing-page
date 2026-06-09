@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     siteName: "8 Lakes Tours",
     images: [
       {
-        url: "/images/hero.jpg",
+        url: "/images/hero-horseback.jpg",
         width: 1200,
         height: 630,
         alt: "Horseback riding through the Mongolian steppe — 8 Lakes Tours",
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
     description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Stay with a nomadic family, ride the steppe, experience real Mongolian life.",
-    images: ["/images/hero.jpg"],
+    images: ["/images/hero-horseback.jpg"],
   },
   icons: {
     icon: [

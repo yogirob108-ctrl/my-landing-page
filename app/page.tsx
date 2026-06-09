@@ -313,7 +313,7 @@ export default function Home() {
         name: '8 Lakes Tours — Nomadic Horse Trek Mongolia',
         description: '9-day immersive horseback trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
         url: 'https://www.8lakestours.com',
-        image: ['https://www.8lakestours.com/images/hero.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
+        image: ['https://www.8lakestours.com/images/hero-horseback.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
         touristType: 'Adventure travellers seeking authentic nomadic experiences',
         itinerary: {
           '@type': 'ItemList',
@@ -643,8 +643,8 @@ export default function Home() {
       <div className="hero" id="top">
         <div className="hero-bg">
           <Image
-            src="/images/hero.jpg"
-            alt="Horseback riders crossing Mongolia's open steppe on an Eight Lakes tour"
+            src="/images/hero-horseback.jpg"
+            alt="View from horseback across Mongolia's open valley beneath dramatic clouds"
             fill
             priority
             sizes="100vw"
