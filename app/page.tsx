@@ -84,6 +84,11 @@ const PACKING_LIST = [
 ];
 
 function detectRegion(): string | undefined {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timezone?.startsWith('Europe/')) return 'NL';
+  if (timezone?.startsWith('America/')) return 'US';
+  if (timezone === 'Asia/Ulaanbaatar') return 'MN';
+
   if (typeof navigator !== 'undefined') {
     const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
     for (const locale of locales) {
@@ -96,10 +101,6 @@ function detectRegion(): string | undefined {
     }
   }
 
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if (timezone?.startsWith('Europe/')) return 'NL';
-  if (timezone?.startsWith('America/')) return 'US';
-  if (timezone === 'Asia/Ulaanbaatar') return 'MN';
   return undefined;
 }
 
@@ -218,11 +219,11 @@ export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
-    currency: 'USD',
-    countryLabel: COUNTRY_LABEL_BY_CURRENCY.USD,
-    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'USD'),
-    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'USD'),
-    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'USD'),
+    currency: 'EUR',
+    countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
+    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'EUR'),
+    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'EUR'),
+    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'EUR'),
   });
   const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const signatureIsValid = signature.trim().length > 1;
@@ -661,11 +662,11 @@ export default function Home() {
       {/* PHOTO STRIP */}
       <div className="photo-strip">
         {[
-          {src:'/images/riding1.jpg', caption:'The Open Steppe'},
+          {src:'/images/riding1.jpg', caption:'Riding the Valley'},
           {src:'/images/water-crossing.jpg', caption:'River Crossings'},
-          {src:'/images/landscape1.jpg', caption:'Alpine Lakes Region'},
+          {src:'/images/landscape1.jpg', caption:'Sunset Valleys'},
           {src:'/images/gers.jpg', caption:'Your Home on the Steppe'},
-          {src:'/images/sunset.jpg', caption:'Steppe Sunsets'},
+          {src:'/images/sunset.jpg', caption:'Open Steppe Evenings'},
         ].map((item) => (
           <div className="strip-item" key={item.src}>
             <img src={item.src} alt={item.caption} loading="lazy" />
@@ -765,14 +766,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><img src="/images/lake.jpg" alt="Eight Lakes region Mongolia" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding2.jpg" alt="Riding through the valley" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic1.jpg" alt="Traditional Mongolian ger" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic2.jpg" alt="Sunburst over the steppe" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="The journey van" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Panorama at sunset" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Riding along the river" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Nomadic herders crossing open steppe" loading="lazy" /></div>
+        <div className="mosaic-item tall"><img src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Grazing animals beside the river" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" loading="lazy" /></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
