@@ -61,7 +61,34 @@ const DISPLAY_EXCHANGE_RATES: Record<CurrencyCode, number> = {
   MNT: 3450,
 };
 
+const PACKING_LIST = [
+  'Warm sleeping bag rated for cold nights',
+  'Comfortable riding boots or sturdy hiking boots',
+  'Light camp shoes or flip-flops',
+  'Rain jacket or waterproof shell',
+  'Warm layers for cold mornings and evenings',
+  'Riding gloves or lightweight outdoor gloves',
+  'Sun hat or cap',
+  'Sunglasses with secure strap',
+  'Swimsuit for lakes, rivers or hot springs',
+  'Headlamp or small flashlight',
+  'Reusable water bottle',
+  'Sunscreen and lip balm with SPF',
+  'Mosquito repellent',
+  'Personal medication and basic toiletries',
+  'Wet wipes, dry tissues and toilet paper',
+  'Hand cream or Vaseline for dry weather',
+  'Travel pillow if you sleep better with one',
+  'Universal adapter plug and power bank',
+  'Binoculars or camera if you want them',
+];
+
 function detectRegion(): string | undefined {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timezone?.startsWith('Europe/')) return 'NL';
+  if (timezone?.startsWith('America/')) return 'US';
+  if (timezone === 'Asia/Ulaanbaatar') return 'MN';
+
   if (typeof navigator !== 'undefined') {
     const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
     for (const locale of locales) {
@@ -74,10 +101,6 @@ function detectRegion(): string | undefined {
     }
   }
 
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if (timezone?.startsWith('Europe/')) return 'NL';
-  if (timezone?.startsWith('America/')) return 'US';
-  if (timezone === 'Asia/Ulaanbaatar') return 'MN';
   return undefined;
 }
 
@@ -196,11 +219,11 @@ export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
-    currency: 'USD',
-    countryLabel: COUNTRY_LABEL_BY_CURRENCY.USD,
-    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'USD'),
-    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'USD'),
-    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'USD'),
+    currency: 'EUR',
+    countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
+    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'EUR'),
+    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'EUR'),
+    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'EUR'),
   });
   const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const signatureIsValid = signature.trim().length > 1;
@@ -501,6 +524,14 @@ export default function Home() {
         .included-list li { padding: 1rem 0; border-bottom: 1px solid rgba(245,240,232,0.07); font-size: 0.9rem; color: var(--mist); display: flex; align-items: center; gap: 1rem; }
         .included-list li .icon { color: var(--gold); font-size: 1rem; flex-shrink: 0; }
         .included-list.not li .icon { color: var(--rust); opacity: 0.7; }
+        .packing-details { margin-top: 1.5rem; border: 1px solid rgba(200,169,110,0.22); background: rgba(200,169,110,0.045); }
+        .packing-summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; color: var(--gold); font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; }
+        .packing-summary::-webkit-details-marker { display: none; }
+        .packing-summary::after { content: '▼'; font-size: 0.7rem; transition: transform 0.25s ease; }
+        .packing-details[open] .packing-summary::after { transform: rotate(180deg); }
+        .packing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem 1.2rem; padding: 0 1.2rem 1.2rem; border-top: 1px solid rgba(200,169,110,0.15); }
+        .packing-grid li { list-style: none; position: relative; padding-left: 1rem; font-size: 0.82rem; line-height: 1.55; color: rgba(212,207,196,0.82); }
+        .packing-grid li::before { content: '•'; position: absolute; left: 0; color: var(--gold); }
 
         .booking { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
         .price-card { background: var(--ink); border: 1px solid rgba(200,169,110,0.25); padding: 3rem; }
@@ -569,6 +600,7 @@ export default function Home() {
           .partnership-img { min-height: unset; }
           .partnership-img img { height: auto; object-fit: contain; }
           .form-grid { grid-template-columns: 1fr; }
+          .packing-grid { grid-template-columns: 1fr; }
           .intro-img-accent { display: none; }
         }
       `}</style>
@@ -630,11 +662,11 @@ export default function Home() {
       {/* PHOTO STRIP */}
       <div className="photo-strip">
         {[
-          {src:'/images/riding1.jpg', caption:'The Open Steppe'},
+          {src:'/images/riding1.jpg', caption:'Riding the Valley'},
           {src:'/images/water-crossing.jpg', caption:'River Crossings'},
-          {src:'/images/landscape1.jpg', caption:'Alpine Lakes Region'},
+          {src:'/images/landscape1.jpg', caption:'Sunset Valleys'},
           {src:'/images/gers.jpg', caption:'Your Home on the Steppe'},
-          {src:'/images/sunset.jpg', caption:'Steppe Sunsets'},
+          {src:'/images/sunset.jpg', caption:'Open Steppe Evenings'},
         ].map((item) => (
           <div className="strip-item" key={item.src}>
             <img src={item.src} alt={item.caption} loading="lazy" />
@@ -653,13 +685,8 @@ export default function Home() {
           <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking supports the local hosts directly. That part matters to me.</p>
           <p style={{marginTop:'1.4rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.7}}>— Robert, Founder</p>
         </div>
-        <div style={{display:'flex', flexDirection:'column'}}>
-          <div className="partnership-img reveal">
-            <img src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" loading="lazy" />
-          </div>
-          <div className="partnership-img reveal">
-            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
-          </div>
+        <div className="partnership-img reveal">
+          <img src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" loading="lazy" />
         </div>
       </section>
 
@@ -739,14 +766,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><img src="/images/lake.jpg" alt="Eight Lakes region Mongolia" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding2.jpg" alt="Riding through the valley" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic1.jpg" alt="Traditional Mongolian ger" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic2.jpg" alt="Sunburst over the steppe" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="The journey van" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Panorama at sunset" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Riding along the river" loading="lazy" /></div>
-        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Nomadic herders crossing open steppe" loading="lazy" /></div>
+        <div className="mosaic-item tall"><img src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/riding3.jpg" alt="Grazing animals beside the river" loading="lazy" /></div>
+        <div className="mosaic-item"><img src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" loading="lazy" /></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
@@ -811,11 +838,19 @@ export default function Home() {
           <ul className="included-list not">
             <li><span className="icon">✦</span> International flights</li>
             <li><span className="icon">✦</span> Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
-            <li><span className="icon">✦</span> Camping gear & sleeping bag</li>
-            <li><span className="icon">✦</span> Personal snacks & trail food</li>
-            <li><span className="icon">✦</span> Appropriate clothing for riding</li>
-            <li><span className="icon">✦</span> Personal medications</li>
+            <li><span className="icon">✦</span> Warm sleeping bag & personal camping comfort items</li>
+            <li><span className="icon">✦</span> Riding layers, waterproof shell & sturdy boots</li>
+            <li><span className="icon">✦</span> Personal snacks, medication & toiletries</li>
+            <li><span className="icon">✦</span> Cash for the local family payment and personal extras</li>
           </ul>
+          <details className="packing-details">
+            <summary className="packing-summary">Suggested Packing List</summary>
+            <ul className="packing-grid">
+              {PACKING_LIST.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </details>
           <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
             <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver and provide proof of travel insurance before the trip begins.</p>
           </div>
