@@ -408,7 +408,7 @@ export default function Home() {
             <span className="price-badge">Founding Rate — Limited Availability</span>
             <div className="price-amount">$2,099</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights</div>
-            <div className="price-note">A deposit is required to hold your spot. Remaining balance due before departure. Custom group dates available on request.</div>
+            <div className="price-note">The $2,099 founding rate is split transparently: $959 is paid online to reserve your place, and $1,140 is paid directly in cash to the nomadic host families in Mongolia. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
                 <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
