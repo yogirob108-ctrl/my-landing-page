@@ -253,7 +253,7 @@ export default function Home() {
         <div className="stat reveal"><span className="stat-num">9</span><span className="stat-label">Days / 8 Nights</span></div>
         <div className="stat reveal reveal-delay-1"><span className="stat-num">8</span><span className="stat-label">Max Guests</span></div>
         <div className="stat reveal reveal-delay-2"><span className="stat-num">4</span><span className="stat-label">Days on Horseback</span></div>
-        <div className="stat reveal reveal-delay-3"><span className="stat-num">$1,500</span><span className="stat-label">Per Person</span></div>
+        <div className="stat reveal reveal-delay-3"><span className="stat-num">$2,099</span><span className="stat-label">Per Person</span></div>
       </div>
 
       {/* INTRO */}
@@ -368,7 +368,7 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">What&apos;s Included</span>
           <h2 className="section-title">Everything<br /><em>You Need</em></h2>
-          <p className="section-body" style={{marginBottom:'2rem'}}>Your $1,500 covers the full experience. No hidden costs.</p>
+          <p className="section-body" style={{marginBottom:'2rem'}}>Your $2,099 covers the full experience. No hidden costs.</p>
           <ul className="included-list">
             <li><span className="icon">✦</span> Transport: capital city to village & return</li>
             <li><span className="icon">✦</span> Host family accommodation (traditional gers)</li>
@@ -403,10 +403,10 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
-          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $1,500 per person — limited to 8 participants.</p>
+          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of $2,099 per person — limited to 8 participants.</p>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">Founding Rate — Limited Availability</span>
-            <div className="price-amount">$1,500</div>
+            <div className="price-amount">$2,099</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights</div>
             <div className="price-note">A deposit is required to hold your spot. Remaining balance due before departure. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>

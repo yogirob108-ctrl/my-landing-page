@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://buy.stripe.com/cNi3coc6RgPK50saip0gw00';
 
-const BASE_PRICE_USD = 1699;
-const BASE_DEPOSIT_USD = 510;
-const BASE_BALANCE_USD = 1189;
+const BASE_PRICE_USD = 2099;
+const BASE_DEPOSIT_USD = 500;
+const BASE_BALANCE_USD = 1599;
 
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
@@ -280,7 +280,7 @@ export default function Home() {
         },
         offers: {
           '@type': 'Offer',
-          price: '1699',
+          price: '2099',
           priceCurrency: 'USD',
           availability: 'https://schema.org/LimitedAvailability',
           validFrom: '2026-01-01',
@@ -306,7 +306,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'A 30% deposit is non-refundable. The remaining balance is paid directly to the host family in cash upon arrival.' } },
+          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'The $500 deposit is non-refundable. The remaining balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.' } },
         ],
       },
     ],
@@ -784,7 +784,7 @@ export default function Home() {
             <span className="price-badge">Founding Rate — Limited Availability</span>
             <div className="price-amount">{pricing.tourPrice}</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
-            <div className="price-note">Prices are localized from a $1,699 USD base rate for easier browsing. Stripe confirms the final payment currency and amount securely at checkout. Custom group dates available on request.</div>
+            <div className="price-note">Prices are localized from a $2,099 USD founding rate for easier browsing. Stripe confirms the final payment currency and amount securely at checkout. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
                 <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
@@ -933,7 +933,7 @@ export default function Home() {
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit (30%)</strong> is required to secure your place. Submit the application with a valid email first so we can send your booking confirmation. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is paid in cash directly to the host family upon arrival.
+                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit</strong> is required to secure your place. Submit the application with a valid email first so we can send your booking confirmation. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.
               </p>
               <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.6, lineHeight:1.6, marginBottom:'1rem'}}>
                 Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
@@ -1009,8 +1009,8 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does the cash payment work?', a:'Your $510 deposit is paid online to secure your spot. The remaining $1,189 balance is paid directly to the host family upon your arrival in Mongolia — either in Mongolian tögrög, USD, or Euros, whichever is more convenient for you. There are no hidden fees or additional charges.'},
-            {q:'What is your cancellation policy?', a:'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.'},
+            {q:'How does the remaining balance work?', a:'Your $500 deposit is paid online to secure your spot. The remaining $1,599 balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests. We will confirm the most convenient payment method with you after your application is accepted.'},
+            {q:'What is your cancellation policy?', a:'The $500 deposit is non-refundable. The remaining balance of $1,599 is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>

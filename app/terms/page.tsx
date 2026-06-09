@@ -31,11 +31,11 @@ export default function TermsAndConditions() {
           },
           {
             title: '2. Booking & Deposit',
-            body: 'A non-refundable deposit of approximately 30% of the total tour price is required to confirm your place. Your spot is not guaranteed until the deposit has been received and confirmed by us. Where available, prices may be displayed and charged in your local currency through Stripe. The remaining balance is due upon arrival in Mongolia and is paid directly to the host family in cash (USD, Euros, or Mongolian tögrög).',
+            body: 'A non-refundable $500 USD deposit, or the local-currency equivalent shown at checkout where supported, is required to confirm your place. Your spot is not guaranteed until the deposit has been received and confirmed by us. Where available, prices may be displayed and charged in your local currency through Stripe. The remaining balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.',
           },
           {
             title: '3. Tour Price',
-            body: 'The current base tour price is $1,699 USD per person for the 9-day / 8-night programme, or the local-currency equivalent shown at checkout where supported. This includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The current founding tour price is $2,099 USD per person for the 9-day / 8-night programme, or the local-currency equivalent shown at checkout where supported. This includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
