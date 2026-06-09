@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 
-const STRIPE_LINK = 'https://buy.stripe.com/cNi3coc6RgPK50saip0gw00';
+const STRIPE_LINK = 'https://buy.stripe.com/9B628k8UFarmakM1LT0gw03';
 
 const BASE_PRICE_USD = 2099;
 const BASE_ONLINE_PAYMENT_USD = 959;
@@ -994,11 +994,15 @@ export default function Home() {
                 Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
               </p>
               <div style={{position:'relative'}}>
-                <stripe-buy-button
-                  buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
-                  publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
-                  style={{display:'block', width:'100%', opacity: canPay ? 1 : 0.35, transition:'opacity 0.3s'}}
-                />
+                <a
+                  href={canPay ? STRIPE_LINK : undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-disabled={!canPay}
+                  style={{display:'flex', width:'100%', boxSizing:'border-box', alignItems:'center', justifyContent:'center', padding:'1rem 1.2rem', background:'#635bff', border:'1px solid #635bff', borderRadius:'4px', color:'#fff', fontSize:'0.75rem', letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:500, textDecoration:'none', opacity: canPay ? 1 : 0.35, transition:'opacity 0.3s', pointerEvents: canPay ? 'auto' : 'none'}}
+                >
+                  Complete $959 Online Booking Payment →
+                </a>
                 {!canPay && (
                   <div
                     style={{position:'absolute', inset:0, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}
