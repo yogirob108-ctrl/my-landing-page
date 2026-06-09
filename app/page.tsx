@@ -214,6 +214,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
   const [signature, setSignature] = useState('');
   const [email, setEmail] = useState('');
@@ -234,6 +235,22 @@ export default function Home() {
   useEffect(() => {
     setPricing(getLocalizedPricing());
   }, []);
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightboxImage(null);
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [lightboxImage]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -517,6 +534,13 @@ export default function Home() {
         .mosaic-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.tall { grid-row: span 2; }
+        .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
+        .image-button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+        .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+        .lightbox-frame { position: relative; width: min(92vw, 1200px); height: min(86vh, 820px); }
+        .lightbox-frame img { object-fit: contain; }
+        .lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1001; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.65); color: var(--cream); padding: 0.7rem 0.9rem; cursor: pointer; font-size: 1rem; }
+        .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
 
         .included { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
         .included-list { list-style: none; }
@@ -650,7 +674,14 @@ export default function Home() {
       {/* INTRO */}
       <section className="intro" id="experience">
         <div className="intro-img reveal">
-          <Image src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" fill sizes="(max-width: 900px) 100vw, 50vw" />
+          <button
+            type="button"
+            className="image-button"
+            aria-label="View larger image: Mongolian horseman in traditional dress"
+            onClick={() => setLightboxImage({ src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' })}
+          >
+            <Image src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" fill sizes="(max-width: 900px) 100vw, 50vw" />
+          </button>
           <span style={{position:'absolute', bottom:'1rem', left:'1rem', fontSize:'0.62rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(245,240,232,0.75)', background:'rgba(14,12,9,0.55)', padding:'0.35rem 0.7rem', backdropFilter:'blur(4px)', pointerEvents:'none'}}>Suma — Your Guide</span>
         </div>
         <div className="reveal reveal-delay-1">
@@ -676,7 +707,14 @@ export default function Home() {
           {src:'/images/sunset.jpg', caption:'Open Steppe Evenings'},
         ].map((item) => (
           <div className="strip-item" key={item.src}>
-            <Image src={item.src} alt={item.caption} fill sizes="(max-width: 900px) 20vw, 20vw" />
+            <button
+              type="button"
+              className="image-button"
+              aria-label={`View larger image: ${item.caption}`}
+              onClick={() => setLightboxImage({ src: item.src, alt: item.caption })}
+            >
+              <Image src={item.src} alt={item.caption} fill sizes="(max-width: 900px) 20vw, 20vw" />
+            </button>
             <div className="strip-caption">{item.caption}</div>
           </div>
         ))}
@@ -693,7 +731,14 @@ export default function Home() {
           <p style={{marginTop:'1.4rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.7}}>— Robert, Founder</p>
         </div>
         <div className="partnership-img reveal">
-          <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill sizes="(max-width: 900px) 100vw, 50vw" />
+          <button
+            type="button"
+            className="image-button"
+            aria-label="View larger image: Robert with the host family outside a traditional ger in Mongolia"
+            onClick={() => setLightboxImage({ src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' })}
+          >
+            <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill sizes="(max-width: 900px) 100vw, 50vw" />
+          </button>
         </div>
       </section>
 
@@ -773,14 +818,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill sizes="(max-width: 900px) 50vw, 50vw" /></div>
-        <div className="mosaic-item"><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="mosaic-item"><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
+        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => setLightboxImage({ src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' })}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => setLightboxImage({ src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' })}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => setLightboxImage({ src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' })}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => setLightboxImage({ src: '/images/mosaic2.jpg', alt: 'Ger camp at sunrise in the valley' })}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => setLightboxImage({ src: '/images/mosaic3.jpg', alt: 'Mongolian eagle portrait' })}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => setLightboxImage({ src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' })}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => setLightboxImage({ src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' })}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => setLightboxImage({ src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' })}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
@@ -1147,6 +1192,16 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {lightboxImage && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxImage(null)}>
+          <button type="button" className="lightbox-close" onClick={() => setLightboxImage(null)} aria-label="Close image preview">×</button>
+          <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
+            <Image src={lightboxImage.src} alt={lightboxImage.alt} fill sizes="95vw" priority />
+          </div>
+          <div className="lightbox-caption">{lightboxImage.alt}</div>
+        </div>
+      )}
 
       {showWaiver && <WaiverModal onClose={() => setShowWaiver(false)} onAgree={() => setShowWaiver(false)} />}
 
