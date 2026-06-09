@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
   description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Ride with a nomadic family, sleep in traditional gers, and experience the real Mongolian steppe.",
   keywords: [
+    "Horse Adventures",
     "Mongolia horse trekking",
     "Naiman Nuur tour",
     "Eight Lakes Mongolia",
