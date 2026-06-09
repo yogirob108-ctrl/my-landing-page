@@ -61,6 +61,28 @@ const DISPLAY_EXCHANGE_RATES: Record<CurrencyCode, number> = {
   MNT: 3450,
 };
 
+const PACKING_LIST = [
+  'Warm sleeping bag rated for cold nights',
+  'Comfortable riding boots or sturdy hiking boots',
+  'Light camp shoes or flip-flops',
+  'Rain jacket or waterproof shell',
+  'Warm layers for cold mornings and evenings',
+  'Riding gloves or lightweight outdoor gloves',
+  'Sun hat or cap',
+  'Sunglasses with secure strap',
+  'Swimsuit for lakes, rivers or hot springs',
+  'Headlamp or small flashlight',
+  'Reusable water bottle',
+  'Sunscreen and lip balm with SPF',
+  'Mosquito repellent',
+  'Personal medication and basic toiletries',
+  'Wet wipes, dry tissues and toilet paper',
+  'Hand cream or Vaseline for dry weather',
+  'Travel pillow if you sleep better with one',
+  'Universal adapter plug and power bank',
+  'Binoculars or camera if you want them',
+];
+
 function detectRegion(): string | undefined {
   if (typeof navigator !== 'undefined') {
     const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
@@ -501,6 +523,14 @@ export default function Home() {
         .included-list li { padding: 1rem 0; border-bottom: 1px solid rgba(245,240,232,0.07); font-size: 0.9rem; color: var(--mist); display: flex; align-items: center; gap: 1rem; }
         .included-list li .icon { color: var(--gold); font-size: 1rem; flex-shrink: 0; }
         .included-list.not li .icon { color: var(--rust); opacity: 0.7; }
+        .packing-details { margin-top: 1.5rem; border: 1px solid rgba(200,169,110,0.22); background: rgba(200,169,110,0.045); }
+        .packing-summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; color: var(--gold); font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; }
+        .packing-summary::-webkit-details-marker { display: none; }
+        .packing-summary::after { content: '▼'; font-size: 0.7rem; transition: transform 0.25s ease; }
+        .packing-details[open] .packing-summary::after { transform: rotate(180deg); }
+        .packing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem 1.2rem; padding: 0 1.2rem 1.2rem; border-top: 1px solid rgba(200,169,110,0.15); }
+        .packing-grid li { list-style: none; position: relative; padding-left: 1rem; font-size: 0.82rem; line-height: 1.55; color: rgba(212,207,196,0.82); }
+        .packing-grid li::before { content: '•'; position: absolute; left: 0; color: var(--gold); }
 
         .booking { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
         .price-card { background: var(--ink); border: 1px solid rgba(200,169,110,0.25); padding: 3rem; }
@@ -569,6 +599,7 @@ export default function Home() {
           .partnership-img { min-height: unset; }
           .partnership-img img { height: auto; object-fit: contain; }
           .form-grid { grid-template-columns: 1fr; }
+          .packing-grid { grid-template-columns: 1fr; }
           .intro-img-accent { display: none; }
         }
       `}</style>
@@ -653,13 +684,8 @@ export default function Home() {
           <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking supports the local hosts directly. That part matters to me.</p>
           <p style={{marginTop:'1.4rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.7}}>— Robert, Founder</p>
         </div>
-        <div style={{display:'flex', flexDirection:'column'}}>
-          <div className="partnership-img reveal">
-            <img src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" loading="lazy" />
-          </div>
-          <div className="partnership-img reveal">
-            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
-          </div>
+        <div className="partnership-img reveal">
+          <img src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" loading="lazy" />
         </div>
       </section>
 
@@ -811,11 +837,19 @@ export default function Home() {
           <ul className="included-list not">
             <li><span className="icon">✦</span> International flights</li>
             <li><span className="icon">✦</span> Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
-            <li><span className="icon">✦</span> Camping gear & sleeping bag</li>
-            <li><span className="icon">✦</span> Personal snacks & trail food</li>
-            <li><span className="icon">✦</span> Appropriate clothing for riding</li>
-            <li><span className="icon">✦</span> Personal medications</li>
+            <li><span className="icon">✦</span> Warm sleeping bag & personal camping comfort items</li>
+            <li><span className="icon">✦</span> Riding layers, waterproof shell & sturdy boots</li>
+            <li><span className="icon">✦</span> Personal snacks, medication & toiletries</li>
+            <li><span className="icon">✦</span> Cash for the local family payment and personal extras</li>
           </ul>
+          <details className="packing-details">
+            <summary className="packing-summary">Suggested Packing List</summary>
+            <ul className="packing-grid">
+              {PACKING_LIST.map(item => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </details>
           <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
             <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver and provide proof of travel insurance before the trip begins.</p>
           </div>
