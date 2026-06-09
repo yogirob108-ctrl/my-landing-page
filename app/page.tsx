@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://buy.stripe.com/cNi3coc6RgPK50saip0gw00';
 
-const BASE_PRICE_USD = 1699;
-const BASE_DEPOSIT_USD = 510;
-const BASE_BALANCE_USD = 1189;
+const BASE_PRICE_USD = 2099;
+const BASE_DEPOSIT_USD = 500;
+const BASE_BALANCE_USD = 1599;
 
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
@@ -272,7 +272,7 @@ export default function Home() {
         name: '8 Lakes Tours — Nomadic Horse Trek Mongolia',
         description: '9-day immersive horseback trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
         url: 'https://www.8lakestours.com',
-        image: 'https://www.8lakestours.com/images/hero.jpg',
+        image: ['https://www.8lakestours.com/images/hero.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
         touristType: 'Adventure travellers seeking authentic nomadic experiences',
         itinerary: {
           '@type': 'ItemList',
@@ -280,7 +280,7 @@ export default function Home() {
         },
         offers: {
           '@type': 'Offer',
-          price: '1699',
+          price: '2099',
           priceCurrency: 'USD',
           availability: 'https://schema.org/LimitedAvailability',
           validFrom: '2026-01-01',
@@ -290,6 +290,7 @@ export default function Home() {
           name: '8 Lakes Tours',
           url: 'https://www.8lakestours.com',
           email: 'info@8lakestours.com',
+          sameAs: ['https://www.instagram.com/8lakestours'],
           founder: { '@type': 'Person', name: 'Robert Zaher' },
         },
         location: {
@@ -306,7 +307,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'A 30% deposit is non-refundable. The remaining balance is paid directly to the host family in cash upon arrival.' } },
+          { '@type': 'Question', name: 'What is your cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'The $500 deposit is non-refundable. The remaining balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.' } },
         ],
       },
     ],
@@ -350,6 +351,12 @@ export default function Home() {
           font-size: 1.3rem; font-weight: 300; letter-spacing: 0.15em;
           color: var(--cream); text-decoration: none; text-transform: uppercase;
         }
+        .nav-links { display: flex; align-items: center; gap: 1rem; }
+        .nav-social {
+          font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+          color: rgba(245,240,232,0.78); text-decoration: none; transition: color 0.3s ease;
+        }
+        .nav-social:hover { color: var(--gold); }
         .nav-cta {
           font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
           color: var(--cream); text-decoration: none;
@@ -456,6 +463,19 @@ export default function Home() {
         .partnership-img { overflow: hidden; min-height: 600px; }
         .partnership-img img { width: 100%; height: 100%; object-fit: cover; }
 
+        .trust { background: var(--dark); padding: 7rem 5rem; }
+        .trust-header { max-width: 760px; margin: 0 auto 3rem; text-align: center; }
+        .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1120px; margin: 0 auto; }
+        .trust-card { border: 1px solid rgba(200,169,110,0.2); background: rgba(200,169,110,0.045); padding: 1.6rem; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; }
+        .trust-quote { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--cream); line-height: 1.55; font-style: italic; }
+        .trust-source { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 1.4rem; }
+        .proof-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; max-width: 1120px; margin: 2rem auto 0; background: rgba(200,169,110,0.18); border: 1px solid rgba(200,169,110,0.18); }
+        .proof-item { background: var(--ink); padding: 1.2rem; text-align: center; }
+        .proof-value { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--gold); display: block; }
+        .proof-label { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); opacity: 0.7; margin-top: 0.35rem; display: block; }
+        .instagram-link { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.45); }
+        .instagram-link:hover { color: var(--cream); border-color: var(--cream); }
+
         .itinerary { background: var(--dark); }
         .itinerary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 4rem; }
         .itin-card { background: var(--ink); padding: 3rem; position: relative; overflow: hidden; transition: background 0.3s ease; }
@@ -530,6 +550,9 @@ export default function Home() {
           .hero-sub .desktop-line { display: none; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
+          .trust { padding: 4rem 1.5rem; }
+          .trust-grid { grid-template-columns: 1fr; }
+          .proof-strip { grid-template-columns: 1fr 1fr; }
           .itinerary-grid { grid-template-columns: 1fr; }
           .itin-tag { font-size: 0.75rem; }
           .itin-title { font-size: 2rem; }
@@ -553,7 +576,10 @@ export default function Home() {
       {/* NAV */}
       <nav id="main-nav">
         <a href="#top" className="nav-logo">8 Lakes Tours</a>
-        <a href="#book" className="nav-cta">Reserve</a>
+        <div className="nav-links">
+          <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" className="nav-social">Instagram</a>
+          <a href="#book" className="nav-cta">Reserve</a>
+        </div>
       </nav>
 
       {/* HERO */}
@@ -592,7 +618,7 @@ export default function Home() {
           <span className="section-eyebrow">What This Is</span>
           <h2 className="section-title">Mongolia<br /><em>Beyond Tourism</em></h2>
           <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is built for people who want to be somewhere real — not just pass through it.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is the first Horse Adventures expedition — built for people who want to be somewhere real, not just pass through it.</p>
           <div style={{marginTop:'2.5rem', display:'flex', gap:'2rem', flexWrap:'wrap'}}>
             <div><span style={{fontFamily:"'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Beginner</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Riders Welcome</p></div>
             <div><span style={{fontFamily:"'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Small</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Intimate Group</p></div>
@@ -624,17 +650,45 @@ export default function Home() {
           <h2 className="section-title">The Family<br /><em>Behind It</em></h2>
           <p className="section-body">I met Ganbold while trekking solo through Mongolia. I hadn&apos;t planned to stay — but his family pulled me in with the kind of warmth that&apos;s hard to explain and impossible to forget. We rode together, shared meals, and spent evenings around the fire talking about the land, the horses, and the life they&apos;ve built here across three generations.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Ganbold&apos;s son Suma grew up in this valley and has been guiding riders through it for years — he knows every trail, every animal, every shift in the weather. When I floated the idea of bringing small groups out here, both of them lit up. This trip exists because they wanted it to.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking goes directly to them. That part matters to me.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking supports the local hosts directly. That part matters to me.</p>
           <p style={{marginTop:'1.4rem', fontSize:'0.75rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.7}}>— Robert, Founder</p>
         </div>
         <div style={{display:'flex', flexDirection:'column'}}>
           <div className="partnership-img reveal">
-            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
+            <img src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" loading="lazy" />
           </div>
           <div className="partnership-img reveal">
-            <img src="/images/partnership2.jpg" alt="Mongolian host family partnership" loading="lazy" />
+            <img src="/images/family.jpg" alt="Group photo with Mongolian host family" loading="lazy" />
           </div>
         </div>
+      </section>
+
+      {/* TRUST */}
+      <section className="trust" id="trust">
+        <div className="trust-header reveal">
+          <span className="section-eyebrow">Proof Before Promises</span>
+          <h2 className="section-title">Built on<br /><em>Real Relationships</em></h2>
+          <p className="section-body" style={{margin:'0 auto'}}>This is our inaugural public season, so we&apos;re not pretending to have hundreds of polished reviews yet. What we can show you is the actual partnership, the people hosting you, and the practical safety structure behind the trip.</p>
+        </div>
+        <div className="trust-grid">
+          {[
+            ['Local host family', 'You stay with Ganbold, Suma and their family — not in a staged tourist camp. The trip is built around their home, horses and valley knowledge.'],
+            ['Experienced guide', 'Suma grew up riding this terrain and guides guests through the Eight Lakes region, reading the horses, weather and route as conditions change.'],
+            ['Transparent first season', 'Small groups, direct communication and no mass-market machinery. Guest reviews from the 2026 trips will be added as soon as the first groups return.'],
+          ].map(([source, quote]) => (
+            <div className="trust-card reveal" key={source}>
+              <p className="trust-quote">“{quote}”</p>
+              <p className="trust-source">{source}</p>
+            </div>
+          ))}
+        </div>
+        <div className="proof-strip reveal">
+          <div className="proof-item"><span className="proof-value">8</span><span className="proof-label">Max guests</span></div>
+          <div className="proof-item"><span className="proof-value">18+</span><span className="proof-label">Adults only</span></div>
+          <div className="proof-item"><span className="proof-value">Insurance</span><span className="proof-label">Required</span></div>
+          <div className="proof-item"><span className="proof-value">Direct</span><span className="proof-label">Family partnership</span></div>
+        </div>
+        <p className="section-body reveal" style={{textAlign:'center', margin:'2rem auto 0', maxWidth:'720px'}}>Follow the route, camp life and behind-the-scenes buildout on <a className="instagram-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram @8lakestours</a>.</p>
       </section>
 
       {/* ITINERARY */}
@@ -775,7 +829,7 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
-          <p className="section-body">We&apos;re running our inaugural trip at a special introductory rate of {pricing.tourPrice} per person — limited to 8 participants.</p>
+          <p className="section-body">We&apos;re running our inaugural Horse Adventures trip at a special introductory rate of {pricing.tourPrice} per person — limited to 8 participants.</p>
           <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
@@ -784,7 +838,7 @@ export default function Home() {
             <span className="price-badge">Founding Rate — Limited Availability</span>
             <div className="price-amount">{pricing.tourPrice}</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
-            <div className="price-note">Prices are localized from a $1,699 USD base rate for easier browsing. Stripe confirms the final payment currency and amount securely at checkout. Custom group dates available on request.</div>
+            <div className="price-note">Prices are localized from a $2,099 USD founding rate for easier browsing. Stripe confirms the final payment currency and amount securely at checkout. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
                 <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
@@ -933,7 +987,7 @@ export default function Home() {
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit (30%)</strong> is required to secure your place. Submit the application with a valid email first so we can send your booking confirmation. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is paid in cash directly to the host family upon arrival.
+                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit</strong> is required to secure your place. Submit the application with a valid email first so we can send your booking confirmation. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.
               </p>
               <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.6, lineHeight:1.6, marginBottom:'1rem'}}>
                 Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
@@ -1009,8 +1063,8 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does the cash payment work?', a:'Your $510 deposit is paid online to secure your spot. The remaining $1,189 balance is paid directly to the host family upon your arrival in Mongolia — either in Mongolian tögrög, USD, or Euros, whichever is more convenient for you. There are no hidden fees or additional charges.'},
-            {q:'What is your cancellation policy?', a:'The $510 deposit is non-refundable. The remaining balance of $1,189 is paid directly to the host family in cash upon arrival.'},
+            {q:'How does the remaining balance work?', a:'Your $500 deposit is paid online to secure your spot. The remaining $1,599 balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests. We will confirm the most convenient payment method with you after your application is accepted.'},
+            {q:'What is your cancellation policy?', a:'The $500 deposit is non-refundable. The remaining balance of $1,599 is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
@@ -1024,13 +1078,14 @@ export default function Home() {
       <footer>
         <div>
           <div className="footer-logo">8 Lakes Tours</div>
-          <div className="footer-tagline">Nomadic Horse Trek · Mongolia</div>
+          <div className="footer-tagline">A Horse Adventures Expedition · Mongolia</div>
         </div>
         <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'0.6rem'}}>
           <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
-          <div style={{display:'flex', gap:'1.2rem'}}>
-            <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.5, textDecoration:'none'}}>Terms &amp; Conditions</a>
-            <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.5, textDecoration:'none'}}>Privacy Policy</a>
+          <div style={{display:'flex', gap:'1.2rem', flexWrap:'wrap', justifyContent:'flex-end'}}>
+            <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Instagram</a>
+            <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Terms &amp; Conditions</a>
+            <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Privacy Policy</a>
           </div>
         </div>
       </footer>
