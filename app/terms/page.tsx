@@ -30,16 +30,16 @@ export default function TermsAndConditions() {
             body: 'By submitting a booking enquiry or making a payment through 8 Lakes Tours, you agree to these Terms & Conditions in full. These terms constitute the entire agreement between you and 8 Lakes Tours (operated by Robert Zaher, contact: info@8lakestours.com).',
           },
           {
-            title: '2. Booking & Deposit',
-            body: 'A non-refundable $500 USD deposit, or the local-currency equivalent shown at checkout where supported, is required to confirm your place. Your spot is not guaranteed until the deposit has been received and confirmed by us. Where available, prices may be displayed and charged in your local currency through Stripe. The remaining balance is due before departure or upon arrival, depending on the payment arrangement confirmed with accepted guests.',
+            title: '2. Booking & Payment Structure',
+            body: 'A non-refundable $959 USD online booking payment, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with Horse Adventures. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining $1,140 USD local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
           },
           {
             title: '3. Tour Price',
-            body: 'The current founding tour price is $2,099 USD per person for the 9-day / 8-night programme, or the local-currency equivalent shown at checkout where supported. This includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The current founding tour price is $2,099 USD per person for the 9-day / 8-night programme. This is split into a $959 USD online booking payment to Horse Adventures and a $1,140 USD cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
-            body: 'The deposit is non-refundable under all circumstances. If you cancel more than 60 days before your departure date, no further charges apply. If you cancel within 60 days of departure, the full tour price becomes due. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
+            body: 'The $959 USD online booking payment is non-refundable under all circumstances once your place is confirmed. The $1,140 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
           },
           {
             title: '5. Travel Insurance',
