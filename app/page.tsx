@@ -192,6 +192,7 @@ export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
   const [signature, setSignature] = useState('');
+  const [email, setEmail] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
@@ -201,7 +202,10 @@ export default function Home() {
     deposit: formatApproxUsd(BASE_DEPOSIT_USD, 'USD'),
     balance: formatApproxUsd(BASE_BALANCE_USD, 'USD'),
   });
-  const canPay = signature.trim().length > 1;
+  const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const signatureIsValid = signature.trim().length > 1;
+  const hasRequiredContact = signatureIsValid && emailIsValid;
+  const canPay = formSubmitted && hasRequiredContact;
 
   useEffect(() => {
     setPricing(getLocalizedPricing());
@@ -835,7 +839,7 @@ export default function Home() {
               <div className="form-group"><label className="form-label">First Name</label><input className="form-input" name="first_name" type="text" placeholder="First name" required /></div>
               <div className="form-group"><label className="form-label">Last Name</label><input className="form-input" name="last_name" type="text" placeholder="Last name" required /></div>
             </div>
-            <div className="form-group"><label className="form-label">Email Address</label><input className="form-input" name="email" type="email" placeholder="you@example.com" required /></div>
+            <div className="form-group"><label className="form-label">Email Address — Required for Confirmation</label><input className="form-input" name="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required /></div>
             <div className="form-grid">
               <div className="form-group"><label className="form-label">Phone Number</label><input className="form-input" name="phone" type="tel" placeholder="+1 (555) 000-0000" /></div>
               <div className="form-group"><label className="form-label">Nationality</label><input className="form-input" name="nationality" type="text" placeholder="e.g. American" /></div>
@@ -914,9 +918,9 @@ export default function Home() {
             {!formSubmitted ? (
               <button
                 type="submit"
-                disabled={!canPay || formSubmitting}
+                disabled={!hasRequiredContact || formSubmitting}
                 className="submit-btn"
-                style={{marginTop:'0.5rem', opacity: canPay ? 1 : 0.4, transition:'opacity 0.3s', cursor: canPay ? 'pointer' : 'not-allowed'}}
+                style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
                 {formSubmitting ? 'Submitting…' : 'Submit Application'}
               </button>
@@ -929,12 +933,12 @@ export default function Home() {
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
               <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Deposit to Reserve Your Spot</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit (30%)</strong> is required to secure your place. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is paid in cash directly to the host family upon arrival.
+                A <strong style={{color:'var(--cream)'}}>{pricing.deposit} deposit (30%)</strong> is required to secure your place. Submit the application with a valid email first so we can send your booking confirmation. The remaining <strong style={{color:'var(--cream)'}}>{pricing.balance}</strong> is paid in cash directly to the host family upon arrival.
               </p>
               <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.6, lineHeight:1.6, marginBottom:'1rem'}}>
                 Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
               </p>
-              <div style={{position:'relative'}} onClick={() => { const form = document.querySelector<HTMLFormElement>('.booking-form'); if (form) submitToFormspree(form); }}>
+              <div style={{position:'relative'}}>
                 <stripe-buy-button
                   buy-button-id="buy_btn_1TLn713OYuYvjeqEojr4C6gS"
                   publishable-key="pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w"
@@ -946,7 +950,7 @@ export default function Home() {
                     onClick={e => { e.stopPropagation(); }}
                   >
                     <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(14,12,9,0.85)', padding:'0.5rem 1rem', pointerEvents:'none'}}>
-                      Please type your full name as a signature above
+                      {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your application before payment'}
                     </p>
                   </div>
                 )}
