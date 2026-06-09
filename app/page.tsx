@@ -535,9 +535,11 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.tall { grid-row: span 2; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
+        .image-button::after { content: 'Click to expand'; position: absolute; right: 0.75rem; bottom: 0.75rem; z-index: 2; padding: 0.4rem 0.55rem; border: 1px solid rgba(245,240,232,0.28); border-radius: 999px; background: rgba(14,12,9,0.68); color: var(--cream); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0; transform: translateY(4px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
+        .image-button:hover::after, .image-button:focus-visible::after { opacity: 1; transform: translateY(0); }
         .image-button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
-        .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
-        .lightbox-frame { position: relative; width: min(92vw, 1200px); height: min(86vh, 820px); }
+        .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.96); display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; }
+        .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(90vh, 1100px); }
         .lightbox-frame img { object-fit: contain; }
         .lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1001; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.65); color: var(--cream); padding: 0.7rem 0.9rem; cursor: pointer; font-size: 1rem; }
         .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
