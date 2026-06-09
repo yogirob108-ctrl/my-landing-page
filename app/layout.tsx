@@ -102,7 +102,6 @@ export default function RootLayout({
           gtag('js', new Date());
           gtag('config', 'G-E9PW7T08LZ');
         `}</Script>
-        <Script src="https://js.stripe.com/v3/buy-button.js" strategy="lazyOnload" />
       </body>
     </html>
   );
