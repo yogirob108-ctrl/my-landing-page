@@ -453,17 +453,17 @@ export default function Home() {
         .partnership-img img { width: 100%; height: 100%; object-fit: cover; }
 
         .itinerary { background: var(--dark); }
-        .itinerary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 4rem; }
-        .itin-card { background: var(--ink); padding: 2.5rem; position: relative; overflow: hidden; transition: background 0.3s ease; }
+        .itinerary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 4rem; }
+        .itin-card { background: var(--ink); padding: 3rem; position: relative; overflow: hidden; transition: background 0.3s ease; }
         .itin-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
         .itin-card:hover::before { transform: scaleX(1); }
         .itin-card:hover { background: #1e1b15; }
-        .itin-days { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: rgba(200,169,110,0.2); position: absolute; top: 1.5rem; right: 1.5rem; line-height: 1; }
-        .itin-tag { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; display: block; }
-        .itin-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: var(--cream); margin-bottom: 1rem; }
-        .itin-desc { font-size: 0.875rem; line-height: 1.7; color: var(--mist); opacity: 0.8; }
-        .itin-list { list-style: none; margin-top: 1rem; }
-        .itin-list li { font-size: 0.8rem; color: var(--mist); padding: 0.3rem 0; padding-left: 1rem; position: relative; opacity: 0.7; }
+        .itin-days { font-family: 'Cormorant Garamond', serif; font-size: 3.4rem; font-weight: 300; color: rgba(200,169,110,0.24); position: absolute; top: 1.5rem; right: 1.5rem; line-height: 1; }
+        .itin-tag { font-size: 0.72rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
+        .itin-title { font-family: 'Cormorant Garamond', serif; font-size: 1.85rem; font-weight: 300; color: var(--cream); margin-bottom: 1.1rem; line-height: 1.15; }
+        .itin-desc { font-size: 1rem; line-height: 1.8; color: rgba(245,240,232,0.78); opacity: 1; }
+        .itin-list { list-style: none; margin-top: 1.2rem; }
+        .itin-list li { font-size: 0.95rem; line-height: 1.65; color: rgba(245,240,232,0.72); padding: 0.45rem 0; padding-left: 1.15rem; position: relative; opacity: 1; }
         .itin-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
 
         .mosaic { padding: 0; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 350px 350px 350px; gap: 3px; }
