@@ -309,10 +309,20 @@ export default function Home() {
     '@context': 'https://schema.org',
     '@graph': [
       {
+        '@type': 'WebSite',
+        name: '8 Lakes Tours',
+        url: 'https://www.8lakestours.com',
+        inLanguage: 'en',
+        publisher: { '@type': 'Organization', name: '8 Lakes Tours' },
+      },
+      {
         '@type': 'TouristTrip',
+        '@id': 'https://www.8lakestours.com/#trip',
         name: '8 Lakes Tours — Nomadic Horse Trek Mongolia',
         description: '9-day immersive horseback trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
         url: 'https://www.8lakestours.com',
+        mainEntityOfPage: 'https://www.8lakestours.com',
+        inLanguage: 'en',
         image: ['https://www.8lakestours.com/images/hero-horseback.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
         touristType: 'Adventure travellers seeking authentic nomadic experiences',
         itinerary: {
@@ -338,6 +348,10 @@ export default function Home() {
           '@type': 'Place',
           name: 'Orkhon Valley & Naiman Nuur, Mongolia',
           geo: { '@type': 'GeoCoordinates', latitude: 46.8, longitude: 102.2 },
+        },
+        areaServed: {
+          '@type': 'Country',
+          name: 'Mongolia',
         },
       },
       {
@@ -597,6 +611,11 @@ export default function Home() {
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
 
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto; }
+          *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+
         @media (max-width: 900px) {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
@@ -646,7 +665,8 @@ export default function Home() {
             src="/images/hero-horseback.jpg"
             alt="View from horseback across Mongolia's open valley beneath dramatic clouds"
             fill
-            priority
+            preload
+            quality={82}
             sizes="100vw"
           />
         </div>
@@ -682,7 +702,7 @@ export default function Home() {
             aria-label="View larger image: Mongolian horseman in traditional dress"
             onClick={() => setLightboxImage({ src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' })}
           >
-            <Image src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" fill sizes="(max-width: 900px) 100vw, 50vw" />
+            <Image src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" fill quality={72} sizes="(max-width: 900px) 100vw, 50vw" />
           </button>
           <span style={{position:'absolute', bottom:'1rem', left:'1rem', fontSize:'0.62rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(245,240,232,0.75)', background:'rgba(14,12,9,0.55)', padding:'0.35rem 0.7rem', backdropFilter:'blur(4px)', pointerEvents:'none'}}>Suma — Your Guide</span>
         </div>
@@ -715,7 +735,7 @@ export default function Home() {
               aria-label={`View larger image: ${item.caption}`}
               onClick={() => setLightboxImage({ src: item.src, alt: item.caption })}
             >
-              <Image src={item.src} alt={item.caption} fill sizes="(max-width: 900px) 20vw, 20vw" />
+              <Image src={item.src} alt={item.caption} fill quality={70} sizes="(max-width: 900px) 20vw, 20vw" />
             </button>
             <div className="strip-caption">{item.caption}</div>
           </div>
@@ -739,7 +759,7 @@ export default function Home() {
             aria-label="View larger image: Robert with the host family outside a traditional ger in Mongolia"
             onClick={() => setLightboxImage({ src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' })}
           >
-            <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill sizes="(max-width: 900px) 100vw, 50vw" />
+            <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill quality={72} sizes="(max-width: 900px) 100vw, 50vw" />
           </button>
         </div>
       </section>
@@ -820,14 +840,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => setLightboxImage({ src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' })}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => setLightboxImage({ src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' })}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => setLightboxImage({ src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' })}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => setLightboxImage({ src: '/images/mosaic2.jpg', alt: 'Ger camp at sunrise in the valley' })}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => setLightboxImage({ src: '/images/mosaic3.jpg', alt: 'Mongolian eagle portrait' })}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => setLightboxImage({ src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' })}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => setLightboxImage({ src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' })}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => setLightboxImage({ src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' })}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => setLightboxImage({ src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' })}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => setLightboxImage({ src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' })}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => setLightboxImage({ src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' })}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => setLightboxImage({ src: '/images/mosaic2.jpg', alt: 'Ger camp at sunrise in the valley' })}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => setLightboxImage({ src: '/images/mosaic3.jpg', alt: 'Mongolian eagle portrait' })}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => setLightboxImage({ src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' })}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => setLightboxImage({ src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' })}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => setLightboxImage({ src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' })}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
@@ -1199,7 +1219,7 @@ export default function Home() {
         <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxImage(null)}>
           <button type="button" className="lightbox-close" onClick={() => setLightboxImage(null)} aria-label="Close image preview">×</button>
           <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
-            <Image src={lightboxImage.src} alt={lightboxImage.alt} fill sizes="95vw" priority />
+            <Image src={lightboxImage.src} alt={lightboxImage.alt} fill quality={85} sizes="95vw" />
           </div>
           <div className="lightbox-caption">{lightboxImage.alt}</div>
         </div>
