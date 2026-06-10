@@ -455,7 +455,7 @@ export default function Home() {
         }
         .hero-content {
           position: relative; z-index: 2;
-          padding: 0 6rem 7rem; max-width: 900px;
+          padding: 0 6rem 6.5rem; max-width: 980px;
           animation: heroFade 1.5s ease-out 0.3s both;
         }
         @keyframes heroFade {
@@ -472,9 +472,12 @@ export default function Home() {
           font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem;
         }
         .hero-title em { font-style: italic; color: var(--gold); }
-        .hero-sub { font-size: 1rem; line-height: 1.7; color: var(--mist); max-width: 520px; margin-bottom: 2.5rem; }
+        .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 620px; margin-bottom: 1.5rem; }
         .hero-sub .mobile-line { display: none; }
         .hero-sub .desktop-line { display: inline; }
+        .hero-facts { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 0 0 2.2rem; max-width: 760px; }
+        .hero-fact { border: 1px solid rgba(245,240,232,0.18); background: rgba(14,12,9,0.42); backdrop-filter: blur(6px); padding: 0.58rem 0.78rem; color: rgba(245,240,232,0.86); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .hero-fact strong { color: var(--gold); font-weight: 500; }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -657,10 +660,16 @@ export default function Home() {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
           nav.mobile-nav-hidden { transform: translateY(-100%); }
-          .hero-content { padding: 0 2rem 5rem; }
+          .hero { min-height: 720px; }
+          .hero-content { padding: 0 2rem 4rem; }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
+          .hero-sub { margin-bottom: 1.2rem; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
+          .hero-facts { gap: 0.5rem; margin-bottom: 1.8rem; }
+          .hero-fact { width: calc(50% - 0.25rem); padding: 0.55rem 0.65rem; font-size: 0.58rem; letter-spacing: 0.12em; }
+          .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+          .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .trust { padding: 4rem 1.5rem; }
@@ -722,15 +731,21 @@ export default function Home() {
         </div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <p className="hero-eyebrow">Orkhon Valley & Eight Lakes Region · Mongolia</p>
+          <p className="hero-eyebrow">9 Days · Orkhon Valley & Eight Lakes · Mongolia</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
           <p className="hero-sub">
-            <span className="mobile-line">9 days in one of the last truly wild places on earth.</span>
-            <span className="desktop-line">A 9-day immersive journey into nomadic Mongolian life — riding on horseback through one of the world&apos;s last great wildernesses, hosted by a family whose roots run as deep as the land itself.</span>
+            <span className="mobile-line">A small-group horseback expedition hosted with nomadic families in Mongolia.</span>
+            <span className="desktop-line">A small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and built for travellers who want the real thing.</span>
           </p>
+          <div className="hero-facts" aria-label="Trip highlights">
+            <span className="hero-fact"><strong>9 days</strong> / 8 nights</span>
+            <span className="hero-fact"><strong>8 guests</strong> maximum</span>
+            <span className="hero-fact"><strong>{pricing.onlinePayment}</strong> online now</span>
+            <span className="hero-fact"><strong>{pricing.localFamilyPayment}</strong> cash to hosts</span>
+          </div>
           <div className="hero-actions">
-            <a href="#book" className="btn-primary">Book Your Journey</a>
-            <a href="#experience" className="btn-ghost">Explore the Experience</a>
+            <a href="#book" className="btn-primary">Reserve Online</a>
+            <a href="#experience" className="btn-ghost">Explore the Journey</a>
           </div>
         </div>
       </div>
