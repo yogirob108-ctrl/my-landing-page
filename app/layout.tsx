@@ -1,22 +1,12 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono, Jost } from "next/font/google";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
+  weight: ["300", "400"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -30,8 +20,16 @@ const jost = Jost({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.8lakestours.com"),
-  title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
+  applicationName: "8 Lakes Tours",
+  title: {
+    default: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
+    template: "%s | 8 Lakes Tours",
+  },
   description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Ride with a nomadic family, sleep in traditional gers, and experience the real Mongolian steppe.",
+  authors: [{ name: "8 Lakes Tours", url: "https://www.8lakestours.com" }],
+  creator: "8 Lakes Tours",
+  publisher: "8 Lakes Tours",
+  category: "Adventure Travel",
   keywords: [
     "Horse Adventures",
     "Mongolia horse trekking",
@@ -55,6 +53,10 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://www.8lakestours.com",
+    languages: {
+      "en": "https://www.8lakestours.com",
+      "x-default": "https://www.8lakestours.com",
+    },
   },
   openGraph: {
     title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
@@ -65,7 +67,7 @@ export const metadata: Metadata = {
     siteName: "8 Lakes Tours",
     images: [
       {
-        url: "/images/hero-horseback.jpg",
+        url: "/images/og-8-lakes.jpg",
         width: 1200,
         height: 630,
         alt: "Horseback riding through the Mongolian steppe — 8 Lakes Tours",
@@ -76,7 +78,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
     description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Stay with a nomadic family, ride the steppe, experience real Mongolian life.",
-    images: ["/images/hero-horseback.jpg"],
+    images: ["/images/og-8-lakes.jpg"],
   },
   icons: {
     icon: [
@@ -92,6 +94,18 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
   verification: {
     google: "k5qDX-okMY6hJL4MNVs5Pv0ZkTIPI-uWg9bl-TigS4o",
@@ -106,7 +120,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${jost.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}

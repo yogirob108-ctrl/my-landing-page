@@ -2,18 +2,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | 8 Lakes Tours',
+  title: 'Terms & Conditions',
   description: 'Terms and Conditions for booking a tour with 8 Lakes Tours.',
   robots: { index: true, follow: true },
 };
 
 export default function TermsAndConditions() {
   return (
-    <main style={{ background: '#0e0c09', minHeight: '100vh', color: '#d4cfc4', fontFamily: "'Jost', sans-serif", fontWeight: 300 }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');`}</style>
+    <main style={{ background: '#0e0c09', minHeight: '100vh', color: '#d4cfc4', fontFamily: "var(--font-jost), 'Jost', sans-serif", fontWeight: 300 }}>
 
       <nav style={{ padding: '1.5rem 4rem', borderBottom: '1px solid rgba(200,169,110,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', letterSpacing: '0.15em', color: '#f5f0e8', textTransform: 'uppercase', textDecoration: 'none' }}>
+        <Link href="/" style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif", fontSize: '1.1rem', letterSpacing: '0.15em', color: '#f5f0e8', textTransform: 'uppercase', textDecoration: 'none' }}>
           8 Lakes Tours
         </Link>
         <Link href="/" style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c8a96e', textDecoration: 'none' }}>← Back to Site</Link>
@@ -21,7 +20,7 @@ export default function TermsAndConditions() {
 
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '5rem 2rem' }}>
         <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#c8a96e', marginBottom: '1rem' }}>Legal</p>
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '2.8rem', fontWeight: 300, color: '#f5f0e8', marginBottom: '0.5rem', lineHeight: 1.1 }}>Terms &amp; Conditions</h1>
+        <h1 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif", fontSize: '2.8rem', fontWeight: 300, color: '#f5f0e8', marginBottom: '0.5rem', lineHeight: 1.1 }}>Terms &amp; Conditions</h1>
         <p style={{ fontSize: '0.8rem', color: '#d4cfc4', opacity: 0.5, marginBottom: '3rem' }}>Last updated: April 2026</p>
 
         {[
@@ -75,7 +74,7 @@ export default function TermsAndConditions() {
           },
         ].map(({ title, body }) => (
           <section key={title} style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.2rem', fontWeight: 400, color: '#f5f0e8', marginBottom: '0.6rem' }}>{title}</h2>
+            <h2 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif", fontSize: '1.2rem', fontWeight: 400, color: '#f5f0e8', marginBottom: '0.6rem' }}>{title}</h2>
             <p style={{ fontSize: '0.9rem', lineHeight: 1.85, color: '#d4cfc4', opacity: 0.85 }}>{body}</p>
           </section>
         ))}
