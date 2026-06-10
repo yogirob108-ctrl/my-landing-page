@@ -34,7 +34,7 @@ export default function TermsAndConditions() {
           },
           {
             title: '3. Tour Price',
-            body: 'The current founding tour price is $2,099 USD per person for the 9-day / 8-night programme. This is split into a $959 USD online booking payment to Horse Adventures and a $1,140 USD cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The current 2026 tour price is $2,099 USD per person for the 9-day / 8-night programme. This is split into a $959 USD online booking payment to Horse Adventures and a $1,140 USD cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
