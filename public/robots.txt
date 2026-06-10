@@ -2,4 +2,26 @@ User-agent: *
 Allow: /
 Disallow: /.next/
 
+# Explicitly allow major AI/search crawlers to read the public marketing content.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://www.8lakestours.com/sitemap.xml

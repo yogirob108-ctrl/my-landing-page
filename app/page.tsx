@@ -1209,6 +1209,9 @@ export default function Home() {
           <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
           <div style={{display:'flex', gap:'1.2rem', flexWrap:'wrap', justifyContent:'flex-end'}}>
             <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Instagram</a>
+            <a href="/about" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>About</a>
+            <a href="/faq" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>FAQ</a>
+            <a href="/contact" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Contact</a>
             <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Terms &amp; Conditions</a>
             <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Privacy Policy</a>
           </div>
