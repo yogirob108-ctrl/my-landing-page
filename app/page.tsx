@@ -274,9 +274,26 @@ export default function Home() {
 
     revealElements.forEach(el => observer.observe(el));
 
+    let lastScrollY = window.scrollY;
+
     const updateNavBackground = () => {
       const nav = document.getElementById('main-nav');
-      if (nav) nav.style.background = window.scrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
+      if (!nav) return;
+
+      const currentScrollY = window.scrollY;
+      const isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+      nav.style.background = currentScrollY > 100 ? 'rgba(14,12,9,0.95)' : '';
+
+      const scrollDelta = currentScrollY - lastScrollY;
+
+      if (!isMobile || currentScrollY <= 120 || scrollDelta < -4) {
+        nav.classList.remove('mobile-nav-hidden');
+      } else if (scrollDelta > 4) {
+        nav.classList.add('mobile-nav-hidden');
+      }
+
+      lastScrollY = Math.max(currentScrollY, 0);
     };
 
     updateNavBackground();
@@ -397,7 +414,7 @@ export default function Home() {
           padding: 1.5rem 3rem;
           display: flex; justify-content: space-between; align-items: center;
           background: linear-gradient(to bottom, rgba(14,12,9,0.85) 0%, transparent 100%);
-          transition: background 0.3s ease;
+          transition: background 0.3s ease, transform 0.3s ease;
         }
         .nav-logo {
           font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
@@ -631,6 +648,7 @@ export default function Home() {
         @media (max-width: 900px) {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
+          nav.mobile-nav-hidden { transform: translateY(-100%); }
           .hero-content { padding: 0 2rem 5rem; }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
           .hero-sub .mobile-line { display: inline; }
@@ -739,7 +757,6 @@ export default function Home() {
         {[
           {src:'/images/hero-horseback.jpg', caption:'From the Saddle'},
           {src:'/images/riding1.jpg', caption:'Riding the Valley'},
-          {src:'/images/rob-family.jpg', caption:'Robert with the Host Family'},
           {src:'/images/water-crossing.jpg', caption:'River Crossings'},
           {src:'/images/landscape1.jpg', caption:'Sunset Valleys'},
           {src:'/images/gers.jpg', caption:'Your Home on the Steppe'},
@@ -800,13 +817,13 @@ export default function Home() {
         <div className="testimonial-grid">
           {[
             {
-              name: 'Irik Clawson',
+              name: 'Irik',
               src: '/images/testimonial-irik-clawson.jpg',
               alt: 'Irik Clawson riding on horseback at sunset in Mongolia',
-              quote: 'Early expedition guest — quote coming soon.',
+              quote: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
             },
             {
-              name: 'Fin Bennet',
+              name: 'Fin',
               src: '/images/testimonial-fin-bennet.jpg',
               alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
               quote: 'It couldn’t be further from back home and that makes me so excited.',
