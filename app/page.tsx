@@ -845,18 +845,6 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <div className="trust-grid">
-          {[
-            ['Local host family', 'You stay with Ganbold, Suma and their family — not in a staged tourist camp. The trip is built around their home, horses and valley knowledge.'],
-            ['Experienced guide', 'Suma grew up riding this terrain and guides guests through the Eight Lakes region, reading the horses, weather and route as conditions change.'],
-            ['Transparent first season', 'Small groups, direct communication and no mass-market machinery. Guest reviews from the 2026 trips will be added as soon as the first groups return.'],
-          ].map(([source, quote]) => (
-            <div className="trust-card reveal" key={source}>
-              <p className="trust-quote">“{quote}”</p>
-              <p className="trust-source">{source}</p>
-            </div>
-          ))}
-        </div>
         <div className="proof-strip reveal">
           <div className="proof-item"><span className="proof-value">8</span><span className="proof-label">Max guests</span></div>
           <div className="proof-item"><span className="proof-value">18+</span><span className="proof-label">Adults only</span></div>
