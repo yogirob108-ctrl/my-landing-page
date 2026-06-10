@@ -42,6 +42,7 @@ export default function Page() {
         <section style={{ marginTop: '2.5rem' }}>
           <h2 style={h2Style}>Instagram</h2>
           <p style={pStyle}><a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" style={{ color: '#c8a96e' }}>@8lakestours</a></p>
+          <p style={{...pStyle, marginTop: '0.8rem'}}>Robert Zaher: <a href="https://www.instagram.com/robzaher108?igsh=OHdvdGp0ZW9ieHFv" target="_blank" rel="noopener noreferrer" style={{ color: '#c8a96e' }}>@robzaher108</a></p>
         </section>
         <section style={{ marginTop: '2.5rem' }}>
           <h2 style={h2Style}>Booking enquiries</h2>
