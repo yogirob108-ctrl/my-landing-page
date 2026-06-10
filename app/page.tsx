@@ -395,8 +395,8 @@ export default function Home() {
           name: '8 Lakes Tours',
           url: 'https://www.8lakestours.com',
           email: 'info@8lakestours.com',
-          sameAs: ['https://www.instagram.com/8lakestours'],
-          founder: { '@type': 'Person', name: 'Robert Zaher' },
+          sameAs: ['https://www.instagram.com/8lakestours', 'https://www.instagram.com/robzaher108'],
+          founder: { '@type': 'Person', name: 'Robert Zaher', sameAs: 'https://www.instagram.com/robzaher108' },
         },
         location: {
           '@type': 'Place',
@@ -411,6 +411,8 @@ export default function Home() {
       {
         '@type': 'FAQPage',
         mainEntity: [
+          { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family portion goes directly to your hosts in Mongolia.' } },
+          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and host-family cash payment instructions.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete." } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
@@ -628,6 +630,36 @@ export default function Home() {
         .lightbox-next { right: 1rem; }
         .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
 
+        .route-map-card { position: relative; min-height: 360px; padding: 2rem; background: radial-gradient(circle at 20% 25%, rgba(200,169,110,0.22), transparent 26%), radial-gradient(circle at 80% 68%, rgba(185,74,48,0.18), transparent 24%), linear-gradient(135deg, rgba(245,240,232,0.055), rgba(200,169,110,0.035)); border: 1px solid rgba(200,169,110,0.28); overflow: hidden; }
+        .route-map-card::before { content: ''; position: absolute; inset: 1.2rem; border: 1px dashed rgba(200,169,110,0.2); border-radius: 999px; transform: rotate(-12deg); }
+        .route-map-title { position: relative; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--cream); margin-bottom: 1.5rem; }
+        .route-line { position: relative; display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+        .route-stop { display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.9rem; align-items: start; color: var(--mist); }
+        .route-dot { width: 0.8rem; height: 0.8rem; margin-top: 0.35rem; border-radius: 999px; background: var(--gold); box-shadow: 0 0 0 8px rgba(200,169,110,0.1); }
+        .route-stop strong { display: block; color: var(--cream); font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .route-stop span { font-size: 0.78rem; line-height: 1.55; opacity: 0.75; }
+        .route-placeholder-note { position: relative; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(200,169,110,0.15); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
+
+        .flow-section { background: var(--dark); }
+        .flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; }
+        .flow-card { background: var(--ink); border: 1px solid rgba(200,169,110,0.18); padding: 2rem; }
+        .flow-step { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 3rem; line-height: 1; color: rgba(200,169,110,0.32); display: block; margin-bottom: 1rem; }
+        .flow-card h3, .trust-card-founder h3, .after-card h3 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 300; color: var(--cream); margin-bottom: 0.8rem; }
+        .flow-card p, .trust-card-founder p, .after-card p { font-size: 0.9rem; line-height: 1.75; color: rgba(212,207,196,0.82); }
+        .trust-conversion { background: var(--ink); display: grid; grid-template-columns: minmax(260px, 0.8fr) 1.2fr; gap: 4rem; align-items: center; }
+        .rob-placeholder { position: relative; aspect-ratio: 1; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.06); overflow: hidden; }
+        .rob-placeholder img { object-fit: cover; }
+        .placeholder-label { position: absolute; left: 1rem; bottom: 1rem; right: 1rem; padding: 0.65rem 0.8rem; background: rgba(14,12,9,0.76); border: 1px solid rgba(245,240,232,0.12); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); text-align: center; }
+        .trust-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.6rem; }
+        .trust-link { display: inline-flex; padding: 0.8rem 1rem; border: 1px solid rgba(200,169,110,0.35); color: var(--gold); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .trust-link:hover { background: var(--gold); color: var(--dark); }
+        .after-payment { background: var(--dark); padding-top: 0; }
+        .after-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .after-card { border: 1px solid rgba(200,169,110,0.18); background: rgba(200,169,110,0.045); padding: 1.6rem; }
+        .after-list { list-style: none; margin-top: 1rem; display: grid; gap: 0.7rem; }
+        .after-list li { position: relative; padding-left: 1.2rem; font-size: 0.85rem; line-height: 1.6; color: rgba(212,207,196,0.82); }
+        .after-list li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: 0.65rem; }
+
         .included { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
         .included-list { list-style: none; }
         .included-list li { padding: 1rem 0; border-bottom: 1px solid rgba(245,240,232,0.07); font-size: 0.9rem; color: var(--mist); display: flex; align-items: center; gap: 1rem; }
@@ -719,7 +751,9 @@ export default function Home() {
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
-          .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
+          .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
+          .flow-grid, .after-grid { grid-template-columns: 1fr; }
+          .route-map-card { min-height: 300px; padding: 1.4rem; }
           .trust { padding: 4rem 1.5rem; }
           .trust-grid { grid-template-columns: 1fr; }
           .testimonial-grid { grid-template-columns: 1fr; }
@@ -996,6 +1030,16 @@ export default function Home() {
               <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7, fontStyle:'italic'}}>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
             </div>
           </div>
+          <div className="route-map-card reveal reveal-delay-1" aria-label="Placeholder route map from Ulaanbaatar to Bat-Ulzii, Orkhon Valley and Eight Lakes">
+            <p className="route-map-title">Route placeholder</p>
+            <div className="route-line">
+              <div className="route-stop"><span className="route-dot"></span><div><strong>Ulaanbaatar</strong><span>Arrival airport, supplies, and final city prep.</span></div></div>
+              <div className="route-stop"><span className="route-dot"></span><div><strong>Bat-Ulzii</strong><span>Public bus transfer through the countryside.</span></div></div>
+              <div className="route-stop"><span className="route-dot"></span><div><strong>Orkhon Valley</strong><span>Meet the host family and settle into ger life.</span></div></div>
+              <div className="route-stop"><span className="route-dot"></span><div><strong>Eight Lakes</strong><span>Four-day guided horseback trek in remote terrain.</span></div></div>
+            </div>
+            <p className="route-placeholder-note">Temporary map while we source / draw the final one</p>
+          </div>
         </div>
       </section>
       {/* INCLUDED */}
@@ -1037,6 +1081,64 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="flow-section">
+        <div className="reveal" style={{maxWidth:'760px'}}>
+          <span className="section-eyebrow">How Booking Works</span>
+          <h2 className="section-title">Clear Before<br /><em>You Pay</em></h2>
+          <p className="section-body">The payment split is deliberate: we collect the online booking payment, and the host-family portion goes straight to the nomadic family in cash because they cannot reliably receive online transfers.</p>
+        </div>
+        <div className="flow-grid">
+          <div className="flow-card reveal"><span className="flow-step">01</span><h3>Apply &amp; reserve online</h3><p>Submit your details, sign the waiver, then pay {pricing.onlinePayment} online to confirm your place with Horse Adventures.</p></div>
+          <div className="flow-card reveal reveal-delay-1"><span className="flow-step">02</span><h3>Get your preparation email</h3><p>We send confirmation, transport guidance, packing notes, insurance reminders, WhatsApp contacts, and exact arrival instructions.</p></div>
+          <div className="flow-card reveal reveal-delay-2"><span className="flow-step">03</span><h3>Pay hosts in cash</h3><p>Bring {pricing.localFamilyPayment} in cash for the nomadic host family. That local portion is not collected online by 8 Lakes Tours.</p></div>
+        </div>
+      </section>
+
+      <section className="trust-conversion">
+        <div className="rob-placeholder reveal">
+          <Image src="/images/rob-family.jpg" alt="Robert Zaher with the Mongolian host family — temporary founder photo placeholder" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
+          <span className="placeholder-label">Rob photo placeholder</span>
+        </div>
+        <div className="trust-card-founder reveal reveal-delay-1">
+          <span className="section-eyebrow">Who You&apos;re Booking With</span>
+          <h2 className="section-title">Robert, the Family<br /><em>&amp; Horse Adventures</em></h2>
+          <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family payment goes directly to your hosts in Mongolia.</p>
+          <p style={{marginTop:'1rem'}}>For now, all tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>. We may add a dedicated Rob address later.</p>
+          <div className="trust-actions">
+            <a className="trust-link" href="mailto:info@8lakestours.com">Email the tour team</a>
+            <a className="trust-link" href="https://www.instagram.com/robzaher108?igsh=OHdvdGp0ZW9ieHFv" target="_blank" rel="noopener noreferrer">Rob&apos;s Instagram</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="after-payment">
+        <div className="reveal" style={{maxWidth:'760px'}}>
+          <span className="section-eyebrow">After You Pay</span>
+          <h2 className="section-title">You Won&apos;t Be<br /><em>Left Guessing</em></h2>
+          <p className="section-body">The confirmation email will carry the practical details instead of crowding the public page. We&apos;ll tune the exact email provider/settings later, but the guest promise is clear.</p>
+        </div>
+        <div className="after-grid">
+          <div className="after-card reveal">
+            <h3>Your confirmation includes</h3>
+            <ul className="after-list">
+              <li>Booking confirmation and selected tour date</li>
+              <li>Ulaanbaatar to Bat-Ulzii transport guidance</li>
+              <li>Recommended local apps and bus/payment notes</li>
+              <li>WhatsApp contacts for English-speaking and local support</li>
+            </ul>
+          </div>
+          <div className="after-card reveal reveal-delay-1">
+            <h3>Before departure we clarify</h3>
+            <ul className="after-list">
+              <li>Packing list, riding layers, sleeping bag and weather notes</li>
+              <li>Travel insurance requirements and waiver status</li>
+              <li>How and when to bring the {pricing.localFamilyPayment} host-family cash payment</li>
+              <li>Meeting timing with the host family near Bat-Ulzii</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <div className="divider"><div className="divider-line"></div><div className="divider-ornament">✦</div><div className="divider-line"></div></div>
 
       {/* BOOKING */}
@@ -1053,7 +1155,7 @@ export default function Home() {
             <span className="price-badge">Founding Rate — Limited Availability</span>
             <div className="price-amount">{pricing.tourPrice}</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
-            <div className="price-note">This founding rate is split transparently: {pricing.onlinePayment} is paid online to reserve your place, and {pricing.localFamilyPayment} is paid directly in cash to the nomadic host families in Mongolia. Custom group dates available on request.</div>
+            <div className="price-note">Total trip price: {pricing.tourPrice}. Pay {pricing.onlinePayment} online now to confirm your place; pay {pricing.localFamilyPayment} directly in cash to the nomadic host families in Mongolia. Custom group dates available on request.</div>
             <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
                 <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
@@ -1080,7 +1182,8 @@ export default function Home() {
 
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">Application</span>
-          <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'2rem'}}>Tell Us<br /><em>About You</em></h2>
+          <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
+          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>We ask for a few details so we can match riders safely, prepare the host family, and send the right confirmation notes.</p>
           <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitToFormspree(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1183,7 +1286,7 @@ export default function Home() {
             )}
 
             <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
-              <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Online Booking Payment</p>
+              <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Online Reservation Payment</p>
               <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
                 Pay <strong style={{color:'var(--cream)'}}>{pricing.onlinePayment} online</strong> to reserve your place with Horse Adventures. The total trip price is <strong style={{color:'var(--cream)'}}>{pricing.tourPrice}</strong>; the remaining <strong style={{color:'var(--cream)'}}>{pricing.localFamilyPayment}</strong> is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly. Submit the application with a valid email first so we can send your booking confirmation.
               </p>
@@ -1198,7 +1301,7 @@ export default function Home() {
                     rel="noopener noreferrer"
                     style={{display:'flex', width:'100%', boxSizing:'border-box', alignItems:'center', justifyContent:'center', padding:'1rem 1.2rem', background:'#635bff', border:'1px solid #635bff', borderRadius:'4px', color:'#fff', fontSize:'0.75rem', letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:500, textDecoration:'none', opacity:1, transition:'opacity 0.3s'}}
                   >
-                    Complete $959 Online Booking Payment →
+                    Confirm My Spot — $959 Online →
                   </a>
                 ) : (
                   <button
@@ -1206,7 +1309,7 @@ export default function Home() {
                     disabled
                     style={{display:'flex', width:'100%', boxSizing:'border-box', alignItems:'center', justifyContent:'center', padding:'1rem 1.2rem', background:'#635bff', border:'1px solid #635bff', borderRadius:'4px', color:'#fff', fontSize:'0.75rem', letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:500, opacity:0.35, cursor:'not-allowed'}}
                   >
-                    Complete $959 Online Booking Payment →
+                    Confirm My Spot — $959 Online →
                   </button>
                 )}
                 {!canPay && (
@@ -1264,6 +1367,9 @@ export default function Home() {
             <h2 className="section-title">Common<br /><em>Questions</em></h2>
           </div>
           {[
+            {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. The public booking side is handled online through Horse Adventures, while the local family portion is paid directly to your hosts in Mongolia."},
+            {q:'Can I speak to someone before booking?', a:"Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob's Instagram at @robzaher108 while we keep tour email communication centralised through the info@ address."},
+            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and exact cash-payment instructions for the host family.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete."},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},

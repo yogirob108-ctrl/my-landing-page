@@ -37,15 +37,18 @@ export default function Page() {
         <p style={{...pStyle, fontSize: '1.05rem'}}>Clear answers for travellers comparing Mongolia horse trekking trips, checking payment structure, or asking an AI assistant to explain 8 Lakes Tours.</p>
         {[
           ['What is 8 Lakes Tours?', '8 Lakes Tours is a 9-day / 8-night small-group horse trekking expedition in Mongolia, focused on the Orkhon Valley and Naiman Nuur / Eight Lakes region. Guests stay with a nomadic family, ride Mongolian horses, sleep in traditional gers, and experience daily life on the steppe.'],
+          ['Who organises the trip?', "8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family portion goes directly to your hosts in Mongolia."],
+          ['Can I speak to someone before booking?', "Yes. Email info@8lakestours.com with any questions before paying. Rob's Instagram is @robzaher108, but tour enquiries currently stay centralised through info@8lakestours.com."],
           ['How much does the trip cost?', 'The founding rate is $2,099 USD per person. This is split into a $959 online booking payment and a $1,140 local cash payment made directly to the nomadic host family in Mongolia.'],
           ['Why is $1,140 paid in cash locally?', 'Many of the nomadic families we work with cannot reliably receive online payments or bank transfers. Paying the $1,140 family portion directly in cash ensures that money reaches the hosts transparently.'],
           ['Is the $959 online payment a deposit?', 'No. It is best understood as the online booking payment that confirms your place and covers the organiser/operator share. The separate $1,140 family portion is paid locally in cash to the host family.'],
+          ['What happens after I pay online?', 'You receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and instructions for the host-family cash payment. The email provider/settings are still being finalised, but this is the intended confirmation flow.'],
           ['Do I need riding experience?', 'No. Beginners are welcome, although a reasonable level of fitness is recommended. Local guides teach basic horse handling before the trek.'],
           ['What is included?', 'The trip includes accommodation, meals, horses, local guiding, ger stays, and the hosted horse trekking experience described on the site. Flights, visas, travel insurance, and personal expenses are not included.'],
           ['What airport should I use?', 'Fly into Chinggis Khaan International Airport in Ulaanbaatar, Mongolia. Guests then travel onward into the countryside before the host-family stay and trek begin.'],
           ['Is travel insurance required?', 'Yes. Comprehensive travel insurance is mandatory and should include medical treatment, emergency evacuation and repatriation, and horseback riding or adventure activity coverage.'],
           ['Can children join?', 'No. The current experience is adults-only and participants must be 18 or older.'],
-          ['How do I contact 8 Lakes Tours?', 'Use the booking form on the website or email info@8lakestours.com. Instagram is available at @8lakestours.'],
+          ['How do I contact 8 Lakes Tours?', "Use the booking form on the website or email info@8lakestours.com. Instagram is available at @8lakestours, and Rob's personal Instagram is @robzaher108."],
         ].map(([q, a]) => (
           <section key={q} style={{ borderTop: '1px solid rgba(200,169,110,0.15)', padding: '1.8rem 0' }}>
             <h2 style={h2Style}>{q}</h2>
