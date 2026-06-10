@@ -409,7 +409,7 @@ export default function Home() {
           overflow-x: hidden;
         }
 
-        nav {
+        #main-nav {
           position: fixed; top: 0; left: 0; right: 0; z-index: 100;
           padding: 1.5rem 3rem;
           display: flex; justify-content: space-between; align-items: center;
@@ -658,16 +658,17 @@ export default function Home() {
 
         @media (max-width: 900px) {
           section { padding: 5rem 2rem; }
-          nav { padding: 1.2rem 2rem; }
-          nav.mobile-nav-hidden { transform: translateY(-100%); }
-          .hero { min-height: 720px; }
+          #main-nav { padding: 1.1rem 1.5rem; }
+          .nav-links { display: none; }
+          .nav-logo { font-size: 1.15rem; letter-spacing: 0.18em; }
+          #main-nav.mobile-nav-hidden { transform: translateY(-100%); }
+          .hero { min-height: 680px; }
           .hero-content { padding: 0 2rem 4rem; }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
           .hero-sub { margin-bottom: 1.2rem; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
-          .hero-facts { gap: 0.5rem; margin-bottom: 1.8rem; }
-          .hero-fact { width: calc(50% - 0.25rem); padding: 0.55rem 0.65rem; font-size: 0.58rem; letter-spacing: 0.12em; }
+          .hero-facts { display: none; }
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
