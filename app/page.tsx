@@ -628,10 +628,18 @@ export default function Home() {
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
 
-        footer { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.15); padding: 4rem 6rem; display: flex; justify-content: space-between; align-items: center; }
-        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.2rem; letter-spacing: 0.15em; color: var(--cream); text-transform: uppercase; }
-        .footer-tagline { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 0.3rem; }
-        .footer-note { font-size: 0.75rem; color: rgba(212,207,196,0.82); }
+        .faq-section { background: var(--ink); padding: 7rem 2rem; }
+        footer { background: #120f0b; border-top: 1px solid rgba(200,169,110,0.18); padding: 4.5rem 2rem 3rem; }
+        .footer-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 1.2fr) 1fr; gap: 4rem; align-items: start; }
+        .footer-kicker { font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: 0.16em; color: var(--cream); text-transform: uppercase; }
+        .footer-tagline { font-size: 0.72rem; line-height: 1.8; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(200,169,110,0.88); margin-top: 1rem; max-width: 420px; }
+        .footer-cta { display: inline-flex; margin-top: 1.8rem; padding: 0.85rem 1.2rem; border: 1px solid rgba(200,169,110,0.35); color: var(--cream); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: background 0.3s ease, border-color 0.3s ease; }
+        .footer-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+        .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 2.5rem; justify-items: start; }
+        .footer-link { color: rgba(200,169,110,0.86); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.3s ease; }
+        .footer-link:hover { color: var(--cream); }
+        .footer-note { border-top: 1px solid rgba(200,169,110,0.14); max-width: 1120px; margin: 3.5rem auto 0; padding-top: 1.4rem; display: flex; justify-content: space-between; gap: 1rem; font-size: 0.75rem; color: rgba(212,207,196,0.68); }
 
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s ease; }
         .js-reveal .reveal { opacity: 0; transform: translateY(40px); }
@@ -669,7 +677,16 @@ export default function Home() {
           .photo-strip { height: 40vw; min-height: 200px; }
           .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
           .mosaic-item.tall { grid-row: span 1; }
-          footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 3rem 2rem; }
+          .faq-section { padding: 4rem 1.5rem 3.5rem; }
+          footer { padding: 3.25rem 1.5rem calc(3rem + env(safe-area-inset-bottom)); }
+          .footer-inner { display: block; text-align: left; }
+          .footer-kicker { margin-bottom: 0.8rem; }
+          .footer-logo { font-size: clamp(2.15rem, 10vw, 3rem); letter-spacing: 0.12em; }
+          .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
+          .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
+          .footer-links { margin-top: 2.5rem; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+          .footer-link { font-size: 0.66rem; letter-spacing: 0.14em; }
+          .footer-note { margin-top: 2.5rem; padding-top: 1.2rem; flex-direction: column; font-size: 0.72rem; line-height: 1.6; }
           .getting-there-section { padding: 4rem 1.5rem; }
           .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
           .divider { padding: 0 2rem; }
@@ -1232,7 +1249,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section style={{background:'var(--ink)', padding:'7rem 2rem'}}>
+      <section className="faq-section">
         <div style={{maxWidth:'760px', margin:'0 auto'}}>
           <div className="reveal" style={{marginBottom:'4rem'}}>
             <span className="section-eyebrow">FAQ</span>
@@ -1263,20 +1280,25 @@ export default function Home() {
       </section>
 
       <footer>
-        <div>
-          <div className="footer-logo">8 Lakes Tours</div>
-          <div className="footer-tagline">A Horse Adventures Expedition · Mongolia</div>
-        </div>
-        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'0.6rem'}}>
-          <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
-          <div style={{display:'flex', gap:'1.2rem', flexWrap:'wrap', justifyContent:'flex-end'}}>
-            <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Instagram</a>
-            <a href="/about" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>About</a>
-            <a href="/faq" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>FAQ</a>
-            <a href="/contact" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Contact</a>
-            <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Terms &amp; Conditions</a>
-            <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Privacy Policy</a>
+        <div className="footer-inner">
+          <div>
+            <div className="footer-kicker">Mongolia · Small-group horseback expeditions</div>
+            <div className="footer-logo">8 Lakes<br />Tours</div>
+            <div className="footer-tagline">A Horse Adventures expedition through the Orkhon Valley and Eight Lakes region.</div>
+            <a className="footer-cta" href="#book">Reserve a Spot</a>
           </div>
+          <nav className="footer-links" aria-label="Footer navigation">
+            <a className="footer-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a className="footer-link" href="/about">About</a>
+            <a className="footer-link" href="/faq">FAQ</a>
+            <a className="footer-link" href="/contact">Contact</a>
+            <a className="footer-link" href="/terms">Terms</a>
+            <a className="footer-link" href="/privacy">Privacy</a>
+          </nav>
+        </div>
+        <div className="footer-note">
+          <span>© 2026 8 Lakes Tours. All rights reserved.</span>
+          <span>Built for direct local family partnership in Mongolia.</span>
         </div>
       </footer>
 
