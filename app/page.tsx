@@ -323,7 +323,7 @@ export default function Home() {
         url: 'https://www.8lakestours.com',
         mainEntityOfPage: 'https://www.8lakestours.com',
         inLanguage: 'en',
-        image: ['https://www.8lakestours.com/images/hero-horseback.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
+        image: ['https://www.8lakestours.com/images/hero-sunset-valley.jpg', 'https://www.8lakestours.com/images/hero-horseback.jpg', 'https://www.8lakestours.com/images/rob-family.jpg'],
         touristType: 'Adventure travellers seeking authentic nomadic experiences',
         itinerary: {
           '@type': 'ItemList',
@@ -512,6 +512,9 @@ export default function Home() {
 
         .partnership { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
         .partnership-text { padding: 8rem 5rem; }
+        .partnership-inline-photo { display: none !important; position: relative; width: 100%; height: auto; aspect-ratio: 1.46; margin: 2rem 0; overflow: hidden; border: 1px solid rgba(200,169,110,0.22); }
+        .partnership-inline-photo img { object-fit: cover; }
+        .partnership-photo-caption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; background: linear-gradient(transparent, rgba(14,12,9,0.88)); padding: 2rem 1rem 0.9rem; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.78); pointer-events: none; }
         .partnership-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; font-weight: 300; color: var(--cream); line-height: 1.6; border-left: 2px solid var(--gold); padding-left: 2rem; margin: 2.5rem 0; }
         .partnership-img { overflow: hidden; min-height: 600px; }
         .partnership-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -522,6 +525,13 @@ export default function Home() {
         .trust-card { border: 1px solid rgba(200,169,110,0.2); background: rgba(200,169,110,0.045); padding: 1.6rem; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; }
         .trust-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--cream); line-height: 1.55; font-style: italic; }
         .trust-source { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 1.4rem; }
+        .testimonial-grid { max-width: 1000px; margin: 0 auto 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+        .testimonial-card { background: rgba(245,240,232,0.04); border: 1px solid rgba(200,169,110,0.18); overflow: hidden; }
+        .testimonial-photo { position: relative; height: 360px; overflow: hidden; display: block; width: 100%; }
+        .testimonial-photo img { object-fit: cover; }
+        .testimonial-body { padding: 1.6rem; }
+        .testimonial-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.45rem; line-height: 1.45; color: var(--cream); font-style: italic; }
+        .testimonial-name { margin-top: 1.2rem; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
         .proof-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; max-width: 1120px; margin: 2rem auto 0; background: rgba(200,169,110,0.18); border: 1px solid rgba(200,169,110,0.18); }
         .proof-item { background: var(--ink); padding: 1.2rem; text-align: center; }
         .proof-value { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--gold); display: block; }
@@ -549,6 +559,8 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.tall { grid-row: span 2; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
+        .image-button.testimonial-photo { height: 360px; }
+        .image-button.partnership-inline-photo { height: auto; aspect-ratio: 1.46; }
         .image-button::after { content: 'Click to expand'; position: absolute; right: 0.75rem; bottom: 0.75rem; z-index: 2; padding: 0.4rem 0.55rem; border: 1px solid rgba(245,240,232,0.28); border-radius: 999px; background: rgba(14,12,9,0.68); color: var(--cream); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0; transform: translateY(4px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
         .image-button:hover::after, .image-button:focus-visible::after { opacity: 1; transform: translateY(0); }
         .image-button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
@@ -627,6 +639,9 @@ export default function Home() {
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .trust { padding: 4rem 1.5rem; }
           .trust-grid { grid-template-columns: 1fr; }
+          .testimonial-grid { grid-template-columns: 1fr; }
+          .testimonial-photo { height: 280px; }
+          .image-button.testimonial-photo { height: 280px; }
           .proof-strip { grid-template-columns: 1fr 1fr; }
           .itinerary-grid { grid-template-columns: 1fr; }
           .itin-tag { font-size: 0.75rem; }
@@ -641,8 +656,8 @@ export default function Home() {
           .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
-          .partnership-img { min-height: unset; }
-          .partnership-img img { height: auto; object-fit: contain; }
+          .partnership-inline-photo { display: block !important; }
+          .partnership-img { display: none; }
           .form-grid { grid-template-columns: 1fr; }
           .packing-grid { grid-template-columns: 1fr; }
           .intro-img-accent { display: none; }
@@ -662,8 +677,8 @@ export default function Home() {
       <div className="hero" id="top">
         <div className="hero-bg">
           <Image
-            src="/images/hero-horseback.jpg"
-            alt="View from horseback across Mongolia's open valley beneath dramatic clouds"
+            src="/images/hero-sunset-valley.jpg"
+            alt="Dramatic sunset over the Orkhon Valley and winding river in Mongolia"
             fill
             preload
             quality={82}
@@ -722,7 +737,9 @@ export default function Home() {
       {/* PHOTO STRIP */}
       <div className="photo-strip">
         {[
+          {src:'/images/hero-horseback.jpg', caption:'From the Saddle'},
           {src:'/images/riding1.jpg', caption:'Riding the Valley'},
+          {src:'/images/rob-family.jpg', caption:'Robert with the Host Family'},
           {src:'/images/water-crossing.jpg', caption:'River Crossings'},
           {src:'/images/landscape1.jpg', caption:'Sunset Valleys'},
           {src:'/images/gers.jpg', caption:'Your Home on the Steppe'},
@@ -747,6 +764,15 @@ export default function Home() {
         <div className="partnership-text reveal">
           <span className="section-eyebrow">Our Local Partnership</span>
           <h2 className="section-title">The Family<br /><em>Behind It</em></h2>
+          <button
+            type="button"
+            className="image-button partnership-inline-photo"
+            aria-label="View larger image: Robert with the host family outside a traditional ger in Mongolia"
+            onClick={() => setLightboxImage({ src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' })}
+          >
+            <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill quality={72} sizes="100vw" />
+            <span className="partnership-photo-caption">Robert with Ganbold, Suma and family in the valley</span>
+          </button>
           <p className="section-body">I met Ganbold while trekking solo through Mongolia. I hadn&apos;t planned to stay — but his family pulled me in with the kind of warmth that&apos;s hard to explain and impossible to forget. We rode together, shared meals, and spent evenings around the fire talking about the land, the horses, and the life they&apos;ve built here across three generations.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Ganbold&apos;s son Suma grew up in this valley and has been guiding riders through it for years — he knows every trail, every animal, every shift in the weather. When I floated the idea of bringing small groups out here, both of them lit up. This trip exists because they wanted it to.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>You won&apos;t be staying near the family — you&apos;ll be living with them. Same meals, same gers, same daily rhythm. Every booking supports the local hosts directly. That part matters to me.</p>
@@ -769,7 +795,38 @@ export default function Home() {
         <div className="trust-header reveal">
           <span className="section-eyebrow">Proof Before Promises</span>
           <h2 className="section-title">Built on<br /><em>Real Relationships</em></h2>
-          <p className="section-body" style={{margin:'0 auto'}}>This is our inaugural public season, so we&apos;re not pretending to have hundreds of polished reviews yet. What we can show you is the actual partnership, the people hosting you, and the practical safety structure behind the trip.</p>
+          <p className="section-body" style={{margin:'0 auto'}}>Real people have already made the journey into this valley. These are early guest impressions from the same world you&apos;ll be stepping into: horses, host families, big weather, and a place that feels very far from ordinary life.</p>
+        </div>
+        <div className="testimonial-grid">
+          {[
+            {
+              name: 'Irik Clawson',
+              src: '/images/testimonial-irik-clawson.jpg',
+              alt: 'Irik Clawson riding on horseback at sunset in Mongolia',
+              quote: 'Early expedition guest — quote coming soon.',
+            },
+            {
+              name: 'Fin Bennet',
+              src: '/images/testimonial-fin-bennet.jpg',
+              alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
+              quote: 'It couldn’t be further from back home and that makes me so excited.',
+            },
+          ].map(testimonial => (
+            <article className="testimonial-card reveal" key={testimonial.name}>
+              <button
+                type="button"
+                className="image-button testimonial-photo"
+                aria-label={`View larger image: ${testimonial.alt}`}
+                onClick={() => setLightboxImage({ src: testimonial.src, alt: testimonial.alt })}
+              >
+                <Image src={testimonial.src} alt={testimonial.alt} fill quality={76} sizes="(max-width: 900px) 100vw, 50vw" />
+              </button>
+              <div className="testimonial-body">
+                <p className="testimonial-quote">“{testimonial.quote}”</p>
+                <p className="testimonial-name">{testimonial.name}</p>
+              </div>
+            </article>
+          ))}
         </div>
         <div className="trust-grid">
           {[
