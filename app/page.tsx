@@ -129,6 +129,34 @@ function getLocalizedPricing(): LocalizedPricing {
   };
 }
 
+const TOUR_DATES = [
+  { date: 'June 22 – 30, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'July 16 – 24, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'August 4 – 12, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'Custom Group Date', detail: 'Private booking · Contact us to arrange', status: 'On Request', muted: true },
+];
+
+const GALLERY_IMAGES = [
+  { src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' },
+  { src: '/images/hero-horseback.jpg', alt: 'From the Saddle' },
+  { src: '/images/riding1.jpg', alt: 'Riding the Valley' },
+  { src: '/images/water-crossing.jpg', alt: 'River Crossings' },
+  { src: '/images/landscape1.jpg', alt: 'Sunset Valleys' },
+  { src: '/images/gers.jpg', alt: 'Your Home on the Steppe' },
+  { src: '/images/sunset.jpg', alt: 'Open Steppe Evenings' },
+  { src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' },
+  { src: '/images/testimonial-irik-clawson.jpg', alt: 'Irik Clawson riding on horseback at sunset in Mongolia' },
+  { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin Bennet with children beside a traditional ger in Mongolia' },
+  { src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' },
+  { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' },
+  { src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' },
+  { src: '/images/mosaic2.jpg', alt: 'Ger camp at sunrise in the valley' },
+  { src: '/images/mosaic3.jpg', alt: 'Mongolian eagle portrait' },
+  { src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' },
+  { src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' },
+  { src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' },
+];
+
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
   const [signature, setSignature] = useState('');
   const [agreed, setAgreed] = useState(false);
@@ -214,7 +242,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home() {
   const [showWaiver, setShowWaiver] = useState(false);
-  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
   const [signature, setSignature] = useState('');
   const [email, setEmail] = useState('');
@@ -231,6 +259,13 @@ export default function Home() {
   const signatureIsValid = signature.trim().length > 1;
   const hasRequiredContact = signatureIsValid && emailIsValid;
   const canPay = formSubmitted && hasRequiredContact;
+  const lightboxImage = lightboxIndex === null ? null : GALLERY_IMAGES[lightboxIndex];
+  const openLightbox = (src: string, alt: string) => {
+    const imageIndex = GALLERY_IMAGES.findIndex(image => image.src === src && image.alt === alt);
+    setLightboxIndex(imageIndex >= 0 ? imageIndex : 0);
+  };
+  const showPreviousImage = () => setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
+  const showNextImage = () => setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
 
   useEffect(() => {
     setPricing(getLocalizedPricing());
@@ -240,7 +275,9 @@ export default function Home() {
     if (!lightboxImage) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setLightboxImage(null);
+      if (event.key === 'Escape') setLightboxIndex(null);
+      if (event.key === 'ArrowLeft') showPreviousImage();
+      if (event.key === 'ArrowRight') showNextImage();
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -475,9 +512,6 @@ export default function Home() {
         .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 620px; margin-bottom: 1.5rem; }
         .hero-sub .mobile-line { display: none; }
         .hero-sub .desktop-line { display: inline; }
-        .hero-facts { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 0 0 2.2rem; max-width: 760px; }
-        .hero-fact { border: 1px solid rgba(245,240,232,0.18); background: rgba(14,12,9,0.42); backdrop-filter: blur(6px); padding: 0.58rem 0.78rem; color: rgba(245,240,232,0.86); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; }
-        .hero-fact strong { color: var(--gold); font-weight: 500; }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -585,9 +619,13 @@ export default function Home() {
         .image-button:hover::after, .image-button:focus-visible::after { opacity: 1; transform: translateY(0); }
         .image-button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
         .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.96); display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; }
-        .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(90vh, 1100px); }
+        .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(86vh, 1100px); }
         .lightbox-frame img { object-fit: contain; }
         .lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1001; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.65); color: var(--cream); padding: 0.7rem 0.9rem; cursor: pointer; font-size: 1rem; }
+        .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.68); color: var(--cream); cursor: pointer; font-size: 1.8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
+        .lightbox-nav:hover, .lightbox-close:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+        .lightbox-prev { left: 1rem; }
+        .lightbox-next { right: 1rem; }
         .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
 
         .included { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
@@ -610,6 +648,16 @@ export default function Home() {
         .price-amount { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 0.4rem; }
         .price-per { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-bottom: 2rem; }
         .price-note { font-size: 0.8rem; color: var(--mist); opacity: 0.7; line-height: 1.6; margin-bottom: 2rem; padding: 1rem; background: rgba(245,240,232,0.04); border-left: 2px solid var(--gold); }
+        .tour-dates-card { margin-top: 1.5rem; padding: 1.5rem; background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.35); border-radius: 4px; }
+        .tour-date-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .tour-date-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; }
+        .tour-date-row.muted { background: rgba(200,169,110,0.03); border-color: rgba(200,169,110,0.1); }
+        .tour-date-title { font-size: 1rem; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; margin-bottom: 0.15rem; }
+        .tour-date-row.muted .tour-date-title { color: var(--mist); }
+        .tour-date-detail { font-size: 0.72rem; color: var(--mist); opacity: 0.7; }
+        .tour-date-row.muted .tour-date-detail { opacity: 0.5; }
+        .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: 2px; white-space: nowrap; }
+        .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
@@ -632,14 +680,14 @@ export default function Home() {
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
 
         .faq-section { background: var(--ink); padding: 7rem 2rem; }
-        footer { background: #120f0b; border-top: 1px solid rgba(200,169,110,0.18); padding: 4.5rem 2rem 3rem; }
-        .footer-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 1.2fr) 1fr; gap: 4rem; align-items: start; }
+        footer { background: #120f0b; border-top: 1px solid rgba(200,169,110,0.18); padding: 4.5rem 2rem 3rem; text-align: center; }
+        .footer-inner { max-width: 860px; margin: 0 auto; display: block; }
         .footer-kicker { font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
-        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: 0.16em; color: var(--cream); text-transform: uppercase; }
-        .footer-tagline { font-size: 0.72rem; line-height: 1.8; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(200,169,110,0.88); margin-top: 1rem; max-width: 420px; }
-        .footer-cta { display: inline-flex; margin-top: 1.8rem; padding: 0.85rem 1.2rem; border: 1px solid rgba(200,169,110,0.35); color: var(--cream); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: background 0.3s ease, border-color 0.3s ease; }
-        .footer-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
-        .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 2.5rem; justify-items: start; }
+        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 0.95; letter-spacing: 0.16em; color: var(--cream); text-transform: uppercase; }
+        .footer-tagline { font-size: 0.72rem; line-height: 1.8; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(200,169,110,0.88); margin: 1rem auto 0; max-width: 520px; }
+        .footer-cta { display: inline-flex; margin-top: 2rem; padding: 1rem 1.8rem; background: var(--gold); border: 1px solid var(--gold); color: var(--dark); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease; }
+        .footer-cta:hover { background: var(--cream); border-color: var(--cream); color: var(--dark); transform: translateY(-2px); }
+        .footer-links { margin: 3rem auto 0; display: flex; flex-wrap: wrap; gap: 0.9rem 1.5rem; justify-content: center; }
         .footer-link { color: rgba(200,169,110,0.86); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.3s ease; }
         .footer-link:hover { color: var(--cream); }
         .footer-note { border-top: 1px solid rgba(200,169,110,0.14); max-width: 1120px; margin: 3.5rem auto 0; padding-top: 1.4rem; display: flex; justify-content: space-between; gap: 1rem; font-size: 0.75rem; color: rgba(212,207,196,0.68); }
@@ -668,7 +716,6 @@ export default function Home() {
           .hero-sub { margin-bottom: 1.2rem; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
-          .hero-facts { display: none; }
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
@@ -689,12 +736,15 @@ export default function Home() {
           .mosaic-item.tall { grid-row: span 1; }
           .faq-section { padding: 4rem 1.5rem 3.5rem; }
           footer { padding: 3.25rem 1.5rem calc(3rem + env(safe-area-inset-bottom)); }
-          .footer-inner { display: block; text-align: left; }
+          .footer-inner { display: block; text-align: center; }
           .footer-kicker { margin-bottom: 0.8rem; }
           .footer-logo { font-size: clamp(2.15rem, 10vw, 3rem); letter-spacing: 0.12em; }
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
-          .footer-links { margin-top: 2.5rem; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+          .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
+          .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
+          .lightbox-prev { left: 0.5rem; }
+          .lightbox-next { right: 0.5rem; }
           .footer-link { font-size: 0.66rem; letter-spacing: 0.14em; }
           .footer-note { margin-top: 2.5rem; padding-top: 1.2rem; flex-direction: column; font-size: 0.72rem; line-height: 1.6; }
           .getting-there-section { padding: 4rem 1.5rem; }
@@ -738,12 +788,6 @@ export default function Home() {
             <span className="mobile-line">A small-group horseback expedition hosted with nomadic families in Mongolia.</span>
             <span className="desktop-line">A small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and built for travellers who want the real thing.</span>
           </p>
-          <div className="hero-facts" aria-label="Trip highlights">
-            <span className="hero-fact"><strong>9 days</strong> / 8 nights</span>
-            <span className="hero-fact"><strong>8 guests</strong> maximum</span>
-            <span className="hero-fact"><strong>{pricing.onlinePayment}</strong> online now</span>
-            <span className="hero-fact"><strong>{pricing.localFamilyPayment}</strong> cash to hosts</span>
-          </div>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">Reserve Online</a>
             <a href="#experience" className="btn-ghost">Explore the Journey</a>
@@ -751,13 +795,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* STATS */}
-      <div className="stats-bar">
-        <div className="stat reveal"><span className="stat-num">9</span><span className="stat-label">Days / 8 Nights</span></div>
-        <div className="stat reveal reveal-delay-1"><span className="stat-num">8</span><span className="stat-label">Max Guests</span></div>
-        <div className="stat reveal reveal-delay-2"><span className="stat-num">4</span><span className="stat-label">Days on Horseback</span></div>
-        <div className="stat reveal reveal-delay-3"><span className="stat-num">{pricing.tourPrice}</span><span className="stat-label">Per Person</span></div>
-      </div>
 
       {/* INTRO */}
       <section className="intro" id="experience">
@@ -766,7 +803,7 @@ export default function Home() {
             type="button"
             className="image-button"
             aria-label="View larger image: Mongolian horseman in traditional dress"
-            onClick={() => setLightboxImage({ src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' })}
+            onClick={() => openLightbox('/images/guide.jpg', 'Mongolian horseman in traditional dress')}
           >
             <Image src="/images/guide.jpg" alt="Mongolian horseman in traditional dress" fill quality={72} sizes="(max-width: 900px) 100vw, 50vw" />
           </button>
@@ -800,7 +837,7 @@ export default function Home() {
               type="button"
               className="image-button"
               aria-label={`View larger image: ${item.caption}`}
-              onClick={() => setLightboxImage({ src: item.src, alt: item.caption })}
+              onClick={() => openLightbox(item.src, item.caption)}
             >
               <Image src={item.src} alt={item.caption} fill quality={70} sizes="(max-width: 900px) 20vw, 20vw" />
             </button>
@@ -818,7 +855,7 @@ export default function Home() {
             type="button"
             className="image-button partnership-inline-photo"
             aria-label="View larger image: Robert with the host family outside a traditional ger in Mongolia"
-            onClick={() => setLightboxImage({ src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' })}
+            onClick={() => openLightbox('/images/rob-family.jpg', 'Robert with the host family outside a traditional ger in Mongolia')}
           >
             <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill quality={72} sizes="100vw" />
             <span className="partnership-photo-caption">Robert with Ganbold, Suma and family in the valley</span>
@@ -833,7 +870,7 @@ export default function Home() {
             type="button"
             className="image-button"
             aria-label="View larger image: Robert with the host family outside a traditional ger in Mongolia"
-            onClick={() => setLightboxImage({ src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' })}
+            onClick={() => openLightbox('/images/rob-family.jpg', 'Robert with the host family outside a traditional ger in Mongolia')}
           >
             <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill quality={72} sizes="(max-width: 900px) 100vw, 50vw" />
           </button>
@@ -867,7 +904,7 @@ export default function Home() {
                 type="button"
                 className="image-button testimonial-photo"
                 aria-label={`View larger image: ${testimonial.alt}`}
-                onClick={() => setLightboxImage({ src: testimonial.src, alt: testimonial.alt })}
+                onClick={() => openLightbox(testimonial.src, testimonial.alt)}
               >
                 <Image src={testimonial.src} alt={testimonial.alt} fill quality={76} sizes="(max-width: 900px) 100vw, 50vw" />
               </button>
@@ -935,14 +972,14 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => setLightboxImage({ src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' })}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => setLightboxImage({ src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' })}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => setLightboxImage({ src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' })}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => setLightboxImage({ src: '/images/mosaic2.jpg', alt: 'Ger camp at sunrise in the valley' })}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => setLightboxImage({ src: '/images/mosaic3.jpg', alt: 'Mongolian eagle portrait' })}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => setLightboxImage({ src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' })}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => setLightboxImage({ src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' })}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => setLightboxImage({ src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' })}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => openLightbox('/images/riding2.jpg', 'Rider crossing shallow water on horseback')}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => openLightbox('/images/mosaic1.jpg', 'Traditional Mongolian gers with grazing animals')}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => openLightbox('/images/mosaic2.jpg', 'Ger camp at sunrise in the valley')}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => openLightbox('/images/mosaic3.jpg', 'Mongolian eagle portrait')}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => openLightbox('/images/mosaic4.jpg', 'Wide sunset view across the Orkhon Valley')}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => openLightbox('/images/mosaic5.jpg', 'Ger silhouette at dusk')}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
@@ -952,37 +989,11 @@ export default function Home() {
         </div>
         <div className="getting-there-grid">
           <div className="reveal">
-            <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Use the apps below to find the right route and purchase your ticket.</p>
-            <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Coordinate your arrival time directly via WhatsApp before departure.</p>
+            <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside.</p>
+            <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Transport details, recommended local apps, and exact coordination notes will be included in your confirmation email after booking.</p>
             <div style={{marginTop:'2.5rem', padding:'1.5rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
               <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.8rem'}}>Need Help?</p>
               <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7, fontStyle:'italic'}}>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
-            </div>
-          </div>
-          <div className="reveal reveal-delay-1">
-            <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1.5rem'}}>Recommended Apps</p>
-            <div style={{display:'flex', flexDirection:'column', gap:'1rem'}}>
-              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
-                <div style={{width:'48px', height:'48px', background:'#f97316', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>🚌</div>
-                <div>
-                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UB Smart Bus</p>
-                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Find bus routes and schedules from Ulaanbaatar to the countryside</p>
-                </div>
-              </div>
-              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
-                <div style={{width:'48px', height:'48px', background:'#eab308', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>🚕</div>
-                <div>
-                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UBCab</p>
-                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Get around Ulaanbaatar before your departure</p>
-                </div>
-              </div>
-              <div style={{background:'rgba(245,240,232,0.04)', border:'1px solid rgba(245,240,232,0.08)', padding:'1.5rem', display:'flex', gap:'1rem', alignItems:'center'}}>
-                <div style={{width:'48px', height:'48px', background:'#6366f1', borderRadius:'12px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', flexShrink:0}}>💳</div>
-                <div>
-                  <p style={{fontSize:'0.9rem', color:'var(--cream)', fontWeight:500, marginBottom:'0.3rem'}}>UBCARD</p>
-                  <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.7, lineHeight:1.5}}>Load credit for bus payments in the city</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1051,44 +1062,25 @@ export default function Home() {
               ))}
             </div>
           </div>
+          <div className="tour-dates-card">
+            <p style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
+            <div className="tour-date-list">
+              {TOUR_DATES.map(dateOption => (
+                <div className={`tour-date-row${dateOption.muted ? ' muted' : ''}`} key={dateOption.date}>
+                  <div>
+                    <p className="tour-date-title">{dateOption.date}</p>
+                    <p className="tour-date-detail">{dateOption.detail}</p>
+                  </div>
+                  <span className="tour-date-status">{dateOption.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="reveal reveal-delay-1">
           <span className="section-eyebrow">Application</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'2rem'}}>Tell Us<br /><em>About You</em></h2>
-          <div style={{marginBottom:'2rem', padding:'1.5rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.35)', borderRadius:'4px'}}>
-            <p style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
-            <div style={{display:'flex', flexDirection:'column', gap:'0.6rem'}}>
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.07)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px'}}>
-                <div>
-                  <p style={{fontSize:'1rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", color:'var(--cream)', fontWeight:400, marginBottom:'0.15rem'}}>June 22 – 30, 2026</p>
-                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.7}}>9 Days · 8 Nights · Orkhon Valley, Mongolia</p>
-                </div>
-                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
-              </div>
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.07)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px'}}>
-                <div>
-                  <p style={{fontSize:'1rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", color:'var(--cream)', fontWeight:400, marginBottom:'0.15rem'}}>July 16 – 24, 2026</p>
-                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.7}}>9 Days · 8 Nights · Orkhon Valley, Mongolia</p>
-                </div>
-                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
-              </div>
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.07)', border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px'}}>
-                <div>
-                  <p style={{fontSize:'1rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", color:'var(--cream)', fontWeight:400, marginBottom:'0.15rem'}}>August 4 – 12, 2026</p>
-                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.7}}>9 Days · 8 Nights · Orkhon Valley, Mongolia</p>
-                </div>
-                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(200,169,110,0.12)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.3rem 0.7rem', borderRadius:'2px', whiteSpace:'nowrap'}}>Spots Available</span>
-              </div>
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.03)', border:'1px solid rgba(200,169,110,0.1)', borderRadius:'3px'}}>
-                <div>
-                  <p style={{fontSize:'1rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", color:'var(--mist)', fontWeight:400, marginBottom:'0.15rem'}}>Custom Group Date</p>
-                  <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5}}>Private booking · Contact us to arrange</p>
-                </div>
-                <span style={{fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--mist)', opacity:0.5, whiteSpace:'nowrap'}}>On Request</span>
-              </div>
-            </div>
-          </div>
           <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitToFormspree(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1319,12 +1311,14 @@ export default function Home() {
       </footer>
 
       {lightboxImage && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxImage(null)}>
-          <button type="button" className="lightbox-close" onClick={() => setLightboxImage(null)} aria-label="Close image preview">×</button>
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxIndex(null)}>
+          <button type="button" className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close image preview">×</button>
+          <button type="button" className="lightbox-nav lightbox-prev" onClick={event => { event.stopPropagation(); showPreviousImage(); }} aria-label="Previous image">‹</button>
           <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
             <Image src={lightboxImage.src} alt={lightboxImage.alt} fill quality={85} sizes="95vw" />
           </div>
-          <div className="lightbox-caption">{lightboxImage.alt}</div>
+          <button type="button" className="lightbox-nav lightbox-next" onClick={event => { event.stopPropagation(); showNextImage(); }} aria-label="Next image">›</button>
+          <div className="lightbox-caption">{lightboxImage.alt} · {lightboxIndex === null ? 0 : lightboxIndex + 1} / {GALLERY_IMAGES.length}</div>
         </div>
       )}
 
