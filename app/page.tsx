@@ -418,7 +418,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The total founding rate is $2,099 USD per person. A $959 online booking payment confirms your place with Horse Adventures. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,099 USD per person. A $959 online booking payment confirms your place with Horse Adventures. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
         ],
       },
     ],
@@ -1145,14 +1145,14 @@ export default function Home() {
       <section className="booking" id="book">
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
-          <h2 className="section-title">Join the<br /><em>First Journey</em></h2>
-          <p className="section-body">We&apos;re running our inaugural Horse Adventures trip at a special introductory rate of {pricing.tourPrice} per person — limited to 8 participants.</p>
+          <h2 className="section-title">Choose Your<br /><em>2026 Expedition</em></h2>
+          <p className="section-body">Real guests have already made the journey. The 2026 Horse Adventures season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
           <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
           </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
-            <span className="price-badge">Founding Rate — Limited Availability</span>
+            <span className="price-badge">2026 Season Rate — Limited Availability</span>
             <div className="price-amount">{pricing.tourPrice}</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
             <div className="price-note">Total trip price: {pricing.tourPrice}. Pay {pricing.onlinePayment} online now to confirm your place; pay {pricing.localFamilyPayment} directly in cash to the nomadic host families in Mongolia. Custom group dates available on request.</div>
@@ -1380,7 +1380,7 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does payment work?', a:'The full founding rate is $2,099 per person. You pay $959 online to Horse Adventures to confirm your place. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'How does payment work?', a:'The current 2026 rate is $2,099 per person. You pay $959 online to Horse Adventures to confirm your place. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,140 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
             {q:'What is your cancellation policy?', a:'The $959 online booking payment is non-refundable once your place is confirmed. The $1,140 local family payment is paid in cash in Mongolia and is not collected online by Horse Adventures.'},
           ].map(({q, a}, i) => (
