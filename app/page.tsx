@@ -455,7 +455,7 @@ export default function Home() {
         }
         .hero-content {
           position: relative; z-index: 2;
-          padding: 0 6rem 7rem; max-width: 900px;
+          padding: 0 6rem 6.5rem; max-width: 980px;
           animation: heroFade 1.5s ease-out 0.3s both;
         }
         @keyframes heroFade {
@@ -472,9 +472,12 @@ export default function Home() {
           font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem;
         }
         .hero-title em { font-style: italic; color: var(--gold); }
-        .hero-sub { font-size: 1rem; line-height: 1.7; color: var(--mist); max-width: 520px; margin-bottom: 2.5rem; }
+        .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 620px; margin-bottom: 1.5rem; }
         .hero-sub .mobile-line { display: none; }
         .hero-sub .desktop-line { display: inline; }
+        .hero-facts { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 0 0 2.2rem; max-width: 760px; }
+        .hero-fact { border: 1px solid rgba(245,240,232,0.18); background: rgba(14,12,9,0.42); backdrop-filter: blur(6px); padding: 0.58rem 0.78rem; color: rgba(245,240,232,0.86); font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .hero-fact strong { color: var(--gold); font-weight: 500; }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -628,10 +631,18 @@ export default function Home() {
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
 
-        footer { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.15); padding: 4rem 6rem; display: flex; justify-content: space-between; align-items: center; }
-        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.2rem; letter-spacing: 0.15em; color: var(--cream); text-transform: uppercase; }
-        .footer-tagline { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 0.3rem; }
-        .footer-note { font-size: 0.75rem; color: rgba(212,207,196,0.82); }
+        .faq-section { background: var(--ink); padding: 7rem 2rem; }
+        footer { background: #120f0b; border-top: 1px solid rgba(200,169,110,0.18); padding: 4.5rem 2rem 3rem; }
+        .footer-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 1.2fr) 1fr; gap: 4rem; align-items: start; }
+        .footer-kicker { font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+        .footer-logo { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: 0.16em; color: var(--cream); text-transform: uppercase; }
+        .footer-tagline { font-size: 0.72rem; line-height: 1.8; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(200,169,110,0.88); margin-top: 1rem; max-width: 420px; }
+        .footer-cta { display: inline-flex; margin-top: 1.8rem; padding: 0.85rem 1.2rem; border: 1px solid rgba(200,169,110,0.35); color: var(--cream); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: background 0.3s ease, border-color 0.3s ease; }
+        .footer-cta:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+        .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 2.5rem; justify-items: start; }
+        .footer-link { color: rgba(200,169,110,0.86); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.3s ease; }
+        .footer-link:hover { color: var(--cream); }
+        .footer-note { border-top: 1px solid rgba(200,169,110,0.14); max-width: 1120px; margin: 3.5rem auto 0; padding-top: 1.4rem; display: flex; justify-content: space-between; gap: 1rem; font-size: 0.75rem; color: rgba(212,207,196,0.68); }
 
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s ease; }
         .js-reveal .reveal { opacity: 0; transform: translateY(40px); }
@@ -649,10 +660,16 @@ export default function Home() {
           section { padding: 5rem 2rem; }
           nav { padding: 1.2rem 2rem; }
           nav.mobile-nav-hidden { transform: translateY(-100%); }
-          .hero-content { padding: 0 2rem 5rem; }
+          .hero { min-height: 720px; }
+          .hero-content { padding: 0 2rem 4rem; }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
+          .hero-sub { margin-bottom: 1.2rem; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
+          .hero-facts { gap: 0.5rem; margin-bottom: 1.8rem; }
+          .hero-fact { width: calc(50% - 0.25rem); padding: 0.55rem 0.65rem; font-size: 0.58rem; letter-spacing: 0.12em; }
+          .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+          .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included { grid-template-columns: 1fr; gap: 3rem; }
           .trust { padding: 4rem 1.5rem; }
@@ -669,7 +686,16 @@ export default function Home() {
           .photo-strip { height: 40vw; min-height: 200px; }
           .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
           .mosaic-item.tall { grid-row: span 1; }
-          footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 3rem 2rem; }
+          .faq-section { padding: 4rem 1.5rem 3.5rem; }
+          footer { padding: 3.25rem 1.5rem calc(3rem + env(safe-area-inset-bottom)); }
+          .footer-inner { display: block; text-align: left; }
+          .footer-kicker { margin-bottom: 0.8rem; }
+          .footer-logo { font-size: clamp(2.15rem, 10vw, 3rem); letter-spacing: 0.12em; }
+          .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
+          .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
+          .footer-links { margin-top: 2.5rem; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+          .footer-link { font-size: 0.66rem; letter-spacing: 0.14em; }
+          .footer-note { margin-top: 2.5rem; padding-top: 1.2rem; flex-direction: column; font-size: 0.72rem; line-height: 1.6; }
           .getting-there-section { padding: 4rem 1.5rem; }
           .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
           .divider { padding: 0 2rem; }
@@ -705,15 +731,21 @@ export default function Home() {
         </div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <p className="hero-eyebrow">Orkhon Valley & Eight Lakes Region · Mongolia</p>
+          <p className="hero-eyebrow">9 Days · Orkhon Valley & Eight Lakes · Mongolia</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
           <p className="hero-sub">
-            <span className="mobile-line">9 days in one of the last truly wild places on earth.</span>
-            <span className="desktop-line">A 9-day immersive journey into nomadic Mongolian life — riding on horseback through one of the world&apos;s last great wildernesses, hosted by a family whose roots run as deep as the land itself.</span>
+            <span className="mobile-line">A small-group horseback expedition hosted with nomadic families in Mongolia.</span>
+            <span className="desktop-line">A small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and built for travellers who want the real thing.</span>
           </p>
+          <div className="hero-facts" aria-label="Trip highlights">
+            <span className="hero-fact"><strong>9 days</strong> / 8 nights</span>
+            <span className="hero-fact"><strong>8 guests</strong> maximum</span>
+            <span className="hero-fact"><strong>{pricing.onlinePayment}</strong> online now</span>
+            <span className="hero-fact"><strong>{pricing.localFamilyPayment}</strong> cash to hosts</span>
+          </div>
           <div className="hero-actions">
-            <a href="#book" className="btn-primary">Book Your Journey</a>
-            <a href="#experience" className="btn-ghost">Explore the Experience</a>
+            <a href="#book" className="btn-primary">Reserve Online</a>
+            <a href="#experience" className="btn-ghost">Explore the Journey</a>
           </div>
         </div>
       </div>
@@ -843,18 +875,6 @@ export default function Home() {
                 <p className="testimonial-name">{testimonial.name}</p>
               </div>
             </article>
-          ))}
-        </div>
-        <div className="trust-grid">
-          {[
-            ['Local host family', 'You stay with Ganbold, Suma and their family — not in a staged tourist camp. The trip is built around their home, horses and valley knowledge.'],
-            ['Experienced guide', 'Suma grew up riding this terrain and guides guests through the Eight Lakes region, reading the horses, weather and route as conditions change.'],
-            ['Transparent first season', 'Small groups, direct communication and no mass-market machinery. Guest reviews from the 2026 trips will be added as soon as the first groups return.'],
-          ].map(([source, quote]) => (
-            <div className="trust-card reveal" key={source}>
-              <p className="trust-quote">“{quote}”</p>
-              <p className="trust-source">{source}</p>
-            </div>
           ))}
         </div>
         <div className="proof-strip reveal">
@@ -1244,7 +1264,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section style={{background:'var(--ink)', padding:'7rem 2rem'}}>
+      <section className="faq-section">
         <div style={{maxWidth:'760px', margin:'0 auto'}}>
           <div className="reveal" style={{marginBottom:'4rem'}}>
             <span className="section-eyebrow">FAQ</span>
@@ -1275,20 +1295,25 @@ export default function Home() {
       </section>
 
       <footer>
-        <div>
-          <div className="footer-logo">8 Lakes Tours</div>
-          <div className="footer-tagline">A Horse Adventures Expedition · Mongolia</div>
-        </div>
-        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'0.6rem'}}>
-          <div className="footer-note">© 2026 8 Lakes Tours · All rights reserved</div>
-          <div style={{display:'flex', gap:'1.2rem', flexWrap:'wrap', justifyContent:'flex-end'}}>
-            <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Instagram</a>
-            <a href="/about" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>About</a>
-            <a href="/faq" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>FAQ</a>
-            <a href="/contact" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Contact</a>
-            <a href="/terms" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Terms &amp; Conditions</a>
-            <a href="/privacy" style={{fontSize:'0.65rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', opacity:0.75, textDecoration:'none'}}>Privacy Policy</a>
+        <div className="footer-inner">
+          <div>
+            <div className="footer-kicker">Mongolia · Small-group horseback expeditions</div>
+            <div className="footer-logo">8 Lakes<br />Tours</div>
+            <div className="footer-tagline">A Horse Adventures expedition through the Orkhon Valley and Eight Lakes region.</div>
+            <a className="footer-cta" href="#book">Reserve a Spot</a>
           </div>
+          <nav className="footer-links" aria-label="Footer navigation">
+            <a className="footer-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a className="footer-link" href="/about">About</a>
+            <a className="footer-link" href="/faq">FAQ</a>
+            <a className="footer-link" href="/contact">Contact</a>
+            <a className="footer-link" href="/terms">Terms</a>
+            <a className="footer-link" href="/privacy">Privacy</a>
+          </nav>
+        </div>
+        <div className="footer-note">
+          <span>© 2026 8 Lakes Tours. All rights reserved.</span>
+          <span>Built for direct local family partnership in Mongolia.</span>
         </div>
       </footer>
 
