@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [
         `${siteUrl}/images/hero-horseback.jpg`,
         `${siteUrl}/images/rob-family.jpg`,
+        `${siteUrl}/images/rob-zaher.jpg`,
         `${siteUrl}/images/lake.jpg`,
       ],
     },
