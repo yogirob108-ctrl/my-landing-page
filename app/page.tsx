@@ -1085,7 +1085,7 @@ export default function Home() {
           <span className="section-eyebrow">Who You&apos;re Booking With</span>
           <h2 className="section-title">Robert, the Family<br /><em>&amp; Horse Adventures</em></h2>
           <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family payment goes directly to your hosts in Mongolia.</p>
-          <p style={{marginTop:'1rem'}}>For now, all tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>. We may add a dedicated Rob address later.</p>
+          <p style={{marginTop:'1rem'}}>All tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>.</p>
           <div className="trust-actions">
             <a className="trust-link" href="mailto:info@8lakestours.com">Email the tour team</a>
             <a className="trust-link" href="https://www.instagram.com/robzaher108?igsh=OHdvdGp0ZW9ieHFv" target="_blank" rel="noopener noreferrer">Rob&apos;s Instagram</a>
