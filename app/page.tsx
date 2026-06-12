@@ -1,7 +1,10 @@
 "use client";
 import Image from 'next/image';
+import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
+const STRIPE_BUY_BUTTON_ID = 'buy_btn_1ThVQd3OYuYvjeqELwNE8Iqp';
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 const STRIPE_LINK = 'https://buy.stripe.com/9B628k8UFarmakM1LT0gw03';
 
 const BASE_PRICE_USD = 2099;
@@ -738,6 +741,9 @@ export default function Home() {
         .stripe-trust-row .stripe-wordmark { background: #635bff; border-color: #635bff; color: #fff; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
         .checkout-button-wrap { position: relative; }
+        .stripe-embed-wrap { min-height: 48px; }
+        .stripe-buy-button-host { display: grid; justify-items: center; }
+        .stripe-buy-button-host stripe-buy-button { width: 100%; }
         .stripe-pay-button { display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: linear-gradient(135deg, #635bff, #7b72ff); border: 1px solid rgba(255,255,255,0.16); border-radius: 5px; color: #fff; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; box-shadow: 0 14px 34px rgba(99,91,255,0.24); transition: transform 0.25s ease, box-shadow 0.25s ease; }
         .stripe-pay-button:hover { transform: translateY(-1px); box-shadow: 0 18px 42px rgba(99,91,255,0.34); }
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
@@ -1285,28 +1291,20 @@ export default function Home() {
               <p className="checkout-copy">
                 Submit the application with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
               </p>
-              <div className="stripe-trust-row" aria-label="Secure Stripe checkout payment options">
-                <span className="stripe-wordmark">stripe</span>
-                <span>Visa</span>
-                <span>Mastercard</span>
-                <span>Amex</span>
-                <span>Apple Pay</span>
-                <span>Google Pay</span>
-              </div>
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
-              <div className="checkout-button-wrap">
+              <div className="checkout-button-wrap stripe-embed-wrap">
                 {canPay ? (
-                  <a
-                    href={STRIPE_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="stripe-pay-button"
-                  >
-                    <span>Confirm My Spot</span>
-                    <strong>$959 Online →</strong>
-                  </a>
+                  <>
+                    <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
+                    <div
+                      className="stripe-buy-button-host"
+                      dangerouslySetInnerHTML={{
+                        __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}"></stripe-buy-button>`,
+                      }}
+                    />
+                  </>
                 ) : (
                   <button
                     type="button"
