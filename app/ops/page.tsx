@@ -1,28 +1,29 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { bookings, emailTemplates, getMissingEmails, getOpsMetrics, stackDecisions, statusLabels, statusOrder, telegramBotCommands } from '@/lib/booking-ops-data';
-import { isAllowedOpsEmail, isSupabaseConfigured } from '@/lib/ops-config';
-import { createSupabaseServerClient } from '@/lib/supabase-server';
+import { bookings, emailTemplates, getMissingEmails, getOpsMetrics, statusLabels, statusOrder, type Booking } from '@/lib/booking-ops-data';
+import { isSupabaseConfigured } from '@/lib/ops-config';
+import { clearOpsPinSession, hasOpsPinSession } from '@/lib/ops-pin';
 
 export const metadata: Metadata = {
-  title: 'Booking Ops Dashboard Prototype | 8 Lakes Tours',
-  description: 'Internal booking operations prototype for 8 Lakes Tours customer flow, payments, email tracking, and pre-trip tasks.',
+  title: 'Ops Command Center | 8 Lakes Tours',
+  description: 'Internal booking operations command center for 8 Lakes Tours.',
   robots: { index: false, follow: false },
 };
 
 export const dynamic = 'force-dynamic';
 
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-const date = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const shortDate = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short' });
 const dateTime = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-const metrics = getOpsMetrics();
-const confirmedBookings = bookings.filter((booking) => ['confirmed', 'prep_sent', 'ready_for_departure', 'completed'].includes(booking.status));
-const onlineOutstanding = metrics.onlineDue - metrics.onlinePaid;
+async function signOut() {
+  'use server';
+  await clearOpsPinSession();
+  redirect('/ops/login');
+}
 
 function formatDate(value: string) {
-  return date.format(new Date(value));
+  return shortDate.format(new Date(value));
 }
 
 function formatDateTime(value: string) {
@@ -33,368 +34,293 @@ function statusClass(status: string) {
   return `status status-${status.replaceAll('_', '-')}`;
 }
 
-async function signOut() {
-  'use server';
-
-  if (isSupabaseConfigured) {
-    const supabase = await createSupabaseServerClient();
-    await supabase.auth.signOut();
-  }
-
-  redirect('/ops/login');
+function isAttentionBooking(booking: Booking) {
+  return booking.status === 'awaiting_payment' || booking.tasks.some((task) => !task.done) || getMissingEmails(booking).length > 0;
 }
 
-async function getOpsUser() {
-  if (!isSupabaseConfigured) {
-    return { email: null, mode: 'prototype' as const };
-  }
-
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
-  const email = data.user?.email ?? null;
-
-  if (!isAllowedOpsEmail(email)) {
-    redirect('/ops/login');
-  }
-
-  return { email, mode: 'authenticated' as const };
+function nextActionFor(booking: Booking) {
+  if (booking.status === 'awaiting_payment') return 'Chase online reservation payment';
+  const openTask = booking.tasks.find((task) => !task.done);
+  if (openTask) return openTask.title;
+  const missing = getMissingEmails(booking)[0];
+  if (missing) return `Send ${missing.replaceAll('_', ' ')}`;
+  return 'No immediate action';
 }
 
 export default async function OpsDashboardPage() {
-  const opsUser = await getOpsUser();
+  if (!(await hasOpsPinSession())) {
+    redirect('/ops/login');
+  }
+
+  const metrics = getOpsMetrics();
+  const onlineOutstanding = metrics.onlineDue - metrics.onlinePaid;
+  const attentionBookings = bookings.filter(isAttentionBooking);
+  const paidBookings = bookings.filter((booking) => booking.onlinePaidUsd >= booking.onlineDueUsd);
+  const unpaidBookings = bookings.filter((booking) => booking.onlinePaidUsd < booking.onlineDueUsd);
+  const openTasks = bookings.flatMap((booking) => booking.tasks.filter((task) => !task.done).map((task) => ({ booking, task })));
 
   return (
-    <main className="ops-page">
-      <header className="ops-hero">
-        <nav className="ops-nav">
-          <Link href="/" className="brand">8 Lakes Tours</Link>
-          <div className="nav-links">
-            <a href="#bookings">Bookings</a>
-            <a href="#emails">Email flow</a>
-            <a href="#stack">Stack</a>
-            {opsUser.mode === 'authenticated' ? <span className="admin-pill">{opsUser.email}</span> : <span className="admin-pill warning-pill">Prototype mode</span>}
-            {opsUser.mode === 'authenticated' && (
-              <form action={signOut}>
-                <button type="submit" className="nav-button">Sign out</button>
-              </form>
-            )}
-            <Link href="/">Public site</Link>
-          </div>
-        </nav>
-        {opsUser.mode === 'prototype' && (
-          <div className="setup-banner">
-            Supabase auth is not configured in this environment yet. This route is still showing sample data only; add the Supabase env vars before using live customer data.
-          </div>
-        )}
-        <div className="hero-grid">
-          <div>
-            <p className="eyebrow">Booking Ops v0</p>
-            <h1>Customer flow, payments, emails, and prep tasks in one focused dashboard.</h1>
-            <p className="lead">This is the first internal operating-system prototype: keep Formspree as the intake pipe for now, make the owned booking database the source of truth, and move email templates from memory into a logged workflow.</p>
-          </div>
-          <aside className="decision-card">
-            <p className="eyebrow">Immediate build target</p>
-            <ol>
-              <li>See every customer and booking state.</li>
-              <li>Separate $959 online revenue from $1,140 family cash.</li>
-              <li>Click-send templates and log exactly what was sent.</li>
-              <li>Track missing prep items before departure.</li>
-            </ol>
-          </aside>
+    <main className="ops-shell">
+      <header className="topbar">
+        <div>
+          <p className="mini">8 Lakes Ops</p>
+          <h1>Command center</h1>
         </div>
+        <form action={signOut}><button className="signout" type="submit">Lock</button></form>
       </header>
 
-      <section className="metrics-grid" aria-label="Booking metrics">
-        <Metric label="Confirmed guests" value={confirmedBookings.reduce((sum, booking) => sum + booking.guestCount, 0).toString()} note={`${bookings.length} active booking records`} />
-        <Metric label="Online paid" value={money.format(metrics.onlinePaid)} note={`${money.format(onlineOutstanding)} still pending online`} />
-        <Metric label="Host-family cash due" value={money.format(metrics.familyCashDue)} note="Paid locally, not counted as online revenue" />
-        <Metric label="Open prep tasks" value={metrics.openTasks.toString()} note="Insurance, arrival details, cash reminders" />
+      <nav className="quick-nav" aria-label="Ops sections">
+        <a href="#today">Today</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#money">Money</a>
+        <a href="#tasks">Tasks</a>
+      </nav>
+
+      <section className="system-strip" aria-label="System status">
+        <strong>{isSupabaseConfigured ? 'Supabase env detected' : 'PIN-only live v0'}</strong>
+        <span>Protected by PIN. Sample records remain until Formspree/Stripe are bridged into Supabase.</span>
       </section>
 
-      <section className="panel" id="bookings">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Bookings</p>
-            <h2>Operational customer database</h2>
-          </div>
-          <p>These records are sample data showing the exact fields the real Supabase table should own. No live customer data belongs in this public prototype yet.</p>
-        </div>
+      <section className="priority-grid" id="today">
+        <PriorityCard tone="urgent" label="Needs attention" value={attentionBookings.length.toString()} detail="Unpaid bookings, missing emails, or open prep tasks" />
+        <PriorityCard label="Guests in pipeline" value={metrics.guests.toString()} detail={`${bookings.length} booking records`} />
+        <PriorityCard label="Online collected" value={money.format(metrics.onlinePaid)} detail={`${money.format(onlineOutstanding)} still outstanding`} />
+        <PriorityCard label="Cash to families" value={money.format(metrics.familyCashDue)} detail="Tracked, not online revenue" />
+      </section>
 
-        <div className="status-row">
-          {statusOrder.map((status) => (
-            <div key={status} className="status-tile">
-              <span>{statusLabels[status]}</span>
-              <strong>{bookings.filter((booking) => booking.status === status).length}</strong>
+      <section className="ops-grid">
+        <div className="main-stack">
+          <section className="panel attention-panel">
+            <div className="section-head">
+              <div>
+                <p className="mini">Priority queue</p>
+                <h2>Do these next</h2>
+              </div>
+              <span>{attentionBookings.length} open</span>
             </div>
-          ))}
-        </div>
-
-        <div className="booking-list">
-          {bookings.map((booking) => {
-            const missingEmails = getMissingEmails(booking);
-            return (
-              <article key={booking.id} className="booking-card">
-                <div className="booking-topline">
-                  <div>
-                    <span className="record-id">{booking.id}</span>
-                    <h3>{booking.customerName}</h3>
-                    <p>{booking.email} · {booking.phone}</p>
+            <div className="action-list">
+              {attentionBookings.map((booking) => (
+                <article className="action-card" key={booking.id}>
+                  <div className="action-top">
+                    <div>
+                      <span className="record-id">{booking.id}</span>
+                      <h3>{booking.customerName}</h3>
+                    </div>
+                    <span className={statusClass(booking.status)}>{statusLabels[booking.status]}</span>
                   </div>
-                  <span className={statusClass(booking.status)}>{statusLabels[booking.status]}</span>
-                </div>
-
-                <div className="booking-grid">
-                  <Info label="Tour date" value={booking.tourDate} />
-                  <Info label="Guests" value={booking.guestCount.toString()} />
-                  <Info label="Riding" value={booking.ridingExperience} />
-                  <Info label="Dietary" value={booking.dietaryNotes} />
-                  <Info label="Source" value={booking.formSource} />
-                  <Info label="Submitted" value={formatDateTime(booking.submittedAt)} />
-                </div>
-
-                <div className="money-strip">
-                  <Info label="Gross trip value" value={money.format(booking.totalTripValueUsd)} />
-                  <Info label="Online paid / due" value={`${money.format(booking.onlinePaidUsd)} / ${money.format(booking.onlineDueUsd)}`} />
-                  <Info label="Cash to family" value={money.format(booking.familyCashDueUsd)} />
-                  <Info label="Stripe" value={booking.stripeReference ?? 'Not matched yet'} />
-                </div>
-
-                <div className="sub-panels">
-                  <div>
-                    <h4>Email history</h4>
-                    <ul className="event-list">
-                      {booking.emails.map((event) => (
-                        <li key={`${booking.id}-${event.template}-${event.sentAt}`}>
-                          <strong>{event.subject}</strong>
-                          <span>{formatDateTime(event.sentAt)} · sent by {event.sentBy}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    {missingEmails.length > 0 && <p className="warning">Missing next: {missingEmails.join(', ').replaceAll('_', ' ')}</p>}
+                  <p className="next-action">{nextActionFor(booking)}</p>
+                  <div className="action-meta">
+                    <span>{booking.tourDate}</span>
+                    <span>{booking.guestCount} guest{booking.guestCount === 1 ? '' : 's'}</span>
+                    <span>{booking.email}</span>
                   </div>
-                  <div>
-                    <h4>Open tasks</h4>
-                    <ul className="task-list">
-                      {booking.tasks.map((task) => (
-                        <li key={`${booking.id}-${task.title}`} className={task.done ? 'done' : ''}>
-                          <span>{task.done ? '✓' : '•'}</span>
-                          <div>
-                            <strong>{task.title}</strong>
-                            <small>Due {formatDate(task.due)}</small>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <p className="notes">{booking.notes}</p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="two-column" id="emails">
-        <div className="panel">
-          <div className="section-heading compact">
-            <div>
-              <p className="eyebrow">Email templates</p>
-              <h2>Click-send first, automate later</h2>
+                </article>
+              ))}
             </div>
-            <p>Each button in the real app should send through Resend, save the message snapshot, and write an email_events row.</p>
-          </div>
-          <div className="template-list">
-            {emailTemplates.map((template) => (
-              <article key={template.key} className="template-card">
-                <div>
-                  <h3>{template.name}</h3>
-                  <p>{template.subject}</p>
-                  <span>{template.trigger}</span>
+          </section>
+
+          <section className="panel" id="pipeline">
+            <div className="section-head">
+              <div>
+                <p className="mini">Customer database</p>
+                <h2>Booking pipeline</h2>
+              </div>
+              <span>Source of truth shape</span>
+            </div>
+            <div className="status-board">
+              {statusOrder.map((status) => (
+                <div key={status} className="status-tile">
+                  <span>{statusLabels[status]}</span>
+                  <strong>{bookings.filter((booking) => booking.status === status).length}</strong>
                 </div>
-                <button type="button" aria-label={`Prototype send button for ${template.name}`}>Send</button>
-              </article>
-            ))}
-          </div>
+              ))}
+            </div>
+            <div className="booking-list">
+              {bookings.map((booking) => <BookingRow key={booking.id} booking={booking} />)}
+            </div>
+          </section>
         </div>
 
-        <div className="panel financial-panel">
-          <p className="eyebrow">Financial view</p>
-          <h2>Keep gross value separate from money collected online</h2>
-          <dl>
-            <div><dt>Gross customer trip value</dt><dd>{money.format(metrics.grossTripValue)}</dd></div>
-            <div><dt>Online reservation amount due</dt><dd>{money.format(metrics.onlineDue)}</dd></div>
-            <div><dt>Online amount received</dt><dd>{money.format(metrics.onlinePaid)}</dd></div>
-            <div><dt>Online outstanding</dt><dd>{money.format(onlineOutstanding)}</dd></div>
-            <div><dt>Cash due directly to families</dt><dd>{money.format(metrics.familyCashDue)}</dd></div>
-          </dl>
-          <p className="callout">Accounting rule: the $1,140 family portion is tracked operationally but should not be treated as online revenue collected by 8 Lakes Tours / Horse Adventures.</p>
-        </div>
+        <aside className="side-stack">
+          <section className="panel money-panel" id="money">
+            <p className="mini">Financial control</p>
+            <h2>Split-payment ledger</h2>
+            <LedgerRow label="Gross trip value" value={money.format(metrics.grossTripValue)} />
+            <LedgerRow label="Online due" value={money.format(metrics.onlineDue)} />
+            <LedgerRow label="Online paid" value={money.format(metrics.onlinePaid)} positive />
+            <LedgerRow label="Online outstanding" value={money.format(onlineOutstanding)} warning={onlineOutstanding > 0} />
+            <LedgerRow label="Cash paid to families" value={money.format(metrics.familyCashDue)} />
+            <p className="ledger-note">Rule: the $1,140/person host-family amount is tracked operationally, but not treated as online revenue.</p>
+          </section>
+
+          <section className="panel compact-panel">
+            <p className="mini">Payment state</p>
+            <div className="mini-list">
+              <strong>{paidBookings.length} paid online</strong>
+              <span>{unpaidBookings.length} awaiting online payment</span>
+            </div>
+          </section>
+
+          <section className="panel" id="tasks">
+            <div className="section-head tight">
+              <div>
+                <p className="mini">Task board</p>
+                <h2>Open prep</h2>
+              </div>
+              <span>{openTasks.length}</span>
+            </div>
+            <ul className="task-list">
+              {openTasks.map(({ booking, task }) => (
+                <li key={`${booking.id}-${task.title}`}>
+                  <span>{formatDate(task.due)}</span>
+                  <strong>{task.title}</strong>
+                  <small>{booking.customerName} · {booking.id}</small>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="panel">
+            <p className="mini">Email workflow</p>
+            <h2>Manual sends first</h2>
+            <div className="template-stack">
+              {emailTemplates.slice(0, 5).map((template) => (
+                <article key={template.key}>
+                  <strong>{template.name}</strong>
+                  <span>{template.subject}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        </aside>
       </section>
 
-      <section className="panel" id="stack">
-        <div className="section-heading">
+      <section className="panel infra-panel">
+        <div className="section-head">
           <div>
-            <p className="eyebrow">Stack design</p>
-            <h2>Small owned system, not a bloated CRM</h2>
+            <p className="mini">Infrastructure priority</p>
+            <h2>Build order from here</h2>
           </div>
-          <p>The real implementation should grow from this dashboard into a protected app backed by Supabase, Resend, Stripe webhooks, and a Formspree bridge.</p>
+          <a href="https://github.com/yogirob108-ctrl/my-landing-page/blob/main/docs/booking-ops-stack.md">Docs live in repo</a>
         </div>
-        <div className="stack-grid">
-          {stackDecisions.map((decision) => (
-            <article key={decision.layer} className="stack-card">
-              <span>{decision.layer}</span>
-              <h3>{decision.choice}</h3>
-              <p>{decision.why}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="panel bot-panel">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Telegram ops bot</p>
-            <h2>On-the-go customer reports and decision support</h2>
-          </div>
-          <p>The bot should be a command layer over the same booking database, not a separate system. It can answer status questions, draft messages, and surface logs while Rob is travelling or away from the laptop.</p>
-        </div>
-        <div className="bot-grid">
-          {telegramBotCommands.map((item) => (
-            <article key={item.command} className="bot-card">
-              <code>{item.command}</code>
-              <p>{item.purpose}</p>
-            </article>
-          ))}
-        </div>
-        <p className="callout">Safety rule: early bot versions should read and draft only. Sending customer emails, refunding payments, or changing booking status should require an explicit confirmation step or happen inside the protected dashboard.</p>
-      </section>
-
-      <section className="panel blueprint-panel">
-        <p className="eyebrow">Next build steps</p>
-        <h2>Implementation sequence</h2>
-        <ol className="blueprint-list">
-          <li><strong>Protect /ops</strong><span>Add Supabase Auth or a single admin allow-list before real data is entered.</span></li>
-          <li><strong>Create Supabase tables</strong><span>customers, bookings, payments, email_templates, email_events, booking_tasks.</span></li>
-          <li><strong>Bridge Formspree</strong><span>Forward submissions into the bookings table while preserving Rob’s current notification email.</span></li>
-          <li><strong>Add Resend actions</strong><span>Turn prototype buttons into server actions that send email and log the exact message snapshot.</span></li>
-          <li><strong>Connect Stripe webhooks</strong><span>Payment success marks online_paid_usd and unlocks the booking-confirmed email.</span></li>
-          <li><strong>Automate reminders</strong><span>Only after the manual template flow is trusted: insurance, arrival details, final checklist.</span></li>
+        <ol className="infra-list">
+          <li><strong>1. Keep PIN gate live</strong><span>Immediate protection while still faster than Supabase magic links.</span></li>
+          <li><strong>2. Apply Supabase migration</strong><span>Tables already exist in repo: projects, customers, bookings, payments, email events, tasks.</span></li>
+          <li><strong>3. Bridge Formspree</strong><span>Every application becomes a booking row and still notifies Rob.</span></li>
+          <li><strong>4. Match Stripe payments</strong><span>Webhook marks online_due/paid and unlocks confirmation email.</span></li>
+          <li><strong>5. Resend email actions</strong><span>Buttons send approved templates and log exact message snapshots.</span></li>
+          <li><strong>6. Telegram read/draft bot</strong><span>Mobile lookup and status reports from the same database.</span></li>
         </ol>
       </section>
 
       <style>{`
         :root { color-scheme: dark; }
-        .ops-page { min-height: 100vh; background: #0e0c09; color: #d4cfc4; font-family: var(--font-jost), Jost, sans-serif; font-weight: 300; }
-        .ops-hero { padding: 1.5rem clamp(1.25rem, 4vw, 4rem) 4rem; background: radial-gradient(circle at 20% 0%, rgba(200,169,110,0.16), transparent 32rem), linear-gradient(140deg, #17120c 0%, #0e0c09 72%); border-bottom: 1px solid rgba(200,169,110,0.16); }
-        .ops-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 5rem; flex-wrap: wrap; }
-        .brand { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: #f5f0e8; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
-        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-        .nav-links a { color: #c8a96e; text-decoration: none; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.68rem; }
-        .admin-pill { border: 1px solid rgba(200,169,110,0.24); color: rgba(245,240,232,0.78); padding: 0.38rem 0.55rem; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
-        .warning-pill { color: #e6bf73; }
-        .nav-button { border: 1px solid rgba(200,169,110,0.3); background: transparent; color: #c8a96e; padding: 0.4rem 0.55rem; cursor: pointer; }
-        .setup-banner { width: min(1240px, 100%); margin: -3.5rem auto 3rem; padding: 0.85rem 1rem; border: 1px solid rgba(230,191,115,0.28); background: rgba(200,169,110,0.08); color: #e6bf73; line-height: 1.55; }
-        .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; max-width: 1240px; margin: 0 auto; }
-        .eyebrow { margin: 0 0 0.9rem; color: #c8a96e; text-transform: uppercase; letter-spacing: 0.24em; font-size: 0.66rem; font-weight: 500; }
-        h1, h2, h3, h4, p { margin-top: 0; }
-        h1, h2 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: #f5f0e8; font-weight: 300; line-height: 1.04; }
-        h1 { font-size: clamp(2.7rem, 7vw, 6.3rem); max-width: 920px; margin-bottom: 1.4rem; }
-        h2 { font-size: clamp(2rem, 4vw, 3.7rem); margin-bottom: 0.8rem; }
-        h3 { color: #f5f0e8; font-size: 1.1rem; margin-bottom: 0.3rem; }
-        h4 { color: #c8a96e; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.68rem; margin-bottom: 0.9rem; }
-        .lead { max-width: 780px; color: rgba(212,207,196,0.82); line-height: 1.8; font-size: 1.02rem; }
-        .decision-card, .panel, .booking-card, .template-card, .stack-card, .status-tile { border: 1px solid rgba(200,169,110,0.18); background: rgba(245,240,232,0.035); box-shadow: 0 18px 60px rgba(0,0,0,0.18); }
-        .decision-card { padding: 1.5rem; }
-        .decision-card ol { margin: 0; padding-left: 1.2rem; line-height: 1.7; color: rgba(245,240,232,0.82); }
-        .metrics-grid, .panel, .two-column { width: min(1240px, calc(100% - 2.5rem)); margin-left: auto; margin-right: auto; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: -2rem; position: relative; z-index: 2; }
-        .metric { padding: 1.2rem; background: #17120c; border: 1px solid rgba(200,169,110,0.22); }
-        .metric span { display: block; color: #c8a96e; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.62rem; margin-bottom: 0.7rem; }
-        .metric strong { display: block; color: #f5f0e8; font-size: clamp(1.5rem, 3vw, 2.2rem); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300; }
-        .metric small { color: rgba(212,207,196,0.62); line-height: 1.5; }
-        .panel { margin-top: 2rem; padding: clamp(1.25rem, 3vw, 2rem); }
-        .section-heading { display: flex; justify-content: space-between; gap: 2rem; align-items: end; margin-bottom: 1.5rem; }
-        .section-heading p:not(.eyebrow) { max-width: 520px; line-height: 1.75; color: rgba(212,207,196,0.72); }
-        .section-heading.compact { display: block; }
-        .status-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.65rem; margin-bottom: 1.5rem; }
-        .status-tile { padding: 0.85rem; }
-        .status-tile span { display: block; color: rgba(212,207,196,0.7); font-size: 0.72rem; min-height: 2rem; }
-        .status-tile strong { color: #f5f0e8; font-size: 1.5rem; font-weight: 400; }
-        .booking-list { display: grid; gap: 1rem; }
-        .booking-card { padding: 1.25rem; background: rgba(14,12,9,0.7); }
-        .booking-topline { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
-        .booking-topline p, .notes { color: rgba(212,207,196,0.68); line-height: 1.6; }
-        .record-id { color: #c8a96e; font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; }
-        .status { display: inline-flex; align-items: center; align-self: start; border: 1px solid rgba(200,169,110,0.22); color: #f5f0e8; padding: 0.45rem 0.65rem; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
-        .status-confirmed, .status-prep-sent, .status-ready-for-departure { background: rgba(87, 139, 97, 0.18); border-color: rgba(87,139,97,0.5); }
-        .status-awaiting-payment { background: rgba(200,169,110,0.12); }
-        .booking-grid, .money-strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 0.8rem; }
-        .money-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0.9rem; background: rgba(200,169,110,0.06); border-left: 2px solid #c8a96e; }
-        .info span { display: block; color: rgba(200,169,110,0.86); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.35rem; }
-        .info strong { color: #f5f0e8; font-weight: 400; font-size: 0.86rem; line-height: 1.45; }
-        .sub-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-        .event-list, .task-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.65rem; }
-        .event-list li, .task-list li { padding: 0.75rem; background: rgba(245,240,232,0.035); border: 1px solid rgba(245,240,232,0.06); }
-        .event-list strong, .task-list strong { display: block; color: #f5f0e8; font-size: 0.82rem; }
-        .event-list span, .task-list small { color: rgba(212,207,196,0.62); font-size: 0.72rem; }
-        .task-list li { display: flex; gap: 0.65rem; }
-        .task-list li > span { color: #c8a96e; }
-        .warning { margin-top: 0.8rem; color: #e6bf73; font-size: 0.78rem; }
-        .notes { margin: 1rem 0 0; font-size: 0.86rem; }
-        .two-column { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr); gap: 2rem; }
-        .template-list, .stack-grid { display: grid; gap: 0.8rem; }
-        .template-card { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 1rem; }
-        .template-card p, .stack-card p { color: rgba(212,207,196,0.72); line-height: 1.55; margin-bottom: 0.3rem; }
-        .template-card span, .stack-card span { color: #c8a96e; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; }
-        button { border: 1px solid #c8a96e; background: #c8a96e; color: #0e0c09; padding: 0.7rem 0.95rem; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.62rem; cursor: not-allowed; opacity: 0.82; }
-        .financial-panel dl { margin: 1.4rem 0; display: grid; gap: 0.85rem; }
-        .financial-panel dl div { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(200,169,110,0.12); }
-        dt { color: rgba(212,207,196,0.72); } dd { margin: 0; color: #f5f0e8; font-weight: 500; }
-        .callout { padding: 1rem; border-left: 2px solid #c8a96e; background: rgba(200,169,110,0.06); color: rgba(245,240,232,0.78); line-height: 1.6; }
-        .stack-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .stack-card { padding: 1rem; }
-        .bot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; margin-bottom: 1rem; }
-        .bot-card { padding: 1rem; background: rgba(245,240,232,0.035); border: 1px solid rgba(200,169,110,0.14); }
-        .bot-card code { display: inline-block; margin-bottom: 0.75rem; color: #0e0c09; background: #c8a96e; padding: 0.35rem 0.5rem; font-size: 0.78rem; }
-        .bot-card p { color: rgba(212,207,196,0.74); line-height: 1.55; margin: 0; }
-        .blueprint-list { display: grid; gap: 0.9rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
-        .blueprint-list li { display: grid; grid-template-columns: 220px 1fr; gap: 1rem; padding: 1rem; background: rgba(245,240,232,0.035); border: 1px solid rgba(200,169,110,0.12); }
-        .blueprint-list strong { color: #f5f0e8; } .blueprint-list span { color: rgba(212,207,196,0.72); line-height: 1.55; }
-        @media (max-width: 980px) {
-          .hero-grid, .two-column, .sub-panels { grid-template-columns: 1fr; }
-          .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .status-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .booking-grid, .money-strip, .stack-grid, .bot-grid { grid-template-columns: 1fr 1fr; }
-          .section-heading { display: block; }
+        .ops-shell { min-height: 100vh; background: #080806; color: #e9e1d3; font-family: var(--font-jost), Jost, sans-serif; padding: 0.9rem; padding-bottom: 5rem; }
+        .topbar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 0.2rem 1rem; background: linear-gradient(180deg, #080806 72%, rgba(8,8,6,0)); backdrop-filter: blur(12px); }
+        .mini { margin: 0 0 0.35rem; color: #c8a96e; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.64rem; font-weight: 600; }
+        h1, h2, h3, p { margin-top: 0; }
+        h1, h2 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300; color: #fff8ea; line-height: 0.96; }
+        h1 { font-size: clamp(2.35rem, 12vw, 5.5rem); margin-bottom: 0; }
+        h2 { font-size: clamp(1.9rem, 7vw, 3.4rem); margin-bottom: 0.4rem; }
+        h3 { color: #fff8ea; margin-bottom: 0.25rem; }
+        .signout { border: 1px solid rgba(200,169,110,0.36); background: rgba(200,169,110,0.1); color: #c8a96e; border-radius: 999px; padding: 0.7rem 0.9rem; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.68rem; }
+        .quick-nav { position: fixed; left: 0.75rem; right: 0.75rem; bottom: 0.75rem; z-index: 30; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.35rem; padding: 0.35rem; background: rgba(16,14,10,0.92); border: 1px solid rgba(200,169,110,0.22); border-radius: 999px; backdrop-filter: blur(16px); }
+        .quick-nav a { text-align: center; text-decoration: none; color: #e9e1d3; padding: 0.7rem 0.2rem; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .system-strip, .panel, .priority-card { border: 1px solid rgba(200,169,110,0.18); background: rgba(233,225,211,0.045); border-radius: 22px; box-shadow: 0 18px 70px rgba(0,0,0,0.24); }
+        .system-strip { display: grid; gap: 0.2rem; margin: 0.4rem 0 0.9rem; padding: 0.9rem; color: rgba(233,225,211,0.76); }
+        .system-strip strong { color: #c8a96e; }
+        .priority-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.7rem; margin-bottom: 0.7rem; }
+        .priority-card { padding: 0.95rem; background: linear-gradient(145deg, rgba(200,169,110,0.09), rgba(233,225,211,0.035)); }
+        .priority-card.urgent { border-color: rgba(255,180,158,0.42); background: linear-gradient(145deg, rgba(154,70,50,0.24), rgba(233,225,211,0.035)); }
+        .priority-card span { display: block; color: rgba(233,225,211,0.68); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.13em; }
+        .priority-card strong { display: block; color: #fff8ea; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 10vw, 3.6rem); line-height: 1; margin: 0.45rem 0; }
+        .priority-card small { color: rgba(233,225,211,0.62); line-height: 1.45; }
+        .ops-grid, .main-stack, .side-stack { display: grid; gap: 0.8rem; }
+        .panel { padding: 1rem; }
+        .section-head { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 0.9rem; }
+        .section-head > span, .section-head a { color: #c8a96e; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; }
+        .action-list, .booking-list, .template-stack { display: grid; gap: 0.7rem; }
+        .action-card, .booking-row, .template-stack article, .task-list li { background: rgba(0,0,0,0.22); border: 1px solid rgba(233,225,211,0.07); border-radius: 18px; padding: 0.9rem; }
+        .action-top, .booking-row-top { display: flex; justify-content: space-between; gap: 0.8rem; align-items: start; }
+        .record-id { display: block; color: #c8a96e; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.25rem; }
+        .status { display: inline-flex; white-space: nowrap; border: 1px solid rgba(200,169,110,0.25); color: #fff8ea; border-radius: 999px; padding: 0.38rem 0.55rem; font-size: 0.58rem; letter-spacing: 0.09em; text-transform: uppercase; }
+        .status-confirmed, .status-prep-sent, .status-ready-for-departure { background: rgba(73,128,88,0.2); border-color: rgba(73,128,88,0.55); }
+        .status-awaiting-payment { background: rgba(255,180,80,0.12); border-color: rgba(255,180,80,0.35); }
+        .next-action { margin: 0.8rem 0; color: #fff8ea; font-size: 1.02rem; }
+        .action-meta, .booking-facts { display: flex; gap: 0.45rem; flex-wrap: wrap; color: rgba(233,225,211,0.62); font-size: 0.76rem; }
+        .action-meta span, .booking-facts span { border: 1px solid rgba(200,169,110,0.13); border-radius: 999px; padding: 0.32rem 0.48rem; }
+        .status-board { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0.55rem; margin-bottom: 0.8rem; }
+        .status-tile { border: 1px solid rgba(200,169,110,0.12); border-radius: 16px; padding: 0.75rem; background: rgba(200,169,110,0.045); }
+        .status-tile span { display: block; color: rgba(233,225,211,0.64); font-size: 0.72rem; min-height: 2.2rem; }
+        .status-tile strong { color: #fff8ea; font-size: 1.45rem; font-weight: 400; }
+        .booking-row { display: grid; gap: 0.75rem; }
+        .booking-row p { color: rgba(233,225,211,0.64); line-height: 1.55; margin-bottom: 0; }
+        .money-line { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.45rem; }
+        .money-line div { border-left: 2px solid rgba(200,169,110,0.55); background: rgba(200,169,110,0.06); padding: 0.55rem; border-radius: 10px; }
+        .money-line span, .ledger-row span { display: block; color: rgba(233,225,211,0.6); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        .money-line strong, .ledger-row strong { color: #fff8ea; font-weight: 500; }
+        .ledger-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(200,169,110,0.12); }
+        .ledger-row.positive strong { color: #9ed0a4; } .ledger-row.warning strong { color: #ffcf8d; }
+        .ledger-note { margin: 1rem 0 0; color: rgba(233,225,211,0.68); line-height: 1.55; }
+        .mini-list { display: grid; gap: 0.35rem; } .mini-list strong { color: #fff8ea; } .mini-list span { color: rgba(233,225,211,0.65); }
+        .task-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
+        .task-list li { display: grid; gap: 0.25rem; }
+        .task-list span { color: #c8a96e; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; }
+        .task-list small, .template-stack span { color: rgba(233,225,211,0.6); line-height: 1.45; }
+        .template-stack article { display: grid; gap: 0.25rem; }
+        .infra-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.65rem; }
+        .infra-list li { display: grid; gap: 0.25rem; padding: 0.85rem; border-radius: 16px; background: rgba(0,0,0,0.2); border: 1px solid rgba(233,225,211,0.07); }
+        .infra-list strong { color: #fff8ea; } .infra-list span { color: rgba(233,225,211,0.64); line-height: 1.5; }
+        @media (min-width: 760px) {
+          .ops-shell { padding: 1.25rem; padding-bottom: 1.25rem; }
+          .topbar, .system-strip, .priority-grid, .ops-grid, .infra-panel { max-width: 1320px; margin-left: auto; margin-right: auto; }
+          .quick-nav { position: sticky; top: 0.85rem; bottom: auto; width: min(560px, 100%); margin: 0 auto 1rem; }
+          .priority-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+          .status-board { grid-template-columns: repeat(7,minmax(0,1fr)); }
         }
-        @media (max-width: 640px) {
-          .ops-nav { margin-bottom: 3rem; }
-          .metrics-grid, .booking-grid, .money-strip, .stack-grid, .bot-grid { grid-template-columns: 1fr; }
-          .booking-topline, .template-card, .financial-panel dl div, .blueprint-list li { display: block; }
-          .status { margin-top: 1rem; }
-          .template-card button { margin-top: 1rem; }
+        @media (min-width: 1080px) {
+          .ops-grid { grid-template-columns: minmax(0,1.55fr) minmax(360px,0.75fr); align-items: start; }
+          .side-stack { position: sticky; top: 5.8rem; }
+          .booking-row { grid-template-columns: minmax(0,1fr) minmax(360px,0.7fr); align-items: center; }
+          .infra-list { grid-template-columns: repeat(3,minmax(0,1fr)); }
+        }
+        @media (max-width: 430px) {
+          .money-line { grid-template-columns: 1fr; }
+          .action-top, .booking-row-top, .section-head { display: grid; }
         }
       `}</style>
     </main>
   );
 }
 
-function Metric({ label, value, note }: { label: string; value: string; note: string }) {
+function PriorityCard({ label, value, detail, tone }: { label: string; value: string; detail: string; tone?: 'urgent' }) {
+  return <article className={`priority-card ${tone ?? ''}`}><span>{label}</span><strong>{value}</strong><small>{detail}</small></article>;
+}
+
+function BookingRow({ booking }: { booking: Booking }) {
+  const missingEmails = getMissingEmails(booking);
   return (
-    <div className="metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{note}</small>
-    </div>
+    <article className="booking-row">
+      <div>
+        <div className="booking-row-top">
+          <div><span className="record-id">{booking.id}</span><h3>{booking.customerName}</h3></div>
+          <span className={statusClass(booking.status)}>{statusLabels[booking.status]}</span>
+        </div>
+        <div className="booking-facts">
+          <span>{booking.email}</span><span>{booking.phone}</span><span>{booking.tourDate}</span><span>{booking.formSource}</span><span>Submitted {formatDateTime(booking.submittedAt)}</span>
+        </div>
+        <p>{booking.notes}</p>
+        {missingEmails.length > 0 && <p className="next-action">Missing email: {missingEmails.join(', ').replaceAll('_', ' ')}</p>}
+      </div>
+      <div className="money-line">
+        <div><span>Online</span><strong>{money.format(booking.onlinePaidUsd)} / {money.format(booking.onlineDueUsd)}</strong></div>
+        <div><span>Family cash</span><strong>{money.format(booking.familyCashDueUsd)}</strong></div>
+        <div><span>Guests</span><strong>{booking.guestCount}</strong></div>
+      </div>
+    </article>
   );
 }
 
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="info">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
+function LedgerRow({ label, value, positive, warning }: { label: string; value: string; positive?: boolean; warning?: boolean }) {
+  return <div className={`ledger-row ${positive ? 'positive' : ''} ${warning ? 'warning' : ''}`}><span>{label}</span><strong>{value}</strong></div>;
 }
