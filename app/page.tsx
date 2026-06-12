@@ -742,8 +742,8 @@ export default function Home() {
         .stripe-trust-row .stripe-wordmark { background: #635bff; border-color: #635bff; color: #fff; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
         .checkout-button-wrap { position: relative; }
-        .stripe-embed-wrap { min-height: 48px; }
-        .stripe-embed-wrap.locked { min-height: 450px; }
+        .stripe-embed-wrap { min-height: 48px; max-width: 430px; margin: 0 auto; }
+        .stripe-embed-wrap.locked { min-height: 258px; overflow: hidden; }
         .stripe-buy-button-host { display: grid; justify-items: center; transition: opacity 0.25s ease, filter 0.25s ease; }
         .stripe-embed-wrap.locked .stripe-buy-button-host { opacity: 0.45; filter: grayscale(0.2); pointer-events: none; user-select: none; }
         .stripe-buy-button-host stripe-buy-button { width: 100%; }
