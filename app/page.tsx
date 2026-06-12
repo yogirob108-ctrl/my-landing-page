@@ -260,6 +260,7 @@ export default function Home() {
   const hasRequiredContact = signatureIsValid && emailIsValid;
   const canPay = formSubmitted && hasRequiredContact;
   const lightboxImage = lightboxIndex === null ? null : GALLERY_IMAGES[lightboxIndex];
+  const isLightboxOpen = lightboxIndex !== null;
   const openLightbox = (src: string, alt: string) => {
     const imageIndex = GALLERY_IMAGES.findIndex(image => image.src === src && image.alt === alt);
     setLightboxIndex(imageIndex >= 0 ? imageIndex : 0);
@@ -272,7 +273,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!lightboxImage) return;
+    if (!isLightboxOpen) return;
 
     const scrollY = window.scrollY;
     const previousBodyStyles = {
@@ -282,14 +283,20 @@ export default function Home() {
       width: document.body.style.width,
     };
     const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousHtmlScrollBehavior = document.documentElement.style.scrollBehavior;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setLightboxIndex(null);
-      if (event.key === 'ArrowLeft') showPreviousImage();
-      if (event.key === 'ArrowRight') showNextImage();
+      if (event.key === 'ArrowLeft') {
+        setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
+      }
+      if (event.key === 'ArrowRight') {
+        setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
+    document.documentElement.style.scrollBehavior = 'auto';
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
@@ -304,8 +311,12 @@ export default function Home() {
       document.body.style.top = previousBodyStyles.top;
       document.body.style.width = previousBodyStyles.width;
       window.scrollTo(0, scrollY);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+        document.documentElement.style.scrollBehavior = previousHtmlScrollBehavior;
+      });
     };
-  }, [lightboxImage]);
+  }, [isLightboxOpen]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -578,7 +589,10 @@ export default function Home() {
         .intro { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
         .intro-img { position: relative; aspect-ratio: 3/4; overflow: hidden; }
         .intro-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .intro-img.portrait-full { background: #0f0f0d; border: 1px solid rgba(200,169,110,0.14); }
+        .intro-img.portrait-full img { object-fit: contain; }
         .intro-img:hover img { transform: scale(1.03); }
+        .intro-img.portrait-full:hover img { transform: none; }
         .intro-img-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 55%; aspect-ratio: 1; overflow: hidden; border: 4px solid var(--dark); }
         .intro-img-accent img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -636,7 +650,10 @@ export default function Home() {
         .mosaic { padding: 0; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 350px 350px 350px; gap: 3px; }
         .mosaic-item { overflow: hidden; position: relative; }
         .mosaic-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .mosaic-item.portrait-full { background: #0f0f0d; }
+        .mosaic-item.portrait-full img { object-fit: contain; }
         .mosaic-item:hover img { transform: scale(1.04); }
+        .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
         .image-button.testimonial-photo { height: 360px; }
@@ -647,7 +664,7 @@ export default function Home() {
         .lightbox-frame img { object-fit: contain; }
         .lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1001; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.65); color: var(--cream); padding: 0.7rem 0.9rem; cursor: pointer; font-size: 1rem; }
         .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.68); color: var(--cream); cursor: pointer; font-size: 1.8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
-        .lightbox-nav:hover, .lightbox-close:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+        .lightbox-nav:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
         .lightbox-prev { left: 1rem; }
         .lightbox-next { right: 1rem; }
         .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
@@ -712,6 +729,22 @@ export default function Home() {
         .submit-btn { background: var(--gold); color: var(--dark); border: none; padding: 1.1rem 2rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-top: 0.5rem; }
         .submit-btn:hover { background: var(--rust); color: var(--cream); }
         .submit-btn:disabled { background: var(--sage); color: var(--cream); cursor: default; }
+        .payment-checkout-card { margin-top: 1rem; padding: 1.2rem; background: linear-gradient(145deg, rgba(245,240,232,0.075), rgba(99,91,255,0.08)); border: 1px solid rgba(200,169,110,0.24); border-radius: 6px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+        .checkout-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.55rem; }
+        .checkout-copy { font-size: 0.85rem; color: var(--mist); line-height: 1.6; margin-bottom: 1rem; }
+        .checkout-copy strong { color: var(--cream); }
+        .stripe-trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin: 0 0 0.85rem; }
+        .stripe-trust-row span { border: 1px solid rgba(245,240,232,0.14); background: rgba(14,12,9,0.44); color: rgba(245,240,232,0.72); border-radius: 999px; padding: 0.32rem 0.55rem; font-size: 0.62rem; letter-spacing: 0.08em; }
+        .stripe-trust-row .stripe-wordmark { background: #635bff; border-color: #635bff; color: #fff; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
+        .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
+        .checkout-button-wrap { position: relative; }
+        .stripe-pay-button { display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: linear-gradient(135deg, #635bff, #7b72ff); border: 1px solid rgba(255,255,255,0.16); border-radius: 5px; color: #fff; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; box-shadow: 0 14px 34px rgba(99,91,255,0.24); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .stripe-pay-button:hover { transform: translateY(-1px); box-shadow: 0 18px 42px rgba(99,91,255,0.34); }
+        .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
+        .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
+        .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
+        .checkout-lock-overlay { position: absolute; inset: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
 
         .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
         .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
@@ -838,7 +871,7 @@ export default function Home() {
 
       {/* INTRO */}
       <section className="intro" id="experience">
-        <div className="intro-img reveal">
+        <div className="intro-img portrait-full reveal">
           <button
             type="button"
             className="image-button"
@@ -1012,11 +1045,11 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
+        <div className="mosaic-item tall portrait-full"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => openLightbox('/images/riding2.jpg', 'Rider crossing shallow water on horseback')}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => openLightbox('/images/mosaic1.jpg', 'Traditional Mongolian gers with grazing animals')}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => openLightbox('/images/mosaic2.jpg', 'Ger camp at sunrise in the valley')}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => openLightbox('/images/mosaic3.jpg', 'Mongolian eagle portrait')}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item portrait-full"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => openLightbox('/images/mosaic3.jpg', 'Mongolian eagle portrait')}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => openLightbox('/images/mosaic4.jpg', 'Wide sunset view across the Orkhon Valley')}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => openLightbox('/images/mosaic5.jpg', 'Ger silhouette at dusk')}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
@@ -1247,39 +1280,49 @@ export default function Home() {
               </div>
             )}
 
-            <div style={{marginTop:'1rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', border:`1px solid ${canPay ? 'rgba(200,169,110,0.2)' : 'rgba(200,169,110,0.1)'}`, borderRadius:'4px', textAlign:'center', transition:'border-color 0.3s'}}>
-              <p style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.5rem'}}>Online Reservation Payment</p>
-              <p style={{fontSize:'0.85rem', color:'var(--mist)', lineHeight:1.6, marginBottom:'1rem'}}>
-                Submit the application with a valid email first, then pay <strong style={{color:'var(--cream)'}}>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
+            <div className="payment-checkout-card">
+              <p className="checkout-eyebrow">Online Reservation Payment</p>
+              <p className="checkout-copy">
+                Submit the application with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
               </p>
-              <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.6, lineHeight:1.6, marginBottom:'1rem'}}>
-                Localized prices are estimates for browsing. The Stripe checkout will confirm the final charge before payment.
+              <div className="stripe-trust-row" aria-label="Secure Stripe checkout payment options">
+                <span className="stripe-wordmark">stripe</span>
+                <span>Visa</span>
+                <span>Mastercard</span>
+                <span>Amex</span>
+                <span>Apple Pay</span>
+                <span>Google Pay</span>
+              </div>
+              <p className="checkout-note">
+                Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
-              <div style={{position:'relative'}}>
+              <div className="checkout-button-wrap">
                 {canPay ? (
                   <a
                     href={STRIPE_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{display:'flex', width:'100%', boxSizing:'border-box', alignItems:'center', justifyContent:'center', padding:'1rem 1.2rem', background:'#635bff', border:'1px solid #635bff', borderRadius:'4px', color:'#fff', fontSize:'0.75rem', letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:500, textDecoration:'none', opacity:1, transition:'opacity 0.3s'}}
+                    className="stripe-pay-button"
                   >
-                    Confirm My Spot — $959 Online →
+                    <span>Confirm My Spot</span>
+                    <strong>$959 Online →</strong>
                   </a>
                 ) : (
                   <button
                     type="button"
                     disabled
-                    style={{display:'flex', width:'100%', boxSizing:'border-box', alignItems:'center', justifyContent:'center', padding:'1rem 1.2rem', background:'#635bff', border:'1px solid #635bff', borderRadius:'4px', color:'#fff', fontSize:'0.75rem', letterSpacing:'0.18em', textTransform:'uppercase', fontWeight:500, opacity:0.35, cursor:'not-allowed'}}
+                    className="stripe-pay-button disabled"
                   >
-                    Confirm My Spot — $959 Online →
+                    <span>Confirm My Spot</span>
+                    <strong>$959 Online →</strong>
                   </button>
                 )}
                 {!canPay && (
                   <div
-                    style={{position:'absolute', inset:0, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}
+                    className="checkout-lock-overlay"
                     onClick={e => { e.stopPropagation(); }}
                   >
-                    <p style={{fontSize:'0.7rem', letterSpacing:'0.15em', textTransform:'uppercase', color:'var(--gold)', background:'rgba(14,12,9,0.85)', padding:'0.5rem 1rem', pointerEvents:'none'}}>
+                    <p>
                       {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your application before payment'}
                     </p>
                   </div>
@@ -1380,13 +1423,12 @@ export default function Home() {
 
       {lightboxImage && (
         <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxIndex(null)}>
-          <button type="button" className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close image preview">×</button>
           <button type="button" className="lightbox-nav lightbox-prev" onClick={event => { event.stopPropagation(); showPreviousImage(); }} aria-label="Previous image">‹</button>
           <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
             <Image src={lightboxImage.src} alt={lightboxImage.alt} fill quality={85} sizes="95vw" />
           </div>
           <button type="button" className="lightbox-nav lightbox-next" onClick={event => { event.stopPropagation(); showNextImage(); }} aria-label="Next image">›</button>
-          <div className="lightbox-caption">{lightboxImage.alt} · {lightboxIndex === null ? 0 : lightboxIndex + 1} / {GALLERY_IMAGES.length}</div>
+          <div className="lightbox-caption">{lightboxImage.alt}</div>
         </div>
       )}
 
