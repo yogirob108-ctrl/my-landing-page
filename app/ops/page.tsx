@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { bookings, emailTemplates, getMissingEmails, getOpsMetrics, stackDecisions, statusLabels, statusOrder, telegramBotCommands } from '@/lib/booking-ops-data';
+import { isAllowedOpsEmail, isSupabaseConfigured } from '@/lib/ops-config';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 
 export const metadata: Metadata = {
   title: 'Booking Ops Dashboard Prototype | 8 Lakes Tours',
   description: 'Internal booking operations prototype for 8 Lakes Tours customer flow, payments, email tracking, and pre-trip tasks.',
   robots: { index: false, follow: false },
 };
+
+export const dynamic = 'force-dynamic';
 
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 const date = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -28,7 +33,36 @@ function statusClass(status: string) {
   return `status status-${status.replaceAll('_', '-')}`;
 }
 
-export default function OpsDashboardPage() {
+async function signOut() {
+  'use server';
+
+  if (isSupabaseConfigured) {
+    const supabase = await createSupabaseServerClient();
+    await supabase.auth.signOut();
+  }
+
+  redirect('/ops/login');
+}
+
+async function getOpsUser() {
+  if (!isSupabaseConfigured) {
+    return { email: null, mode: 'prototype' as const };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.auth.getUser();
+  const email = data.user?.email ?? null;
+
+  if (!isAllowedOpsEmail(email)) {
+    redirect('/ops/login');
+  }
+
+  return { email, mode: 'authenticated' as const };
+}
+
+export default async function OpsDashboardPage() {
+  const opsUser = await getOpsUser();
+
   return (
     <main className="ops-page">
       <header className="ops-hero">
@@ -38,9 +72,20 @@ export default function OpsDashboardPage() {
             <a href="#bookings">Bookings</a>
             <a href="#emails">Email flow</a>
             <a href="#stack">Stack</a>
+            {opsUser.mode === 'authenticated' ? <span className="admin-pill">{opsUser.email}</span> : <span className="admin-pill warning-pill">Prototype mode</span>}
+            {opsUser.mode === 'authenticated' && (
+              <form action={signOut}>
+                <button type="submit" className="nav-button">Sign out</button>
+              </form>
+            )}
             <Link href="/">Public site</Link>
           </div>
         </nav>
+        {opsUser.mode === 'prototype' && (
+          <div className="setup-banner">
+            Supabase auth is not configured in this environment yet. This route is still showing sample data only; add the Supabase env vars before using live customer data.
+          </div>
+        )}
         <div className="hero-grid">
           <div>
             <p className="eyebrow">Booking Ops v0</p>
@@ -244,8 +289,12 @@ export default function OpsDashboardPage() {
         .ops-hero { padding: 1.5rem clamp(1.25rem, 4vw, 4rem) 4rem; background: radial-gradient(circle at 20% 0%, rgba(200,169,110,0.16), transparent 32rem), linear-gradient(140deg, #17120c 0%, #0e0c09 72%); border-bottom: 1px solid rgba(200,169,110,0.16); }
         .ops-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 5rem; flex-wrap: wrap; }
         .brand { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: #f5f0e8; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
-        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
         .nav-links a { color: #c8a96e; text-decoration: none; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.68rem; }
+        .admin-pill { border: 1px solid rgba(200,169,110,0.24); color: rgba(245,240,232,0.78); padding: 0.38rem 0.55rem; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
+        .warning-pill { color: #e6bf73; }
+        .nav-button { border: 1px solid rgba(200,169,110,0.3); background: transparent; color: #c8a96e; padding: 0.4rem 0.55rem; cursor: pointer; }
+        .setup-banner { width: min(1240px, 100%); margin: -3.5rem auto 3rem; padding: 0.85rem 1rem; border: 1px solid rgba(230,191,115,0.28); background: rgba(200,169,110,0.08); color: #e6bf73; line-height: 1.55; }
         .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; max-width: 1240px; margin: 0 auto; }
         .eyebrow { margin: 0 0 0.9rem; color: #c8a96e; text-transform: uppercase; letter-spacing: 0.24em; font-size: 0.66rem; font-weight: 500; }
         h1, h2, h3, h4, p { margin-top: 0; }

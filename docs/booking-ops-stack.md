@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build a small owned operating system for 8 Lakes Tours bookings instead of adopting a heavyweight CRM. The system should answer five questions reliably:
+Build a small owned operating system for the wider Adventure Therapy organisation instead of adopting a heavyweight CRM. 8 Lakes Tours is the first tour project in the system, but the database should support future tours/retreats around the world. The system should answer five questions reliably:
 
 1. Who booked or applied?
 2. Did they pay the online reservation amount?
@@ -12,6 +12,8 @@ Build a small owned operating system for 8 Lakes Tours bookings instead of adopt
 
 ## Current reality
 
+- Supabase project name: `adventure therapy`, used for the whole organisation.
+- 8 Lakes Tours is the first tour/project in that shared ops database.
 - The public booking form currently submits to Formspree.
 - Stripe payment is currently a payment link flow.
 - Customers pay the online/operator share online and bring the local host-family share in cash.
@@ -33,6 +35,24 @@ Build a small owned operating system for 8 Lakes Tours bookings instead of adopt
 | Internal alerts | Email first, Telegram later | Rob should get clear internal notifications; Telegram bot can become the on-the-go command interface. |
 
 ## Data model
+
+### tour_projects
+
+```sql
+create table tour_projects (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  name text not null,
+  brand_name text,
+  contact_email text,
+  default_online_due_usd integer,
+  default_family_cash_due_usd integer,
+  default_total_trip_value_usd integer,
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+```
 
 ### customers
 
@@ -69,6 +89,7 @@ create type booking_status as enum (
 create table bookings (
   id uuid primary key default gen_random_uuid(),
   public_reference text not null unique,
+  project_id uuid not null references tour_projects(id),
   customer_id uuid not null references customers(id),
   tour_date text not null,
   guest_count integer not null default 1,
@@ -258,7 +279,7 @@ Implemented as `/ops` with sample data only:
 
 - Add Supabase client/server helpers.
 - Add Supabase Auth and allow-list Rob/Henry emails.
-- Move sample data into tables.
+- Move sample data into tables, with 8 Lakes Tours as the first `tour_projects` row.
 - Render `/ops` from Supabase.
 
 ### Phase 2 — Manual email sending
@@ -292,7 +313,7 @@ Implemented as `/ops` with sample data only:
 ## Environment variables for real implementation
 
 ```txt
-NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_URL=https://izomzgseckrweydevsff.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
