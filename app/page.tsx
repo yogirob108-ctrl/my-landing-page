@@ -589,7 +589,10 @@ export default function Home() {
         .intro { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
         .intro-img { position: relative; aspect-ratio: 3/4; overflow: hidden; }
         .intro-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .intro-img.portrait-full { background: #0f0f0d; border: 1px solid rgba(200,169,110,0.14); }
+        .intro-img.portrait-full img { object-fit: contain; }
         .intro-img:hover img { transform: scale(1.03); }
+        .intro-img.portrait-full:hover img { transform: none; }
         .intro-img-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 55%; aspect-ratio: 1; overflow: hidden; border: 4px solid var(--dark); }
         .intro-img-accent img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -647,10 +650,10 @@ export default function Home() {
         .mosaic { padding: 0; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 350px 350px 350px; gap: 3px; }
         .mosaic-item { overflow: hidden; position: relative; }
         .mosaic-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .mosaic-item.eagle-portrait { background: #0f0f0d; }
-        .mosaic-item.eagle-portrait img { object-fit: contain; }
+        .mosaic-item.portrait-full { background: #0f0f0d; }
+        .mosaic-item.portrait-full img { object-fit: contain; }
         .mosaic-item:hover img { transform: scale(1.04); }
-        .mosaic-item.eagle-portrait:hover img { transform: none; }
+        .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
         .image-button.testimonial-photo { height: 360px; }
@@ -868,7 +871,7 @@ export default function Home() {
 
       {/* INTRO */}
       <section className="intro" id="experience">
-        <div className="intro-img reveal">
+        <div className="intro-img portrait-full reveal">
           <button
             type="button"
             className="image-button"
@@ -1042,11 +1045,11 @@ export default function Home() {
 
       {/* MOSAIC */}
       <div className="mosaic">
-        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
+        <div className="mosaic-item tall portrait-full"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => openLightbox('/images/riding2.jpg', 'Rider crossing shallow water on horseback')}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => openLightbox('/images/mosaic1.jpg', 'Traditional Mongolian gers with grazing animals')}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => openLightbox('/images/mosaic2.jpg', 'Ger camp at sunrise in the valley')}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item eagle-portrait"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => openLightbox('/images/mosaic3.jpg', 'Mongolian eagle portrait')}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+        <div className="mosaic-item portrait-full"><button type="button" className="image-button" aria-label="View larger image: Mongolian eagle portrait" onClick={() => openLightbox('/images/mosaic3.jpg', 'Mongolian eagle portrait')}><Image src="/images/mosaic3.jpg" alt="Mongolian eagle portrait" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => openLightbox('/images/mosaic4.jpg', 'Wide sunset view across the Orkhon Valley')}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => openLightbox('/images/mosaic5.jpg', 'Ger silhouette at dusk')}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
