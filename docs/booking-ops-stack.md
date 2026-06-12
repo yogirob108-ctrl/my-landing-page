@@ -29,7 +29,8 @@ Build a small owned operating system for 8 Lakes Tours bookings instead of adopt
 | Email | Resend | Send transactional templates from `info@8lakestours.com`; store provider IDs and body snapshots. |
 | Payments | Stripe | Payment success/failure/refund webhooks update booking and payment rows. |
 | Scheduling | Vercel Cron or Supabase scheduled jobs | Only after manual click-send templates are trusted. |
-| Internal alerts | Email first, Telegram later | Rob should get clear internal notifications; Telegram bot can come later. |
+| Telegram bot | Telegram Bot API + protected ops API endpoints | Mobile command layer for customer lookups, status reports, logs, and draft decision support. |
+| Internal alerts | Email first, Telegram later | Rob should get clear internal notifications; Telegram bot can become the on-the-go command interface. |
 
 ## Data model
 
@@ -207,6 +208,38 @@ Track three different numbers:
 
 Do **not** treat host-family cash as Stripe revenue. It is operationally tracked so guests know what to bring and Rob knows what is expected locally.
 
+## Telegram bot command layer
+
+The Telegram bot should sit on top of the same database as `/ops`; it must not become a second source of truth. Its job is to let Rob/Henry ask operational questions from a phone and get compact reports without opening the dashboard.
+
+Early bot capabilities:
+
+```txt
+/customer maya
+/status 8LT-2026-001
+/logs 8LT-2026-001
+/today
+/draft packing 8LT-2026-001
+/report july
+```
+
+Expected answers:
+
+- Customer lookup by name, email, phone, or booking reference.
+- Current booking status, tour date, guest count, online payment state, host-family cash due, missing emails, and open tasks.
+- Email log, payment log, internal notes, and major status changes.
+- Daily attention report: unpaid applications, overdue prep tasks, upcoming departures, customers missing insurance/arrival details.
+- Drafted email replies from approved templates for review.
+- Tour-date financial and readiness report.
+
+Safety rules:
+
+- First version should be read-only plus draft generation.
+- Sending customer emails from Telegram should require an explicit confirmation step.
+- Refunds, payment edits, and booking-status changes should stay in the protected dashboard until the audit trail is solid.
+- Bot access must be allow-listed to Rob/Henry Telegram IDs.
+- Never expose private customer records in a broad group chat; use a private bot chat or tightly controlled ops group.
+
 ## Build phases
 
 ### Phase 0 — Prototype dashboard
@@ -248,6 +281,14 @@ Implemented as `/ops` with sample data only:
 - Queue insurance reminders, arrival details, final checklist.
 - Notify Rob before sending anything that needs human confirmation.
 
+### Phase 5 — Telegram command layer
+
+- Add Telegram bot webhook endpoint.
+- Allow-list Rob/Henry Telegram user IDs.
+- Implement read-only customer lookup, status, logs, and daily reports.
+- Add draft-only message generation from approved templates.
+- Add confirmation-gated actions only after audit logging is proven.
+
 ## Environment variables for real implementation
 
 ```txt
@@ -258,6 +299,8 @@ RESEND_API_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 FORMSPREE_WEBHOOK_SECRET=
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_ALLOWED_USER_IDS=
 OPS_ALLOWED_EMAILS=rob@example.com,henry@example.com
 ```
 

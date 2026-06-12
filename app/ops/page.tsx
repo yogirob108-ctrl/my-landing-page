@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { bookings, emailTemplates, getMissingEmails, getOpsMetrics, stackDecisions, statusLabels, statusOrder } from '@/lib/booking-ops-data';
+import { bookings, emailTemplates, getMissingEmails, getOpsMetrics, stackDecisions, statusLabels, statusOrder, telegramBotCommands } from '@/lib/booking-ops-data';
 
 export const metadata: Metadata = {
   title: 'Booking Ops Dashboard Prototype | 8 Lakes Tours',
@@ -206,6 +206,25 @@ export default function OpsDashboardPage() {
         </div>
       </section>
 
+      <section className="panel bot-panel">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Telegram ops bot</p>
+            <h2>On-the-go customer reports and decision support</h2>
+          </div>
+          <p>The bot should be a command layer over the same booking database, not a separate system. It can answer status questions, draft messages, and surface logs while Rob is travelling or away from the laptop.</p>
+        </div>
+        <div className="bot-grid">
+          {telegramBotCommands.map((item) => (
+            <article key={item.command} className="bot-card">
+              <code>{item.command}</code>
+              <p>{item.purpose}</p>
+            </article>
+          ))}
+        </div>
+        <p className="callout">Safety rule: early bot versions should read and draft only. Sending customer emails, refunding payments, or changing booking status should require an explicit confirmation step or happen inside the protected dashboard.</p>
+      </section>
+
       <section className="panel blueprint-panel">
         <p className="eyebrow">Next build steps</p>
         <h2>Implementation sequence</h2>
@@ -286,6 +305,10 @@ export default function OpsDashboardPage() {
         .callout { padding: 1rem; border-left: 2px solid #c8a96e; background: rgba(200,169,110,0.06); color: rgba(245,240,232,0.78); line-height: 1.6; }
         .stack-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .stack-card { padding: 1rem; }
+        .bot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; margin-bottom: 1rem; }
+        .bot-card { padding: 1rem; background: rgba(245,240,232,0.035); border: 1px solid rgba(200,169,110,0.14); }
+        .bot-card code { display: inline-block; margin-bottom: 0.75rem; color: #0e0c09; background: #c8a96e; padding: 0.35rem 0.5rem; font-size: 0.78rem; }
+        .bot-card p { color: rgba(212,207,196,0.74); line-height: 1.55; margin: 0; }
         .blueprint-list { display: grid; gap: 0.9rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
         .blueprint-list li { display: grid; grid-template-columns: 220px 1fr; gap: 1rem; padding: 1rem; background: rgba(245,240,232,0.035); border: 1px solid rgba(200,169,110,0.12); }
         .blueprint-list strong { color: #f5f0e8; } .blueprint-list span { color: rgba(212,207,196,0.72); line-height: 1.55; }
@@ -293,12 +316,12 @@ export default function OpsDashboardPage() {
           .hero-grid, .two-column, .sub-panels { grid-template-columns: 1fr; }
           .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .status-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .booking-grid, .money-strip, .stack-grid { grid-template-columns: 1fr 1fr; }
+          .booking-grid, .money-strip, .stack-grid, .bot-grid { grid-template-columns: 1fr 1fr; }
           .section-heading { display: block; }
         }
         @media (max-width: 640px) {
           .ops-nav { margin-bottom: 3rem; }
-          .metrics-grid, .booking-grid, .money-strip, .stack-grid { grid-template-columns: 1fr; }
+          .metrics-grid, .booking-grid, .money-strip, .stack-grid, .bot-grid { grid-template-columns: 1fr; }
           .booking-topline, .template-card, .financial-panel dl div, .blueprint-list li { display: block; }
           .status { margin-top: 1rem; }
           .template-card button { margin-top: 1rem; }

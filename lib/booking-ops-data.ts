@@ -151,6 +151,38 @@ export const stackDecisions = [
     choice: 'Cron jobs only after manual flow is trusted',
     why: 'Manual click-to-send proves the templates and statuses before scheduled reminders start sending on their own.',
   },
+  {
+    layer: 'Mobile command layer',
+    choice: 'Telegram bot connected to the ops database',
+    why: 'Rob/Henry should be able to ask for customer status, money, email logs, and next actions on the go without opening the dashboard.',
+  },
+];
+
+export const telegramBotCommands = [
+  {
+    command: '/customer maya',
+    purpose: 'Find a customer or booking by name, email, phone, or booking reference.',
+  },
+  {
+    command: '/status 8LT-2026-001',
+    purpose: 'Return booking status, payment state, family cash due, missing emails, and open tasks.',
+  },
+  {
+    command: '/logs 8LT-2026-001',
+    purpose: 'Show email events, internal notes, payment events, and important status changes.',
+  },
+  {
+    command: '/today',
+    purpose: 'Summarise bookings needing attention today: unpaid applications, overdue prep tasks, and upcoming departures.',
+  },
+  {
+    command: '/draft packing 8LT-2026-001',
+    purpose: 'Draft the next customer email from the approved template for review before sending.',
+  },
+  {
+    command: '/report july',
+    purpose: 'Produce a compact tour-date report: guests, revenue online, family cash due, missing prep items.',
+  },
 ];
 
 export const bookings: Booking[] = [
