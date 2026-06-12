@@ -723,6 +723,7 @@ export default function Home() {
         .form-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
         .form-input, .form-select, .form-textarea { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); padding: 0.8rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.875rem; font-weight: 300; width: 100%; transition: border-color 0.3s ease; outline: none; -webkit-appearance: none; }
         .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+        .form-input:-webkit-autofill, .form-input:-webkit-autofill:hover, .form-input:-webkit-autofill:focus, input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 1000px #15120e inset !important; box-shadow: 0 0 0 1000px #15120e inset !important; -webkit-text-fill-color: var(--cream) !important; caret-color: var(--cream); border-color: rgba(200,169,110,0.35) !important; transition: background-color 9999s ease-in-out 0s; }
         .form-select option { background: var(--ink); }
         .form-textarea { resize: vertical; min-height: 80px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -742,14 +743,16 @@ export default function Home() {
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
         .checkout-button-wrap { position: relative; }
         .stripe-embed-wrap { min-height: 48px; }
-        .stripe-buy-button-host { display: grid; justify-items: center; }
+        .stripe-embed-wrap.locked { min-height: 450px; }
+        .stripe-buy-button-host { display: grid; justify-items: center; transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-embed-wrap.locked .stripe-buy-button-host { opacity: 0.45; filter: grayscale(0.2); pointer-events: none; user-select: none; }
         .stripe-buy-button-host stripe-buy-button { width: 100%; }
         .stripe-pay-button { display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: linear-gradient(135deg, #635bff, #7b72ff); border: 1px solid rgba(255,255,255,0.16); border-radius: 5px; color: #fff; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; box-shadow: 0 14px 34px rgba(99,91,255,0.24); transition: transform 0.25s ease, box-shadow 0.25s ease; }
         .stripe-pay-button:hover { transform: translateY(-1px); box-shadow: 0 18px 42px rgba(99,91,255,0.34); }
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
         .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
-        .checkout-lock-overlay { position: absolute; inset: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
 
         .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
@@ -1260,6 +1263,7 @@ export default function Home() {
               <label htmlFor="signature" style={{fontSize:'0.65rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)', display:'block', marginBottom:'0.5rem'}}>Digital Signature — Type Your Full Name</label>
               <input
                 id="signature"
+                className="form-input signature-input"
                 type="text"
                 name="signature"
                 value={signature}
@@ -1294,27 +1298,14 @@ export default function Home() {
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
-              <div className="checkout-button-wrap stripe-embed-wrap">
-                {canPay ? (
-                  <>
-                    <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
-                    <div
-                      className="stripe-buy-button-host"
-                      dangerouslySetInnerHTML={{
-                        __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}"></stripe-buy-button>`,
-                      }}
-                    />
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    className="stripe-pay-button disabled"
-                  >
-                    <span>Confirm My Spot</span>
-                    <strong>$959 Online →</strong>
-                  </button>
-                )}
+              <div className={`checkout-button-wrap stripe-embed-wrap ${canPay ? '' : 'locked'}`} aria-disabled={!canPay}>
+                <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
+                <div
+                  className="stripe-buy-button-host"
+                  dangerouslySetInnerHTML={{
+                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}"></stripe-buy-button>`,
+                  }}
+                />
                 {!canPay && (
                   <div
                     className="checkout-lock-overlay"
