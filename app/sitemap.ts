@@ -30,6 +30,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${siteUrl}/gallery`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+      images: [
+        `${siteUrl}/images/gallery-extra/rearing-horse-over-valley.jpg`,
+        `${siteUrl}/images/gallery-extra/packed-horses-rain-camp.jpg`,
+        `${siteUrl}/images/expedition-originals/storm-cloud-valley-panorama.jpg`,
+      ],
+    },
+    {
       url: `${siteUrl}/contact`,
       lastModified,
       changeFrequency: 'monthly',
