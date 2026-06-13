@@ -76,7 +76,6 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
               quality={72}
               sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw"
             />
-            <span className="gallery-caption">{image.alt}</span>
           </button>
         ))}
       </div>
@@ -90,7 +89,6 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
             <img src={lightboxImage.src} alt={lightboxImage.alt} decoding="async" />
           </div>
           <button type="button" className="lightbox-nav lightbox-next" onClick={event => { event.stopPropagation(); showNext(); }} aria-label="Next image">›</button>
-          <div className="lightbox-caption">{lightboxImage.alt}</div>
         </div>
       )}
     </>
