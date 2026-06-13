@@ -716,7 +716,7 @@ export default function Home() {
         .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.96); display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; overscroll-behavior: contain; touch-action: none; }
         .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(86vh, 1100px); }
         .lightbox-frame img { object-fit: contain; }
-        .lightbox-close { position: fixed; top: 1rem; right: 1rem; z-index: 1001; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.65); color: var(--cream); padding: 0.7rem 0.9rem; cursor: pointer; font-size: 1rem; }
+        .lightbox-close { position: fixed; top: calc(1rem + env(safe-area-inset-top)); right: calc(1rem + env(safe-area-inset-right)); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.82); color: var(--cream); cursor: pointer; font-size: 1.35rem; line-height: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
         .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.68); color: var(--cream); cursor: pointer; font-size: 1.8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .lightbox-nav:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
         .lightbox-prev { left: 1rem; }
@@ -886,6 +886,7 @@ export default function Home() {
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
+          .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
           .lightbox-next { right: 0.5rem; }
           .footer-link { font-size: 0.66rem; letter-spacing: 0.14em; }
@@ -941,7 +942,7 @@ export default function Home() {
 
       {/* INTRO */}
       <section className="intro" id="experience">
-        <div className="intro-img portrait-full reveal">
+        <div className="intro-img reveal">
           <button
             type="button"
             className="image-button"
@@ -1492,6 +1493,7 @@ export default function Home() {
 
       {lightboxImage && (
         <div className="lightbox" role="dialog" aria-modal="true" aria-label={lightboxImage.alt} onClick={() => setLightboxIndex(null)}>
+          <button type="button" className="lightbox-close" onClick={event => { event.stopPropagation(); setLightboxIndex(null); }} aria-label="Close expanded image">×</button>
           <button type="button" className="lightbox-nav lightbox-prev" onClick={event => { event.stopPropagation(); showPreviousImage(); }} aria-label="Previous image">‹</button>
           <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
             <Image src={lightboxImage.src} alt={lightboxImage.alt} fill quality={85} sizes="95vw" />
