@@ -157,17 +157,16 @@ const TOUR_DATES = [
 ];
 
 const STRIP_IMAGES = [
-  { src: '/images/expedition-originals/river-horseman-silhouette-portrait.jpg', alt: 'Horseman silhouetted beside the river', caption: 'From the Saddle' },
-  { src: '/images/expedition-originals/horseman-valley-lookout-portrait.jpg', alt: 'Horseman looking across the Orkhon Valley', caption: 'Riding the Valley' },
-  { src: '/images/expedition-originals/suma-river-crossing-original.jpg', alt: 'Suma riding through a shallow river crossing', caption: 'River Crossings' },
-  { src: '/images/expedition-originals/orkhon-valley-sunset-wide.jpg', alt: 'Sunset over the Orkhon Valley river bends', caption: 'Sunset Valleys' },
-  { src: '/images/expedition-originals/ger-and-van-camp-wide.jpg', alt: 'Traditional ger camp with a van and mountain backdrop', caption: 'Your Home on the Steppe' },
-  { src: '/images/expedition-originals/yaks-river-backlit-portrait.jpg', alt: 'Yaks grazing beside the river in backlit evening sun', caption: 'Open Steppe Evenings' },
+  { src: '/images/expedition-originals/river-horseman-silhouette-portrait.jpg', alt: 'Horseman silhouetted beside the river' },
+  { src: '/images/expedition-originals/horseman-valley-lookout-portrait.jpg', alt: 'Horseman looking across the Orkhon Valley' },
+  { src: '/images/expedition-originals/suma-river-crossing-original.jpg', alt: 'Suma riding through a shallow river crossing' },
+  { src: '/images/expedition-originals/orkhon-valley-sunset-wide.jpg', alt: 'Sunset over the Orkhon Valley river bends' },
+  { src: '/images/expedition-originals/ger-and-van-camp-wide.jpg', alt: 'Traditional ger camp with a van and mountain backdrop' },
+  { src: '/images/expedition-originals/yaks-river-backlit-portrait.jpg', alt: 'Yaks grazing beside the river in backlit evening sun' },
 ];
 
 const MAIN_ALBUM_IMAGES = [
   { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
-  { src: '/images/expedition-originals/ger-sunrise-original.jpg', alt: 'Ger at sunrise in the valley', orientation: 'landscape' },
   { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia', orientation: 'portrait' },
   { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait' },
@@ -179,7 +178,6 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait' },
   { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape' },
   { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait' },
-  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', orientation: 'landscape' },
 ];
 
 const GALLERY_IMAGES = [
@@ -696,14 +694,10 @@ export default function Home() {
         .strip-item:hover { flex: 2.5; }
         .strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .strip-item:hover img { transform: scale(1.04); }
-        .strip-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(14,12,9,0.85)); padding: 2rem 1.5rem 1rem; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream); opacity: 0; transition: opacity 0.4s ease; }
-        .strip-item:hover .strip-caption { opacity: 1; }
-
         .partnership { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-        .partnership-text { padding: 8rem 5rem; }
+        .partnership-text { padding: 6rem; display: flex; flex-direction: column; justify-content: center; }
         .partnership-inline-photo { display: none !important; position: relative; width: 100%; height: auto; aspect-ratio: 1.46; margin: 2rem 0; overflow: hidden; border: 1px solid rgba(200,169,110,0.22); }
         .partnership-inline-photo img { object-fit: cover; }
-        .partnership-photo-caption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; background: linear-gradient(transparent, rgba(14,12,9,0.88)); padding: 2rem 1rem 0.9rem; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,240,232,0.78); pointer-events: none; }
         .partnership-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; font-weight: 300; color: var(--cream); line-height: 1.6; border-left: 2px solid var(--gold); padding-left: 2rem; margin: 2.5rem 0; }
         .partnership-img { overflow: hidden; min-height: 600px; }
         .partnership-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -756,7 +750,6 @@ export default function Home() {
         .main-album-item.landscape { grid-column: span 2; aspect-ratio: 3 / 2; min-height: 300px; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
-        .main-album-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.1rem 0.9rem; background: linear-gradient(180deg, transparent, rgba(14,12,9,0.86)); color: rgba(245,240,232,0.78); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
         .image-button.testimonial-photo { height: 360px; }
         .image-button.partnership-inline-photo { height: auto; aspect-ratio: 1.46; }
@@ -769,8 +762,6 @@ export default function Home() {
         .lightbox-nav:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
         .lightbox-prev { left: 1rem; }
         .lightbox-next { right: 1rem; }
-        .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--mist); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(90vw, 760px); }
-
         .trust-conversion { background: var(--ink); display: grid; grid-template-columns: minmax(260px, 0.8fr) 1.2fr; gap: 4rem; align-items: center; }
         .rob-photo { position: relative; aspect-ratio: 1; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.06); overflow: hidden; }
         .rob-photo img { object-fit: cover; object-position: 50% 32%; }
@@ -901,8 +892,16 @@ export default function Home() {
           .nav-links { display: none; }
           .nav-logo { font-size: 1.15rem; letter-spacing: 0.18em; }
           #main-nav.mobile-nav-hidden { transform: translateY(-100%); }
-          .hero { min-height: 680px; }
-          .hero-content { padding: 0 2rem 4rem; }
+          .hero {
+            height: auto;
+            min-height: 100svh;
+            min-height: 100dvh;
+            padding-top: calc(5.25rem + env(safe-area-inset-top));
+          }
+          .hero-content {
+            padding: 0 1.55rem calc(8.75rem + env(safe-area-inset-bottom));
+            width: 100%;
+          }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
           .hero-sub { margin-bottom: 1.2rem; }
           .hero-sub .mobile-line { display: inline; }
@@ -935,7 +934,6 @@ export default function Home() {
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
           .main-album { grid-template-columns: repeat(2, 1fr); }
           .main-album-item { min-height: 0; }
-          .main-album-caption { font-size: 0.5rem; letter-spacing: 0.1em; padding: 1rem 0.7rem; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1030,7 +1028,6 @@ export default function Home() {
             >
               <Image src={item.src} alt={item.alt} fill quality={70} sizes="(max-width: 900px) 20vw, 20vw" />
             </button>
-            <div className="strip-caption">{item.caption}</div>
           </div>
         ))}
       </div>
@@ -1047,7 +1044,6 @@ export default function Home() {
             onClick={() => openLightbox('/images/rob-family.jpg', 'Robert with the host family outside a traditional ger in Mongolia')}
           >
             <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill quality={72} sizes="100vw" />
-            <span className="partnership-photo-caption">Robert with Ganbold, Suma and family in the valley</span>
           </button>
           <p className="section-body">I met Ganbold while trekking solo through Mongolia. I hadn&apos;t planned to stay — but his family pulled me in with the kind of warmth that&apos;s hard to explain and impossible to forget. We rode together, shared meals, and spent evenings around the fire talking about the land, the horses, and the life they&apos;ve built here across three generations.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Ganbold&apos;s son Suma grew up in this valley and has been guiding riders through it for years — he knows every trail, every animal, every shift in the weather. When I floated the idea of bringing small groups out here, both of them lit up. This trip exists because they wanted it to.</p>
@@ -1183,7 +1179,6 @@ export default function Home() {
             >
               <Image src={image.src} alt={image.alt} fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" />
             </button>
-            <div className="main-album-caption">{image.alt}</div>
           </div>
         ))}
       </div>
@@ -1563,7 +1558,6 @@ export default function Home() {
             <img className="lightbox-image" src={lightboxImage.src} alt={lightboxImage.alt} decoding="async" />
           </div>
           <button type="button" className="lightbox-nav lightbox-next" onClick={event => { event.stopPropagation(); showNextImage(); }} aria-label="Next image">›</button>
-          <div className="lightbox-caption">{lightboxImage.alt}</div>
         </div>
       )}
 
