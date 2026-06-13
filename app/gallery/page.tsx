@@ -63,8 +63,7 @@ export default function GalleryPage() {
         .gallery-card.portrait { grid-row: span 2; }
         .gallery-card img { display: block; width: 100%; height: 100%; min-height: inherit; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; }
         .gallery-card:hover img { transform: scale(1.035); filter: brightness(1.08); }
-        .gallery-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 1rem 0.9rem; background: linear-gradient(180deg, transparent, rgba(14,12,9,0.9)); color: rgba(245,240,232,0.78); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0; transition: opacity 0.3s ease; }
-        .gallery-card:hover .gallery-caption { opacity: 1; }
+
         .gallery-lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.96); display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; }
         .lightbox-frame { width: min(96vw, 1800px); height: min(86vh, 1100px); display: flex; align-items: center; justify-content: center; }
         .lightbox-frame img { width: 100%; height: 100%; object-fit: contain; }
@@ -73,7 +72,7 @@ export default function GalleryPage() {
         .lightbox-nav { top: 50%; transform: translateY(-50%); width: 3rem; height: 3rem; border-radius: 999px; font-size: 1.8rem; }
         .lightbox-prev { left: 1rem; }
         .lightbox-next { right: 1rem; }
-        .lightbox-caption { position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: rgba(212,207,196,0.82); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; max-width: min(88vw, 760px); }
+
         .gallery-footer { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 2rem 3rem; border-top: 1px solid rgba(200,169,110,0.15); color: rgba(212,207,196,0.5); font-size: 0.75rem; }
         @media (max-width: 1100px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 700px) {
@@ -85,7 +84,7 @@ export default function GalleryPage() {
           .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .gallery-card { min-height: 190px; }
           .gallery-card.portrait { min-height: 300px; }
-          .gallery-caption { opacity: 1; padding: 1.4rem 0.65rem 0.65rem; font-size: 0.48rem; }
+
           .lightbox-nav { width: 2.7rem; height: 2.7rem; }
           .lightbox-prev { left: 0.5rem; }
           .lightbox-next { right: 0.5rem; }
