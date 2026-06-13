@@ -167,9 +167,9 @@ const STRIP_IMAGES = [
 
 const MAIN_ALBUM_IMAGES = [
   { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
-  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia', orientation: 'portrait' },
+  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia', orientation: 'portrait', objectPosition: '80% center' },
   { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
-  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait' },
+  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center' },
   { src: '/images/expedition-originals/ger-sunset-wide-original.jpg', alt: 'Wide ger camp sunset', orientation: 'landscape' },
   { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait' },
   { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape' },
@@ -177,7 +177,7 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape' },
   { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait' },
   { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape' },
-  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait' },
+  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait', mobileFullWidth: true },
 ];
 
 const GALLERY_IMAGES = [
@@ -809,9 +809,11 @@ export default function Home() {
         .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: 2px; white-space: nowrap; }
         .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
+        .form-section { border: 1px solid rgba(200,169,110,0.16); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+        .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
-        .form-input, .form-select, .form-textarea { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); padding: 0.8rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.875rem; font-weight: 300; width: 100%; transition: border-color 0.3s ease; outline: none; -webkit-appearance: none; }
+        .form-input, .form-select, .form-textarea { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); padding: 0.8rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.875rem; line-height: 1.3; font-weight: 300; width: 100%; min-height: 48px; box-sizing: border-box; transition: border-color 0.3s ease; outline: none; -webkit-appearance: none; }
         .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
         .form-input:-webkit-autofill, .form-input:-webkit-autofill:hover, .form-input:-webkit-autofill:focus, input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, textarea:-webkit-autofill:hover, textarea:-webkit-autofill:focus { -webkit-box-shadow: 0 0 0 1000px #15120e inset !important; box-shadow: 0 0 0 1000px #15120e inset !important; -webkit-text-fill-color: var(--cream) !important; caret-color: var(--cream); border-color: rgba(200,169,110,0.35) !important; transition: background-color 9999s ease-in-out 0s; }
         .form-select option { background: var(--ink); }
@@ -910,6 +912,16 @@ export default function Home() {
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
+          .booking { padding: 4rem 1.2rem; }
+          .booking-form { gap: 0.85rem; }
+          .form-section { padding: 0.85rem; gap: 0.75rem; }
+          .form-section-title { font-size: 0.56rem; letter-spacing: 0.16em; }
+          .form-group { gap: 0.28rem; }
+          .form-label { font-size: 0.54rem; letter-spacing: 0.11em; line-height: 1.35; }
+          .form-input, .form-select, .form-textarea { min-height: 46px; padding: 0.62rem 0.72rem; font-size: 0.94rem; }
+          .form-textarea { min-height: 88px; }
+          .form-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+          .form-grid.compact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .trust { padding: 4rem 1.5rem; }
           .trust-grid { grid-template-columns: 1fr; }
           .testimonial-grid { grid-template-columns: 1fr; }
@@ -934,6 +946,7 @@ export default function Home() {
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
           .main-album { grid-template-columns: repeat(2, 1fr); }
           .main-album-item { min-height: 0; }
+          .main-album-item.mobile-full-width { grid-column: 1 / -1; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1170,14 +1183,21 @@ export default function Home() {
       {/* MAIN PHOTO ALBUM */}
       <div className="main-album" aria-label="Photo album from the Mongolia expedition">
         {MAIN_ALBUM_IMAGES.map((image) => (
-          <div className={`main-album-item ${image.orientation}`} key={image.src}>
+          <div className={`main-album-item ${image.orientation}${image.mobileFullWidth ? ' mobile-full-width' : ''}`} key={image.src}>
             <button
               type="button"
               className="image-button"
               aria-label={`View larger image: ${image.alt}`}
               onClick={() => openLightbox(image.src, image.alt)}
             >
-              <Image src={image.src} alt={image.alt} fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" />
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                quality={70}
+                sizes="(max-width: 900px) 50vw, 25vw"
+                style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined}
+              />
             </button>
           </div>
         ))}
@@ -1303,7 +1323,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="reveal reveal-delay-1">
+        <div className="reveal reveal-delay-1" id="application">
           <span className="section-eyebrow">Application</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
           <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>We ask for a few details so we can match riders safely, prepare the host family, and send the right confirmation notes.</p>
@@ -1312,39 +1332,46 @@ export default function Home() {
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
             <input type="hidden" name="display_online_payment" value={pricing.onlinePayment} />
             <input type="hidden" name="display_local_family_payment" value={pricing.localFamilyPayment} />
-            <div className="form-grid">
-              <div className="form-group"><label className="form-label" htmlFor="first_name">First Name</label><input id="first_name" className="form-input" name="first_name" type="text" placeholder="First name" required /></div>
-              <div className="form-group"><label className="form-label" htmlFor="last_name">Last Name</label><input id="last_name" className="form-input" name="last_name" type="text" placeholder="Last name" required /></div>
-            </div>
-            <div className="form-group"><label className="form-label" htmlFor="email">Email Address — Required for Confirmation</label><input id="email" className="form-input" name="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required /></div>
-            <div className="form-grid">
-              <div className="form-group"><label className="form-label" htmlFor="phone">Phone Number</label><input id="phone" className="form-input" name="phone" type="tel" placeholder="+1 (555) 000-0000" /></div>
-              <div className="form-group"><label className="form-label" htmlFor="nationality">Nationality</label><input id="nationality" className="form-input" name="nationality" type="text" placeholder="e.g. American" /></div>
-            </div>
-            <div className="form-group"><label className="form-label" htmlFor="emergency_contact">Emergency Contact (Name & Phone)</label><input id="emergency_contact" className="form-input" name="emergency_contact" type="text" placeholder="Name · Phone number" /></div>
-            <div className="form-grid">
-              <div className="form-group">
-                <label className="form-label" htmlFor="riding_experience">Riding Experience</label>
-                <select id="riding_experience" className="form-select" name="riding_experience">
-                  <option value="">Select level</option>
-                  <option>Beginner — little to none</option>
-                  <option>Intermediate — comfortable riding</option>
-                  <option>Advanced — experienced rider</option>
-                </select>
+            <div className="form-section">
+              <p className="form-section-title">Contact details</p>
+              <div className="form-grid compact-grid">
+                <div className="form-group"><label className="form-label" htmlFor="first_name">First Name</label><input id="first_name" className="form-input" name="first_name" type="text" placeholder="First name" required /></div>
+                <div className="form-group"><label className="form-label" htmlFor="last_name">Last Name</label><input id="last_name" className="form-input" name="last_name" type="text" placeholder="Last name" required /></div>
               </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="tour_date">Preferred Tour Date</label>
-                <select id="tour_date" className="form-select" name="tour_date">
-                  <option value="">Select date</option>
-                  <option>June 22–30</option>
-                  <option>July 16–24</option>
-                  <option>August 4–12</option>
-                  <option>Custom Group Date</option>
-                </select>
+              <div className="form-group"><label className="form-label" htmlFor="email">Email Address — Required for Confirmation</label><input id="email" className="form-input" name="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required /></div>
+              <div className="form-grid compact-grid">
+                <div className="form-group"><label className="form-label" htmlFor="phone">Phone Number</label><input id="phone" className="form-input" name="phone" type="tel" placeholder="+1 (555) 000-0000" /></div>
+                <div className="form-group"><label className="form-label" htmlFor="nationality">Nationality</label><input id="nationality" className="form-input" name="nationality" type="text" placeholder="e.g. American" /></div>
               </div>
+              <div className="form-group"><label className="form-label" htmlFor="emergency_contact">Emergency Contact (Name & Phone)</label><input id="emergency_contact" className="form-input" name="emergency_contact" type="text" placeholder="Name · Phone number" /></div>
             </div>
-            <div className="form-group"><label className="form-label" htmlFor="dietary_restrictions">Dietary Restrictions</label><input id="dietary_restrictions" className="form-input" name="dietary_restrictions" type="text" placeholder="None, vegetarian, allergies, etc." /></div>
-            <div className="form-group"><label className="form-label" htmlFor="notes">Special Notes or Questions</label><textarea id="notes" className="form-textarea" name="notes" placeholder="Anything else we should know?"></textarea></div>
+
+            <div className="form-section">
+              <p className="form-section-title">Trip details</p>
+              <div className="form-grid compact-grid">
+                <div className="form-group">
+                  <label className="form-label" htmlFor="riding_experience">Riding Experience</label>
+                  <select id="riding_experience" className="form-select" name="riding_experience">
+                    <option value="">Select level</option>
+                    <option>Beginner — little to none</option>
+                    <option>Intermediate — comfortable riding</option>
+                    <option>Advanced — experienced rider</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="tour_date">Preferred Tour Date</label>
+                  <select id="tour_date" className="form-select" name="tour_date">
+                    <option value="">Select date</option>
+                    <option>June 22–30</option>
+                    <option>July 16–24</option>
+                    <option>August 4–12</option>
+                    <option>Custom Group Date</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-group"><label className="form-label" htmlFor="dietary_restrictions">Dietary Restrictions</label><input id="dietary_restrictions" className="form-input" name="dietary_restrictions" type="text" placeholder="None, vegetarian, allergies, etc." /></div>
+              <div className="form-group"><label className="form-label" htmlFor="notes">Special Notes or Questions</label><textarea id="notes" className="form-textarea" name="notes" placeholder="Anything else we should know?"></textarea></div>
+            </div>
 
             {/* Collapsible Waiver */}
             <div style={{border:'1px solid rgba(200,169,110,0.2)', borderRadius:'3px', overflow:'hidden'}}>
@@ -1531,7 +1558,7 @@ export default function Home() {
             <div className="footer-kicker">Mongolia · Small-group horseback expeditions</div>
             <div className="footer-logo">8 Lakes<br />Tours</div>
             <div className="footer-tagline">A Horse Adventures expedition through the Orkhon Valley and Eight Lakes region.</div>
-            <a className="footer-cta" href="#book">Reserve a Spot</a>
+            <a className="footer-cta" href="#application">Reserve a Spot</a>
           </div>
           <nav className="footer-links" aria-label="Footer navigation">
             <a className="footer-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram</a>
