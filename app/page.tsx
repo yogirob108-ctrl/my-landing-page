@@ -3,13 +3,30 @@ import Image from 'next/image';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
-const STRIPE_BUY_BUTTON_ID = 'buy_btn_1ThVQd3OYuYvjeqELwNE8Iqp';
+const STRIPE_ONE_TIME_PRICE_ID = 'price_1TgPdW3OYuYvjeqEIR9mXzEp';
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 const STRIPE_LINK = 'https://buy.stripe.com/9B628k8UFarmakM1LT0gw03';
 
 const BASE_PRICE_USD = 2099;
 const BASE_ONLINE_PAYMENT_USD = 959;
 const BASE_LOCAL_FAMILY_PAYMENT_USD = 1140;
+
+type StripeCheckoutResult = Promise<{ error?: { message?: string } }>;
+
+declare global {
+  interface Window {
+    Stripe?: (publishableKey: string) => {
+      redirectToCheckout: (options: {
+        lineItems: { price: string; quantity: number }[];
+        mode: 'payment';
+        customerEmail?: string;
+        clientReferenceId?: string;
+        successUrl: string;
+        cancelUrl: string;
+      }) => StripeCheckoutResult;
+    };
+  }
+}
 
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
@@ -251,6 +268,8 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -391,6 +410,38 @@ export default function Home() {
       setFormSubmitting(false);
     }
   };
+
+  const startStripeCheckout = async () => {
+    if (!canPay || checkoutLoading) return;
+
+    setCheckoutError('');
+    setCheckoutLoading(true);
+
+    try {
+      const stripe = window.Stripe?.(STRIPE_PUBLISHABLE_KEY);
+
+      if (!stripe) {
+        throw new Error('Stripe checkout is still loading. Please try again in a moment.');
+      }
+
+      const result = await stripe.redirectToCheckout({
+        lineItems: [{ price: STRIPE_ONE_TIME_PRICE_ID, quantity: 1 }],
+        mode: 'payment',
+        customerEmail: email.trim(),
+        clientReferenceId: `8-lakes-${Date.now()}`,
+        successUrl: `${window.location.origin}/?checkout=success#booking`,
+        cancelUrl: `${window.location.origin}/?checkout=cancelled#booking`,
+      });
+
+      if (result.error?.message) {
+        throw new Error(result.error.message);
+      }
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : 'Stripe checkout could not start. Please try again.');
+      setCheckoutLoading(false);
+    }
+  };
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -742,11 +793,20 @@ export default function Home() {
         .stripe-trust-row .stripe-wordmark { background: #635bff; border-color: #635bff; color: #fff; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
         .checkout-button-wrap { position: relative; }
-        .stripe-embed-wrap { min-height: 48px; max-width: 430px; margin: 0 auto; }
-        .stripe-embed-wrap.locked { min-height: 258px; overflow: hidden; }
-        .stripe-buy-button-host { display: grid; justify-items: center; transition: opacity 0.25s ease, filter 0.25s ease; }
-        .stripe-embed-wrap.locked .stripe-buy-button-host { opacity: 0.45; filter: grayscale(0.2); pointer-events: none; user-select: none; }
-        .stripe-buy-button-host stripe-buy-button { width: 100%; }
+        .stripe-embed-wrap { max-width: 430px; margin: 0 auto; }
+        .stripe-checkout-preview { width: 100%; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,244,249,0.96)); color: #0a2540; padding: 0; overflow: hidden; box-shadow: 0 18px 38px rgba(0,0,0,0.24); transition: opacity 0.25s ease, filter 0.25s ease, transform 0.25s ease; }
+        .stripe-checkout-preview:not(:disabled) { cursor: pointer; }
+        .stripe-checkout-preview:not(:disabled):hover { transform: translateY(-1px); }
+        .stripe-checkout-preview:disabled { opacity: 0.48; filter: grayscale(0.16); cursor: not-allowed; }
+        .stripe-preview-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem 0.55rem; border-bottom: 1px solid rgba(10,37,64,0.08); }
+        .stripe-preview-wordmark { background: #635bff; color: #fff; border-radius: 5px; padding: 0.28rem 0.5rem; font-size: 0.76rem; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
+        .stripe-preview-secure { color: rgba(10,37,64,0.62); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; }
+        .stripe-preview-body { display: block; padding: 0.85rem 1rem 1rem; text-align: left; }
+        .stripe-preview-label { display: block; color: rgba(10,37,64,0.58); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.32rem; }
+        .stripe-preview-amount { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; color: #0a2540; font-size: 1.34rem; font-weight: 700; letter-spacing: -0.03em; }
+        .stripe-preview-amount span { color: rgba(10,37,64,0.56); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; white-space: nowrap; }
+        .stripe-card-row { display: flex; gap: 0.35rem; margin-top: 0.85rem; }
+        .stripe-card-row span { border: 1px solid rgba(10,37,64,0.14); border-radius: 4px; background: #fff; color: rgba(10,37,64,0.7); padding: 0.25rem 0.38rem; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.04em; }
         .stripe-pay-button { display: flex; width: 100%; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: linear-gradient(135deg, #635bff, #7b72ff); border: 1px solid rgba(255,255,255,0.16); border-radius: 5px; color: #fff; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; text-decoration: none; box-shadow: 0 14px 34px rgba(99,91,255,0.24); transition: transform 0.25s ease, box-shadow 0.25s ease; }
         .stripe-pay-button:hover { transform: translateY(-1px); box-shadow: 0 18px 42px rgba(99,91,255,0.34); }
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
@@ -754,6 +814,7 @@ export default function Home() {
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
+        .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
 
         .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
         .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
@@ -1298,14 +1359,32 @@ export default function Home() {
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
-              <div className={`checkout-button-wrap stripe-embed-wrap ${canPay ? '' : 'locked'}`} aria-disabled={!canPay}>
-                <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
-                <div
-                  className="stripe-buy-button-host"
-                  dangerouslySetInnerHTML={{
-                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}"></stripe-buy-button>`,
-                  }}
-                />
+              <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
+                <Script async src="https://js.stripe.com/v3/" strategy="afterInteractive" />
+                <button
+                  type="button"
+                  className="stripe-checkout-preview"
+                  disabled={!canPay || checkoutLoading}
+                  onClick={startStripeCheckout}
+                >
+                  <span className="stripe-preview-top">
+                    <span className="stripe-preview-wordmark">stripe</span>
+                    <span className="stripe-preview-secure">Secure checkout</span>
+                  </span>
+                  <span className="stripe-preview-body">
+                    <span className="stripe-preview-label">Online payment now</span>
+                    <span className="stripe-preview-amount">
+                      $959.00
+                      <span>One-time payment</span>
+                    </span>
+                    <span className="stripe-card-row" aria-hidden="true">
+                      <span>VISA</span>
+                      <span>MC</span>
+                      <span>AMEX</span>
+                      <span>Apple Pay</span>
+                    </span>
+                  </span>
+                </button>
                 {!canPay && (
                   <div
                     className="checkout-lock-overlay"
@@ -1316,6 +1395,7 @@ export default function Home() {
                     </p>
                   </div>
                 )}
+                {checkoutError && <p className="checkout-error">{checkoutError}</p>}
               </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
