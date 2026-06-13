@@ -156,6 +156,17 @@ const TOUR_DATES = [
   { date: 'Custom Group Date', detail: 'Private booking · Contact us to arrange', status: 'On Request', muted: true },
 ];
 
+const PORTRAIT_ALBUM_IMAGES = [
+  { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe' },
+  { src: '/images/saddle-valley-portrait.jpg', alt: 'Saddled horse looking out over the Mongolian valley' },
+  { src: '/images/herder-valley-portrait.jpg', alt: 'Horseman watching over the valley and grazing herd' },
+  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia' },
+  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle' },
+  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley' },
+  { src: '/images/yaks-river-portrait.jpg', alt: 'Yaks grazing beside the river in the valley' },
+  { src: '/images/suma-river-crossing-portrait.jpg', alt: 'Suma riding through a shallow river crossing' },
+];
+
 const GALLERY_IMAGES = [
   { src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' },
   { src: '/images/hero-horseback.jpg', alt: 'From the Saddle' },
@@ -175,6 +186,7 @@ const GALLERY_IMAGES = [
   { src: '/images/mosaic4.jpg', alt: 'Wide sunset view across the Orkhon Valley' },
   { src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' },
   { src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' },
+  ...PORTRAIT_ALBUM_IMAGES,
 ];
 
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
@@ -709,6 +721,11 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
+        .portrait-album { padding: 3px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; background: #0f0f0d; }
+        .portrait-album-item { position: relative; aspect-ratio: 3 / 4; min-height: 420px; overflow: hidden; background: var(--ink); }
+        .portrait-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .portrait-album-item:hover img { transform: scale(1.04); }
+        .portrait-album-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.1rem 0.9rem; background: linear-gradient(180deg, transparent, rgba(14,12,9,0.86)); color: rgba(245,240,232,0.78); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
         .image-button.testimonial-photo { height: 360px; }
         .image-button.partnership-inline-photo { height: auto; aspect-ratio: 1.46; }
@@ -885,6 +902,9 @@ export default function Home() {
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
+          .portrait-album { grid-template-columns: repeat(2, 1fr); }
+          .portrait-album-item { min-height: 0; }
+          .portrait-album-caption { font-size: 0.5rem; letter-spacing: 0.1em; padding: 1rem 0.7rem; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1125,6 +1145,23 @@ export default function Home() {
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => openLightbox('/images/mosaic5.jpg', 'Ger silhouette at dusk')}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
+
+      {/* PORTRAIT ALBUM */}
+      <div className="portrait-album" aria-label="Portrait photo album from the Mongolia expedition">
+        {PORTRAIT_ALBUM_IMAGES.map((image) => (
+          <div className="portrait-album-item" key={image.src}>
+            <button
+              type="button"
+              className="image-button"
+              aria-label={`View larger image: ${image.alt}`}
+              onClick={() => openLightbox(image.src, image.alt)}
+            >
+              <Image src={image.src} alt={image.alt} fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" />
+            </button>
+            <div className="portrait-album-caption">{image.alt}</div>
+          </div>
+        ))}
+      </div>
       {/* GETTING THERE */}
       <section className="getting-there-section">
         <div className="reveal">
@@ -1361,7 +1398,7 @@ export default function Home() {
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
               <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
-                <Script async src="https://js.stripe.com/v3/" strategy="afterInteractive" />
+                {canPay && <Script async src="https://js.stripe.com/v3/" strategy="afterInteractive" />}
                 <button
                   type="button"
                   className="stripe-checkout-preview"
