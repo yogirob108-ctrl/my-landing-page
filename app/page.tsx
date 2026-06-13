@@ -971,6 +971,7 @@ export default function Home() {
       <nav id="main-nav">
         <a href="#top" className="nav-logo">8 Lakes Tours</a>
         <div className="nav-links">
+          <a href="/gallery" className="nav-social">Gallery</a>
           <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" className="nav-social">Instagram</a>
           <a href="#book" className="nav-cta">Reserve</a>
         </div>
@@ -1569,6 +1570,7 @@ export default function Home() {
           </div>
           <nav className="footer-links" aria-label="Footer navigation">
             <a className="footer-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a className="footer-link" href="/gallery">Gallery</a>
             <a className="footer-link" href="/about">About</a>
             <a className="footer-link" href="/faq">FAQ</a>
             <a className="footer-link" href="/contact">Contact</a>
