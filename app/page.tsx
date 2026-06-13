@@ -172,8 +172,6 @@ const PORTRAIT_ALBUM_IMAGES = [
   { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia' },
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle' },
   { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley' },
-  { src: '/images/yaks-river-portrait.jpg', alt: 'Yaks grazing beside the river in the valley' },
-  { src: '/images/suma-river-crossing-portrait.jpg', alt: 'Suma riding through a shallow river crossing' },
   { src: '/images/expedition-originals/suma-horse-black-white-portrait.jpg', alt: 'Suma standing with a horse in black and white' },
   { src: '/images/expedition-originals/saddle-valley-black-white-portrait.jpg', alt: 'Black and white saddle view over the valley' },
   { src: '/images/expedition-originals/grazing-horse-river-sun-portrait.jpg', alt: 'Horse grazing beside a sunlit river' },
@@ -197,12 +195,6 @@ const EXPEDITION_LANDSCAPE_IMAGES = [
 
 const GALLERY_IMAGES = [
   { src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' },
-  { src: '/images/hero-horseback.jpg', alt: 'From the Saddle' },
-  { src: '/images/riding1.jpg', alt: 'Riding the Valley' },
-  { src: '/images/water-crossing.jpg', alt: 'River Crossings' },
-  { src: '/images/landscape1.jpg', alt: 'Sunset Valleys' },
-  { src: '/images/gers.jpg', alt: 'Your Home on the Steppe' },
-  { src: '/images/sunset.jpg', alt: 'Open Steppe Evenings' },
   { src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' },
   { src: '/images/testimonial-irik-clawson.jpg', alt: 'Irik Clawson riding on horseback at sunset in Mongolia' },
   { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin Bennet with children beside a traditional ger in Mongolia' },
@@ -331,6 +323,25 @@ export default function Home() {
   };
   const showPreviousImage = () => setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
   const showNextImage = () => setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
+
+  useEffect(() => {
+    if (lightboxIndex === null || typeof window === 'undefined') return;
+
+    const preloadIndexes = [
+      lightboxIndex,
+      (lightboxIndex + 1) % GALLERY_IMAGES.length,
+      (lightboxIndex + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length,
+      (lightboxIndex + 2) % GALLERY_IMAGES.length,
+    ];
+
+    preloadIndexes.forEach(index => {
+      const src = GALLERY_IMAGES[index]?.src;
+      if (!src) return;
+      const image = new window.Image();
+      image.decoding = 'async';
+      image.src = src;
+    });
+  }, [lightboxIndex]);
 
   useEffect(() => {
     setPricing(getLocalizedPricing());
@@ -764,8 +775,8 @@ export default function Home() {
         .image-button.partnership-inline-photo { height: auto; aspect-ratio: 1.46; }
         .image-button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
         .lightbox { position: fixed; inset: 0; z-index: 1000; background: rgba(14,12,9,0.96); display: flex; align-items: center; justify-content: center; padding: 1.5rem; cursor: zoom-out; overscroll-behavior: contain; touch-action: none; }
-        .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(86vh, 1100px); }
-        .lightbox-frame img { object-fit: contain; }
+        .lightbox-frame { position: relative; width: min(96vw, 1800px); height: min(86vh, 1100px); display: flex; align-items: center; justify-content: center; }
+        .lightbox-frame img { width: 100%; height: 100%; object-fit: contain; }
         .lightbox-close { position: fixed; top: calc(1rem + env(safe-area-inset-top)); right: calc(1rem + env(safe-area-inset-right)); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.82); color: var(--cream); cursor: pointer; font-size: 1.35rem; line-height: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
         .lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1001; width: 3rem; height: 3rem; border-radius: 999px; border: 1px solid rgba(245,240,232,0.35); background: rgba(14,12,9,0.68); color: var(--cream); cursor: pointer; font-size: 1.8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .lightbox-nav:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
@@ -1576,7 +1587,8 @@ export default function Home() {
           <button type="button" className="lightbox-close" onClick={event => { event.stopPropagation(); setLightboxIndex(null); }} aria-label="Close expanded image">×</button>
           <button type="button" className="lightbox-nav lightbox-prev" onClick={event => { event.stopPropagation(); showPreviousImage(); }} aria-label="Previous image">‹</button>
           <div className="lightbox-frame" onClick={event => event.stopPropagation()}>
-            <Image src={lightboxImage.src} alt={lightboxImage.alt} fill quality={85} sizes="95vw" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- Lightbox uses direct local originals so adjacent-photo preloading makes next/prev feel instant. */}
+            <img className="lightbox-image" src={lightboxImage.src} alt={lightboxImage.alt} decoding="async" />
           </div>
           <button type="button" className="lightbox-nav lightbox-next" onClick={event => { event.stopPropagation(); showNextImage(); }} aria-label="Next image">›</button>
           <div className="lightbox-caption">{lightboxImage.alt}</div>
