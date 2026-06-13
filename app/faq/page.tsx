@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
   title: 'FAQ',
@@ -9,8 +10,6 @@ export const metadata: Metadata = {
 };
 
 const pageStyle = { background: '#0e0c09', minHeight: '100vh', color: '#d4cfc4', fontFamily: "var(--font-jost), 'Jost', sans-serif", fontWeight: 300 } as const;
-const navStyle = { padding: '1.5rem 4rem', borderBottom: '1px solid rgba(200,169,110,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap' } as const;
-const logoStyle = { fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif", fontSize: '1.1rem', letterSpacing: '0.15em', color: '#f5f0e8', textTransform: 'uppercase', textDecoration: 'none' } as const;
 const linkStyle = { fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c8a96e', textDecoration: 'none' } as const;
 const wrapperStyle = { maxWidth: '760px', margin: '0 auto', padding: '5rem 2rem' } as const;
 const eyebrowStyle = { fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#c8a96e', marginBottom: '1rem' } as const;
@@ -22,15 +21,7 @@ const footerStyle = { borderTop: '1px solid rgba(200,169,110,0.15)', padding: '2
 export default function Page() {
   return (
     <main style={pageStyle}>
-      <nav style={navStyle}>
-        <Link href="/" style={logoStyle}>8 Lakes Tours</Link>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link href="/about" style={linkStyle}>About</Link>
-          <Link href="/faq" style={linkStyle}>FAQ</Link>
-          <Link href="/contact" style={linkStyle}>Contact</Link>
-          <Link href="/" style={linkStyle}>← Back to Site</Link>
-        </div>
-      </nav>
+      <SiteNav />
       <div style={wrapperStyle}>
         <p style={eyebrowStyle}>FAQ</p>
         <h1 style={h1Style}>Common Questions</h1>

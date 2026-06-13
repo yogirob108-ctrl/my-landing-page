@@ -165,32 +165,21 @@ const STRIP_IMAGES = [
   { src: '/images/expedition-originals/yaks-river-backlit-portrait.jpg', alt: 'Yaks grazing beside the river in backlit evening sun', caption: 'Open Steppe Evenings' },
 ];
 
-const PORTRAIT_ALBUM_IMAGES = [
-  { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe' },
-  { src: '/images/saddle-valley-portrait.jpg', alt: 'Saddled horse looking out over the Mongolian valley' },
-  { src: '/images/herder-valley-portrait.jpg', alt: 'Horseman watching over the valley and grazing herd' },
-  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia' },
-  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle' },
-  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley' },
-  { src: '/images/expedition-originals/suma-horse-black-white-portrait.jpg', alt: 'Suma standing with a horse in black and white' },
-  { src: '/images/expedition-originals/saddle-valley-black-white-portrait.jpg', alt: 'Black and white saddle view over the valley' },
-  { src: '/images/expedition-originals/grazing-horse-river-sun-portrait.jpg', alt: 'Horse grazing beside a sunlit river' },
-  { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk' },
-  { src: '/images/expedition-originals/eagle-black-white-portrait.jpg', alt: 'Black and white portrait of a Mongolian eagle' },
-  { src: '/images/expedition-originals/suma-motorbike-field-portrait.jpg', alt: 'Suma on a motorbike in the open field' },
-  { src: '/images/expedition-originals/motorbike-valley-repair-portrait.jpg', alt: 'Motorbike stop overlooking a broad valley' },
-  { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset' },
-  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley' },
-];
-
-const EXPEDITION_LANDSCAPE_IMAGES = [
-  { src: '/images/expedition-originals/ger-sunrise-original.jpg', alt: 'Ger at sunrise in the valley' },
-  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains' },
-  { src: '/images/expedition-originals/ger-sunset-wide-original.jpg', alt: 'Wide ger camp sunset' },
-  { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river' },
-  { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset' },
-  { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley' },
-  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley' },
+const MAIN_ALBUM_IMAGES = [
+  { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
+  { src: '/images/expedition-originals/ger-sunrise-original.jpg', alt: 'Ger at sunrise in the valley', orientation: 'landscape' },
+  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia', orientation: 'portrait' },
+  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
+  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait' },
+  { src: '/images/expedition-originals/ger-sunset-wide-original.jpg', alt: 'Wide ger camp sunset', orientation: 'landscape' },
+  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait' },
+  { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape' },
+  { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk', orientation: 'portrait' },
+  { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape' },
+  { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait' },
+  { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape' },
+  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait' },
+  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', orientation: 'landscape' },
 ];
 
 const GALLERY_IMAGES = [
@@ -207,8 +196,7 @@ const GALLERY_IMAGES = [
   { src: '/images/riding3.jpg', alt: 'Grazing animals beside the river' },
   { src: '/images/mosaic5.jpg', alt: 'Ger silhouette at dusk' },
   ...STRIP_IMAGES.map(({ src, alt }) => ({ src, alt })),
-  ...PORTRAIT_ALBUM_IMAGES,
-  ...EXPEDITION_LANDSCAPE_IMAGES,
+  ...MAIN_ALBUM_IMAGES.map(({ src, alt }) => ({ src, alt })),
 ];
 
 function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () => void }) {
@@ -762,14 +750,13 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
-        .portrait-album { padding: 3px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; background: #0f0f0d; }
-        .landscape-album { padding: 3px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: #0f0f0d; }
-        .portrait-album-item, .landscape-album-item { position: relative; overflow: hidden; background: var(--ink); }
-        .portrait-album-item { aspect-ratio: 3 / 4; min-height: 420px; }
-        .landscape-album-item { aspect-ratio: 3 / 2; min-height: 300px; }
-        .portrait-album-item img, .landscape-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .portrait-album-item:hover img, .landscape-album-item:hover img { transform: scale(1.04); }
-        .portrait-album-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.1rem 0.9rem; background: linear-gradient(180deg, transparent, rgba(14,12,9,0.86)); color: rgba(245,240,232,0.78); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; }
+        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-flow: dense; gap: 3px; background: #0f0f0d; }
+        .main-album-item { position: relative; overflow: hidden; background: var(--ink); }
+        .main-album-item.portrait { aspect-ratio: 3 / 4; min-height: 420px; }
+        .main-album-item.landscape { grid-column: span 2; aspect-ratio: 3 / 2; min-height: 300px; }
+        .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .main-album-item:hover img { transform: scale(1.04); }
+        .main-album-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.1rem 0.9rem; background: linear-gradient(180deg, transparent, rgba(14,12,9,0.86)); color: rgba(245,240,232,0.78); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; pointer-events: none; }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
         .image-button.testimonial-photo { height: 360px; }
         .image-button.partnership-inline-photo { height: auto; aspect-ratio: 1.46; }
@@ -946,9 +933,9 @@ export default function Home() {
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
-          .portrait-album, .landscape-album { grid-template-columns: repeat(2, 1fr); }
-          .portrait-album-item, .landscape-album-item { min-height: 0; }
-          .portrait-album-caption { font-size: 0.5rem; letter-spacing: 0.1em; padding: 1rem 0.7rem; }
+          .main-album { grid-template-columns: repeat(2, 1fr); }
+          .main-album-item { min-height: 0; }
+          .main-album-caption { font-size: 0.5rem; letter-spacing: 0.1em; padding: 1rem 0.7rem; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1184,10 +1171,10 @@ export default function Home() {
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger silhouette at dusk" onClick={() => openLightbox('/images/mosaic5.jpg', 'Ger silhouette at dusk')}><Image src="/images/mosaic5.jpg" alt="Ger silhouette at dusk" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
 
-      {/* PORTRAIT ALBUM */}
-      <div className="portrait-album" aria-label="Portrait photo album from the Mongolia expedition">
-        {PORTRAIT_ALBUM_IMAGES.map((image) => (
-          <div className="portrait-album-item" key={image.src}>
+      {/* MAIN PHOTO ALBUM */}
+      <div className="main-album" aria-label="Photo album from the Mongolia expedition">
+        {MAIN_ALBUM_IMAGES.map((image) => (
+          <div className={`main-album-item ${image.orientation}`} key={image.src}>
             <button
               type="button"
               className="image-button"
@@ -1196,24 +1183,7 @@ export default function Home() {
             >
               <Image src={image.src} alt={image.alt} fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" />
             </button>
-            <div className="portrait-album-caption">{image.alt}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* LANDSCAPE ALBUM */}
-      <div className="landscape-album" aria-label="Landscape photo album from the Mongolia expedition">
-        {EXPEDITION_LANDSCAPE_IMAGES.map((image) => (
-          <div className="landscape-album-item" key={image.src}>
-            <button
-              type="button"
-              className="image-button"
-              aria-label={`View larger image: ${image.alt}`}
-              onClick={() => openLightbox(image.src, image.alt)}
-            >
-              <Image src={image.src} alt={image.alt} fill quality={70} sizes="(max-width: 900px) 50vw, 33vw" />
-            </button>
-            <div className="portrait-album-caption">{image.alt}</div>
+            <div className="main-album-caption">{image.alt}</div>
           </div>
         ))}
       </div>
