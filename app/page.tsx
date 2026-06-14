@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://buy.stripe.com/4gM8wI2whczu9gI1LT0gw04';
 const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TiGFd3OYuYvjeqEw1PHV27M';
@@ -270,6 +270,10 @@ export default function Home() {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [bookingReference, setBookingReference] = useState('');
+  const [leadName, setLeadName] = useState('');
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadStatus, setLeadStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [leadError, setLeadError] = useState('');
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -289,6 +293,25 @@ export default function Home() {
   };
   const showPreviousImage = () => setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
   const showNextImage = () => setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
+
+  const submitLead = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLeadError('');
+    setLeadStatus('saving');
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_contact_section', interest: 'Mongolia trip updates' }),
+      });
+      const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
+      if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
+      setLeadStatus('saved');
+    } catch (error) {
+      setLeadError(error instanceof Error ? error.message : 'Could not save your email. Please try again.');
+      setLeadStatus('error');
+    }
+  };
 
   useEffect(() => {
     if (lightboxIndex === null || typeof window === 'undefined') return;
@@ -839,7 +862,17 @@ export default function Home() {
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
-
+        .lead-card-public { margin: 2.2rem auto 0; max-width: 460px; padding: 1.2rem; border: 1px solid rgba(200,169,110,0.22); border-radius: 8px; background: rgba(245,240,232,0.045); }
+        .lead-card-public h3 { color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; margin: 0 0 0.4rem; }
+        .lead-card-public p { color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.6; margin: 0 0 1rem; }
+        .lead-form { display: grid; gap: 0.6rem; }
+        .lead-form input { width: 100%; box-sizing: border-box; border: 1px solid rgba(245,240,232,0.14); background: rgba(14,12,9,0.54); color: var(--cream); border-radius: 4px; padding: 0.86rem 1rem; font: inherit; outline: none; }
+        .lead-form input:focus { border-color: var(--gold); }
+        .lead-form button { border: 0; background: var(--gold); color: var(--dark); border-radius: 4px; padding: 0.92rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
+        .lead-form button:disabled { opacity: 0.6; cursor: default; }
+        .lead-message { margin-top: 0.75rem; font-size: 0.74rem; line-height: 1.5; color: var(--gold); }
+        .lead-message.error { color: #ffb4a6; }
+        .lightbox-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
         .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
         .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
         .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 6rem; }
@@ -1494,6 +1527,34 @@ export default function Home() {
                 <p style={{fontSize:'0.9rem', color:'var(--cream)'}}>info@8lakestours.com</p>
               </div>
             </a>
+          </div>
+          <div className="lead-card-public reveal">
+            <h3>Get trip updates</h3>
+            <p>Not ready to reserve yet? Leave your email and we&apos;ll send useful Mongolia trip updates, new dates, and practical preparation notes.</p>
+            <form className="lead-form" onSubmit={submitLead}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Name — optional"
+                value={leadName}
+                onChange={event => setLeadName(event.target.value)}
+                autoComplete="name"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email address"
+                value={leadEmail}
+                onChange={event => setLeadEmail(event.target.value)}
+                autoComplete="email"
+                required
+              />
+              <button type="submit" disabled={leadStatus === 'saving' || leadStatus === 'saved'}>
+                {leadStatus === 'saving' ? 'Saving…' : leadStatus === 'saved' ? 'Saved' : 'Send me updates'}
+              </button>
+            </form>
+            {leadStatus === 'saved' && <p className="lead-message">✓ You&apos;re on the list. We&apos;ll only send relevant trip updates.</p>}
+            {leadStatus === 'error' && <p className="lead-message error">{leadError}</p>}
           </div>
         </div>
       </section>

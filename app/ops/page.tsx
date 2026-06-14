@@ -39,6 +39,7 @@ export default async function OpsDashboardPage() {
 
   const dataset = await getOpsDataset();
   const bookings = dataset.bookings;
+  const leads = dataset.leads;
   const metrics = getOpsMetrics(bookings);
   const configMessage = missingConfigMessage(dataset.mode);
 
@@ -56,9 +57,31 @@ export default async function OpsDashboardPage() {
 
       <section className="metrics" aria-label="Booking metrics">
         <Metric label="Records" value={bookings.length.toString()} />
+        <Metric label="Leads" value={leads.length.toString()} />
         <Metric label="Guests" value={metrics.guests.toString()} />
         <Metric label="Online paid" value={money.format(metrics.onlinePaid)} />
-        <Metric label="Outstanding" value={money.format(metrics.onlineDue - metrics.onlinePaid)} />
+      </section>
+
+      <section className="table-panel leads-panel">
+        <div className="panel-head">
+          <div>
+            <p className="mini">Lead list</p>
+            <h2>Subscribers and trip-update leads that have not become bookings yet.</h2>
+          </div>
+          <span>{leads.length} lead{leads.length === 1 ? '' : 's'}</span>
+        </div>
+        <div className="lead-grid" aria-label="Leads">
+          {leads.length === 0 ? (
+            <p className="empty-state">No subscriber leads yet.</p>
+          ) : leads.map((lead) => (
+            <article className="lead-card" key={lead.id}>
+              <span className="status">{lead.status}</span>
+              <strong>{lead.name}</strong>
+              <a href={`mailto:${lead.email}`}>{lead.email}</a>
+              <small>{lead.interest} · {lead.source} · {formatDateTime(lead.createdAt)}</small>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="create-panel">
@@ -126,6 +149,10 @@ export default async function OpsDashboardPage() {
         .create-panel input { width: 100%; box-sizing: border-box; border: 1px solid rgba(200,169,110,0.18); background: rgba(0,0,0,0.24); color: #fff8ea; border-radius: 12px; padding: 0.78rem; font: inherit; }
         .create-panel button { background: #c8a96e; color: #080806; }
         .table-panel { max-width: 1360px; margin: 0 auto; padding: 0.8rem; }
+        .leads-panel { margin-bottom: 0.8rem; }
+        .lead-grid { display: grid; gap: 0.55rem; }
+        .lead-card { border: 1px solid rgba(233,225,211,0.075); background: rgba(0,0,0,0.2); border-radius: 18px; padding: 0.9rem; display: grid; gap: 0.25rem; }
+        .lead-card strong { color: #fff8ea; font-weight: 500; } .lead-card a { color: #c8a96e; overflow-wrap: anywhere; } .lead-card small, .empty-state { color: rgba(233,225,211,0.62); line-height: 1.45; }
         .panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: end; margin-bottom: 0.8rem; } .panel-head > span { color: #c8a96e; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.7rem; }
         .filter-row { display: flex; gap: 0.45rem; overflow-x: auto; padding-bottom: 0.8rem; margin-bottom: 0.2rem; }
         .filter-row a { white-space: nowrap; background: rgba(0,0,0,0.18); }
@@ -136,7 +163,7 @@ export default async function OpsDashboardPage() {
         .status { display: inline-flex; white-space: nowrap; border: 1px solid rgba(200,169,110,0.25); color: #fff8ea; border-radius: 999px; padding: 0.38rem 0.55rem; font-size: 0.58rem; letter-spacing: 0.09em; text-transform: uppercase; }
         .status-confirmed, .status-prep-sent, .status-ready-for-departure { background: rgba(73,128,88,0.2); border-color: rgba(73,128,88,0.55); }
         .status-awaiting-payment { background: rgba(255,180,80,0.12); border-color: rgba(255,180,80,0.35); }
-        @media (min-width: 780px) { .metrics { grid-template-columns: repeat(4,minmax(0,1fr)); } .create-panel { grid-template-columns: 260px 1fr; align-items: end; } .create-panel form { grid-template-columns: repeat(6,minmax(0,1fr)) auto; } .table-row { grid-template-columns: 0.9fr 1.4fr 1.5fr 1.1fr 1.1fr 1fr; align-items: center; } .table-head { display: grid; } .table-panel { padding: 1rem; } }
+        @media (min-width: 780px) { .metrics { grid-template-columns: repeat(4,minmax(0,1fr)); } .create-panel { grid-template-columns: 260px 1fr; align-items: end; } .create-panel form { grid-template-columns: repeat(6,minmax(0,1fr)) auto; } .lead-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .table-row { grid-template-columns: 0.9fr 1.4fr 1.5fr 1.1fr 1.1fr 1fr; align-items: center; } .table-head { display: grid; } .table-panel { padding: 1rem; } }
       `}</style>
     </main>
   );
