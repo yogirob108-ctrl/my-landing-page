@@ -1,32 +1,12 @@
 "use client";
 import Image from 'next/image';
-import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
-const STRIPE_ONE_TIME_PRICE_ID = 'price_1TgPdW3OYuYvjeqEIR9mXzEp';
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 const STRIPE_LINK = 'https://buy.stripe.com/9B628k8UFarmakM1LT0gw03';
 
 const BASE_PRICE_USD = 2099;
 const BASE_ONLINE_PAYMENT_USD = 959;
 const BASE_LOCAL_FAMILY_PAYMENT_USD = 1140;
-
-type StripeCheckoutResult = Promise<{ error?: { message?: string } }>;
-
-declare global {
-  interface Window {
-    Stripe?: (publishableKey: string) => {
-      redirectToCheckout: (options: {
-        lineItems: { price: string; quantity: number }[];
-        mode: 'payment';
-        customerEmail?: string;
-        clientReferenceId?: string;
-        successUrl: string;
-        cancelUrl: string;
-      }) => StripeCheckoutResult;
-    };
-  }
-}
 
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
@@ -285,6 +265,7 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
   const [pricing, setPricing] = useState<LocalizedPricing>({
@@ -432,16 +413,24 @@ export default function Home() {
 
   const submitToFormspree = async (form: HTMLFormElement) => {
     if (formSubmitted) return;
+    setFormError('');
     setFormSubmitting(true);
     try {
-      await fetch('https://formspree.io/f/xnjorabj', {
+      const response = await fetch('https://formspree.io/f/xnjorabj', {
         method: 'POST',
         body: new FormData(form),
         headers: { Accept: 'application/json' },
       });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null) as { errors?: { message?: string }[]; error?: string } | null;
+        const message = payload?.errors?.[0]?.message || payload?.error || 'The application could not be sent. Please try again or email info@8lakestours.com.';
+        throw new Error(message);
+      }
+
       setFormSubmitted(true);
-    } catch {
-      // silent — don't block Stripe payment on network error
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : 'The application could not be sent. Please try again or email info@8lakestours.com.');
     } finally {
       setFormSubmitting(false);
     }
@@ -454,24 +443,10 @@ export default function Home() {
     setCheckoutLoading(true);
 
     try {
-      const stripe = window.Stripe?.(STRIPE_PUBLISHABLE_KEY);
-
-      if (!stripe) {
-        throw new Error('Stripe checkout is still loading. Please try again in a moment.');
-      }
-
-      const result = await stripe.redirectToCheckout({
-        lineItems: [{ price: STRIPE_ONE_TIME_PRICE_ID, quantity: 1 }],
-        mode: 'payment',
-        customerEmail: email.trim(),
-        clientReferenceId: `8-lakes-${Date.now()}`,
-        successUrl: `${window.location.origin}/?checkout=success#booking`,
-        cancelUrl: `${window.location.origin}/?checkout=cancelled#booking`,
-      });
-
-      if (result.error?.message) {
-        throw new Error(result.error.message);
-      }
+      const checkoutUrl = new URL(STRIPE_LINK);
+      checkoutUrl.searchParams.set('prefilled_email', email.trim());
+      checkoutUrl.searchParams.set('client_reference_id', `8-lakes-${Date.now()}`);
+      window.location.assign(checkoutUrl.toString());
     } catch (error) {
       setCheckoutError(error instanceof Error ? error.message : 'Stripe checkout could not start. Please try again.');
       setCheckoutLoading(false);
@@ -744,15 +719,17 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
-        .main-album { padding: 3px; column-count: 4; column-gap: 3px; background: #0f0f0d; }
-        .main-album-item { position: relative; overflow: hidden; background: var(--ink); display: block; width: 100%; margin: 0 0 3px; break-inside: avoid; page-break-inside: avoid; transform: translateZ(0); }
-        .main-album-item.collage-lead { aspect-ratio: 3 / 4.25; }
-        .main-album-item.collage-wide { aspect-ratio: 4 / 3; }
-        .main-album-item.collage-tall { aspect-ratio: 3 / 4.6; }
-        .main-album-item.collage-square { aspect-ratio: 1 / 1; }
-        .main-album-item.collage-panorama { aspect-ratio: 16 / 10; }
-        .main-album-item.collage-feature { aspect-ratio: 3 / 4.1; }
-        .main-album-item.collage-finale { aspect-ratio: 4 / 5; }
+        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(78px, 7vw, 118px); gap: 3px; background: #0f0f0d; }
+        .main-album-item { position: relative; overflow: hidden; background: var(--ink); min-height: 0; }
+        .main-album-item.collage-lead { grid-column: 1 / 5; grid-row: 1 / 7; }
+        .main-album-item.collage-wide:nth-of-type(2) { grid-column: 5 / 9; grid-row: 1 / 4; }
+        .main-album-item.collage-tall { grid-column: 9 / 11; grid-row: 1 / 5; }
+        .main-album-item.collage-square { grid-column: 11 / 13; grid-row: 1 / 3; }
+        .main-album-item.collage-panorama { grid-column: 5 / 9; grid-row: 4 / 7; }
+        .main-album-item.collage-wide:nth-of-type(6) { grid-column: 11 / 13; grid-row: 3 / 5; }
+        .main-album-item.collage-feature { grid-column: 9 / 13; grid-row: 5 / 10; }
+        .main-album-item.collage-wide:nth-of-type(8) { grid-column: 1 / 7; grid-row: 7 / 10; }
+        .main-album-item.collage-finale { grid-column: 7 / 9; grid-row: 7 / 10; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
@@ -816,6 +793,9 @@ export default function Home() {
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-section { border: 1px solid rgba(200,169,110,0.16); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
         .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
+        .form-fields { border: 0; padding: 0; margin: 0; display: contents; }
+        .form-fields:disabled { opacity: 0.58; }
+        .form-fields:disabled input, .form-fields:disabled select, .form-fields:disabled textarea, .form-fields:disabled button { cursor: not-allowed; }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
         .form-input, .form-select, .form-textarea { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); padding: 0.8rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.875rem; line-height: 1.3; font-weight: 300; width: 100%; min-height: 48px; box-sizing: border-box; transition: border-color 0.3s ease; outline: none; -webkit-appearance: none; }
@@ -838,6 +818,7 @@ export default function Home() {
         .stripe-trust-row span { border: 1px solid rgba(245,240,232,0.14); background: rgba(14,12,9,0.44); color: rgba(245,240,232,0.72); border-radius: 999px; padding: 0.32rem 0.55rem; font-size: 0.62rem; letter-spacing: 0.08em; }
         .stripe-trust-row .stripe-wordmark { background: #635bff; border-color: #635bff; color: #fff; font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; }
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
+        .form-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
         .checkout-button-wrap { position: relative; }
         .stripe-embed-wrap { max-width: 430px; margin: 0 auto; }
         .stripe-checkout-preview { width: 100%; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,244,249,0.96)); color: #0a2540; padding: 0; overflow: hidden; box-shadow: 0 18px 38px rgba(0,0,0,0.24); transition: opacity 0.25s ease, filter 0.25s ease, transform 0.25s ease; }
@@ -954,10 +935,15 @@ export default function Home() {
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
-          .main-album { column-count: 2; column-gap: 3px; }
-          .main-album-item { margin-bottom: 3px; }
+          .main-album { display: block; column-count: 2; column-gap: 3px; }
+          .main-album-item { display: block; width: 100%; margin: 0 0 3px; break-inside: avoid; page-break-inside: avoid; transform: translateZ(0); }
+          .main-album-item.collage-lead { aspect-ratio: 3 / 4.25; }
           .main-album-item.collage-wide { aspect-ratio: 1 / 1; }
+          .main-album-item.collage-tall { aspect-ratio: 3 / 4.6; }
+          .main-album-item.collage-square { aspect-ratio: 1 / 1; }
           .main-album-item.collage-panorama { aspect-ratio: 4 / 3; }
+          .main-album-item.collage-feature { aspect-ratio: 3 / 4.1; }
+          .main-album-item.collage-finale { aspect-ratio: 4 / 5; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1343,6 +1329,7 @@ export default function Home() {
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
             <input type="hidden" name="display_online_payment" value={pricing.onlinePayment} />
             <input type="hidden" name="display_local_family_payment" value={pricing.localFamilyPayment} />
+            <fieldset className="form-fields" disabled={formSubmitted || formSubmitting}>
             <div className="form-section">
               <p className="form-section-title">Contact details</p>
               <div className="form-grid compact-grid">
@@ -1430,6 +1417,7 @@ export default function Home() {
               />
               <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.5, marginTop:'0.4rem', lineHeight:1.5}}>By typing your name you confirm you have read and agree to the liability waiver.</p>
             </div>
+            </fieldset>
 
             {/* Submit application to Formspree */}
             {!formSubmitted ? (
@@ -1446,6 +1434,7 @@ export default function Home() {
                 <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Application received — complete your online booking payment below</p>
               </div>
             )}
+            {formError && <p className="form-error">{formError}</p>}
 
             <div className="payment-checkout-card">
               <p className="checkout-eyebrow">Online Reservation Payment</p>
@@ -1456,7 +1445,6 @@ export default function Home() {
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
               <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
-                {canPay && <Script async src="https://js.stripe.com/v3/" strategy="afterInteractive" />}
                 <button
                   type="button"
                   className="stripe-checkout-preview"
