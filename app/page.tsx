@@ -169,7 +169,6 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
   { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center' },
-  { src: '/images/expedition-originals/ger-sunset-wide-original.jpg', alt: 'Wide ger camp sunset', orientation: 'landscape' },
   { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait' },
   { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape' },
   { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk', orientation: 'portrait' },
@@ -687,6 +686,9 @@ export default function Home() {
         .intro-img.portrait-full:hover img { transform: none; }
         .intro-img-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 55%; aspect-ratio: 1; overflow: hidden; border: 4px solid var(--dark); }
         .intro-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+        .intro-points { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+        .intro-point-value { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--gold); line-height: 1; }
+        .intro-point-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-top: 0.4rem; line-height: 1.4; }
 
         .photo-strip { padding: 0; display: flex; gap: 0; overflow: hidden; height: 50vh; min-height: 350px; }
         .strip-item { flex: 1; overflow: hidden; position: relative; transition: flex 0.6s cubic-bezier(0.4,0,0.2,1); cursor: pointer; }
@@ -762,8 +764,8 @@ export default function Home() {
         .lightbox-prev { left: 1rem; }
         .lightbox-next { right: 1rem; }
         .trust-conversion { background: var(--ink); display: grid; grid-template-columns: minmax(260px, 0.8fr) 1.2fr; gap: 4rem; align-items: center; }
-        .rob-photo { position: relative; aspect-ratio: 1; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.06); overflow: hidden; }
-        .rob-photo img { object-fit: cover; object-position: 50% 32%; }
+        .rob-photo { position: relative; aspect-ratio: 4 / 3; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.06); overflow: hidden; }
+        .rob-photo img { object-fit: contain; object-position: center; }
         .trust-card-founder h3 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 300; color: var(--cream); margin-bottom: 0.8rem; }
         .trust-card-founder p { font-size: 0.9rem; line-height: 1.75; color: rgba(212,207,196,0.82); }
         .trust-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.6rem; }
@@ -900,7 +902,7 @@ export default function Home() {
             padding-top: calc(5.25rem + env(safe-area-inset-top));
           }
           .hero-content {
-            padding: 0 1.55rem calc(8.75rem + env(safe-area-inset-bottom));
+            padding: 0 1.55rem calc(5.25rem + env(safe-area-inset-bottom));
             width: 100%;
           }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
@@ -909,6 +911,11 @@ export default function Home() {
           .hero-sub .desktop-line { display: none; }
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
+          .intro-points { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-top: 2.2rem; align-items: start; }
+          .intro-point-value { font-size: clamp(1.25rem, 7vw, 1.55rem); }
+          .intro-point-label { font-size: 0.48rem; letter-spacing: 0.12em; line-height: 1.55; overflow-wrap: normal; }
+          .trust-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
+          .trust-link { justify-content: center; align-items: center; text-align: center; padding: 0.85rem 0.6rem; font-size: 0.58rem; letter-spacing: 0.12em; line-height: 1.35; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
           .booking { padding: 4rem 1.2rem; }
@@ -1020,10 +1027,10 @@ export default function Home() {
           <h2 className="section-title">Mongolia<br /><em>Beyond Tourism</em></h2>
           <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is a Horse Adventures expedition built for people who want to be somewhere real, not just pass through it.</p>
-          <div style={{marginTop:'2.5rem', display:'flex', gap:'2rem', flexWrap:'wrap'}}>
-            <div><span style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Beginner</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Riders Welcome</p></div>
-            <div><span style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Small</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Intimate Group</p></div>
-            <div><span style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond',serif", fontSize:'1.8rem', color:'var(--gold)'}}>Real</span><p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--mist)', opacity:0.6, marginTop:'0.2rem'}}>Family Partnership</p></div>
+          <div className="intro-points">
+            <div><span className="intro-point-value">Beginner</span><p className="intro-point-label">Riders Welcome</p></div>
+            <div><span className="intro-point-value">Small</span><p className="intro-point-label">Intimate Group</p></div>
+            <div><span className="intro-point-value">Real</span><p className="intro-point-label">Family Partnership</p></div>
           </div>
         </div>
       </section>
@@ -1259,7 +1266,7 @@ export default function Home() {
 
       <section className="trust-conversion">
         <div className="rob-photo reveal">
-          <Image src="/images/rob-zaher.jpg" alt="Robert Zaher outdoors in warm evening light" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
+          <Image src="/images/rob-family.jpg" alt="Robert with Ganbold, Suma and family in Mongolia" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
         </div>
         <div className="trust-card-founder reveal reveal-delay-1">
           <span className="section-eyebrow">Who You&apos;re Booking With</span>

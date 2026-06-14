@@ -61,7 +61,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/partnership2.jpg', alt: 'Local hosts and horses in the valley', width: 1000, height: 912, orientation: 'landscape' },
   { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback', width: 1200, height: 900, orientation: 'landscape' },
   { src: '/images/riding3.jpg', alt: 'Grazing animals beside the river', width: 1200, height: 900, orientation: 'landscape' },
-  { src: '/images/rob-family.jpg', alt: 'Robert with Ganbold, Suma and family', width: 1042, height: 712, orientation: 'landscape' },
+  { src: '/images/rob-family.jpg', alt: 'Robert with Ganbold, Suma and family', width: 1800, height: 1371, orientation: 'landscape' },
   { src: '/images/rob-zaher.jpg', alt: 'Robert Zaher in Mongolia', width: 768, height: 1024, orientation: 'portrait' },
   { src: '/images/saddle-valley-portrait.jpg', alt: 'Saddled horse looking out over the valley', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin with children beside a ger', width: 1400, height: 1050, orientation: 'landscape' },
