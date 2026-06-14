@@ -24,6 +24,18 @@ export type OpsBookingRecord = Booking & {
 export type OpsDataset = {
   mode: 'supabase' | 'sample';
   bookings: OpsBookingRecord[];
+  leads: OpsLeadRecord[];
+};
+
+export type OpsLeadRecord = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  source: string;
+  interest: string;
+  status: string;
+  createdAt: string;
 };
 
 type SupabaseBookingRow = {
@@ -94,7 +106,17 @@ function sampleRecord(booking: Booking): OpsBookingRecord {
 }
 
 export function getSampleDataset(): OpsDataset {
-  return { mode: 'sample', bookings: sampleBookings.map(sampleRecord) };
+  return { mode: 'sample', bookings: sampleBookings.map(sampleRecord), leads: [] };
+}
+
+function parseLeadNotes(notes: string | null | undefined) {
+  const value = notes ?? '';
+  const get = (label: string, fallback: string) => value.match(new RegExp(`${label}:\\s*([^\\n]+)`, 'i'))?.[1]?.trim() || fallback;
+  return {
+    status: get('Status', 'lead'),
+    source: get('Source', 'unknown'),
+    interest: get('Interest', 'Trip updates'),
+  };
 }
 
 export async function getOpsDataset(): Promise<OpsDataset> {
@@ -127,6 +149,37 @@ export async function getOpsDataset(): Promise<OpsDataset> {
     .order('submitted_at', { ascending: false });
 
   if (error || !data) return getSampleDataset();
+
+  const { data: leadRows } = await supabase
+    .from('customers')
+    .select('id,first_name,last_name,email,phone,notes,created_at,bookings(id)')
+    .ilike('notes', '%Lead/subscriber record%')
+    .order('created_at', { ascending: false });
+
+  const leads: OpsLeadRecord[] = ((leadRows ?? []) as unknown as {
+    id: string;
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    phone: string | null;
+    notes: string | null;
+    created_at: string;
+    bookings?: { id: string }[];
+  }[])
+    .filter((row) => (row.bookings ?? []).length === 0)
+    .map((row) => {
+      const parsed = parseLeadNotes(row.notes);
+      return {
+        id: row.id,
+        name: `${row.first_name ?? ''} ${row.last_name ?? ''}`.trim() || 'Subscriber',
+        email: row.email ?? '',
+        phone: row.phone ?? '',
+        source: parsed.source,
+        interest: parsed.interest,
+        status: parsed.status,
+        createdAt: row.created_at,
+      };
+    });
 
   const records = (data as unknown as SupabaseBookingRow[]).map((row): OpsBookingRecord => {
     const customer = Array.isArray(row.customers) ? row.customers[0] : row.customers;
@@ -183,7 +236,7 @@ export async function getOpsDataset(): Promise<OpsDataset> {
     };
   });
 
-  return { mode: 'supabase', bookings: records };
+  return { mode: 'supabase', bookings: records, leads };
 }
 
 export async function getOpsBooking(reference: string) {
