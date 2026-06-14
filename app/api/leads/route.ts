@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
+import { getInternalEmailRecipients, leadCustomerEmail, leadInternalEmail, sendEmail } from '@/lib/email';
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
@@ -65,6 +66,15 @@ export async function POST(request: Request) {
   if (result.error || !result.data) {
     return jsonError(result.error?.message ?? 'Lead could not be saved.', 500);
   }
+
+  const internalRecipients = getInternalEmailRecipients();
+  const internalEmail = leadInternalEmail({ name, email, source, interest });
+  const customerEmail = leadCustomerEmail({ name });
+
+  await Promise.allSettled([
+    sendEmail({ to: internalRecipients, replyTo: email, ...internalEmail }),
+    sendEmail({ to: email, replyTo: internalRecipients[0], ...customerEmail }),
+  ]);
 
   revalidatePath('/ops');
 
