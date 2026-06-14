@@ -166,15 +166,15 @@ const STRIP_IMAGES = [
 ];
 
 const MAIN_ALBUM_IMAGES = [
-  { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
-  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
-  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center' },
-  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait' },
-  { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape' },
-  { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape' },
-  { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait', mobileFullWidth: true },
-  { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape' },
-  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait', mobileFullWidth: true },
+  { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait', collage: 'lead' },
+  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape', collage: 'wide' },
+  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center', collage: 'tall' },
+  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait', collage: 'square' },
+  { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape', collage: 'panorama' },
+  { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape', collage: 'wide' },
+  { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait', mobileFullWidth: true, collage: 'feature' },
+  { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape', collage: 'wide' },
+  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait', mobileFullWidth: true, collage: 'finale' },
 ];
 
 const GALLERY_IMAGES = [
@@ -744,10 +744,15 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
-        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-flow: dense; gap: 3px; background: #0f0f0d; }
-        .main-album-item { position: relative; overflow: hidden; background: var(--ink); }
-        .main-album-item.portrait { aspect-ratio: 3 / 4; min-height: 420px; }
-        .main-album-item.landscape { grid-column: span 2; aspect-ratio: 3 / 2; min-height: 300px; }
+        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: minmax(78px, 7vw); grid-auto-flow: dense; gap: 3px; background: #0f0f0d; }
+        .main-album-item { position: relative; overflow: hidden; background: var(--ink); min-height: 0; }
+        .main-album-item.collage-lead { grid-column: span 4; grid-row: span 6; }
+        .main-album-item.collage-wide { grid-column: span 5; grid-row: span 3; }
+        .main-album-item.collage-tall { grid-column: span 3; grid-row: span 6; }
+        .main-album-item.collage-square { grid-column: span 3; grid-row: span 3; }
+        .main-album-item.collage-panorama { grid-column: span 6; grid-row: span 3; }
+        .main-album-item.collage-feature { grid-column: span 6; grid-row: span 5; }
+        .main-album-item.collage-finale { grid-column: span 6; grid-row: span 4; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
@@ -949,9 +954,14 @@ export default function Home() {
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
-          .main-album { grid-template-columns: repeat(2, 1fr); }
-          .main-album-item { min-height: 0; }
-          .main-album-item.mobile-full-width { grid-column: 1 / -1; }
+          .main-album { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 16.5vw; }
+          .main-album-item.collage-lead { grid-column: span 3; grid-row: span 5; }
+          .main-album-item.collage-wide { grid-column: span 3; grid-row: span 3; }
+          .main-album-item.collage-tall { grid-column: span 3; grid-row: span 5; }
+          .main-album-item.collage-square { grid-column: span 3; grid-row: span 3; }
+          .main-album-item.collage-panorama { grid-column: span 6; grid-row: span 3; }
+          .main-album-item.collage-feature { grid-column: span 3; grid-row: span 5; }
+          .main-album-item.collage-finale { grid-column: span 6; grid-row: span 4; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1186,9 +1196,9 @@ export default function Home() {
       </div>
 
       {/* MAIN PHOTO ALBUM */}
-      <div className="main-album" aria-label="Photo album from the Mongolia expedition">
+      <div id="main-album" className="main-album" aria-label="Photo album from the Mongolia expedition">
         {MAIN_ALBUM_IMAGES.map((image) => (
-          <div className={`main-album-item ${image.orientation}${image.mobileFullWidth ? ' mobile-full-width' : ''}`} key={image.src}>
+          <div className={`main-album-item ${image.orientation} collage-${image.collage}`} key={image.src}>
             <button
               type="button"
               className="image-button"
