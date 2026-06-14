@@ -47,7 +47,7 @@ export type Booking = {
   onlinePaidUsd: number;
   familyCashDueUsd: number;
   stripeReference?: string;
-  formSource: 'Formspree' | 'Direct form' | 'Manual';
+  formSource: 'Website form' | 'Direct form' | 'Manual';
   submittedAt: string;
   paymentReceivedAt?: string;
   notes: string;
@@ -123,8 +123,8 @@ export const emailTemplates: { key: EmailTemplateKey; name: string; subject: str
 export const stackDecisions = [
   {
     layer: 'Current intake',
-    choice: 'Keep Formspree for now',
-    why: 'It already notifies Rob and receives the public booking form. Treat it as a temporary intake pipe, not the source of truth.',
+    choice: 'Direct website form into ops',
+    why: 'The public application now writes to Supabase first, then Resend sends confirmations. Third-party form intake is no longer in the live booking path.',
   },
   {
     layer: 'Source of truth',
@@ -204,7 +204,7 @@ export const bookings: Booking[] = [
     onlinePaidUsd: 959,
     familyCashDueUsd: 1140,
     stripeReference: 'cs_live_example_001',
-    formSource: 'Formspree',
+    formSource: 'Website form',
     submittedAt: '2026-06-09T14:22:00Z',
     paymentReceivedAt: '2026-06-09T14:36:00Z',
     notes: 'Arrives in Ulaanbaatar two days early. Asked about borrowing riding helmet.',
@@ -235,7 +235,7 @@ export const bookings: Booking[] = [
     onlineDueUsd: 1918,
     onlinePaidUsd: 0,
     familyCashDueUsd: 2280,
-    formSource: 'Formspree',
+    formSource: 'Website form',
     submittedAt: '2026-06-10T09:12:00Z',
     notes: 'Travelling as a couple. Needs reassurance about beginner riding level.',
     emails: [

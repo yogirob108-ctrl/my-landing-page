@@ -38,7 +38,7 @@ export default function PrivacyPolicy() {
           },
           {
             title: '5. Third-Party Services',
-            body: 'We use Formspree (formspree.io) to receive and store form submissions. Formspree acts as a data processor on our behalf and stores your form data on secure servers. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. Please refer to Formspree\'s and Stripe\'s respective privacy policies for details on how they handle your data.',
+            body: 'We store booking and lead submissions in our private 8 Lakes Tours operations database hosted on Supabase. We use Resend (resend.com) to send transactional emails such as application confirmations and internal booking notifications. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. Please refer to Supabase, Resend, and Stripe\'s respective privacy policies for details on how they handle data as our processors.',
           },
           {
             title: '6. Data Retention',

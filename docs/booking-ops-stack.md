@@ -14,7 +14,7 @@ Build a small owned operating system for the wider Adventure Therapy organisatio
 
 - Supabase project name: `adventure therapy`, used for the whole organisation.
 - 8 Lakes Tours is the first tour/project in that shared ops database.
-- The public booking form currently submits to Formspree.
+- The public booking form now submits directly to `/api/bookings`, writes to Supabase `/ops`, then sends notifications through Resend.
 - Stripe payment is currently a payment link flow.
 - Customers pay the online/operator share online and bring the local host-family share in cash.
 - Rob is the human point of contact for tour operations.
@@ -25,7 +25,7 @@ Build a small owned operating system for the wider Adventure Therapy organisatio
 | Layer | Choice | Notes |
 | --- | --- | --- |
 | Public site | Existing Next.js app | Keep the marketing site and booking entry point in one repo for now. |
-| Intake | Formspree bridge first, direct API later | Do not rip out the working form until the ops workflow is proven. |
+| Intake | Direct `/api/bookings` submission | Website applications save to `/ops` before payment; Resend handles email notifications. |
 | Database | Supabase Postgres | Own customers, bookings, payments, email logs, and task records. |
 | Auth | Supabase Auth | Protect `/ops` before any real customer data is displayed. |
 | Email | Resend | Send transactional templates from `info@8lakestours.com`; store provider IDs and body snapshots. |
@@ -97,8 +97,8 @@ create table bookings (
   riding_experience text,
   dietary_notes text,
   notes text,
-  form_source text not null default 'formspree',
-  formspree_submission_id text,
+  form_source text not null default 'website',
+  legacy_submission_id text,
   total_trip_value_usd integer not null default 2099,
   online_due_usd integer not null default 959,
   online_paid_usd integer not null default 0,
@@ -291,7 +291,7 @@ Implemented as `/ops` with sample data only:
 
 ### Phase 3 — Intake/payment integrations
 
-- Connect Formspree webhook or replace Formspree with `/api/bookings`.
+- Keep `/api/bookings` as the direct intake path and add Stripe webhook reconciliation next.
 - Add Stripe webhook route.
 - Match payment by booking reference/email and amount.
 - Update booking status and payment rows.
@@ -319,7 +319,6 @@ SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
-FORMSPREE_WEBHOOK_SECRET=
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_ALLOWED_USER_IDS=
 OPS_ALLOWED_EMAILS=rob@example.com,henry@example.com
@@ -331,4 +330,4 @@ OPS_ALLOWED_EMAILS=rob@example.com,henry@example.com
 - Never expose Supabase service role keys to the browser.
 - Email event logs store full body snapshots; treat them as customer data.
 - Stripe webhooks must verify signatures.
-- Formspree webhook ingestion must verify a shared secret or move to direct API submission.
+- Direct `/api/bookings` ingestion must save the booking before any payment or notification side effects.

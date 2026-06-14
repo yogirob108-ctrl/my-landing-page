@@ -217,7 +217,7 @@ export async function getOpsDataset(): Promise<OpsDataset> {
       onlinePaidUsd: row.online_paid_usd,
       familyCashDueUsd: row.family_cash_due_usd,
       stripeReference: payment?.stripe_checkout_session_id ?? payment?.stripe_payment_intent_id ?? undefined,
-      formSource: row.form_source === 'manual' ? 'Manual' : row.form_source === 'direct' ? 'Direct form' : 'Formspree',
+      formSource: row.form_source === 'manual' ? 'Manual' : row.form_source === 'direct' ? 'Direct form' : 'Website form',
       submittedAt: row.submitted_at,
       paymentReceivedAt: payment?.paid_at ?? undefined,
       notes: row.notes ?? customer?.notes ?? '',

@@ -42,6 +42,9 @@ export default async function OpsDashboardPage() {
   const leads = dataset.leads;
   const metrics = getOpsMetrics(bookings);
   const configMessage = missingConfigMessage(dataset.mode);
+  const awaitingOnlinePayment = bookings.filter((booking) => booking.onlinePaidUsd < booking.onlineDueUsd).length;
+  const onlinePaid = bookings.filter((booking) => booking.onlinePaidUsd >= booking.onlineDueUsd && booking.onlineDueUsd > 0).length;
+  const readyForPrep = bookings.filter((booking) => booking.onlinePaidUsd >= booking.onlineDueUsd && booking.tasks.some((task) => !task.done)).length;
 
   return (
     <main className="cms-shell">
@@ -60,6 +63,22 @@ export default async function OpsDashboardPage() {
         <Metric label="Leads" value={leads.length.toString()} />
         <Metric label="Guests" value={metrics.guests.toString()} />
         <Metric label="Online paid" value={money.format(metrics.onlinePaid)} />
+      </section>
+
+      <section className="flow-panel" aria-label="Booking operations flow">
+        <div className="panel-head">
+          <div>
+            <p className="mini">Clear flow</p>
+            <h2>Application → online payment → confirmation → host-family cash reminder.</h2>
+          </div>
+          <span>{dataset.mode === 'supabase' ? 'Live workflow' : 'Sample workflow'}</span>
+        </div>
+        <div className="flow-grid">
+          <FlowStep number="1" label="Application saved" value={`${bookings.length} in ops`} note="Website form writes here first. No external form service in the live path." />
+          <FlowStep number="2" label="Online reservation" value={`${awaitingOnlinePayment} awaiting`} note="$959 online is the operator/reservation payment." />
+          <FlowStep number="3" label="Payment confirmed" value={`${onlinePaid} paid`} note="Mark paid manually until the Stripe webhook is wired." />
+          <FlowStep number="4" label="Prep & local cash" value={`${readyForPrep} need prep`} note="Remind guest to bring $1,140 clean USD for the family." />
+        </div>
       </section>
 
       <section className="table-panel leads-panel">
@@ -139,10 +158,16 @@ export default async function OpsDashboardPage() {
         h1, h2, p { margin-top: 0; } h1, h2 { color: #fff8ea; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300; line-height: 0.98; }
         h1 { font-size: clamp(2.7rem, 11vw, 5.5rem); margin-bottom: 0; } h2 { font-size: clamp(1.55rem, 4vw, 2.7rem); max-width: 760px; }
         button, .filter-row a { border: 1px solid rgba(200,169,110,0.34); background: rgba(200,169,110,0.1); color: #c8a96e; border-radius: 999px; padding: 0.72rem 0.9rem; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68rem; text-decoration: none; cursor: pointer; }
-        .warning-banner, .table-panel, .metric, .create-panel { border: 1px solid rgba(200,169,110,0.18); background: rgba(233,225,211,0.045); border-radius: 22px; box-shadow: 0 18px 70px rgba(0,0,0,0.22); }
+        .warning-banner, .table-panel, .metric, .create-panel, .flow-panel { border: 1px solid rgba(200,169,110,0.18); background: rgba(233,225,211,0.045); border-radius: 22px; box-shadow: 0 18px 70px rgba(0,0,0,0.22); }
         .warning-banner { max-width: 1360px; margin: 0 auto 0.8rem; padding: 0.9rem; color: #ffcf8d; line-height: 1.55; }
         .metrics { max-width: 1360px; margin: 0 auto 0.8rem; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0.65rem; }
         .metric { padding: 0.9rem; } .metric span { display: block; color: rgba(233,225,211,0.62); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; } .metric strong { color: #fff8ea; font-size: 1.8rem; font-weight: 400; }
+        .flow-panel { max-width: 1360px; margin: 0 auto 0.8rem; padding: 0.9rem; }
+        .flow-grid { display: grid; gap: 0.6rem; }
+        .flow-step { border: 1px solid rgba(233,225,211,0.075); background: rgba(0,0,0,0.22); border-radius: 18px; padding: 0.9rem; display: grid; gap: 0.35rem; }
+        .flow-step-top { display: flex; align-items: center; gap: 0.55rem; }
+        .flow-number { display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 999px; background: #c8a96e; color: #080806; font-size: 0.72rem; font-weight: 700; }
+        .flow-step strong { color: #fff8ea; font-weight: 500; } .flow-step b { color: #c8a96e; font-size: 1.25rem; font-weight: 500; } .flow-step p { color: rgba(233,225,211,0.62); line-height: 1.45; margin: 0; }
         .create-panel { max-width: 1360px; margin: 0 auto 0.8rem; padding: 0.9rem; display: grid; gap: 0.7rem; }
         .create-panel h2 { margin-bottom: 0; }
         .create-panel form { display: grid; gap: 0.55rem; }
@@ -163,7 +188,7 @@ export default async function OpsDashboardPage() {
         .status { display: inline-flex; white-space: nowrap; border: 1px solid rgba(200,169,110,0.25); color: #fff8ea; border-radius: 999px; padding: 0.38rem 0.55rem; font-size: 0.58rem; letter-spacing: 0.09em; text-transform: uppercase; }
         .status-confirmed, .status-prep-sent, .status-ready-for-departure { background: rgba(73,128,88,0.2); border-color: rgba(73,128,88,0.55); }
         .status-awaiting-payment { background: rgba(255,180,80,0.12); border-color: rgba(255,180,80,0.35); }
-        @media (min-width: 780px) { .metrics { grid-template-columns: repeat(4,minmax(0,1fr)); } .create-panel { grid-template-columns: 260px 1fr; align-items: end; } .create-panel form { grid-template-columns: repeat(6,minmax(0,1fr)) auto; } .lead-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .table-row { grid-template-columns: 0.9fr 1.4fr 1.5fr 1.1fr 1.1fr 1fr; align-items: center; } .table-head { display: grid; } .table-panel { padding: 1rem; } }
+        @media (min-width: 780px) { .metrics { grid-template-columns: repeat(4,minmax(0,1fr)); } .flow-grid { grid-template-columns: repeat(4,minmax(0,1fr)); } .create-panel { grid-template-columns: 260px 1fr; align-items: end; } .create-panel form { grid-template-columns: repeat(6,minmax(0,1fr)) auto; } .lead-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .table-row { grid-template-columns: 0.9fr 1.4fr 1.5fr 1.1fr 1.1fr 1fr; align-items: center; } .table-head { display: grid; } .table-panel { padding: 1rem; } }
       `}</style>
     </main>
   );
@@ -171,6 +196,16 @@ export default async function OpsDashboardPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return <article className="metric"><span>{label}</span><strong>{value}</strong></article>;
+}
+
+function FlowStep({ number, label, value, note }: { number: string; label: string; value: string; note: string }) {
+  return (
+    <article className="flow-step">
+      <div className="flow-step-top"><span className="flow-number">{number}</span><strong>{label}</strong></div>
+      <b>{value}</b>
+      <p>{note}</p>
+    </article>
+  );
 }
 
 function Status({ status }: { status: string }) {

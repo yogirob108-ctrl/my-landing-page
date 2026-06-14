@@ -456,13 +456,6 @@ export default function Home() {
       setBookingReference(payload.reference);
       setFormSubmitted(true);
 
-      const notificationData = new FormData(form);
-      notificationData.set('ops_reference', payload.reference);
-      void fetch('https://formspree.io/f/xnjorabj', {
-        method: 'POST',
-        body: notificationData,
-        headers: { Accept: 'application/json' },
-      }).catch(() => undefined);
     } catch (error) {
       setFormError(error instanceof Error ? error.message : 'The application could not be saved. Please try again or email info@8lakestours.com.');
     } finally {
@@ -1449,7 +1442,7 @@ export default function Home() {
             </div>
             </fieldset>
 
-            {/* Submit application to Formspree */}
+            {/* Submit application to ops */}
             {!formSubmitted ? (
               <button
                 type="submit"
