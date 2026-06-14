@@ -1263,7 +1263,7 @@ export default function Home() {
         </div>
         <div className="trust-card-founder reveal reveal-delay-1">
           <span className="section-eyebrow">Who You&apos;re Booking With</span>
-          <h2 className="section-title">Robert, the Family<br /><em>&amp; Horse Adventures</em></h2>
+          <h2 className="section-title">Robert, the Family<br /><em>&amp; 8 Lakes Tours</em></h2>
           <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family payment goes directly to your hosts in Mongolia.</p>
           <p style={{marginTop:'1rem'}}>All tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>.</p>
           <div className="trust-actions">
