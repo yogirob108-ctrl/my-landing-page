@@ -1,8 +1,11 @@
 "use client";
 import Image from 'next/image';
+import Script from 'next/script';
 import { useEffect, useState } from 'react';
 
-const STRIPE_LINK = 'https://buy.stripe.com/9B628k8UFarmakM1LT0gw03';
+const STRIPE_LINK = 'https://buy.stripe.com/4gM8wI2whczu9gI1LT0gw04';
+const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TiGFd3OYuYvjeqEw1PHV27M';
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 
 const BASE_PRICE_USD = 2099;
 const BASE_ONLINE_PAYMENT_USD = 959;
@@ -266,8 +269,7 @@ export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [checkoutError, setCheckoutError] = useState('');
+  const [bookingReference, setBookingReference] = useState('');
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -411,45 +413,37 @@ export default function Home() {
     };
   }, []);
 
-  const submitToFormspree = async (form: HTMLFormElement) => {
+  const submitApplication = async (form: HTMLFormElement) => {
     if (formSubmitted) return;
     setFormError('');
     setFormSubmitting(true);
     try {
-      const response = await fetch('https://formspree.io/f/xnjorabj', {
+      const formData = new FormData(form);
+      const response = await fetch('/api/bookings', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
       });
+      const payload = await response.json().catch(() => null) as { ok?: boolean; reference?: string; error?: string } | null;
 
-      if (!response.ok) {
-        const payload = await response.json().catch(() => null) as { errors?: { message?: string }[]; error?: string } | null;
-        const message = payload?.errors?.[0]?.message || payload?.error || 'The application could not be sent. Please try again or email info@8lakestours.com.';
-        throw new Error(message);
+      if (!response.ok || !payload?.ok || !payload.reference) {
+        throw new Error(payload?.error || 'The application could not be saved. Please try again or email info@8lakestours.com.');
       }
 
+      setBookingReference(payload.reference);
       setFormSubmitted(true);
+
+      const notificationData = new FormData(form);
+      notificationData.set('ops_reference', payload.reference);
+      void fetch('https://formspree.io/f/xnjorabj', {
+        method: 'POST',
+        body: notificationData,
+        headers: { Accept: 'application/json' },
+      }).catch(() => undefined);
     } catch (error) {
-      setFormError(error instanceof Error ? error.message : 'The application could not be sent. Please try again or email info@8lakestours.com.');
+      setFormError(error instanceof Error ? error.message : 'The application could not be saved. Please try again or email info@8lakestours.com.');
     } finally {
       setFormSubmitting(false);
-    }
-  };
-
-  const startStripeCheckout = async () => {
-    if (!canPay || checkoutLoading) return;
-
-    setCheckoutError('');
-    setCheckoutLoading(true);
-
-    try {
-      const checkoutUrl = new URL(STRIPE_LINK);
-      checkoutUrl.searchParams.set('prefilled_email', email.trim());
-      checkoutUrl.searchParams.set('client_reference_id', `8-lakes-${Date.now()}`);
-      window.location.assign(checkoutUrl.toString());
-    } catch (error) {
-      setCheckoutError(error instanceof Error ? error.message : 'Stripe checkout could not start. Please try again.');
-      setCheckoutLoading(false);
     }
   };
 
@@ -839,6 +833,9 @@ export default function Home() {
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
         .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
+        .stripe-buy-button-frame { min-height: 230px; transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-buy-button-frame.locked { opacity: 0.42; filter: grayscale(0.2); pointer-events: none; }
+        .stripe-link-fallback { display: inline-flex; justify-content: center; margin-top: 0.75rem; color: rgba(245,240,232,0.58); font-size: 0.68rem; text-decoration: underline; text-underline-offset: 3px; }
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
@@ -1324,7 +1321,7 @@ export default function Home() {
           <span className="section-eyebrow">Application</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
           <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>We ask for a few details so we can match riders safely, prepare the host family, and send the right confirmation notes.</p>
-          <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitToFormspree(e.currentTarget); }}>
+          <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitApplication(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
             <input type="hidden" name="display_online_payment" value={pricing.onlinePayment} />
@@ -1431,7 +1428,8 @@ export default function Home() {
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'3px', textAlign:'center'}}>
-                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Application received — complete your online booking payment below</p>
+                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Application saved to ops — complete your online booking payment below</p>
+                {bookingReference && <p style={{fontSize:'0.68rem', color:'rgba(245,240,232,0.62)', marginTop:'0.4rem'}}>Reference: {bookingReference}</p>}
               </div>
             )}
             {formError && <p className="form-error">{formError}</p>}
@@ -1445,30 +1443,14 @@ export default function Home() {
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
               <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
-                <button
-                  type="button"
-                  className="stripe-checkout-preview"
-                  disabled={!canPay || checkoutLoading}
-                  onClick={startStripeCheckout}
-                >
-                  <span className="stripe-preview-top">
-                    <span className="stripe-preview-wordmark">stripe</span>
-                    <span className="stripe-preview-secure">Secure checkout</span>
-                  </span>
-                  <span className="stripe-preview-body">
-                    <span className="stripe-preview-label">Online payment now</span>
-                    <span className="stripe-preview-amount">
-                      $959.00
-                      <span>One-time payment</span>
-                    </span>
-                    <span className="stripe-card-row" aria-hidden="true">
-                      <span>VISA</span>
-                      <span>MC</span>
-                      <span>AMEX</span>
-                      <span>Apple Pay</span>
-                    </span>
-                  </span>
-                </button>
+                <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
+                <div
+                  className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
+                  dangerouslySetInnerHTML={{
+                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-application'}"></stripe-buy-button>`,
+                  }}
+                />
+                <a className="stripe-link-fallback" href={STRIPE_LINK}>Open Stripe checkout</a>
                 {!canPay && (
                   <div
                     className="checkout-lock-overlay"
@@ -1479,7 +1461,6 @@ export default function Home() {
                     </p>
                   </div>
                 )}
-                {checkoutError && <p className="checkout-error">{checkoutError}</p>}
               </div>
             </div>
             <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
