@@ -744,15 +744,15 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
-        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: minmax(78px, 7vw); grid-auto-flow: dense; gap: 3px; background: #0f0f0d; }
-        .main-album-item { position: relative; overflow: hidden; background: var(--ink); min-height: 0; }
-        .main-album-item.collage-lead { grid-column: span 4; grid-row: span 6; }
-        .main-album-item.collage-wide { grid-column: span 5; grid-row: span 3; }
-        .main-album-item.collage-tall { grid-column: span 3; grid-row: span 6; }
-        .main-album-item.collage-square { grid-column: span 3; grid-row: span 3; }
-        .main-album-item.collage-panorama { grid-column: span 6; grid-row: span 3; }
-        .main-album-item.collage-feature { grid-column: span 6; grid-row: span 5; }
-        .main-album-item.collage-finale { grid-column: span 6; grid-row: span 4; }
+        .main-album { padding: 3px; column-count: 4; column-gap: 3px; background: #0f0f0d; }
+        .main-album-item { position: relative; overflow: hidden; background: var(--ink); display: block; width: 100%; margin: 0 0 3px; break-inside: avoid; page-break-inside: avoid; transform: translateZ(0); }
+        .main-album-item.collage-lead { aspect-ratio: 3 / 4.25; }
+        .main-album-item.collage-wide { aspect-ratio: 4 / 3; }
+        .main-album-item.collage-tall { aspect-ratio: 3 / 4.6; }
+        .main-album-item.collage-square { aspect-ratio: 1 / 1; }
+        .main-album-item.collage-panorama { aspect-ratio: 16 / 10; }
+        .main-album-item.collage-feature { aspect-ratio: 3 / 4.1; }
+        .main-album-item.collage-finale { aspect-ratio: 4 / 5; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
@@ -954,14 +954,10 @@ export default function Home() {
           .footer-tagline { font-size: 0.68rem; letter-spacing: 0.16em; max-width: 320px; }
           .footer-cta { width: 100%; justify-content: center; margin-top: 1.5rem; }
           .footer-links { margin-top: 2.5rem; gap: 1rem 1.2rem; }
-          .main-album { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 16.5vw; }
-          .main-album-item.collage-lead { grid-column: span 3; grid-row: span 5; }
-          .main-album-item.collage-wide { grid-column: span 3; grid-row: span 3; }
-          .main-album-item.collage-tall { grid-column: span 3; grid-row: span 5; }
-          .main-album-item.collage-square { grid-column: span 3; grid-row: span 3; }
-          .main-album-item.collage-panorama { grid-column: span 6; grid-row: span 3; }
-          .main-album-item.collage-feature { grid-column: span 3; grid-row: span 5; }
-          .main-album-item.collage-finale { grid-column: span 6; grid-row: span 4; }
+          .main-album { column-count: 2; column-gap: 3px; }
+          .main-album-item { margin-bottom: 3px; }
+          .main-album-item.collage-wide { aspect-ratio: 1 / 1; }
+          .main-album-item.collage-panorama { aspect-ratio: 4 / 3; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
