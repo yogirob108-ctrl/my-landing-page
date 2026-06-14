@@ -167,7 +167,6 @@ const STRIP_IMAGES = [
 
 const MAIN_ALBUM_IMAGES = [
   { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait' },
-  { src: '/images/valley-road-portrait.jpg', alt: 'White van crossing a remote valley road in Mongolia', orientation: 'portrait', objectPosition: '80% center' },
   { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape' },
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center' },
   { src: '/images/expedition-originals/ger-sunset-wide-original.jpg', alt: 'Wide ger camp sunset', orientation: 'landscape' },
