@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
+import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 
 const TOTAL_TRIP_VALUE_USD = 2099;
 const ONLINE_DUE_USD = 959;
@@ -118,6 +119,50 @@ export async function POST(request: Request) {
     body: `${firstName} ${lastName} submitted the public reservation form and is awaiting online payment.`,
     created_by: 'website-form',
   });
+
+  const tourDate = clean(payload.tour_date) || 'TBC';
+  const internalEmail = bookingInternalEmail({
+    reference,
+    firstName,
+    lastName,
+    email,
+    phone: clean(payload.phone),
+    tourDate,
+    ridingExperience: clean(payload.riding_experience),
+    notes: clean(payload.notes),
+  });
+  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate });
+  const internalRecipients = getInternalEmailRecipients();
+
+  const internalResult = await sendEmail({
+    to: internalRecipients,
+    replyTo: email,
+    ...internalEmail,
+  });
+  const customerEmailResult = await sendEmail({
+    to: email,
+    replyTo: internalRecipients[0],
+    ...customerEmail,
+  });
+
+  await supabase.from('booking_events').insert([
+    {
+      booking_id: booking.id,
+      event_type: internalResult.sent ? 'email' : 'system',
+      direction: 'outbound',
+      title: internalResult.sent ? 'Internal notification email sent' : 'Internal notification email failed',
+      body: internalResult.sent ? `Resend email id: ${internalResult.id ?? 'unknown'}` : internalResult.error,
+      created_by: 'resend',
+    },
+    {
+      booking_id: booking.id,
+      event_type: customerEmailResult.sent ? 'email' : 'system',
+      direction: 'outbound',
+      title: customerEmailResult.sent ? 'Customer confirmation email sent' : 'Customer confirmation email failed',
+      body: customerEmailResult.sent ? `Resend email id: ${customerEmailResult.id ?? 'unknown'}` : customerEmailResult.error,
+      created_by: 'resend',
+    },
+  ]);
 
   revalidatePath('/ops');
 
