@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { createTask, getOpsTasks, kanbanStatuses, updateTaskStatus, type KanbanStatus, type OpsTask } from '@/lib/ops-workspace';
 import { hasOpsPinSession } from '@/lib/ops-pin';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Kanban | 8 Lakes Ops',
   description: 'Internal 8 Lakes Tours todo and kanban board.',

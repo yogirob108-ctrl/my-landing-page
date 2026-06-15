@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { createInfluencer, getInfluencers, influencerStatuses, updateInfluencerStatus, type InfluencerRecord } from '@/lib/ops-workspace';
 import { hasOpsPinSession } from '@/lib/ops-pin';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Influencers | 8 Lakes Ops',
   description: 'Internal 8 Lakes Tours partnership and influencer tracker.',
