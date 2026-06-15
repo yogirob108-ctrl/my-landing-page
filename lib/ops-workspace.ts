@@ -61,7 +61,7 @@ export const influencerStatuses: { key: InfluencerStatus; label: string }[] = [
 ];
 
 function lineValue(notes: string | null | undefined, label: string, fallback = '') {
-  return notes?.match(new RegExp(`^${label}:\\s*(.*)$`, 'im'))?.[1]?.trim() || fallback;
+  return notes?.match(new RegExp(`^${label}:[ \\t]*([^\\r\\n]*)`, 'im'))?.[1]?.trim() || fallback;
 }
 
 function taskNotes(input: Omit<OpsTask, 'id' | 'createdAt'>) {
