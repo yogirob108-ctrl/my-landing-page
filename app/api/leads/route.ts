@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { getInternalEmailRecipients, leadCustomerEmail, leadInternalEmail, sendEmail } from '@/lib/email';
@@ -76,7 +75,6 @@ export async function POST(request: Request) {
     sendEmail({ to: email, replyTo: internalRecipients[0], ...customerEmail }),
   ]);
 
-  revalidatePath('/ops');
 
   return NextResponse.json({ ok: true });
 }

@@ -76,9 +76,9 @@ export function bookingInternalEmail(input: {
         <div style="border:1px solid #e2d5bd;border-radius:14px;padding:14px 16px;margin:18px 0;background:#fffaf1">
           <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;color:#8a6a2c">Ops flow</p>
           <ol style="margin:0;padding-left:20px">
-            <li>Application saved in /ops as <strong>${escapeHtml(input.reference)}</strong>.</li>
+            <li>Application saved in the Adventure Therapy ops database as <strong>${escapeHtml(input.reference)}</strong>.</li>
             <li>Customer receives this confirmation and pays <strong>$959 online</strong>.</li>
-            <li>Rob/Henry confirms payment in Stripe and marks the booking paid in /ops until webhook automation is added.</li>
+            <li>Rob/Henry confirms payment in Stripe and marks the booking paid in the Adventure Therapy ops dashboard until webhook automation is added.</li>
             <li>Customer brings <strong>$1,140 clean USD cash</strong> for the host family in Mongolia.</li>
           </ol>
         </div>

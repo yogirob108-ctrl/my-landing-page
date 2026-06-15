@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
@@ -164,7 +163,6 @@ export async function POST(request: Request) {
     },
   ]);
 
-  revalidatePath('/ops');
 
   return NextResponse.json({ ok: true, reference });
 }
