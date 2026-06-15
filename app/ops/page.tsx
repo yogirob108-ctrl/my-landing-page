@@ -53,7 +53,11 @@ export default async function OpsDashboardPage() {
           <p className="mini">8 Lakes Ops CMS</p>
           <h1>Bookings</h1>
         </div>
-        <form action={signOut}><button type="submit">Lock</button></form>
+        <nav className="ops-nav" aria-label="Ops sections">
+          <Link href="/ops/kanban">Kanban</Link>
+          <Link href="/ops/influencers">Influencers</Link>
+          <form action={signOut}><button type="submit">Lock</button></form>
+        </nav>
       </header>
 
       {configMessage && <section className="warning-banner">{configMessage}</section>}
@@ -154,6 +158,8 @@ export default async function OpsDashboardPage() {
         :root { color-scheme: dark; }
         .cms-shell { min-height: 100vh; background: #080806; color: #e9e1d3; font-family: var(--font-jost), Jost, sans-serif; padding: 0.9rem; }
         .topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; max-width: 1360px; margin: 0 auto 0.8rem; }
+        .ops-nav { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; }
+        .ops-nav a { border: 1px solid rgba(200,169,110,0.34); background: rgba(200,169,110,0.1); color: #c8a96e; border-radius: 999px; padding: 0.72rem 0.9rem; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68rem; text-decoration: none; }
         .mini { color: #c8a96e; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.64rem; font-weight: 600; margin: 0 0 0.3rem; }
         h1, h2, p { margin-top: 0; } h1, h2 { color: #fff8ea; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-weight: 300; line-height: 0.98; }
         h1 { font-size: clamp(2.7rem, 11vw, 5.5rem); margin-bottom: 0; } h2 { font-size: clamp(1.55rem, 4vw, 2.7rem); max-width: 760px; }
