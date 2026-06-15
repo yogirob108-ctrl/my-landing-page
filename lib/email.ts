@@ -79,7 +79,7 @@ export function bookingInternalEmail(input: {
             <li>Application saved in the Adventure Therapy ops database as <strong>${escapeHtml(input.reference)}</strong>.</li>
             <li>Customer receives this confirmation and pays <strong>$959 online</strong>.</li>
             <li>Rob/Henry confirms payment in Stripe and marks the booking paid in the Adventure Therapy ops dashboard until webhook automation is added.</li>
-            <li>Customer brings <strong>$1,140 clean USD cash</strong> for the host family in Mongolia.</li>
+            <li>Customer brings <strong>$1,200 clean USD cash</strong> for the host family in Mongolia.</li>
           </ol>
         </div>
 
@@ -106,10 +106,10 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
 
         <div style="border:1px solid #e2d5bd;border-radius:14px;padding:16px 18px;margin:20px 0;background:#fffaf1">
           <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:0.08em;font-size:12px;color:#8a6a2c">How payment works</p>
-          <p style="margin:0 0 10px">The 2026 trip price is <strong>$2,099 per person</strong>, split into two parts:</p>
+          <p style="margin:0 0 10px">The 2026 trip price is <strong>$2,159 per person</strong>, split into two parts:</p>
           <ul style="margin:0;padding-left:20px">
             <li><strong>$959 paid online</strong> to reserve your place with 8 Lakes Tours.</li>
-            <li><strong>$1,140 paid locally in cash</strong> directly to the nomadic host family in Mongolia.</li>
+            <li><strong>$1,200 paid locally in cash</strong> directly to the nomadic host family in Mongolia.</li>
           </ul>
         </div>
 

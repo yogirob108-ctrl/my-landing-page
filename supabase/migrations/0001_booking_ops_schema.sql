@@ -72,10 +72,10 @@ create table bookings (
   notes text,
   form_source text not null default 'website',
   legacy_submission_id text,
-  total_trip_value_usd integer not null default 2099,
+  total_trip_value_usd integer not null default 2159,
   online_due_usd integer not null default 959,
   online_paid_usd integer not null default 0,
-  family_cash_due_usd integer not null default 1140,
+  family_cash_due_usd integer not null default 1200,
   submitted_at timestamptz not null default now(),
   confirmed_at timestamptz,
   created_at timestamptz not null default now(),
@@ -162,8 +162,8 @@ insert into tour_projects (
   '8 Lakes Tours',
   'info@8lakestours.com',
   959,
-  1140,
-  2099
+  1200,
+  2159
 ) on conflict (slug) do nothing;
 
 alter table tour_projects enable row level security;

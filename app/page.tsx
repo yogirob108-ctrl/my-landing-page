@@ -7,9 +7,9 @@ const STRIPE_LINK = 'https://buy.stripe.com/4gM8wI2whczu9gI1LT0gw04';
 const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TiGFd3OYuYvjeqEw1PHV27M';
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 
-const BASE_PRICE_USD = 2099;
+const BASE_PRICE_USD = 2159;
 const BASE_ONLINE_PAYMENT_USD = 959;
-const BASE_LOCAL_FAMILY_PAYMENT_USD = 1140;
+const BASE_LOCAL_FAMILY_PAYMENT_USD = 1200;
 
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
@@ -489,7 +489,7 @@ export default function Home() {
         },
         offers: {
           '@type': 'Offer',
-          price: '2099',
+          price: '2159',
           priceCurrency: 'USD',
           availability: 'https://schema.org/LimitedAvailability',
           validFrom: '2026-01-01',
@@ -522,7 +522,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,099 USD per person. A $959 online booking payment confirms your place with Horse Adventures. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with Horse Adventures. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
         ],
       },
     ],
@@ -1573,9 +1573,9 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does payment work?', a:'The current 2026 rate is $2,099 per person. You pay $959 online to Horse Adventures to confirm your place. The remaining $1,140 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
-            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,140 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'The $959 online booking payment is non-refundable once your place is confirmed. The $1,140 local family payment is paid in cash in Mongolia and is not collected online by Horse Adventures.'},
+            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online to Horse Adventures to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
+            {q:'What is your cancellation policy?', a:'The $959 online booking payment is non-refundable once your place is confirmed. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Horse Adventures.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>

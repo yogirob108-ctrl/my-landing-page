@@ -3,9 +3,9 @@ import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 
-const TOTAL_TRIP_VALUE_USD = 2099;
+const TOTAL_TRIP_VALUE_USD = 2159;
 const ONLINE_DUE_USD = 959;
-const FAMILY_CASH_DUE_USD = 1140;
+const FAMILY_CASH_DUE_USD = 1200;
 
 type PublicBookingPayload = {
   first_name?: string;
