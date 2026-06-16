@@ -515,14 +515,14 @@ export default function Home() {
       {
         '@type': 'FAQPage',
         mainEntity: [
-          { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family portion goes directly to your hosts in Mongolia.' } },
+          { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings are supported by Adventure Therapy, the parent adventure-company behind the online booking and payment flow, while the local family portion goes directly to your hosts in Mongolia.' } },
           { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and host-family cash payment instructions.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete." } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with Horse Adventures. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours through Adventure Therapy. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
         ],
       },
     ],
@@ -1040,7 +1040,7 @@ export default function Home() {
           <span className="section-eyebrow">What This Is</span>
           <h2 className="section-title">Mongolia<br /><em>Beyond Tourism</em></h2>
           <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is a Horse Adventures expedition built for people who want to be somewhere real, not just pass through it.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is an Adventure Therapy journey built for people who want to be somewhere real, not just pass through it.</p>
           <div className="intro-points">
             <div><span className="intro-point-value">Beginner</span><p className="intro-point-label">Riders Welcome</p></div>
             <div><span className="intro-point-value">Small</span><p className="intro-point-label">Intimate Group</p></div>
@@ -1285,7 +1285,7 @@ export default function Home() {
         <div className="trust-card-founder reveal reveal-delay-1">
           <span className="section-eyebrow">Who You&apos;re Booking With</span>
           <h2 className="section-title">Robert, the Family<br /><em>&amp; 8 Lakes Tours</em></h2>
-          <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Bookings are handled online through Horse Adventures, while the local family payment goes directly to your hosts in Mongolia.</p>
+          <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Adventure Therapy supports the online booking flow and wider company structure, while the local family payment goes directly to your hosts in Mongolia.</p>
           <p style={{marginTop:'1rem'}}>All tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>.</p>
           <div className="trust-actions">
             <a className="trust-link" href="mailto:info@8lakestours.com">Email the tour team</a>
@@ -1301,7 +1301,7 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Choose Your<br /><em>2026 Expedition</em></h2>
-          <p className="section-body">Real guests have already made the journey. The 2026 Horse Adventures season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
+          <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
           <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
@@ -1315,7 +1315,7 @@ export default function Home() {
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
                 <p>Total trip price: {pricing.tourPrice} per person.</p>
-                <p>The online payment goes to Horse Adventures / 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>The online payment goes through Adventure Therapy / 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
             </details>
@@ -1560,7 +1560,7 @@ export default function Home() {
             <h2 className="section-title">Common<br /><em>Questions</em></h2>
           </div>
           {[
-            {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. The public booking side is handled online through Horse Adventures, while the local family portion is paid directly to your hosts in Mongolia."},
+            {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Adventure Therapy supports the online booking/payment system, while the local family portion is paid directly to your hosts in Mongolia."},
             {q:'Can I speak to someone before booking?', a:"Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob's Instagram at @robzaher108 while we keep tour email communication centralised through the info@ address."},
             {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and exact cash-payment instructions for the host family.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
@@ -1573,9 +1573,9 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online to Horse Adventures to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through Adventure Therapy / 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'The $959 online booking payment is non-refundable once your place is confirmed. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Horse Adventures.'},
+            {q:'What is your cancellation policy?', a:'The $959 online booking payment is non-refundable once your place is confirmed. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
@@ -1591,7 +1591,7 @@ export default function Home() {
           <div>
             <div className="footer-kicker">Mongolia · Small-group horseback expeditions</div>
             <div className="footer-logo">8 Lakes<br />Tours</div>
-            <div className="footer-tagline">A Horse Adventures expedition through the Orkhon Valley and Eight Lakes region.</div>
+            <div className="footer-tagline">An Adventure Therapy journey through the Orkhon Valley and Eight Lakes region.</div>
             <a className="footer-cta" href="#application">Reserve a Spot</a>
           </div>
           <nav className="footer-links" aria-label="Footer navigation">

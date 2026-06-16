@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   publisher: "8 Lakes Tours",
   category: "Adventure Travel",
   keywords: [
-    "Horse Adventures",
+    "Adventure Therapy",
     "Mongolia horse trekking",
     "Naiman Nuur tour",
     "Eight Lakes Mongolia",
