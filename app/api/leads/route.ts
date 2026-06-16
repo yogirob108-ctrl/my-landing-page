@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { getInternalEmailRecipients, leadCustomerEmail, leadInternalEmail, sendEmail } from '@/lib/email';
+import { isValidEmail, normalizeEmail, subscribeToNewsletter } from '@/lib/newsletter';
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
@@ -23,47 +24,26 @@ export async function POST(request: Request) {
     return jsonError('Invalid lead submission.');
   }
 
-  const email = clean(payload.email).toLowerCase();
+  const email = normalizeEmail(payload.email);
   const name = clean(payload.name);
   const source = clean(payload.source) || 'homepage_subscribe';
   const interest = clean(payload.interest) || 'Trip updates';
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!isValidEmail(email)) {
     return jsonError('Please enter a valid email address.');
   }
 
-  const [firstName = 'Subscriber', ...lastParts] = name ? name.split(/\s+/) : ['Subscriber'];
-  const lastName = lastParts.join(' ');
-  const now = new Date().toISOString();
-  const notes = [
-    'Lead/subscriber record',
-    `Status: subscribed`,
-    `Source: ${source}`,
-    `Interest: ${interest}`,
-    `Consent: ${now}`,
-  ].join('\n');
-
   const supabase = createSupabaseAdminClient();
-  const { data: existingCustomer } = await supabase
-    .from('customers')
-    .select('id, notes')
-    .eq('email', email)
-    .maybeSingle();
-
-  const record = {
-    first_name: firstName,
-    last_name: lastName,
+  const subscription = await subscribeToNewsletter(supabase, {
+    name,
     email,
-    notes: existingCustomer?.notes ? `${existingCustomer.notes}\n\n${notes}` : notes,
-    updated_at: now,
-  };
+    source,
+    interest,
+    consentContext: 'Homepage trip-updates/newsletter CTA form',
+  });
 
-  const result = existingCustomer
-    ? await supabase.from('customers').update(record).eq('id', existingCustomer.id).select('id').single()
-    : await supabase.from('customers').insert(record).select('id').single();
-
-  if (result.error || !result.data) {
-    return jsonError(result.error?.message ?? 'Lead could not be saved.', 500);
+  if (!subscription.ok) {
+    return jsonError(subscription.error, 500);
   }
 
   const internalRecipients = getInternalEmailRecipients();

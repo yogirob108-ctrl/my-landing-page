@@ -304,7 +304,7 @@ export default function Home() {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_contact_section', interest: 'Mongolia trip updates' }),
+        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: 'Mongolia field notes, trip dates, preparation emails, and Adventure Therapy updates' }),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
@@ -876,6 +876,7 @@ export default function Home() {
         .lead-form button:disabled { opacity: 0.6; cursor: default; }
         .lead-message { margin-top: 0.75rem; font-size: 0.74rem; line-height: 1.5; color: var(--gold); }
         .lead-message.error { color: #ffb4a6; }
+        .lead-privacy { margin-top: 0.75rem !important; margin-bottom: 0 !important; font-size: 0.68rem !important; line-height: 1.5 !important; color: rgba(212,207,196,0.56) !important; }
         .lightbox-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
         .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
         .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
@@ -1526,7 +1527,7 @@ export default function Home() {
               <a href="/terms" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Terms &amp; Conditions</a>
               {' '}and{' '}
               <a href="/privacy" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Privacy Policy</a>.
-              Your data will be used solely to process your booking enquiry.
+              Your data will be used to process your booking enquiry and send relevant trip/prep updates. Reply to any email to opt out of marketing updates.
             </p>
           </form>
         </div>
@@ -1553,8 +1554,8 @@ export default function Home() {
             </a>
           </div>
           <div className="lead-card-public reveal">
-            <h3>Get trip updates</h3>
-            <p>Not ready to reserve yet? Leave your email and we&apos;ll send useful Mongolia trip updates, new dates, and practical preparation notes.</p>
+            <h3>Join the field notes</h3>
+            <p>Not ready to reserve yet? Join the 8 Lakes update list for Mongolia field notes, new dates, practical prep emails, and future Adventure Therapy trips.</p>
             <form className="lead-form" onSubmit={submitLead}>
               <input
                 type="text"
@@ -1574,11 +1575,12 @@ export default function Home() {
                 required
               />
               <button type="submit" disabled={leadStatus === 'saving' || leadStatus === 'saved'}>
-                {leadStatus === 'saving' ? 'Saving…' : leadStatus === 'saved' ? 'Saved' : 'Send me updates'}
+                {leadStatus === 'saving' ? 'Saving…' : leadStatus === 'saved' ? 'Saved' : 'Join the list'}
               </button>
             </form>
-            {leadStatus === 'saved' && <p className="lead-message">✓ You&apos;re on the list. We&apos;ll only send relevant trip updates.</p>}
+            {leadStatus === 'saved' && <p className="lead-message">✓ You&apos;re on the list. We&apos;ll send only relevant trip notes and updates.</p>}
             {leadStatus === 'error' && <p className="lead-message error">{leadError}</p>}
+            <p className="lead-privacy">Applicants are added automatically too, so nobody falls through the cracks. No spam — opt out by replying to any email.</p>
           </div>
         </div>
       </section>

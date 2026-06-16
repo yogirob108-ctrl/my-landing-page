@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
+import { subscribeToNewsletter } from '@/lib/newsletter';
 
 const TOTAL_TRIP_VALUE_USD = 2159;
 const ONLINE_DUE_USD = 959;
@@ -84,16 +85,36 @@ export async function POST(request: Request) {
 
   const { data: existingCustomer } = await supabase
     .from('customers')
-    .select('id')
+    .select('id, notes')
     .eq('email', email)
     .maybeSingle();
 
+  const customerPayload = {
+    ...customerFields,
+    notes: existingCustomer?.notes
+      ? `${existingCustomer.notes}\n\n${customerFields.notes}`
+      : customerFields.notes,
+  };
+
   const customerResult = existingCustomer
-    ? await supabase.from('customers').update(customerFields).eq('id', existingCustomer.id).select('id').single()
-    : await supabase.from('customers').insert(customerFields).select('id').single();
+    ? await supabase.from('customers').update(customerPayload).eq('id', existingCustomer.id).select('id').single()
+    : await supabase.from('customers').insert(customerPayload).select('id').single();
 
   if (customerResult.error || !customerResult.data) {
     return jsonError(customerResult.error?.message ?? 'Customer record could not be saved.', 500);
+  }
+
+  const subscription = await subscribeToNewsletter(supabase, {
+    firstName,
+    lastName,
+    email,
+    source: 'booking_application_form',
+    interest: '8 Lakes Tours applicant follow-up and trip updates',
+    consentContext: 'Booking application submitted; form states applicants receive relevant trip/prep updates and can opt out by reply',
+  });
+
+  if (!subscription.ok) {
+    return jsonError(subscription.error, 500);
   }
 
   const { data: booking, error: bookingError } = await supabase.from('bookings').insert({

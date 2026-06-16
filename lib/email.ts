@@ -213,6 +213,10 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
           <li>Please plan to bring <strong>${FAMILY_CASH_USD} in clean USD notes</strong> for the host family.</li>
         </ol>
 
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Trip updates</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">We’ll keep you on the 8 Lakes update list for relevant preparation notes and future date updates. Reply any time if you do not want marketing updates.</p>
+        </div>
 
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8">
           <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Keep this reference</p>
