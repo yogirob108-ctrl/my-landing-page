@@ -213,7 +213,6 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
           <li>Please plan to bring <strong>${FAMILY_CASH_USD} in clean USD notes</strong> for the host family.</li>
         </ol>
 
-        <p style="margin:0 0 22px"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Return to booking page</a></p>
 
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8">
           <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Keep this reference</p>

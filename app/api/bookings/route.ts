@@ -1,3 +1,4 @@
+import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
@@ -29,6 +30,12 @@ function jsonError(message: string, status = 400) {
   return NextResponse.json({ ok: false, error: message }, { status });
 }
 
+function generateBookingReference() {
+  const alphabet = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const code = Array.from({ length: 5 }, () => alphabet[randomInt(alphabet.length)]).join('');
+  return `8L-${code}`;
+}
+
 export async function POST(request: Request) {
   if (!isSupabaseAdminConfigured) {
     return jsonError('Booking system is temporarily unavailable. Please email info@8lakestours.com.', 503);
@@ -52,7 +59,7 @@ export async function POST(request: Request) {
 
   const supabase = createSupabaseAdminClient();
   const now = new Date();
-  const reference = `8LT-${now.getUTCFullYear()}-${Math.floor(now.getTime() / 1000).toString().slice(-6)}`;
+  const reference = generateBookingReference();
 
   const { data: project, error: projectError } = await supabase
     .from('tour_projects')
