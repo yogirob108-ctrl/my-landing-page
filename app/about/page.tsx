@@ -27,7 +27,7 @@ const storyCards = [
 const expectationCards = [
   {
     title: 'Real adventure, optional challenge',
-    body: 'Weather can shift, horses and roads can change plans, and group dynamics matter in wild country. You may be invited outside your comfort zone, but nothing is forced. You can say no, rest, or stay closer to nomadic life for the day.',
+    body: 'Weather can shift, horses and roads can change plans, and group dynamics matter in wild country. You should arrive mentally prepared for simple conditions, physical discomfort, and flexibility. You may be invited outside your comfort zone, but nothing is forced. You can say no, rest, or stay closer to nomadic life for the day.',
   },
   {
     title: 'Remote, but not abandoned',

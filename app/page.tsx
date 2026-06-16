@@ -80,6 +80,7 @@ const PACKING_LIST = [
   'Sunscreen and lip balm with SPF',
   'Mosquito repellent',
   'Personal medication and basic toiletries',
+  'Personal first-aid kit, blister care and any painkillers/anti-inflammatory medicine you normally use',
   'Wet wipes, dry tissues and toilet paper',
   'Hand cream or Vaseline for dry weather',
   'Travel pillow if you sleep better with one',
@@ -521,7 +522,8 @@ export default function Home() {
           { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and host-family cash payment instructions.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'How flexible do I need to be?', acceptedAnswer: { '@type': 'Answer', text: 'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. Guests should arrive flexible and open-minded. You may be encouraged to step outside your comfort zone, but nothing is forced: you can say no, rest, or take a quieter day around the host family and ger life. Remote does not mean abandoned: the steppe is a hospitable living culture of neighbouring families, shared food, supplies, and mutual help.' } },
-          { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete." } },
+          { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. Guests should also be mentally prepared for simple conditions, physical discomfort, changing plans, and group life in the wild." } },
+          { '@type': 'Question', name: 'What medical supplies should I bring?', acceptedAnswer: { '@type': 'Answer', text: 'Bring your own personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but they are not a replacement for your personal medical needs.' } },
           { '@type': 'Question', name: 'Can you support vegan, lactose-free, or strict dietary requirements?', acceptedAnswer: { '@type': 'Answer', text: 'This trip is not a good fit for strict vegan travellers and may be unsuitable for anyone with serious dairy or lactose intolerance. Rural Mongolian host-family meals are traditionally meat- and dairy-heavy, including milk tea, yoghurt, cheese, meat, and other animal products. Vegetarian guests may be possible with advance notice, but fully separate vegan or dairy-free meals cannot be reliably provided in this remote setting.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
@@ -1293,7 +1295,7 @@ export default function Home() {
             <li><span className="icon">✦</span> Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
             <li><span className="icon">✦</span> Warm sleeping bag & personal camping comfort items</li>
             <li><span className="icon">✦</span> Riding layers, waterproof shell & sturdy boots</li>
-            <li><span className="icon">✦</span> Personal snacks, medication & toiletries</li>
+            <li><span className="icon">✦</span> Personal snacks, medication, first-aid kit, painkillers & toiletries</li>
             <li><span className="icon">✦</span> Cash for the local family payment and personal extras</li>
           </ul>
           <details className="packing-details">
@@ -1305,7 +1307,7 @@ export default function Home() {
             </ul>
           </details>
           <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
-            <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver and provide proof of travel insurance before the trip begins.</p>
+            <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver, provide proof of travel insurance, bring their own personal medical basics, and arrive mentally prepared for simple conditions, changing plans, physical discomfort, and group life in the wild.</p>
           </div>
         </div>
       </section>
@@ -1598,7 +1600,8 @@ export default function Home() {
             {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and exact cash-payment instructions for the host family.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'How flexible do I need to be?', a:'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. You may be encouraged to step outside your comfort zone, but nothing is forced — you can say no, rest, or take a quieter day around the host family and ger life. Remote does not mean abandoned: the steppe is a hospitable living culture of neighbouring families, shared food, supplies, and mutual help.'},
-            {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete."},
+            {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. You should also be mentally prepared for simple conditions, physical discomfort, changing plans, and sharing space with a group in the wild."},
+            {q:'What medical supplies should I bring?', a:'Bring a small personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but guests are responsible for their own personal medical basics.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.'},
             {q:'What is the weather like in the summer?', a:'Expect warm days between 15–24°C (60–75°F) and cold nights that can drop to 0–5°C (32–41°F), especially at higher altitudes. Pack layers — mornings and evenings in the Naiman Nuur region can get very cold.'},
