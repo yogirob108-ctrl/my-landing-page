@@ -50,23 +50,24 @@ function nl2br(value: string) {
 
 function emailShell({ preheader, title, intro, children, footer = true }: { preheader: string; title: string; intro?: string; children: string; footer?: boolean }) {
   return `
+    <style>html,body{margin:0!important;padding:0!important;width:100%!important;} table{border-collapse:collapse;}</style>
     <div style="display:none;max-height:0;overflow:hidden;color:transparent;opacity:0">${escapeHtml(preheader)}</div>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4efe5;margin:0;padding:14px 6px;font-family:Arial,Helvetica,sans-serif;color:#241d14">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fffaf1;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;color:#241d14">
       <tr>
-        <td align="center">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:860px;background:#fffaf1;border:1px solid #e4d5bd;border-radius:10px;overflow:hidden;box-shadow:0 14px 36px rgba(55,36,16,.10)">
+        <td align="left" style="padding:0">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:none;background:#fffaf1;border:0;border-radius:0;overflow:hidden;box-shadow:none">
             <tr>
-              <td style="background:#171209;padding:22px 24px 20px;color:#f8eedb">
+              <td style="background:#171209;padding:15px 12px 14px;color:#f8eedb;border-bottom:4px solid #c8a96e">
                 <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:#c8a96e;font-weight:700">8 Lakes Tours</p>
                 <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:34px;line-height:1.05;color:#fff8ea">${title}</h1>
                 ${intro ? `<p style="margin:14px 0 0;color:#e9dcc6;font-size:16px;line-height:1.55">${intro}</p>` : ''}
               </td>
             </tr>
             <tr>
-              <td style="padding:20px 24px 24px">
+              <td style="padding:13px 12px 16px">
                 ${children}
                 ${footer ? `
-                  <hr style="border:0;border-top:1px solid #eadcc6;margin:28px 0 18px">
+                  <hr style="border:0;border-top:1px solid #eadcc6;margin:22px 0 14px">
                   <p style="margin:0 0 6px;color:#5f513f;font-size:14px;line-height:1.55">Questions? Reply to this email or write to <a href="mailto:info@8lakestours.com" style="color:#8a5a13">info@8lakestours.com</a>.</p>
                   <p style="margin:0;color:#8b7a63;font-size:13px">8 Lakes Tours · Mongolia horse trekking · Orkhon Valley & Eight Lakes region</p>
                 ` : ''}
@@ -81,8 +82,8 @@ function emailShell({ preheader, title, intro, children, footer = true }: { preh
 
 function pill(label: string, value: string, detail: string) {
   return `
-    <td style="width:33.333%;padding:6px" valign="top">
-      <div style="border:1px solid #e1d0b1;background:#fff6e7;border-radius:8px;padding:12px;min-height:88px">
+    <td style="width:33.333%;padding:4px" valign="top">
+      <div style="border-left:4px solid #c8a96e;background:#fff6e7;border-radius:0;padding:11px;min-height:82px">
         <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;color:#8a6a2c;font-size:11px;font-weight:700">${label}</p>
         <p style="margin:0;color:#241d14;font-size:24px;font-weight:700;line-height:1">${value}</p>
         <p style="margin:8px 0 0;color:#6c5c48;font-size:13px;line-height:1.35">${detail}</p>
@@ -145,7 +146,7 @@ export function bookingInternalEmail(input: {
       intro: `<strong>${escapeHtml(name)}</strong> submitted the website form. Their place is not confirmed until the ${ONLINE_PAYMENT_USD} online payment is matched.`,
       footer: false,
       children: `
-        <div style="border:1px solid #d9c399;border-radius:8px;background:#fff3dd;padding:14px;margin-bottom:18px">
+        <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
           <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Operator checklist</p>
           <ol style="margin:0;padding-left:20px;color:#3a3024;line-height:1.7;font-size:15px">
             <li>Check Stripe for the <strong>${ONLINE_PAYMENT_USD}</strong> online booking payment.</li>
@@ -153,7 +154,7 @@ export function bookingInternalEmail(input: {
             <li>Reply personally if the application needs clarification.</li>
             <li>Make sure the guest knows to bring <strong>${FAMILY_CASH_USD} clean USD cash</strong> for the host family.</li>
           </ol>
-          <p style="margin:14px 0 0"><a href="${OPS_URL}/bookings" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:6px;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Open Adventure Therapy</a></p>
+          <p style="margin:14px 0 0"><a href="${OPS_URL}/bookings" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Open Adventure Therapy</a></p>
         </div>
 
         <h2 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:24px;margin:0 0 10px;color:#241d14">Guest details</h2>
@@ -166,7 +167,7 @@ export function bookingInternalEmail(input: {
           ${detailRow('Riding level', escapeHtml(input.ridingExperience || 'Not provided'))}
         </table>
 
-        <div style="border:1px solid #eadcc6;border-radius:8px;padding:14px;background:#fffdf8">
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8">
           <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Guest notes</p>
           <p style="margin:0;color:#3a3024;line-height:1.6">${nl2br(input.notes)}</p>
         </div>
@@ -188,12 +189,12 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
       title: `Thanks ${escapeHtml(name)} — application received.`,
       intro: `Your application has been saved. Your booking reference is <strong>${escapeHtml(input.reference)}</strong> for <strong>${escapeHtml(input.tourDate || 'TBC')}</strong>.`,
       children: `
-        <div style="border:1px solid #d9c399;border-radius:8px;background:#fff3dd;padding:14px;margin-bottom:18px">
+        <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
           <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Important</p>
           <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">Your place is confirmed once your <strong>${ONLINE_PAYMENT_USD} online booking payment</strong> has been completed and matched with this application.</p>
         </div>
 
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 -6px 18px">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 -4px 16px">
           <tr>
             ${pill('Total trip price', TOTAL_PRICE_USD, 'Per person for the 2026 9-day / 8-night expedition.')}
             ${pill('Pay online', ONLINE_PAYMENT_USD, 'Confirms your place with 8 Lakes Tours.')}
@@ -212,9 +213,9 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
           <li>Please plan to bring <strong>${FAMILY_CASH_USD} in clean USD notes</strong> for the host family.</li>
         </ol>
 
-        <p style="margin:0 0 22px"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:6px;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Return to booking page</a></p>
+        <p style="margin:0 0 22px"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Return to booking page</a></p>
 
-        <div style="border:1px solid #eadcc6;border-radius:8px;padding:14px;background:#fffdf8">
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8">
           <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Keep this reference</p>
           <p style="margin:0;color:#241d14;font-size:18px;font-weight:700">${escapeHtml(input.reference)}</p>
         </div>
@@ -256,7 +257,7 @@ export function leadCustomerEmail(input: { name: string }) {
       intro: 'You’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.',
       children: `
         <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">When you’re ready to reserve, complete the application on the website. The current 2026 price is split clearly: <strong>${ONLINE_PAYMENT_USD} online</strong> and <strong>${FAMILY_CASH_USD} cash paid directly to the host family</strong>.</p>
-        <p style="margin:0"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:6px;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">View the trip</a></p>
+        <p style="margin:0"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">View the trip</a></p>
       `,
     }),
   };
