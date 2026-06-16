@@ -874,8 +874,9 @@ export default function Home() {
         .lead-form { display: grid; gap: 0.6rem; }
         .lead-form input { width: 100%; box-sizing: border-box; border: 1px solid rgba(245,240,232,0.14); background: rgba(14,12,9,0.54); color: var(--cream); border-radius: 4px; padding: 0.86rem 1rem; font: inherit; outline: none; }
         .lead-form input:focus { border-color: var(--gold); }
-        .lead-form button { border: 0; background: var(--gold); color: var(--dark); border-radius: 4px; padding: 0.92rem 1rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
-        .lead-form button:disabled { opacity: 0.6; cursor: default; }
+        .lead-form button { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold); background: var(--gold); color: var(--dark); border-radius: 0; padding: 1rem 1.25rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.18em; line-height: 1; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease; }
+        .lead-form button:hover:not(:disabled) { background: var(--cream); border-color: var(--cream); color: var(--dark); transform: translateY(-1px); }
+        .lead-form button:disabled { opacity: 0.86; cursor: default; color: rgba(14,12,9,0.88); }
         .lead-message { margin-top: 0.75rem; font-size: 0.74rem; line-height: 1.5; color: var(--gold); }
         .lead-message.error { color: #ffb4a6; }
         .lead-privacy { margin-top: 0.75rem !important; margin-bottom: 0 !important; font-size: 0.68rem !important; line-height: 1.5 !important; color: rgba(212,207,196,0.56) !important; }
