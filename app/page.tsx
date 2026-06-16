@@ -111,11 +111,13 @@ function detectRegion(): string | undefined {
 function formatApproxUsd(amountUsd: number, currency: CurrencyCode) {
   const converted = amountUsd * DISPLAY_EXCHANGE_RATES[currency];
   const rounded = currency === 'MNT' ? Math.round(converted / 1000) * 1000 : Math.round(converted);
+  const useCompactNotation = rounded >= 100000;
 
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
-    maximumFractionDigits: 0,
+    notation: useCompactNotation ? 'compact' : 'standard',
+    maximumFractionDigits: useCompactNotation ? 2 : 0,
   }).format(rounded);
 }
 
@@ -777,19 +779,25 @@ export default function Home() {
         .packing-grid li { list-style: none; position: relative; padding-left: 1rem; font-size: 0.82rem; line-height: 1.55; color: rgba(212,207,196,0.82); }
         .packing-grid li::before { content: '•'; position: absolute; left: 0; color: var(--gold); }
 
-        .booking { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
-        .price-card { background: var(--ink); border: 1px solid rgba(200,169,110,0.25); padding: 3rem; }
-        .price-badge { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; background: var(--rust); color: var(--cream); display: inline-block; padding: 0.4rem 1rem; margin-bottom: 1.5rem; }
-        .price-amount { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 0.4rem; }
-        .price-per { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-bottom: 2rem; }
-        .price-note { font-size: 0.8rem; color: var(--mist); opacity: 0.7; line-height: 1.6; margin-bottom: 1rem; padding: 1rem; background: rgba(245,240,232,0.04); border-left: 2px solid var(--gold); }
+        .booking { background: var(--dark); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6rem; align-items: start; overflow-x: clip; }
+        .scarcity-pill { display:inline-flex; max-width:100%; box-sizing:border-box; align-items:center; gap:0.6rem; margin-top:1.2rem; padding:0.6rem 1.1rem; background:rgba(185,74,48,0.12); border:1px solid rgba(185,74,48,0.35); border-radius:3px; overflow:hidden; }
+        .scarcity-pill span:last-child { min-width:0; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--rust); line-height:1.45; overflow-wrap:anywhere; }
+        .price-card { max-width:100%; box-sizing:border-box; overflow:hidden; background: var(--ink); border: 1px solid rgba(200,169,110,0.25); padding: 3rem; }
+        .price-badge { max-width:100%; box-sizing:border-box; font-size: 0.6rem; letter-spacing: 0.3em; line-height:1.55; text-transform: uppercase; background: var(--rust); color: var(--cream); display: inline-block; padding: 0.4rem 1rem; margin-bottom: 1.5rem; overflow-wrap:anywhere; }
+        .price-amount { max-width:100%; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.45rem, 8vw, 4rem); font-weight: 300; color: var(--gold); line-height: 0.98; margin-bottom: 0.4rem; overflow-wrap:anywhere; word-break: normal; }
+        .price-per { max-width:100%; font-size: 0.75rem; letter-spacing: 0.15em; line-height:1.5; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-bottom: 2rem; overflow-wrap:anywhere; }
+        .price-note { max-width:100%; box-sizing:border-box; font-size: 0.8rem; color: var(--mist); opacity: 0.7; line-height: 1.6; margin-bottom: 1rem; padding: 1rem; background: rgba(245,240,232,0.04); border-left: 2px solid var(--gold); overflow-wrap:anywhere; }
         .payment-details { margin-top: 1rem; border: 1px solid rgba(200,169,110,0.22); background: rgba(200,169,110,0.045); }
         .payment-summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 1rem; color: var(--gold); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; }
         .payment-summary::-webkit-details-marker { display: none; }
         .payment-summary::after { content: '▼'; font-size: 0.65rem; transition: transform 0.25s ease; }
         .payment-details[open] .payment-summary::after { transform: rotate(180deg); }
-        .payment-detail-body { padding: 0 1rem 1rem; border-top: 1px solid rgba(200,169,110,0.14); font-size: 0.8rem; line-height: 1.65; color: rgba(212,207,196,0.82); }
+        .payment-detail-body { padding: 0 1rem 1rem; border-top: 1px solid rgba(200,169,110,0.14); font-size: 0.8rem; line-height: 1.65; color: rgba(212,207,196,0.82); overflow-wrap:anywhere; }
         .payment-detail-body p { margin-top: 0.8rem; }
+        .price-spec-list { display:flex; flex-direction:column; gap:0.8rem; margin-top:1.5rem; }
+        .price-spec-row { display:flex; justify-content:space-between; gap:1rem; min-width:0; font-size:0.8rem; color:var(--mist); padding:0.6rem 0; border-bottom:1px solid rgba(245,240,232,0.07); }
+        .price-spec-row span { min-width:0; overflow-wrap:anywhere; }
+        .price-spec-row span:last-child { color:var(--cream); text-align:right; }
         .tour-dates-card { margin-top: 1.5rem; padding: 1.5rem; background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.35); border-radius: 4px; }
         .tour-date-list { display: flex; flex-direction: column; gap: 0.6rem; }
         .tour-date-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; }
@@ -820,7 +828,7 @@ export default function Home() {
         .submit-btn { background: var(--gold); color: var(--dark); border: none; padding: 1.1rem 2rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-top: 0.5rem; }
         .submit-btn:hover { background: var(--rust); color: var(--cream); }
         .submit-btn:disabled { background: var(--sage); color: var(--cream); cursor: default; }
-        .payment-checkout-card { margin-top: 1rem; padding: 1.2rem; background: linear-gradient(145deg, rgba(245,240,232,0.075), rgba(99,91,255,0.08)); border: 1px solid rgba(200,169,110,0.24); border-radius: 6px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+        .payment-checkout-card { max-width:100%; box-sizing:border-box; overflow:hidden; margin-top: 1rem; padding: 1.2rem; background: linear-gradient(145deg, rgba(245,240,232,0.075), rgba(99,91,255,0.08)); border: 1px solid rgba(200,169,110,0.24); border-radius: 6px; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
         .checkout-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.55rem; }
         .checkout-copy { font-size: 0.85rem; color: var(--mist); line-height: 1.6; margin-bottom: 1rem; }
         .checkout-copy strong { color: var(--cream); }
@@ -830,7 +838,7 @@ export default function Home() {
         .checkout-note { font-size: 0.72rem; color: rgba(212,207,196,0.62); line-height: 1.6; margin-bottom: 1rem; }
         .form-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
         .checkout-button-wrap { position: relative; }
-        .stripe-embed-wrap { max-width: 430px; margin: 0 auto; }
+        .stripe-embed-wrap { width:100%; max-width:min(430px, 100%); margin: 0 auto; overflow:hidden; }
         .stripe-checkout-preview { width: 100%; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(241,244,249,0.96)); color: #0a2540; padding: 0; overflow: hidden; box-shadow: 0 18px 38px rgba(0,0,0,0.24); transition: opacity 0.25s ease, filter 0.25s ease, transform 0.25s ease; }
         .stripe-checkout-preview:not(:disabled) { cursor: pointer; }
         .stripe-checkout-preview:not(:disabled):hover { transform: translateY(-1px); }
@@ -849,11 +857,12 @@ export default function Home() {
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
         .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
-        .stripe-buy-button-frame { min-height: 230px; transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-buy-button-frame { width:100%; max-width:100%; overflow:hidden; min-height: 230px; transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-buy-button-frame stripe-buy-button { display:block; max-width:100%; overflow:hidden; }
         .stripe-buy-button-frame.locked { opacity: 0.42; filter: grayscale(0.2); pointer-events: none; }
         .stripe-link-fallback { display: inline-flex; justify-content: center; margin-top: 0.75rem; color: rgba(245,240,232,0.58); font-size: 0.68rem; text-decoration: underline; text-underline-offset: 3px; }
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .checkout-lock-overlay p { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 1rem; pointer-events: none; }
+        .checkout-lock-overlay p { max-width:calc(100% - 1rem); box-sizing:border-box; font-size: 0.7rem; letter-spacing: 0.12em; line-height:1.45; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 0.75rem; pointer-events: none; white-space:normal; overflow-wrap:anywhere; }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
         .lead-card-public { margin: 2.2rem auto 0; max-width: 460px; padding: 1.2rem; border: 1px solid rgba(200,169,110,0.22); border-radius: 8px; background: rgba(245,240,232,0.045); }
         .lead-card-public h3 { color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; margin: 0 0 0.4rem; }
@@ -927,6 +936,17 @@ export default function Home() {
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
           .booking { padding: 4rem 1.2rem; }
+          .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
+          .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
+          .price-card { padding: 1.25rem 0.9rem; margin-top:1.5rem !important; }
+          .price-badge { display:block; width:100%; padding:0.45rem 0.55rem; text-align:center; font-size:0.52rem; letter-spacing:0.18em; }
+          .price-amount { font-size: clamp(2.15rem, 15vw, 3.05rem); line-height:0.95; }
+          .price-per { font-size:0.62rem; letter-spacing:0.1em; margin-bottom:1.15rem; }
+          .price-note { padding:0.8rem; font-size:0.76rem; }
+          .payment-summary { padding:0.75rem 0.8rem; font-size:0.56rem; letter-spacing:0.12em; line-height:1.45; }
+          .payment-detail-body { padding:0 0.8rem 0.85rem; }
+          .price-spec-list { gap:0.45rem; margin-top:1rem; }
+          .price-spec-row { display:grid; grid-template-columns:0.8fr 1.2fr; gap:0.8rem; font-size:0.76rem; line-height:1.45; }
           .booking-form { gap: 0.85rem; }
           .form-section { padding: 0.85rem; gap: 0.75rem; }
           .form-section-title { font-size: 0.56rem; letter-spacing: 0.16em; }
@@ -981,6 +1001,13 @@ export default function Home() {
           .partnership-img { display: none; }
           .form-grid { grid-template-columns: 1fr; }
           .packing-grid { grid-template-columns: 1fr; }
+          .payment-checkout-card { padding:0.8rem 0.55rem; }
+          .checkout-eyebrow { font-size:0.58rem; letter-spacing:0.13em; }
+          .checkout-copy { font-size:0.78rem; }
+          .checkout-note { font-size:0.68rem; }
+          .stripe-embed-wrap { max-width:100%; }
+          .stripe-buy-button-frame { min-height:220px; }
+          .checkout-lock-overlay p { font-size:0.58rem; letter-spacing:0.09em; padding:0.45rem 0.5rem; }
           .intro-img-accent { display: none; }
         }
       `}</style>
@@ -1302,9 +1329,9 @@ export default function Home() {
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Choose Your<br /><em>2026 Expedition</em></h2>
           <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
-          <div style={{display:'inline-flex', alignItems:'center', gap:'0.6rem', marginTop:'1.2rem', padding:'0.6rem 1.1rem', background:'rgba(185,74,48,0.12)', border:'1px solid rgba(185,74,48,0.35)', borderRadius:'3px'}}>
+          <div className="scarcity-pill">
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
-            <span style={{fontSize:'0.72rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--rust)'}}>Only 8 spots available for the 2026 season</span>
+            <span>Only 8 spots available for the 2026 season</span>
           </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">2026 Season Rate — Limited Availability</span>
@@ -1319,10 +1346,10 @@ export default function Home() {
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
             </details>
-            <div style={{display:'flex', flexDirection:'column', gap:'0.8rem', marginTop:'1.5rem'}}>
+            <div className="price-spec-list">
               {[['Duration','9 Days / 8 Nights'],['Group Size','Max 8 Participants'],['Location','Orkhon Valley, Mongolia'],['Riding Level','Beginner – Intermediate']].map(([k,v]) => (
-                <div key={k} style={{display:'flex', justifyContent:'space-between', fontSize:'0.8rem', color:'var(--mist)', padding:'0.6rem 0', borderBottom:'1px solid rgba(245,240,232,0.07)'}}>
-                  <span>{k}</span><span style={{color:'var(--cream)'}}>{v}</span>
+                <div key={k} className="price-spec-row">
+                  <span>{k}</span><span>{v}</span>
                 </div>
               ))}
             </div>
