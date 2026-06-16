@@ -4,7 +4,7 @@ import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
   title: 'About 8 Lakes Tours',
-  description: 'About 8 Lakes Tours: a small-group Mongolia horse trekking expedition with nomadic host families in the Orkhon Valley and Eight Lakes region.',
+  description: 'About 8 Lakes Tours: an Adventure Therapy project and small-group Mongolia horse trekking expedition with nomadic host families in the Orkhon Valley and Eight Lakes region.',
   alternates: { canonical: 'https://www.8lakestours.com/about' },
   robots: { index: true, follow: true },
 };
@@ -26,11 +26,14 @@ export default function Page() {
         <p style={eyebrowStyle}>About</p>
         <h1 style={h1Style}>About 8 Lakes Tours</h1>
         <p style={{...pStyle, fontSize: '1.05rem'}}>8 Lakes Tours is a small-group Mongolia horse trekking experience built around a direct partnership with nomadic host families in the Orkhon Valley and Naiman Nuur, also known as the Eight Lakes region.</p>
+        <p style={{...pStyle, fontSize: '1.05rem', marginTop: '1.1rem'}}>It is also one of the first journeys from Adventure Therapy — a wider adventure group built around the idea that wild places, physical challenge, silence, weather, horses, and simple living can do something that comfort cannot.</p>
         {[
           ['What we offer', 'The core trip is a 9-day / 8-night adventure including time in a ger village, four days of guided horseback trekking, meals, accommodation, horses, local guiding, and support from experienced hosts. The route is designed for beginner to intermediate riders with a reasonable level of fitness.'],
-          ['Who hosts the trip', 'Guests are hosted locally by the Sandagdorj nomadic family and guided through the landscape by experienced Mongolian horsemen, including Suma. Robert Zaher leads the 8 Lakes Tours experience and works directly with the family. Adventure Therapy supports the wider adventure-company structure, online booking flow, and future trips. For now, all tour enquiries go through info@8lakestours.com; Rob\'s Instagram is @robzaher108.'],
+          ['Part of Adventure Therapy', 'Adventure Therapy is not clinical therapy and does not claim to treat mental-health conditions. It is our philosophy for building trips: choose real environments over artificial comfort, let nature do some of the work, and use adventure, discomfort, movement, and attention as a way to come back stronger. 8 Lakes Tours is the Mongolia expression of that idea.'],
+          ['Who hosts the trip', 'Guests are hosted locally by the Sandagdorj nomadic family and guided through the landscape by experienced Mongolian horsemen, including Suma. Robert Zaher leads the 8 Lakes Tours experience and works directly with the family. Adventure Therapy supports the wider group structure, online booking flow, and future trips. For now, all tour enquiries go through info@8lakestours.com; Rob\'s Instagram is @robzaher108.'],
           ['Why the payment is split', 'Many nomadic families in the area live outside normal online banking systems. The current 2026 trip price is $2,159 per person: $959 is paid online to confirm the booking, and $1,200 is paid directly in cash to the host family in Mongolia. This keeps the local family portion transparent and direct.'],
           ['Where the tour takes place', 'The journey is based in Mongolia, around the Orkhon Valley and the Naiman Nuur / Eight Lakes region. Guests fly into Chinggis Khaan International Airport in Ulaanbaatar before travelling onward to the countryside.'],
+          ['What we mean by adventure', 'This is not a spa retreat or a polished tourist circuit. It is horses, gers, weather, long days outside, simple meals, and the kind of quiet you only get when the signal disappears. The point is not to escape life forever; it is to put yourself somewhere real enough that you remember what you are made of.'],
         ].map(([title, body]) => (
           <section key={title} style={{ marginTop: '2.5rem' }}>
             <h2 style={h2Style}>{title}</h2>
