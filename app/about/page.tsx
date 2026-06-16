@@ -31,7 +31,7 @@ const expectationCards = [
   },
   {
     title: 'Remote, but not abandoned',
-    body: 'The steppe feels vast and far from city life, but it is not empty. Neighbouring families visit, share tea and food, help with work, and know the land. This is a living hospitality culture — not a survival fantasy with no people or supplies.',
+    body: 'The steppe feels vast and far from city life, but it is not empty. A simple story explains the culture well: when travellers lost their way between distant gers, they could stop at another family home for tea, food, shelter, directions, or supplies. Hospitality was not decoration — it was how people crossed uncertain land together.',
   },
   {
     title: 'Food is part of the culture',
@@ -67,6 +67,7 @@ export default function Page() {
         <div className="intro-copy">
           <p>The trip exists because Rob travelled through Mongolia, met Ganbold&apos;s family, rode with them, stayed with them, and saw that this valley could host something deeper than a standard sightseeing product.</p>
           <p>Guests do not come here to consume a polished show. They come to live closer to the family rhythm for a short time: ride, eat, adapt, rest, laugh, get cold, drink tea, look at the sky, and remember what simplicity feels like.</p>
+          <p>That includes embracing variance. In steppe life, the plan is shaped by weather, distance, animals, and the people you meet along the way. The old hospitality logic of the ger — offer tea, food, shelter, and help to the traveller who appears at your door — is part of why uncertainty here can feel human rather than hostile.</p>
         </div>
       </section>
 
