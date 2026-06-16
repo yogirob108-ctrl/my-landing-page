@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import SiteNav from '../components/SiteNav';
 
@@ -46,8 +45,7 @@ export default function Page() {
       <SiteNav />
 
       <section className="about-hero">
-        <div className="about-hero-image">
-          <Image src="/images/rob-family.jpg" alt="Robert with the host family outside a traditional ger in Mongolia" fill priority sizes="100vw" />
+        <div className="about-hero-image" role="img" aria-label="Robert with the host family outside a traditional ger in Mongolia">
           <div className="about-hero-overlay" />
         </div>
         <div className="about-hero-copy">
@@ -73,9 +71,7 @@ export default function Page() {
       </section>
 
       <section className="story-section">
-        <div className="story-image portrait">
-          <Image src="/images/rob-zaher.jpg" alt="Robert Zaher, organiser of 8 Lakes Tours" fill sizes="(max-width: 900px) 100vw, 38vw" />
-        </div>
+        <div className="story-image portrait" role="img" aria-label="Robert Zaher, organiser of 8 Lakes Tours" />
         <div className="story-copy">
           <p className="eyebrow">Who you&apos;re booking with</p>
           <h2>Rob Zaher</h2>
@@ -102,9 +98,9 @@ export default function Page() {
       </section>
 
       <section className="photo-band" aria-label="Mongolia trip photos">
-        <div className="band-image wide"><Image src="/images/expedition-originals/ger-blue-hour-original.jpg" alt="Ger at blue hour beneath the Mongolian mountains" fill sizes="(max-width: 900px) 100vw, 50vw" /></div>
-        <div className="band-image"><Image src="/images/guide-horse-portrait.jpg" alt="Suma standing with his horse on the open steppe" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
-        <div className="band-image"><Image src="/images/gallery-extra/rainy-horseback-overlook.jpg" alt="Riders looking over the valley in changing weather" fill sizes="(max-width: 900px) 50vw, 25vw" /></div>
+        <div className="band-image wide ger" role="img" aria-label="Ger at blue hour beneath the Mongolian mountains" />
+        <div className="band-image guide" role="img" aria-label="Suma standing with his horse on the open steppe" />
+        <div className="band-image riders" role="img" aria-label="Riders looking over the valley in changing weather" />
       </section>
 
       <section className="cards-section expectations">
@@ -160,8 +156,7 @@ export default function Page() {
         p { color:rgba(212,207,196,.84); line-height:1.75; }
         a { color:inherit; }
         .about-hero { min-height:92vh; position:relative; display:flex; align-items:flex-end; padding:8rem 6rem 5rem; box-sizing:border-box; }
-        .about-hero-image { position:absolute; inset:0; overflow:hidden; }
-        .about-hero-image img { object-fit:cover; object-position:center 42%; }
+        .about-hero-image { position:absolute; inset:0; overflow:hidden; background-image:url('/images/rob-family.jpg'); background-size:cover; background-position:center 42%; }
         .about-hero-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(14,12,9,.96) 0%, rgba(14,12,9,.72) 42%, rgba(14,12,9,.18) 100%); }
         .about-hero-copy { position:relative; z-index:1; max-width:1040px; }
         .about-hero-copy > p:last-of-type { max-width:680px; font-size:1.08rem; }
@@ -172,8 +167,7 @@ export default function Page() {
         .intro-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:4rem; border-bottom:1px solid rgba(200,169,110,.14); }
         .intro-copy { display:grid; gap:1rem; font-size:1.02rem; }
         .story-section { display:grid; grid-template-columns:minmax(260px,.7fr) 1fr; gap:4rem; align-items:center; background:#18130e; }
-        .story-image { position:relative; min-height:560px; background:#080806; overflow:hidden; border:1px solid rgba(200,169,110,.18); }
-        .story-image img { object-fit:cover; object-position:center; }
+        .story-image { position:relative; min-height:560px; background:#080806 url('/images/rob-zaher.jpg') center / cover no-repeat; overflow:hidden; border:1px solid rgba(200,169,110,.18); }
         .story-copy { max-width:720px; }
         .story-copy p { font-size:1rem; }
         .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:2rem; }
@@ -181,8 +175,10 @@ export default function Page() {
         .info-card.strong { background:rgba(200,169,110,.065); }
         .info-card p { font-size:.93rem; line-height:1.7; }
         .photo-band { display:grid; grid-template-columns:2fr 1fr 1fr; gap:4px; background:#080806; padding:4px; }
-        .band-image { position:relative; min-height:420px; background:#18130e; overflow:hidden; }
-        .band-image img { object-fit:cover; }
+        .band-image { position:relative; min-height:420px; background:#18130e center / cover no-repeat; overflow:hidden; }
+        .band-image.ger { background-image:url('/images/expedition-originals/ger-blue-hour-original.jpg'); }
+        .band-image.guide { background-image:url('/images/guide-horse-portrait.jpg'); background-position:center 36%; }
+        .band-image.riders { background-image:url('/images/gallery-extra/rainy-horseback-overlook.jpg'); }
         .expectations { background:#120f0b; }
         .payment-strip { display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center; border-top:1px solid rgba(200,169,110,.14); border-bottom:1px solid rgba(200,169,110,.14); }
         .payment-strip p { max-width:820px; }
