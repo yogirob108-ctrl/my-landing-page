@@ -529,7 +529,7 @@ export default function Home() {
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
           { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours through Adventure Therapy. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
-          { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 45 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 host-family cash payment is not collected online.' } },
+          { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 host-family cash payment is not collected online.' } },
         ],
       },
     ],
@@ -631,8 +631,6 @@ export default function Home() {
         .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 680px; margin-bottom: 1.5rem; }
         .hero-sub .mobile-line { display: none; }
         .hero-sub .desktop-line { display: inline; }
-        .hero-facts { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0 0 1.5rem; }
-        .hero-facts span { border:1px solid rgba(200,169,110,0.34); background:rgba(14,12,9,0.46); color:rgba(245,240,232,0.86); padding:0.42rem 0.68rem; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; backdrop-filter:blur(4px); }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -954,8 +952,6 @@ export default function Home() {
           }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
           .hero-sub { margin-bottom: 1.2rem; }
-          .hero-facts { gap: 0.38rem; margin-bottom: 1.2rem; }
-          .hero-facts span { flex: 1 1 calc(50% - 0.38rem); text-align: center; padding: 0.42rem 0.4rem; font-size: 0.52rem; letter-spacing: 0.1em; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
@@ -1080,12 +1076,6 @@ export default function Home() {
             <span className="mobile-line">A 9-day small-group horseback expedition in Mongolia — hosted with nomadic families and open to beginner/intermediate riders.</span>
             <span className="desktop-line">A 9-day small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and open to beginner/intermediate riders who want the real thing.</span>
           </p>
-          <div className="hero-facts" aria-label="Trip quick facts">
-            <span>9 days</span>
-            <span>Max 8 guests</span>
-            <span>{pricing.tourPrice} total</span>
-            <span>{pricing.onlinePayment} online</span>
-          </div>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">Reserve Online</a>
             <a href="#experience" className="btn-ghost">Explore the Journey</a>
@@ -1384,7 +1374,7 @@ export default function Home() {
               <div className="payment-detail-body">
                 <p>Total trip price: {pricing.tourPrice} per person.</p>
                 <p>The online payment goes through Adventure Therapy / 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
-                <p>If your plans change more than 45 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
+                <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
             </details>
@@ -1658,7 +1648,7 @@ export default function Home() {
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
             {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through Adventure Therapy / 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'If your plans change more than 45 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
+            {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
