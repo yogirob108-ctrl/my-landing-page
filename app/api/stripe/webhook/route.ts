@@ -4,7 +4,6 @@ import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
 const stripe = new Stripe('sk_test_webhook_signature_verification_only');
 
 function jsonError(message: string, status = 400) {
@@ -16,6 +15,10 @@ function usdFromCents(amount: number | null | undefined) {
   return Math.round(amount) / 100;
 }
 
+function eventTimestamp(event: Stripe.Event) {
+  return new Date(event.created * 1000).toISOString();
+}
+
 function getCheckoutReference(session: Stripe.Checkout.Session) {
   return (
     session.client_reference_id ||
@@ -23,6 +26,11 @@ function getCheckoutReference(session: Stripe.Checkout.Session) {
     session.metadata?.public_reference ||
     ''
   ).trim();
+}
+
+function getPaymentIntentId(value: Stripe.PaymentIntent | string | null) {
+  if (!value) return null;
+  return typeof value === 'string' ? value : value.id;
 }
 
 async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
@@ -48,6 +56,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const onlinePaidUsd = usdFromCents(session.amount_total);
   const currency = session.currency?.toUpperCase() || 'USD';
+  const paymentIntentId = getPaymentIntentId(session.payment_intent);
   const supabase = createSupabaseAdminClient();
 
   const { data: booking, error: bookingError } = await supabase
@@ -68,6 +77,43 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
   const existingPaid = Number(booking.online_paid_usd ?? 0);
   const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 959;
   const alreadyRecorded = existingPaid >= amountToRecord && booking.status === 'confirmed';
+
+  if (paymentIntentId) {
+    const { data: existingPayment, error: existingPaymentError } = await supabase
+      .from('payments')
+      .select('id')
+      .eq('stripe_payment_intent_id', paymentIntentId)
+      .maybeSingle();
+
+    if (existingPaymentError) {
+      throw new Error(`Payment lookup failed: ${existingPaymentError.message}`);
+    }
+
+    const paymentPayload = {
+      booking_id: booking.id,
+      provider: 'stripe',
+      stripe_checkout_session_id: session.id,
+      stripe_payment_intent_id: paymentIntentId,
+      amount_usd: amountToRecord,
+      status: 'paid',
+      paid_at: new Date().toISOString(),
+      raw_event: {
+        checkout_session_id: session.id,
+        payment_intent_id: paymentIntentId,
+        event_source: 'checkout.session.completed',
+        amount_total: session.amount_total,
+        currency: session.currency,
+      },
+    };
+
+    const paymentWrite = existingPayment
+      ? await supabase.from('payments').update(paymentPayload).eq('id', existingPayment.id)
+      : await supabase.from('payments').insert(paymentPayload);
+
+    if (paymentWrite.error) {
+      throw new Error(`Payment row write failed: ${paymentWrite.error.message}`);
+    }
+  }
 
   if (!alreadyRecorded) {
     const { error: updateError } = await supabase
@@ -90,7 +136,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
       title: 'Stripe payment confirmed',
       body: [
         `Stripe checkout session ${session.id} completed.`,
-        `Payment intent: ${typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id ?? 'unknown'}.`,
+        `Payment intent: ${paymentIntentId ?? 'unknown'}.`,
         `Amount recorded: ${amountToRecord} ${currency}.`,
       ].join('\n'),
       created_by: 'stripe-webhook',
@@ -101,7 +147,121 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
     }
   }
 
-  return { matched: true, reference, bookingId: booking.id, amount: amountToRecord, alreadyRecorded };
+  return { matched: true, reference, bookingId: booking.id, amount: amountToRecord, paymentIntentId, alreadyRecorded };
+}
+
+async function handleStripeRefund(event: Stripe.Event) {
+  if (!isSupabaseAdminConfigured) {
+    throw new Error('Supabase admin is not configured.');
+  }
+
+  const object = event.data.object;
+  const isCharge = object.object === 'charge';
+  const isRefund = object.object === 'refund';
+
+  if (!isCharge && !isRefund) {
+    return { matched: false, reason: 'unsupported_refund_object' };
+  }
+
+  const charge = isCharge ? object as Stripe.Charge : null;
+  const refund = isRefund ? object as Stripe.Refund : null;
+  const paymentIntentId = typeof (charge?.payment_intent ?? refund?.payment_intent) === 'string'
+    ? String(charge?.payment_intent ?? refund?.payment_intent)
+    : null;
+
+  if (!paymentIntentId) {
+    console.warn('Stripe refund event has no payment intent', { eventId: event.id, eventType: event.type });
+    return { matched: false, reason: 'missing_payment_intent' };
+  }
+
+  const supabase = createSupabaseAdminClient();
+  const { data: payment, error: paymentError } = await supabase
+    .from('payments')
+    .select('id, booking_id, amount_usd, status, raw_event')
+    .eq('stripe_payment_intent_id', paymentIntentId)
+    .maybeSingle();
+
+  if (paymentError) {
+    throw new Error(`Refund payment lookup failed: ${paymentError.message}`);
+  }
+
+  if (!payment) {
+    console.warn('Stripe refund could not be matched to a payment row', { eventId: event.id, eventType: event.type, paymentIntentId });
+    return { matched: false, reason: 'payment_not_found', paymentIntentId };
+  }
+
+  const refundedUsd = isCharge ? usdFromCents(charge?.amount_refunded) : usdFromCents(refund?.amount);
+  const originalAmountUsd = Number(payment.amount_usd ?? 0);
+  const refundStatus = refundedUsd >= originalAmountUsd ? 'refunded' : 'partially_refunded';
+  const remainingPaidUsd = Math.max(0, originalAmountUsd - refundedUsd);
+  const occurredAt = eventTimestamp(event);
+
+  const rawEvent = {
+    ...(typeof payment.raw_event === 'object' && payment.raw_event ? payment.raw_event : {}),
+    latest_refund_event: {
+      event_id: event.id,
+      event_type: event.type,
+      payment_intent_id: paymentIntentId,
+      charge_id: charge?.id ?? refund?.charge ?? null,
+      refund_id: refund?.id ?? null,
+      refunded_usd: refundedUsd,
+      original_amount_usd: originalAmountUsd,
+      received_at: occurredAt,
+    },
+  };
+
+  const { error: updatePaymentError } = await supabase
+    .from('payments')
+    .update({
+      status: refundStatus,
+      refunded_at: occurredAt,
+      raw_event: rawEvent,
+    })
+    .eq('id', payment.id);
+
+  if (updatePaymentError) {
+    throw new Error(`Refund payment update failed: ${updatePaymentError.message}`);
+  }
+
+  const { error: updateBookingError } = await supabase
+    .from('bookings')
+    .update({
+      online_paid_usd: remainingPaidUsd,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', payment.booking_id);
+
+  if (updateBookingError) {
+    throw new Error(`Refund booking update failed: ${updateBookingError.message}`);
+  }
+
+  const { error: eventError } = await supabase.from('booking_events').insert({
+    booking_id: payment.booking_id,
+    event_type: 'payment',
+    direction: 'system',
+    title: refundStatus === 'refunded' ? 'Stripe payment refunded' : 'Stripe payment partially refunded',
+    body: [
+      `Stripe refund event ${event.id} received.`,
+      `Payment intent: ${paymentIntentId}.`,
+      `Refunded amount recorded: ${refundedUsd} USD.`,
+      'Booking status was not automatically changed; review cancellation/transfer status manually if needed.',
+    ].join('\n'),
+    metadata: {
+      event_id: event.id,
+      event_type: event.type,
+      payment_intent_id: paymentIntentId,
+      refunded_usd: refundedUsd,
+      remaining_paid_usd: remainingPaidUsd,
+    },
+    created_by: 'stripe-webhook',
+    occurred_at: occurredAt,
+  });
+
+  if (eventError) {
+    throw new Error(`Refund event insert failed: ${eventError.message}`);
+  }
+
+  return { matched: true, paymentIntentId, refundedUsd, remainingPaidUsd, status: refundStatus };
 }
 
 export async function POST(request: Request) {
@@ -130,6 +290,12 @@ export async function POST(request: Request) {
       case 'checkout.session.completed':
       case 'checkout.session.async_payment_succeeded': {
         const result = await handleCheckoutSessionPaid(event.data.object as Stripe.Checkout.Session);
+        return NextResponse.json({ ok: true, received: true, type: event.type, result });
+      }
+      case 'charge.refunded':
+      case 'refund.created':
+      case 'refund.updated': {
+        const result = await handleStripeRefund(event);
         return NextResponse.json({ ok: true, received: true, type: event.type, result });
       }
       default:

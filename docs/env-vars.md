@@ -40,6 +40,9 @@ Configure this endpoint in Stripe Dashboard → Developers → Webhooks with the
 ```txt
 checkout.session.completed
 checkout.session.async_payment_succeeded
+charge.refunded
+refund.created
+refund.updated
 ```
 
 The site passes the generated booking reference into the Stripe Buy Button as `client-reference-id`. The webhook matches Stripe `checkout.session.client_reference_id` back to `bookings.public_reference`, then updates:
