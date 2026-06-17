@@ -26,7 +26,7 @@ export default function TermsAndConditions() {
           },
           {
             title: '2. Booking & Payment Structure',
-            body: 'A non-refundable $959 USD online booking payment, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with 8 Lakes Tours through Adventure Therapy. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining $1,200 USD local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
+            body: 'A $959 USD online booking payment, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with 8 Lakes Tours through Adventure Therapy. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining $1,200 USD local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
           },
           {
             title: '3. Tour Price',
@@ -34,7 +34,7 @@ export default function TermsAndConditions() {
           },
           {
             title: '4. Cancellation Policy',
-            body: 'The $959 USD online booking payment is non-refundable under all circumstances once your place is confirmed. The $1,200 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
+            body: 'The $959 USD online booking payment is refundable for 7 days after payment, unless the departure date is within 45 days. After that, it becomes non-refundable because your place, hosts, horses, transport, guides, and group logistics are being held. Where practical, we may offer a transfer to another 2026 date or an approved replacement traveller. If 8 Lakes Tours cancels your departure, the online amount you paid to us will be refunded in full. The $1,200 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
           },
           {
             title: '5. Travel Insurance',
