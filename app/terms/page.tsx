@@ -34,7 +34,7 @@ export default function TermsAndConditions() {
           },
           {
             title: '4. Cancellation Policy',
-            body: 'The $959 USD online booking payment is refundable for 7 days after payment, unless the departure date is within 45 days. After that, it becomes non-refundable because your place, hosts, horses, transport, guides, and group logistics are being held. Where practical, we may offer a transfer to another 2026 date or an approved replacement traveller. If 8 Lakes Tours cancels your departure, the online amount you paid to us will be refunded in full. The $1,200 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
+            body: 'If you cancel more than 45 days before departure, the $959 USD online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If you cancel within 45 days of departure, we will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us will be refunded minus unrecoverable Stripe/payment processing fees. The $1,200 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
           },
           {
             title: '5. Travel Insurance',
@@ -54,7 +54,7 @@ export default function TermsAndConditions() {
           },
           {
             title: '9. Group Size & Availability',
-            body: 'Tours are limited to a maximum of 8 participants. 8 Lakes Tours reserves the right to cancel a tour date if minimum participant numbers are not reached, or for reasons beyond our control. In such cases, a full refund of all amounts paid will be issued.',
+            body: 'Tours are limited to a maximum of 8 participants. 8 Lakes Tours reserves the right to cancel a tour date if minimum participant numbers are not reached, or for reasons beyond our control. In such cases, the online amount paid to us will be refunded minus unrecoverable Stripe/payment processing fees. The local family cash payment is not collected online before departure.',
           },
           {
             title: '10. Force Majeure',

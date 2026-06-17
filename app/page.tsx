@@ -529,6 +529,7 @@ export default function Home() {
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
           { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours through Adventure Therapy. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 45 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 host-family cash payment is not collected online.' } },
         ],
       },
     ],
@@ -627,9 +628,11 @@ export default function Home() {
           font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem;
         }
         .hero-title em { font-style: italic; color: var(--gold); }
-        .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 620px; margin-bottom: 1.5rem; }
+        .hero-sub { font-size: 1.05rem; line-height: 1.7; color: var(--mist); max-width: 680px; margin-bottom: 1.5rem; }
         .hero-sub .mobile-line { display: none; }
         .hero-sub .desktop-line { display: inline; }
+        .hero-facts { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0 0 1.5rem; }
+        .hero-facts span { border:1px solid rgba(200,169,110,0.34); background:rgba(14,12,9,0.46); color:rgba(245,240,232,0.86); padding:0.42rem 0.68rem; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; backdrop-filter:blur(4px); }
         .hero-actions { display: flex; gap: 1rem; align-items: center; }
         .btn-primary {
           display: inline-block; background: var(--gold); color: var(--dark);
@@ -666,6 +669,16 @@ export default function Home() {
         .section-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.15; color: var(--cream); margin-bottom: 1.5rem; }
         .section-title em { font-style: italic; color: var(--gold); }
         .section-body { font-size: 1rem; line-height: 1.8; color: var(--mist); max-width: 560px; }
+
+        .offer-strip { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.22); border-bottom: 1px solid rgba(200,169,110,0.22); padding: 1.3rem 6rem; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1.5fr) auto; gap: 1.5rem; align-items: center; }
+        .offer-strip-kicker { font-size: 0.6rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
+        .offer-strip-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; color: var(--cream); line-height: 1.12; }
+        .offer-strip-facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.6rem; }
+        .offer-fact { border-left: 1px solid rgba(200,169,110,0.28); padding-left: 0.85rem; min-width: 0; }
+        .offer-fact strong { display: block; color: var(--cream); font-size: 0.92rem; line-height: 1.25; overflow-wrap: anywhere; }
+        .offer-fact span { display: block; margin-top: 0.2rem; color: rgba(212,207,196,0.68); font-size: 0.58rem; line-height: 1.45; letter-spacing: 0.16em; text-transform: uppercase; }
+        .offer-strip-cta { display: inline-flex; justify-content: center; align-items: center; white-space: nowrap; background: var(--gold); border: 1px solid var(--gold); color: var(--dark); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; padding: 0.9rem 1.2rem; transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease; }
+        .offer-strip-cta:hover { background: var(--cream); border-color: var(--cream); transform: translateY(-1px); }
 
         .intro { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
         .intro-img { position: relative; aspect-ratio: 3/4; overflow: hidden; }
@@ -798,6 +811,15 @@ export default function Home() {
         .payment-details[open] .payment-summary::after { transform: rotate(180deg); }
         .payment-detail-body { padding: 0 1rem 1rem; border-top: 1px solid rgba(200,169,110,0.14); font-size: 0.8rem; line-height: 1.65; color: rgba(212,207,196,0.82); overflow-wrap:anywhere; }
         .payment-detail-body p { margin-top: 0.8rem; }
+        .booking-steps { margin-top: 1.1rem; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.65rem; }
+        .booking-step { border: 1px solid rgba(200,169,110,0.18); background: rgba(245,240,232,0.035); padding: 0.9rem; min-width: 0; }
+        .booking-step strong { display: block; color: var(--gold); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.35rem; }
+        .booking-step span { display: block; color: rgba(212,207,196,0.8); font-size: 0.78rem; line-height: 1.5; }
+        .ask-card { margin-top: 1.1rem; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.055); padding: 1rem; }
+        .ask-card h3 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-size: 1.25rem; font-weight: 300; margin-bottom: 0.4rem; }
+        .ask-card p { color: rgba(212,207,196,0.78); font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.75rem; }
+        .ask-card a { display: inline-flex; color: var(--gold); border-bottom: 1px solid rgba(200,169,110,0.45); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .ask-card a:hover { color: var(--cream); border-color: var(--cream); }
         .price-spec-list { display:flex; flex-direction:column; gap:0.8rem; margin-top:1.5rem; }
         .price-spec-row { display:flex; justify-content:space-between; gap:1rem; min-width:0; font-size:0.8rem; color:var(--mist); padding:0.6rem 0; border-bottom:1px solid rgba(245,240,232,0.07); }
         .price-spec-row span { min-width:0; overflow-wrap:anywhere; }
@@ -909,6 +931,8 @@ export default function Home() {
 
         @media (prefers-reduced-motion: reduce) {
           html { scroll-behavior: auto; }
+          .js-reveal .reveal, .js-reveal .reveal.visible { opacity: 1 !important; transform: none !important; }
+          .hero-bg { animation: none !important; }
           *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
         }
 
@@ -930,11 +954,18 @@ export default function Home() {
           }
           .hero-overlay { background: linear-gradient(to top, rgba(14,12,9,0.97) 0%, rgba(14,12,9,0.6) 45%, rgba(14,12,9,0.25) 100%); }
           .hero-sub { margin-bottom: 1.2rem; }
+          .hero-facts { gap: 0.38rem; margin-bottom: 1.2rem; }
+          .hero-facts span { flex: 1 1 calc(50% - 0.38rem); text-align: center; padding: 0.42rem 0.4rem; font-size: 0.52rem; letter-spacing: 0.1em; }
           .hero-sub .mobile-line { display: inline; }
           .hero-sub .desktop-line { display: none; }
           .hero-actions { flex-direction: column; align-items: stretch; gap: 0.8rem; }
           .hero-actions .btn-primary, .hero-actions .btn-ghost { text-align: center; }
           .intro-points { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-top: 2.2rem; align-items: start; }
+          .offer-strip { padding: 1.25rem 1.2rem; grid-template-columns: 1fr; gap: 1rem; }
+          .offer-strip-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .offer-fact { padding-left: 0.65rem; }
+          .offer-fact strong { font-size: 0.82rem; }
+          .offer-strip-cta { width: 100%; }
           .intro-point-value { font-size: clamp(1.25rem, 7vw, 1.55rem); }
           .intro-point-label { font-size: 0.48rem; letter-spacing: 0.12em; line-height: 1.55; overflow-wrap: normal; }
           .trust-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
@@ -945,6 +976,7 @@ export default function Home() {
           .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
           .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
           .price-card { padding: 1.25rem 0.9rem; margin-top:1.5rem !important; }
+          .booking-steps { grid-template-columns: 1fr; }
           .price-badge { display:block; width:100%; padding:0.45rem 0.55rem; text-align:center; font-size:0.52rem; letter-spacing:0.18em; }
           .price-amount { font-size: clamp(2.15rem, 15vw, 3.05rem); line-height:0.95; }
           .price-per { font-size:0.62rem; letter-spacing:0.1em; margin-bottom:1.15rem; }
@@ -1045,15 +1077,35 @@ export default function Home() {
           <p className="hero-eyebrow">9 Days · Orkhon Valley & Eight Lakes · Mongolia</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
           <p className="hero-sub">
-            <span className="mobile-line">A small-group horseback expedition hosted with nomadic families in Mongolia.</span>
-            <span className="desktop-line">A small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and built for travellers who want the real thing.</span>
+            <span className="mobile-line">A 9-day small-group horseback expedition in Mongolia — hosted with nomadic families and open to beginner/intermediate riders.</span>
+            <span className="desktop-line">A 9-day small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and open to beginner/intermediate riders who want the real thing.</span>
           </p>
+          <div className="hero-facts" aria-label="Trip quick facts">
+            <span>9 days</span>
+            <span>Max 8 guests</span>
+            <span>{pricing.tourPrice} total</span>
+            <span>{pricing.onlinePayment} online</span>
+          </div>
           <div className="hero-actions">
             <a href="#book" className="btn-primary">Reserve Online</a>
             <a href="#experience" className="btn-ghost">Explore the Journey</a>
           </div>
         </div>
       </div>
+
+      <section className="offer-strip" aria-label="2026 expedition price and booking summary">
+        <div>
+          <p className="offer-strip-kicker">2026 expeditions open</p>
+          <h2 className="offer-strip-title">Small-group Mongolia horse trek</h2>
+        </div>
+        <div className="offer-strip-facts">
+          <div className="offer-fact"><strong>{pricing.tourPrice}</strong><span>Total per person</span></div>
+          <div className="offer-fact"><strong>{pricing.onlinePayment}</strong><span>Pay online to reserve</span></div>
+          <div className="offer-fact"><strong>{pricing.localFamilyPayment}</strong><span>Cash direct to hosts</span></div>
+          <div className="offer-fact"><strong>Max 8</strong><span>Guests per departure</span></div>
+        </div>
+        <a className="offer-strip-cta" href="#book">See dates</a>
+      </section>
 
 
       {/* INTRO */}
@@ -1233,28 +1285,11 @@ export default function Home() {
         <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
       </div>
 
-      {/* MAIN PHOTO ALBUM */}
-      <div id="main-album" className="main-album" aria-label="Photo album from the Mongolia expedition">
-        {MAIN_ALBUM_IMAGES.map((image) => (
-          <div className={`main-album-item ${image.orientation} collage-${image.collage}`} key={image.src}>
-            <button
-              type="button"
-              className="image-button"
-              aria-label={`View larger image: ${image.alt}`}
-              onClick={() => openLightbox(image.src, image.alt)}
-            >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                quality={70}
-                sizes="(max-width: 900px) 50vw, 25vw"
-                style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined}
-              />
-            </button>
-          </div>
-        ))}
-      </div>
+      <section style={{background:'#0f0f0d', padding:'3rem 2rem', textAlign:'center', borderTop:'1px solid rgba(200,169,110,0.14)', borderBottom:'1px solid rgba(200,169,110,0.14)'}}>
+        <p style={{fontSize:'0.65rem', letterSpacing:'0.26em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.75rem'}}>Want more photos?</p>
+        <p style={{fontSize:'0.95rem', color:'rgba(212,207,196,0.78)', lineHeight:1.7, maxWidth:'620px', margin:'0 auto 1.3rem'}}>We keep the homepage focused on the trip decision. The fuller Mongolia photo archive lives in the gallery.</p>
+        <a href="/gallery" className="btn-ghost">View Full Gallery</a>
+      </section>
       {/* GETTING THERE */}
       <section className="getting-there-section">
         <div className="reveal">
@@ -1337,7 +1372,7 @@ export default function Home() {
           <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
           <div className="scarcity-pill">
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
-            <span>Only 8 spots available for the 2026 season</span>
+            <span>Small groups only — each departure capped at 8 guests</span>
           </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
             <span className="price-badge">2026 Season Rate — Limited Availability</span>
@@ -1349,6 +1384,7 @@ export default function Home() {
               <div className="payment-detail-body">
                 <p>Total trip price: {pricing.tourPrice} per person.</p>
                 <p>The online payment goes through Adventure Therapy / 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>If your plans change more than 45 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
             </details>
@@ -1358,6 +1394,16 @@ export default function Home() {
                   <span>{k}</span><span>{v}</span>
                 </div>
               ))}
+            </div>
+            <div className="booking-steps" aria-label="How booking works">
+              <div className="booking-step"><strong>1. Apply</strong><span>Send your details so we can check fit, date, riding level, and food needs.</span></div>
+              <div className="booking-step"><strong>2. Reserve</strong><span>Pay {pricing.onlinePayment} online to hold your place once the form is submitted.</span></div>
+              <div className="booking-step"><strong>3. Prepare</strong><span>We send prep notes; you bring {pricing.localFamilyPayment} cash direct for the host family.</span></div>
+            </div>
+            <div className="ask-card">
+              <h3>Not sure if this fits?</h3>
+              <p>Ask before paying. We&apos;re happy to check riding level, food restrictions, route expectations, dates, or whether this is the right kind of adventure for you.</p>
+              <a href="mailto:info@8lakestours.com?subject=Question%20before%20booking%208%20Lakes%20Tours">Ask a question first</a>
             </div>
           </div>
           <div className="tour-dates-card">
@@ -1612,7 +1658,7 @@ export default function Home() {
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
             {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through Adventure Therapy / 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'The $959 online booking payment is refundable for 7 days after payment, unless your departure is within 45 days. After that, it becomes non-refundable because your place, hosts, horses, transport, guides, and group logistics are being held. Where practical, we may offer a transfer to another 2026 date or an approved replacement traveller. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded in full. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
+            {q:'What is your cancellation policy?', a:'If your plans change more than 45 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 45 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
           ].map(({q, a}, i) => (
             <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
               <p style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
