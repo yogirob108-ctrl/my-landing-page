@@ -11,6 +11,15 @@ const BASE_PRICE_USD = 2159;
 const BASE_ONLINE_PAYMENT_USD = 959;
 const BASE_LOCAL_FAMILY_PAYMENT_USD = 1200;
 
+function stripePaymentLink(reference: string, email: string) {
+  const params = new URLSearchParams();
+  if (reference) params.set('client_reference_id', reference);
+  if (email) params.set('prefilled_email', email);
+
+  const query = params.toString();
+  return query ? `${STRIPE_LINK}?${query}` : STRIPE_LINK;
+}
+
 type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'RUB' | 'MNT';
 
 type LocalizedPricing = {
@@ -288,6 +297,7 @@ export default function Home() {
   const signatureIsValid = signature.trim().length > 1;
   const hasRequiredContact = signatureIsValid && emailIsValid;
   const canPay = formSubmitted && hasRequiredContact;
+  const checkoutFallbackHref = canPay ? stripePaymentLink(bookingReference, email.trim()) : '#book';
   const lightboxImage = lightboxIndex === null ? null : GALLERY_IMAGES[lightboxIndex];
   const isLightboxOpen = lightboxIndex !== null;
   const openLightbox = (src: string, alt: string) => {
@@ -1545,7 +1555,17 @@ export default function Home() {
                     __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-application'}"></stripe-buy-button>`,
                   }}
                 />
-                <a className="stripe-link-fallback" href={STRIPE_LINK}>Open Stripe checkout</a>
+                <a
+                  className="stripe-link-fallback"
+                  href={checkoutFallbackHref}
+                  aria-disabled={!canPay}
+                  tabIndex={canPay ? 0 : -1}
+                  onClick={event => {
+                    if (!canPay) event.preventDefault();
+                  }}
+                >
+                  Open Stripe checkout
+                </a>
                 {!canPay && (
                   <div
                     className="checkout-lock-overlay"
