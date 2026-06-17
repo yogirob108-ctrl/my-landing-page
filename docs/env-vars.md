@@ -45,7 +45,7 @@ checkout.session.async_payment_succeeded
 The site passes the generated booking reference into the Stripe Buy Button as `client-reference-id`. The webhook matches Stripe `checkout.session.client_reference_id` back to `bookings.public_reference`, then updates:
 
 ```txt
-bookings.status = paid
+bookings.status = confirmed
 bookings.online_paid_usd = Stripe amount_total / 100
 booking_events += Stripe payment confirmed
 ```

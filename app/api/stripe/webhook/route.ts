@@ -67,13 +67,13 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const existingPaid = Number(booking.online_paid_usd ?? 0);
   const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 959;
-  const alreadyRecorded = existingPaid >= amountToRecord && booking.status === 'paid';
+  const alreadyRecorded = existingPaid >= amountToRecord && booking.status === 'confirmed';
 
   if (!alreadyRecorded) {
     const { error: updateError } = await supabase
       .from('bookings')
       .update({
-        status: 'paid',
+        status: 'confirmed',
         online_paid_usd: amountToRecord,
         updated_at: new Date().toISOString(),
       })
