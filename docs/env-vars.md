@@ -26,7 +26,6 @@ Notes:
 The public booking form saves a booking with `status = awaiting_payment`. Stripe webhooks then mark that booking paid in Supabase when Checkout completes.
 
 ```bash
-STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 

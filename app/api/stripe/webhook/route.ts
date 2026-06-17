@@ -3,10 +3,9 @@ import Stripe from 'stripe';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-const stripe = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
+const stripe = new Stripe('sk_test_webhook_signature_verification_only');
 
 function jsonError(message: string, status = 400) {
   return NextResponse.json({ ok: false, error: message }, { status });
@@ -106,7 +105,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 }
 
 export async function POST(request: Request) {
-  if (!stripe || !stripeWebhookSecret) {
+  if (!stripeWebhookSecret) {
     return jsonError('Stripe webhook is not configured.', 503);
   }
 
