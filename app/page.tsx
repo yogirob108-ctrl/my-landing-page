@@ -145,13 +145,13 @@ function getLocalizedPricing(): LocalizedPricing {
 }
 
 const TOUR_DATES = [
-  { date: 'June 22 – 30, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'July 6 – 14, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'July 16 – 24, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'July 28 – August 5, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'August 4 – 12, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'August 24 – September 1, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'September 14 – 22, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'June 22 – 30, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'July 6 – 14, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'July 16 – 24, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'July 28 – August 5, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'August 4 – 12, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'August 24 – September 1, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
+  { date: 'September 14 – 22, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Open · max 8' },
   { date: 'Private Group Date', detail: 'Custom departure · Available through late September', status: 'On Request', muted: true },
 ];
 
@@ -863,10 +863,6 @@ export default function Home() {
         .payment-details[open] .payment-summary::after { transform: rotate(180deg); }
         .payment-detail-body { padding: 0 1rem 1rem; border-top: 1px solid rgba(200,169,110,0.14); font-size: 0.8rem; line-height: 1.65; color: rgba(212,207,196,0.82); overflow-wrap:anywhere; }
         .payment-detail-body p { margin-top: 0.8rem; }
-        .booking-steps { margin-top: 1.1rem; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.65rem; }
-        .booking-step { border: 1px solid rgba(200,169,110,0.18); background: rgba(245,240,232,0.035); padding: 0.9rem; min-width: 0; }
-        .booking-step strong { display: block; color: var(--gold); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.35rem; }
-        .booking-step span { display: block; color: rgba(212,207,196,0.8); font-size: 0.78rem; line-height: 1.5; }
         .ask-card { margin-top: 1.1rem; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.055); padding: 1rem; }
         .ask-card h3 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-size: 1.25rem; font-weight: 300; margin-bottom: 0.4rem; }
         .ask-card p { color: rgba(212,207,196,0.78); font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.75rem; }
@@ -1035,7 +1031,6 @@ export default function Home() {
           .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
           .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
           .price-card { padding: 1.25rem 0.9rem; margin-top:1.5rem !important; }
-          .booking-steps { grid-template-columns: 1fr; }
           .price-badge { display:block; width:100%; padding:0.45rem 0.55rem; text-align:center; font-size:0.52rem; letter-spacing:0.18em; }
           .price-amount { font-size: clamp(2.15rem, 15vw, 3.05rem); line-height:0.95; }
           .price-per { font-size:0.62rem; letter-spacing:0.1em; margin-bottom:1.15rem; }
@@ -1509,11 +1504,6 @@ export default function Home() {
                   <span>{k}</span><span>{v}</span>
                 </div>
               ))}
-            </div>
-            <div className="booking-steps" aria-label="How booking works">
-              <div className="booking-step"><strong>1. Apply</strong><span>Send your details so we can check fit, date, riding level, and food needs.</span></div>
-              <div className="booking-step"><strong>2. Reserve</strong><span>Pay {pricing.onlinePayment} online to hold your place once the form is submitted.</span></div>
-              <div className="booking-step"><strong>3. Prepare</strong><span>We send prep notes; you bring {pricing.localFamilyPayment} cash direct for the host family.</span></div>
             </div>
             <div className="ask-card">
               <h3>Not sure if this fits?</h3>
