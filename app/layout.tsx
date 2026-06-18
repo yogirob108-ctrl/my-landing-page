@@ -122,6 +122,10 @@ export default function RootLayout({
       lang="en"
       className={`${cormorant.variable} ${jost.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="8 Lakes Tours AI reference" />
+        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="8 Lakes Tours full AI reference" />
+      </head>
       <body className="min-h-full flex flex-col">
         {children}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-E9PW7T08LZ" strategy="lazyOnload" />

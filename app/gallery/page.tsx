@@ -5,7 +5,7 @@ import { GALLERY_IMAGES } from './gallery-data';
 import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
-  title: 'Photo Gallery | 8 Lakes Tours',
+  title: 'Photo Gallery',
   description: 'A full photo gallery from 8 Lakes Tours: horses, host families, gers, mountain valleys, river crossings, and the Eight Lakes region of Mongolia.',
   alternates: { canonical: 'https://www.8lakestours.com/gallery' },
   robots: { index: true, follow: true },

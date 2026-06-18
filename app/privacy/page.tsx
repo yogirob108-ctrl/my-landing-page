@@ -5,6 +5,7 @@ import SiteNav from '../components/SiteNav';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy Policy for 8 Lakes Tours — how we collect, use, and protect your personal data.',
+  alternates: { canonical: 'https://www.8lakestours.com/privacy' },
   robots: { index: true, follow: true },
 };
 

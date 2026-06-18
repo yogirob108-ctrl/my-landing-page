@@ -5,6 +5,7 @@ import SiteNav from '../components/SiteNav';
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
   description: 'Terms and Conditions for booking a tour with 8 Lakes Tours.',
+  alternates: { canonical: 'https://www.8lakestours.com/terms' },
   robots: { index: true, follow: true },
 };
 
