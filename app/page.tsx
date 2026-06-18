@@ -170,9 +170,15 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center', collage: 'tall' },
   { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait', collage: 'square' },
   { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape', collage: 'panorama' },
+  { src: '/images/gallery-extra/rearing-horse-over-valley.jpg', alt: 'Horse rearing above the green valley', orientation: 'landscape', collage: 'extra-wide' },
+  { src: '/images/gallery-extra/rider-rearing-horse-wide.jpg', alt: 'Rider on a rearing horse against the sky', orientation: 'landscape', collage: 'extra-wide' },
+  { src: '/images/gallery-extra/packed-horses-rain-camp.jpg', alt: 'Packed horses waiting under storm clouds', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape', collage: 'wide' },
+  { src: '/images/gallery-extra/horses-in-forest-rain.jpg', alt: 'Pack horses resting in the forest rain', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait', mobileFullWidth: true, collage: 'feature' },
+  { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk', orientation: 'portrait', collage: 'extra-tall' },
   { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape', collage: 'wide' },
+  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait', mobileFullWidth: true, collage: 'finale' },
 ];
 
@@ -617,7 +623,7 @@ export default function Home() {
           font-size: 1.3rem; font-weight: 300; letter-spacing: 0.15em;
           color: var(--cream); text-decoration: none; text-transform: uppercase;
         }
-        .nav-links { display: flex; align-items: center; gap: 1rem; }
+        .nav-links { display: flex; align-items: center; gap: 0.9rem; }
         .nav-social {
           font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
           color: rgba(245,240,232,0.78); text-decoration: none; transition: color 0.3s ease;
@@ -795,8 +801,10 @@ export default function Home() {
         .main-album-item.collage-panorama { grid-column: 5 / 9; grid-row: 4 / 7; }
         .main-album-item.collage-wide:nth-of-type(6) { grid-column: 11 / 13; grid-row: 3 / 5; }
         .main-album-item.collage-feature { grid-column: 9 / 13; grid-row: 5 / 10; }
-        .main-album-item.collage-wide:nth-of-type(8) { grid-column: 1 / 7; grid-row: 7 / 10; }
+        .main-album-item.collage-wide:nth-of-type(13) { grid-column: 1 / 7; grid-row: 7 / 10; }
         .main-album-item.collage-finale { grid-column: 7 / 9; grid-row: 7 / 10; }
+        .main-album-item.collage-extra-wide { grid-column: span 4; grid-row: span 3; }
+        .main-album-item.collage-extra-tall { grid-column: span 3; grid-row: span 5; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
@@ -1086,6 +1094,8 @@ export default function Home() {
           .main-album-item.collage-panorama { aspect-ratio: 4 / 3; }
           .main-album-item.collage-feature { aspect-ratio: 3 / 4.1; }
           .main-album-item.collage-finale { aspect-ratio: 4 / 5; }
+          .main-album-item.collage-extra-wide { aspect-ratio: 4 / 3; }
+          .main-album-item.collage-extra-tall { aspect-ratio: 3 / 4.6; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
@@ -1116,7 +1126,10 @@ export default function Home() {
         <a href="#top" className="nav-logo">8 Lakes Tours</a>
         <div className="nav-links">
           <a href="/gallery" className="nav-social">Gallery</a>
-          <a href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer" className="nav-social">Instagram</a>
+          <a href="/about" className="nav-social">About</a>
+          <a href="/preparation" className="nav-social">Prep</a>
+          <a href="/faq" className="nav-social">FAQ</a>
+          <a href="/contact" className="nav-social">Contact</a>
           <a href="#book" className="nav-cta">Reserve</a>
         </div>
       </nav>
@@ -1330,14 +1343,30 @@ export default function Home() {
         </div>
       </section> 
 
-      {/* MOSAIC */}
-      <div className="mosaic">
-        <div className="mosaic-item tall"><button type="button" className="image-button" aria-label="View larger image: Sunlit river valley in Mongolia" onClick={() => openLightbox('/images/lake.jpg', 'Sunlit river valley in Mongolia')}><Image src="/images/lake.jpg" alt="Sunlit river valley in Mongolia" fill quality={70} sizes="(max-width: 900px) 50vw, 50vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Rider crossing shallow water on horseback" onClick={() => openLightbox('/images/riding2.jpg', 'Rider crossing shallow water on horseback')}><Image src="/images/riding2.jpg" alt="Rider crossing shallow water on horseback" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Traditional Mongolian gers with grazing animals" onClick={() => openLightbox('/images/mosaic1.jpg', 'Traditional Mongolian gers with grazing animals')}><Image src="/images/mosaic1.jpg" alt="Traditional Mongolian gers with grazing animals" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Ger camp at sunrise in the valley" onClick={() => openLightbox('/images/mosaic2.jpg', 'Ger camp at sunrise in the valley')}><Image src="/images/mosaic2.jpg" alt="Ger camp at sunrise in the valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Wide sunset view across the Orkhon Valley" onClick={() => openLightbox('/images/mosaic4.jpg', 'Wide sunset view across the Orkhon Valley')}><Image src="/images/mosaic4.jpg" alt="Wide sunset view across the Orkhon Valley" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
-        <div className="mosaic-item"><button type="button" className="image-button" aria-label="View larger image: Grazing animals beside the river" onClick={() => openLightbox('/images/riding3.jpg', 'Grazing animals beside the river')}><Image src="/images/riding3.jpg" alt="Grazing animals beside the river" fill quality={70} sizes="(max-width: 900px) 50vw, 25vw" /></button></div>
+      {/* HOMEPAGE PHOTO COLLAGE */}
+      <div className="main-album" id="homepage-photos" aria-label="8 Lakes Tours homepage photo collage">
+        {MAIN_ALBUM_IMAGES.map((item) => (
+          <div
+            className={`main-album-item collage-${item.collage}${item.mobileFullWidth ? ' mobile-full-width' : ''}`}
+            key={item.src}
+          >
+            <button
+              type="button"
+              className="image-button"
+              aria-label={`View larger image: ${item.alt}`}
+              onClick={() => openLightbox(item.src, item.alt)}
+            >
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                quality={70}
+                sizes="(max-width: 900px) 50vw, 33vw"
+                style={item.objectPosition ? { objectPosition: item.objectPosition } : undefined}
+              />
+            </button>
+          </div>
+        ))}
       </div>
 
       <section style={{background:'#0f0f0d', padding:'3rem 2rem', textAlign:'center', borderTop:'1px solid rgba(200,169,110,0.14)', borderBottom:'1px solid rgba(200,169,110,0.14)'}}>
