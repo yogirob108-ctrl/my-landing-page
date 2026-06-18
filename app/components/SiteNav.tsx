@@ -36,6 +36,7 @@ export default function SiteNav() {
       <div className="site-nav-links">
         <Link href="/gallery">Gallery</Link>
         <Link href="/about">About</Link>
+        <Link href="/preparation">Prep</Link>
         <Link href="/faq">FAQ</Link>
         <Link href="/contact">Contact</Link>
         <Link href="/#book" className="site-nav-cta">Reserve</Link>

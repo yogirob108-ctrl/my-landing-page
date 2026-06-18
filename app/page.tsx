@@ -529,6 +529,18 @@ export default function Home() {
           '@type': 'Country',
           name: 'Mongolia',
         },
+        review: [
+          {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Irik Clawson' },
+            reviewBody: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
+          },
+          {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Fin Bennet' },
+            reviewBody: 'It couldn’t be further from back home and that makes me so excited.',
+          },
+        ],
       },
       {
         '@type': 'ItemList',
@@ -830,6 +842,12 @@ export default function Home() {
         .price-amount { max-width:100%; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.45rem, 8vw, 4rem); font-weight: 300; color: var(--gold); line-height: 0.98; margin-bottom: 0.4rem; overflow-wrap:anywhere; word-break: normal; }
         .price-per { max-width:100%; font-size: 0.75rem; letter-spacing: 0.15em; line-height:1.5; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-bottom: 2rem; overflow-wrap:anywhere; }
         .price-note { max-width:100%; box-sizing:border-box; font-size: 0.8rem; color: var(--mist); opacity: 0.7; line-height: 1.6; margin-bottom: 1rem; padding: 1rem; background: rgba(245,240,232,0.04); border-left: 2px solid var(--gold); overflow-wrap:anywhere; }
+        .payment-split { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.65rem; align-items: stretch; margin: 1.1rem 0; }
+        .payment-split-card { border: 1px solid rgba(200,169,110,0.24); background: rgba(245,240,232,0.035); padding: 1rem; min-width: 0; }
+        .payment-split-label { display: block; color: rgba(212,207,196,0.62); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.35rem; }
+        .payment-split-amount { display: block; color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.45rem; line-height: 1; margin-bottom: 0.35rem; overflow-wrap: anywhere; }
+        .payment-split-copy { color: rgba(212,207,196,0.76); font-size: 0.72rem; line-height: 1.5; }
+        .payment-split-arrow { display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1.1rem; opacity: 0.76; }
         .payment-details { margin-top: 1rem; border: 1px solid rgba(200,169,110,0.22); background: rgba(200,169,110,0.045); }
         .payment-summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 1rem; color: var(--gold); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; }
         .payment-summary::-webkit-details-marker { display: none; }
@@ -860,6 +878,12 @@ export default function Home() {
         .tour-date-row.muted .tour-date-detail { opacity: 0.5; }
         .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: 2px; white-space: nowrap; }
         .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
+        .fit-filter { background: #120f0b; padding: 6rem; border-top: 1px solid rgba(200,169,110,0.14); border-bottom: 1px solid rgba(200,169,110,0.14); }
+        .fit-filter-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr); gap: 4rem; align-items: start; }
+        .fit-list { display: grid; gap: 0.7rem; list-style: none; margin: 0; padding: 0; }
+        .fit-list li { border: 1px solid rgba(185,74,48,0.22); background: rgba(185,74,48,0.07); color: rgba(212,207,196,0.84); padding: 0.95rem 1rem; font-size: 0.86rem; line-height: 1.62; }
+        .fit-list li strong { color: var(--cream); }
+        .fit-filter-cta { margin-top: 1.3rem; display: inline-flex; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.45); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-section { border: 1px solid rgba(200,169,110,0.16); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
         .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
@@ -996,6 +1020,9 @@ export default function Home() {
           .trust-link { justify-content: center; align-items: center; text-align: center; padding: 0.85rem 0.6rem; font-size: 0.58rem; letter-spacing: 0.12em; line-height: 1.35; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
+          .fit-filter { padding: 4rem 1.5rem; }
+          .fit-filter-inner { grid-template-columns: 1fr; gap: 2rem; }
+          .fit-list li { padding: 0.85rem; font-size: 0.82rem; }
           .booking { padding: 4rem 1.2rem; }
           .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
           .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
@@ -1005,10 +1032,20 @@ export default function Home() {
           .price-amount { font-size: clamp(2.15rem, 15vw, 3.05rem); line-height:0.95; }
           .price-per { font-size:0.62rem; letter-spacing:0.1em; margin-bottom:1.15rem; }
           .price-note { padding:0.8rem; font-size:0.76rem; }
+          .payment-split { grid-template-columns: 1fr; gap: 0.45rem; }
+          .payment-split-card { padding: 0.85rem; }
+          .payment-split-amount { font-size: 1.3rem; }
+          .payment-split-arrow { transform: rotate(90deg); height: 1.1rem; }
           .payment-summary { padding:0.75rem 0.8rem; font-size:0.56rem; letter-spacing:0.12em; line-height:1.45; }
           .payment-detail-body { padding:0 0.8rem 0.85rem; }
           .price-spec-list { gap:0.45rem; margin-top:1rem; }
           .price-spec-row { display:grid; grid-template-columns:0.8fr 1.2fr; gap:0.8rem; font-size:0.76rem; line-height:1.45; }
+          .tour-dates-card { padding: 1rem 0.8rem; }
+          .tour-date-list { gap: 0.35rem; }
+          .tour-date-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; padding: 0.62rem 0.7rem; align-items: center; }
+          .tour-date-title { font-size: 0.93rem; margin: 0; }
+          .tour-date-detail { display: none; }
+          .tour-date-status { font-size: 0.48rem; letter-spacing: 0.08em; padding: 0.24rem 0.42rem; }
           .booking-form { gap: 0.85rem; }
           .form-section { padding: 0.85rem; gap: 0.75rem; }
           .form-section-title { font-size: 0.56rem; letter-spacing: 0.16em; }
@@ -1364,6 +1401,24 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="fit-filter" id="fit">
+        <div className="fit-filter-inner">
+          <div className="reveal">
+            <span className="section-eyebrow">Who this is not for</span>
+            <h2 className="section-title">A beautiful trip,<br /><em>not an easy product.</em></h2>
+            <p className="section-body">We would rather repel the wrong guest than sell a remote horse trek to someone who needs comfort, control, or hotel-level predictability.</p>
+            <a className="fit-filter-cta" href="/preparation">Read preparation guide</a>
+          </div>
+          <ul className="fit-list reveal reveal-delay-1">
+            <li><strong>Not for luxury-only travellers.</strong> Gers, weather, dust, shared space, and simple conditions are part of the experience.</li>
+            <li><strong>Not for strict vegan or serious dairy-free diets.</strong> Remote host-family food is traditionally meat- and dairy-heavy.</li>
+            <li><strong>Not for people who need stable internet.</strong> Starlink or local connectivity may exist, but it is a bonus, not a guarantee.</li>
+            <li><strong>Not for rigid itinerary people.</strong> Horses, weather, roads, and host-family logistics can change the plan.</li>
+            <li><strong>Not for anyone uncomfortable around animals.</strong> You will be close to horses, dogs, yaks, livestock, and working family life.</li>
+          </ul>
+        </div>
+      </section>
+
       <section className="trust-conversion">
         <div className="rob-photo reveal">
           <Image src="/images/rob-zaher.jpg" alt="Robert Zaher outdoors in warm evening light" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
@@ -1397,6 +1452,19 @@ export default function Home() {
             <div className="price-amount">{pricing.tourPrice}</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
             <div className="price-note">Pay {pricing.onlinePayment} online now to confirm your place. Bring {pricing.localFamilyPayment} in cash for the host family.</div>
+            <div className="payment-split" aria-label="How the 8 Lakes Tours payment is split">
+              <div className="payment-split-card">
+                <span className="payment-split-label">Pay online</span>
+                <span className="payment-split-amount">{pricing.onlinePayment}</span>
+                <p className="payment-split-copy">Reserves your place with 8 Lakes Tours / Adventure Therapy.</p>
+              </div>
+              <div className="payment-split-arrow" aria-hidden="true">+</div>
+              <div className="payment-split-card">
+                <span className="payment-split-label">Pay locally</span>
+                <span className="payment-split-amount">{pricing.localFamilyPayment}</span>
+                <p className="payment-split-copy">Clean USD cash paid directly to the nomadic host family in Mongolia.</p>
+              </div>
+            </div>
             <details className="payment-details">
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
@@ -1709,6 +1777,7 @@ export default function Home() {
             <a className="footer-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a className="footer-link" href="/gallery">Gallery</a>
             <a className="footer-link" href="/about">About</a>
+            <a className="footer-link" href="/preparation">Preparation</a>
             <a className="footer-link" href="/faq">FAQ</a>
             <a className="footer-link" href="/contact">Contact</a>
             <a className="footer-link" href="/terms">Terms</a>

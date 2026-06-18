@@ -36,6 +36,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${siteUrl}/preparation`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.78,
+      images: [
+        `${siteUrl}/images/og-8-lakes-horseback-2026.jpg`,
+        `${siteUrl}/images/hero-horseback.jpg`,
+      ],
+    },
+    {
       url: `${siteUrl}/gallery`,
       lastModified,
       changeFrequency: 'monthly',
