@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: 'About 8 Lakes Tours',
   description: 'About 8 Lakes Tours, Robert Zaher, Adventure Therapy, and the nomadic host-family horse trekking experience in Mongolia.',
   alternates: { canonical: 'https://www.8lakestours.com/about' },
+  openGraph: {
+    title: 'About 8 Lakes Tours',
+    description: 'Meet the people and host-family relationship behind this Mongolia horse trekking expedition.',
+    url: 'https://www.8lakestours.com/about',
+    images: [{ url: '/images/og-8-lakes-about-2026.jpg', width: 1200, height: 630, alt: 'Robert Zaher with the Mongolian host family behind 8 Lakes Tours' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About 8 Lakes Tours',
+    description: 'Meet the people and host-family relationship behind this Mongolia horse trekking expedition.',
+    images: ['/images/og-8-lakes-about-2026.jpg'],
+  },
   robots: { index: true, follow: true },
 };
 
@@ -40,8 +52,35 @@ const expectationCards = [
 ];
 
 export default function Page() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'AboutPage',
+        '@id': 'https://www.8lakestours.com/about#about-page',
+        url: 'https://www.8lakestours.com/about',
+        name: 'About 8 Lakes Tours',
+        description: 'About 8 Lakes Tours, Robert Zaher, Adventure Therapy, and the nomadic host-family horse trekking experience in Mongolia.',
+        inLanguage: 'en',
+        isPartOf: { '@id': 'https://www.8lakestours.com/#website' },
+        about: { '@id': 'https://www.8lakestours.com/#organization' },
+      },
+      {
+        '@type': ['Organization', 'TravelAgency'],
+        '@id': 'https://www.8lakestours.com/#organization',
+        name: '8 Lakes Tours',
+        url: 'https://www.8lakestours.com',
+        email: 'info@8lakestours.com',
+        founder: { '@type': 'Person', name: 'Robert Zaher', sameAs: 'https://www.instagram.com/robzaher108' },
+        sameAs: ['https://www.instagram.com/8lakestours', 'https://www.instagram.com/robzaher108'],
+        areaServed: { '@type': 'Country', name: 'Mongolia' },
+      },
+    ],
+  };
+
   return (
     <main className="about-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <SiteNav />
 
       <section className="about-hero">

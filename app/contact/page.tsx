@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: 'Contact',
   description: 'Contact 8 Lakes Tours for Mongolia horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
   alternates: { canonical: 'https://www.8lakestours.com/contact' },
+  openGraph: {
+    title: 'Contact 8 Lakes Tours',
+    description: 'Ask about Mongolia horse trekking dates, private groups, payment, insurance, and trip preparation.',
+    url: 'https://www.8lakestours.com/contact',
+    images: [{ url: '/images/og-8-lakes-horseback-2026.jpg', width: 1200, height: 630, alt: '8 Lakes Tours Mongolia horseback expedition' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact 8 Lakes Tours',
+    description: 'Ask about Mongolia horse trekking dates, private groups, payment, insurance, and trip preparation.',
+    images: ['/images/og-8-lakes-horseback-2026.jpg'],
+  },
   robots: { index: true, follow: true },
 };
 
@@ -19,8 +31,32 @@ const pStyle = { fontSize: '0.95rem', lineHeight: 1.85, color: '#d4cfc4', opacit
 const footerStyle = { borderTop: '1px solid rgba(200,169,110,0.15)', padding: '2rem 4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' } as const;
 
 export default function Page() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': 'https://www.8lakestours.com/contact#contact-page',
+    url: 'https://www.8lakestours.com/contact',
+    name: 'Contact 8 Lakes Tours',
+    description: 'Contact 8 Lakes Tours for Mongolia horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
+    inLanguage: 'en',
+    mainEntity: {
+      '@type': ['Organization', 'TravelAgency'],
+      name: '8 Lakes Tours',
+      url: 'https://www.8lakestours.com',
+      email: 'info@8lakestours.com',
+      sameAs: ['https://www.instagram.com/8lakestours', 'https://www.instagram.com/robzaher108'],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'booking enquiries',
+        email: 'info@8lakestours.com',
+        availableLanguage: ['en'],
+      },
+    },
+  };
+
   return (
     <main style={pageStyle}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <SiteNav />
       <div style={wrapperStyle}>
         <p style={eyebrowStyle}>Contact</p>

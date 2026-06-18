@@ -6,6 +6,18 @@ export const metadata: Metadata = {
   title: 'FAQ',
   description: 'Frequently asked questions about 8 Lakes Tours, Mongolia horse trekking, pricing, cash payments to nomadic host families, insurance, and booking.',
   alternates: { canonical: 'https://www.8lakestours.com/faq' },
+  openGraph: {
+    title: '8 Lakes Tours FAQ',
+    description: 'Answers about Mongolia horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
+    url: 'https://www.8lakestours.com/faq',
+    images: [{ url: '/images/og-8-lakes-horseback-2026.jpg', width: 1200, height: 630, alt: '8 Lakes Tours Mongolia horseback expedition' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '8 Lakes Tours FAQ',
+    description: 'Answers about Mongolia horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
+    images: ['/images/og-8-lakes-horseback-2026.jpg'],
+  },
   robots: { index: true, follow: true },
 };
 
@@ -19,8 +31,25 @@ const pStyle = { fontSize: '0.95rem', lineHeight: 1.85, color: '#d4cfc4', opacit
 const footerStyle = { borderTop: '1px solid rgba(200,169,110,0.15)', padding: '2rem 4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' } as const;
 
 export default function Page() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': 'https://www.8lakestours.com/faq#faq',
+    url: 'https://www.8lakestours.com/faq',
+    inLanguage: 'en',
+    mainEntity: [
+      { '@type': 'Question', name: 'What is 8 Lakes Tours?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is a 9-day / 8-night small-group horse trekking expedition in Mongolia, focused on the Orkhon Valley and Naiman Nuur / Eight Lakes region. Guests stay with a nomadic family, ride Mongolian horses, sleep in traditional gers, and experience daily life on the steppe.' } },
+      { '@type': 'Question', name: 'What 2026 departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours currently shows seven fixed 2026 departures from June through September, plus private group dates on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.' } },
+      { '@type': 'Question', name: 'How much does the trip cost?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. This is split into a $959 online booking payment and a $1,200 local cash payment made directly to the nomadic host family in Mongolia.' } },
+      { '@type': 'Question', name: 'Is the $959 online payment a deposit?', acceptedAnswer: { '@type': 'Answer', text: 'No. It is best understood as the online booking payment that confirms your place and covers the organiser/operator share. The separate $1,200 family portion is paid locally in cash to the host family.' } },
+      { '@type': 'Question', name: 'Can you support vegan, lactose-free, or strict dietary requirements?', acceptedAnswer: { '@type': 'Answer', text: 'This trip is not a good fit for strict vegan travellers, and it may be unsuitable for anyone with serious dairy or lactose intolerance. Remote host-family meals are traditionally meat- and dairy-heavy, and fully separate vegan or dairy-free meals cannot be reliably provided.' } },
+      { '@type': 'Question', name: 'Is travel insurance required?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Comprehensive travel insurance is mandatory and should include medical treatment, emergency evacuation and repatriation, and horseback riding or adventure activity coverage.' } },
+    ],
+  };
+
   return (
     <main style={pageStyle}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <SiteNav />
       <div style={wrapperStyle}>
         <p style={eyebrowStyle}>FAQ</p>
@@ -31,6 +60,7 @@ export default function Page() {
           ['Who organises the trip?', "8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Bookings are supported by Adventure Therapy, the parent adventure-company behind the online booking and payment flow, while the local family portion goes directly to your hosts in Mongolia."],
           ['Can I speak to someone before booking?', "Yes. Email info@8lakestours.com with any questions before paying. Rob's Instagram is @robzaher108, but tour enquiries currently stay centralised through info@8lakestours.com."],
           ['How much does the trip cost?', 'The current 2026 rate is $2,159 USD per person. This is split into a $959 online booking payment and a $1,200 local cash payment made directly to the nomadic host family in Mongolia.'],
+          ['What 2026 departure dates are available?', 'The website currently shows seven fixed 2026 departures from June through September, plus private group dates on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.'],
           ['Why is $1,200 paid in cash locally?', 'Many of the nomadic families we work with cannot reliably receive online payments or bank transfers. Paying the $1,200 family portion directly in cash ensures that money reaches the hosts transparently.'],
           ['Is the $959 online payment a deposit?', 'No. It is best understood as the online booking payment that confirms your place and covers the organiser/operator share. The separate $1,200 family portion is paid locally in cash to the host family.'],
           ['What happens after I pay online?', 'You receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and instructions for the host-family cash payment. The email provider/settings are still being finalised, but this is the intended confirmation flow.'],

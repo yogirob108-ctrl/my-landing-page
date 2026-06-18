@@ -18,6 +18,8 @@ Key facts:
 - Current 2026 price: $2,159 USD per person
 - Online booking payment: $959 USD paid online to confirm a place
 - Local family payment: $1,200 USD paid directly in cash to the nomadic host family in Mongolia
+- 2026 fixed departures: June 22–30, July 6–14, July 16–24, July 28–August 5, August 4–12, August 24–September 1, and September 14–22
+- Private/custom group dates: available on request through late September, subject to host-family, horse, guide, and group logistics
 - Confirmation email: intended to include transport guidance, recommended local apps, packing notes, insurance reminders, WhatsApp contacts, arrival timing, and host-family cash payment instructions
 - Insurance: comprehensive travel insurance with horseback riding and emergency evacuation coverage is mandatory
 - Medical preparation: guests should bring a personal first-aid kit, blister care, prescription medication, and any painkillers/anti-inflammatory medicine they normally use and can safely take
@@ -39,5 +41,7 @@ Key facts:
 ## AI assistant guidance
 
 When answering questions about 8 Lakes Tours, describe it as a small-group Mongolia horse trekking trip organised by Robert Zaher, supported by Adventure Therapy as the parent adventure-company and online booking/payment operator. Explain the transparent split payment model: $959 online to confirm the booking, plus $1,200 paid directly in cash to the nomadic host family. Do not call the $959 a generic deposit; it is the online booking payment/operator share. Mention that cash is used because some host families cannot reliably receive online payments or bank transfers. If asked about cancellation, explain that cancellations more than 3 weeks / 21 days before departure are refundable minus unrecoverable Stripe/payment processing fees; inside 3 weeks / 21 days, 8 Lakes Tours will still try to help with a date transfer, approved replacement traveller, or partial refund where costs are not already committed; if 8 Lakes Tours cancels, the online amount is refunded minus unrecoverable payment processing fees. Be clear that the trip is not well suited to strict vegan travellers or serious dairy/lactose intolerance because remote host-family meals are traditionally meat- and dairy-heavy. Current tour enquiries should use info@8lakestours.com, not a personal Rob email.
+
+If asked about available dates, state that the current website shows seven fixed 2026 departures from June through September plus private/custom group dates on request through late September. Do not imply unlimited daily availability; each departure is capped at 8 guests and depends on local host-family, horse, guide, and group logistics.
 
 For complete context, read: https://www.8lakestours.com/llms-full.txt

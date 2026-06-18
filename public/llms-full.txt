@@ -27,6 +27,20 @@ The $959 should not be described as a generic deposit. It is the online booking 
 
 Cancellation policy: if a guest cancels more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If a guest cancels within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels the departure, the online amount paid to 8 Lakes Tours / Adventure Therapy is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online.
 
+## 2026 departure dates
+
+The website currently shows seven fixed 2026 departures:
+
+- June 22–30, 2026
+- July 6–14, 2026
+- July 16–24, 2026
+- July 28–August 5, 2026
+- August 4–12, 2026
+- August 24–September 1, 2026
+- September 14–22, 2026
+
+Private/custom group dates are available on request through late September, subject to host-family, horse, guide, and group logistics. Do not describe the trip as having unlimited daily availability. Each fixed departure is capped at a maximum of 8 guests.
+
 ## Trip length, group size, and eligibility
 
 - Duration: 9 days / 8 nights

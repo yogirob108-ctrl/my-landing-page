@@ -8,12 +8,42 @@ export const metadata: Metadata = {
   title: 'Photo Gallery',
   description: 'A full photo gallery from 8 Lakes Tours: horses, host families, gers, mountain valleys, river crossings, and the Eight Lakes region of Mongolia.',
   alternates: { canonical: 'https://www.8lakestours.com/gallery' },
+  openGraph: {
+    title: '8 Lakes Tours Photo Gallery',
+    description: 'Horses, host families, gers, mountain valleys, river crossings, and the Eight Lakes region of Mongolia.',
+    url: 'https://www.8lakestours.com/gallery',
+    images: [{ url: '/images/og-8-lakes-gallery-2026.jpg', width: 1200, height: 630, alt: 'Mongolia horse trekking photo gallery — 8 Lakes Tours' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '8 Lakes Tours Photo Gallery',
+    description: 'Horses, host families, gers, mountain valleys, river crossings, and the Eight Lakes region of Mongolia.',
+    images: ['/images/og-8-lakes-gallery-2026.jpg'],
+  },
   robots: { index: true, follow: true },
 };
 
 export default function GalleryPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    '@id': 'https://www.8lakestours.com/gallery#image-gallery',
+    url: 'https://www.8lakestours.com/gallery',
+    name: '8 Lakes Tours Photo Gallery',
+    description: 'A full photo gallery from 8 Lakes Tours: horses, host families, gers, mountain valleys, river crossings, and the Eight Lakes region of Mongolia.',
+    inLanguage: 'en',
+    image: GALLERY_IMAGES.slice(0, 12).map(image => ({
+      '@type': 'ImageObject',
+      url: `https://www.8lakestours.com${image.src}`,
+      caption: image.alt,
+      width: image.width,
+      height: image.height,
+    })),
+  };
+
   return (
     <main className="gallery-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <SiteNav />
 
       <header className="gallery-hero">

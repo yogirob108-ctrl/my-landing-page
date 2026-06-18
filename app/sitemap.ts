@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 const siteUrl = 'https://www.8lakestours.com'
-const lastModified = new Date('2026-06-09')
+const lastModified = new Date('2026-06-18')
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [
         `${siteUrl}/images/hero-horseback.jpg`,
+        `${siteUrl}/images/og-8-lakes-horseback-2026.jpg`,
         `${siteUrl}/images/rob-family.jpg`,
         `${siteUrl}/images/rob-zaher.jpg`,
         `${siteUrl}/images/lake.jpg`,
@@ -22,6 +23,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: 'monthly',
       priority: 0.8,
+      images: [
+        `${siteUrl}/images/og-8-lakes-about-2026.jpg`,
+        `${siteUrl}/images/rob-family.jpg`,
+        `${siteUrl}/images/rob-zaher.jpg`,
+      ],
     },
     {
       url: `${siteUrl}/faq`,
@@ -35,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.75,
       images: [
+        `${siteUrl}/images/og-8-lakes-gallery-2026.jpg`,
         `${siteUrl}/images/gallery-extra/rearing-horse-over-valley.jpg`,
         `${siteUrl}/images/gallery-extra/packed-horses-rain-camp.jpg`,
         `${siteUrl}/images/expedition-originals/storm-cloud-valley-panorama.jpg`,

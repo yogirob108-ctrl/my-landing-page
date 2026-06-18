@@ -146,9 +146,13 @@ function getLocalizedPricing(): LocalizedPricing {
 
 const TOUR_DATES = [
   { date: 'June 22 – 30, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'July 6 – 14, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
   { date: 'July 16 – 24, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'July 28 – August 5, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
   { date: 'August 4 – 12, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
-  { date: 'Custom Group Date', detail: 'Private booking · Contact us to arrange', status: 'On Request', muted: true },
+  { date: 'August 24 – September 1, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'September 14 – 22, 2026', detail: '9 Days · 8 Nights · Orkhon Valley, Mongolia', status: 'Spots Available' },
+  { date: 'Private Group Date', detail: 'Custom departure · Available through late September', status: 'On Request', muted: true },
 ];
 
 const STRIP_IMAGES = [
@@ -506,6 +510,7 @@ export default function Home() {
           priceCurrency: 'USD',
           availability: 'https://schema.org/LimitedAvailability',
           validFrom: '2026-01-01',
+          validThrough: '2026-09-22',
         },
         provider: {
           '@type': 'Organization',
@@ -526,6 +531,17 @@ export default function Home() {
         },
       },
       {
+        '@type': 'ItemList',
+        '@id': 'https://www.8lakestours.com/#2026-departures',
+        name: '8 Lakes Tours 2026 fixed departure dates',
+        itemListElement: TOUR_DATES.map((tourDate, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: tourDate.date,
+          description: `${tourDate.detail} · ${tourDate.status}`,
+        })),
+      },
+      {
         '@type': 'FAQPage',
         mainEntity: [
           { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings are supported by Adventure Therapy, the parent adventure-company behind the online booking and payment flow, while the local family portion goes directly to your hosts in Mongolia.' } },
@@ -536,6 +552,7 @@ export default function Home() {
           { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. Guests should also be mentally prepared for simple conditions, physical discomfort, changing plans, and group life in the wild." } },
           { '@type': 'Question', name: 'What medical supplies should I bring?', acceptedAnswer: { '@type': 'Answer', text: 'Bring your own personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but they are not a replacement for your personal medical needs.' } },
           { '@type': 'Question', name: 'Can you support vegan, lactose-free, or strict dietary requirements?', acceptedAnswer: { '@type': 'Answer', text: 'This trip is not a good fit for strict vegan travellers and may be unsuitable for anyone with serious dairy or lactose intolerance. Rural Mongolian host-family meals are traditionally meat- and dairy-heavy, including milk tea, yoghurt, cheese, meat, and other animal products. Vegetarian guests may be possible with advance notice, but fully separate vegan or dairy-free meals cannot be reliably provided in this remote setting.' } },
+          { '@type': 'Question', name: 'What 2026 departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours currently shows seven fixed 2026 departures from June through September, plus private group dates on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
@@ -1463,10 +1480,9 @@ export default function Home() {
                   <label className="form-label" htmlFor="tour_date">Preferred Tour Date</label>
                   <select id="tour_date" className="form-select" name="tour_date">
                     <option value="">Select date</option>
-                    <option>June 22–30</option>
-                    <option>July 16–24</option>
-                    <option>August 4–12</option>
-                    <option>Custom Group Date</option>
+                    {TOUR_DATES.map(dateOption => (
+                      <option key={dateOption.date}>{dateOption.date}</option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -1657,7 +1673,8 @@ export default function Home() {
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'How flexible do I need to be?', a:'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. On the steppe, uncertainty has long been part of life: travellers could lose their way between gers, so hospitality, tea, food, shelter, directions, and mutual help became part of the culture. You may be encouraged to step outside your comfort zone, but nothing is forced — you can say no, rest, or take a quieter day around the host family and ger life.'},
             {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. You should also be mentally prepared for simple conditions, physical discomfort, changing plans, and sharing space with a group in the wild."},
-            {q:'What medical supplies should I bring?', a:'Bring a small personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but guests are responsible for their own personal medical basics.'},
+            {q:'What 2026 departure dates are available?', a:'We currently show seven fixed 2026 departures from June through September, plus private group dates on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.'},
+            {q:'What medical supplies should I bring?', a:'Bring a small personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but they are not medical professionals and cannot replace your own personal medical supplies.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.'},
             {q:'What is the weather like in the summer?', a:'Expect warm days between 15–24°C (60–75°F) and cold nights that can drop to 0–5°C (32–41°F), especially at higher altitudes. Pack layers — mornings and evenings in the Naiman Nuur region can get very cold.'},
