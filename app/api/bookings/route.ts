@@ -108,9 +108,9 @@ export async function POST(request: Request) {
     firstName,
     lastName,
     email,
-    source: 'booking_application_form',
-    interest: '8 Lakes Tours applicant follow-up and trip updates',
-    consentContext: 'Booking application submitted; form states applicants receive relevant trip/prep updates and can opt out by reply',
+    source: 'booking_form',
+    interest: '8 Lakes Tours booking follow-up and newsletter updates',
+    consentContext: 'Booking form submitted; form states guests receive relevant trip/prep updates and can opt out by reply',
   });
 
   if (!subscription.ok) {
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
     booking_id: booking.id,
     event_type: 'system',
     direction: 'system',
-    title: 'Website application submitted',
+    title: 'Website booking submitted',
     body: `${firstName} ${lastName} submitted the public reservation form and is awaiting online payment.`,
     created_by: 'website-form',
   });

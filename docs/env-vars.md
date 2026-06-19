@@ -2,9 +2,9 @@
 
 Copy the relevant values into `.env.local` for local development and into Vercel project settings for production/preview deployments.
 
-## Required for public booking and lead capture
+## Required for public booking and newsletter capture
 
-The 8 Lakes public site still writes reservation applications and trip-update leads into the shared Adventure Therapy Supabase project. The internal dashboard itself now lives in the separate `adventure-therapy-ops` repo/app.
+The 8 Lakes public site writes bookings and newsletter subscribers into the shared Adventure Therapy Supabase project. The internal dashboard itself now lives in the separate `adventure-therapy-ops` repo/app.
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://izomzgseckrweydevsff.supabase.co

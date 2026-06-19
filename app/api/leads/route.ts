@@ -14,14 +14,14 @@ function jsonError(message: string, status = 400) {
 
 export async function POST(request: Request) {
   if (!isSupabaseAdminConfigured) {
-    return jsonError('Lead capture is temporarily unavailable. Please email info@8lakestours.com.', 503);
+    return jsonError('Newsletter signup is temporarily unavailable. Please email info@8lakestours.com.', 503);
   }
 
   let payload: { name?: string; email?: string; source?: string; interest?: string };
   try {
     payload = await request.json();
   } catch {
-    return jsonError('Invalid lead submission.');
+    return jsonError('Invalid newsletter signup.');
   }
 
   const email = normalizeEmail(payload.email);

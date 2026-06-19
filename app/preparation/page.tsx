@@ -115,7 +115,7 @@ export default function PreparationPage() {
         <p style={eyebrowStyle}>Preparation</p>
         <h1 style={h1Style}>How to prepare for the steppe.</h1>
         <p style={{ ...pStyle, fontSize: '1.08rem', maxWidth: '700px' }}>
-          This page gives practical preparation guidance for accepted guests and serious applicants: what to bring, how to pack for Mongolia&apos;s fast-changing steppe weather, how the cash split works, what food is like, and what mindset fits a remote Mongolian horse trek.
+          This page gives practical preparation guidance for booked guests and serious travellers: what to bring, how to pack for Mongolia&apos;s fast-changing steppe weather, how the cash split works, what food is like, and what mindset fits a remote Mongolian horse trek.
         </p>
 
         <div style={{ display: 'grid', gap: '1.1rem', marginTop: '3rem' }}>
@@ -136,7 +136,7 @@ export default function PreparationPage() {
         </section>
 
         <p style={{ ...pStyle, marginTop: '2rem' }}>
-          Ready to apply? <Link href="/#book" style={linkStyle}>Return to the booking form</Link>.
+          Ready to book? <Link href="/#book" style={linkStyle}>Return to the booking form</Link>.
         </p>
       </div>
     </main>

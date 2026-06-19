@@ -35,7 +35,7 @@ Key facts:
 
 ## Important pages
 
-- [Homepage and booking form](https://www.8lakestours.com/): main trip page, dates, price, application form, itinerary, inclusion list, and FAQ.
+- [Homepage and booking form](https://www.8lakestours.com/): main trip page, dates, price, booking form, itinerary, inclusion list, and FAQ.
 - [About](https://www.8lakestours.com/about): who 8 Lakes Tours is, how the family partnership works, and where the trip takes place.
 - [FAQ](https://www.8lakestours.com/faq): concise answers about payment, riding experience, airport, insurance, safety, and inclusions.
 - [Preparation](https://www.8lakestours.com/preparation): practical guidance on packing, insurance, cash, arrival, food, riding fitness, translation, and remote conditions.

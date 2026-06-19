@@ -169,7 +169,7 @@ export default function Page() {
         <p className="eyebrow">Next</p>
         <h2>Keep exploring</h2>
         <div className="next-grid">
-          <Link href="/#book"><strong>Reserve a spot</strong><span>Dates, price, application, and payment structure.</span></Link>
+          <Link href="/#book"><strong>Reserve a spot</strong><span>Dates, price, booking form, and payment structure.</span></Link>
           <Link href="/gallery"><strong>Gallery</strong><span>See the horses, gers, weather, guides, and valley.</span></Link>
           <Link href="/faq"><strong>FAQ</strong><span>Food, flexibility, safety, insurance, payment, and logistics.</span></Link>
           <Link href="/contact"><strong>Contact</strong><span>Ask Rob and the team before you book.</span></Link>

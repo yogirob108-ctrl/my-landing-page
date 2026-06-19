@@ -460,7 +460,7 @@ export default function Home() {
     };
   }, []);
 
-  const submitApplication = async (form: HTMLFormElement) => {
+  const submitBooking = async (form: HTMLFormElement) => {
     if (formSubmitted) return;
     setFormError('');
     setFormSubmitting(true);
@@ -474,14 +474,14 @@ export default function Home() {
       const payload = await response.json().catch(() => null) as { ok?: boolean; reference?: string; error?: string } | null;
 
       if (!response.ok || !payload?.ok || !payload.reference) {
-        throw new Error(payload?.error || 'The application could not be saved. Please try again or email info@8lakestours.com.');
+        throw new Error(payload?.error || 'The booking could not be saved. Please try again or email info@8lakestours.com.');
       }
 
       setBookingReference(payload.reference);
       setFormSubmitted(true);
 
     } catch (error) {
-      setFormError(error instanceof Error ? error.message : 'The application could not be saved. Please try again or email info@8lakestours.com.');
+      setFormError(error instanceof Error ? error.message : 'The booking could not be saved. Please try again or email info@8lakestours.com.');
     } finally {
       setFormSubmitting(false);
     }
@@ -1530,10 +1530,10 @@ export default function Home() {
         </div>
 
         <div className="reveal reveal-delay-1" id="application">
-          <span className="section-eyebrow">Application</span>
+          <span className="section-eyebrow">Booking</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
           <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>We ask for a few details so we can match riders safely, prepare the host family, and send the right confirmation notes.</p>
-          <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitApplication(e.currentTarget); }}>
+          <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
             <input type="hidden" name="display_online_payment" value={pricing.onlinePayment} />
@@ -1627,7 +1627,7 @@ export default function Home() {
             </div>
             </fieldset>
 
-            {/* Submit application to ops */}
+            {/* Submit booking to ops */}
             {!formSubmitted ? (
               <button
                 type="submit"
@@ -1635,11 +1635,11 @@ export default function Home() {
                 className="submit-btn"
                 style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
-                {formSubmitting ? 'Submitting…' : 'Submit Application'}
+                {formSubmitting ? 'Submitting…' : 'Submit Booking'}
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'3px', textAlign:'center'}}>
-                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Application saved to ops — complete your online booking payment below</p>
+                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Booking saved — complete your online booking payment below</p>
                 {bookingReference && <p style={{fontSize:'0.68rem', color:'rgba(245,240,232,0.62)', marginTop:'0.4rem'}}>Reference: {bookingReference}</p>}
               </div>
             )}
@@ -1648,7 +1648,7 @@ export default function Home() {
             <div className="payment-checkout-card">
               <p className="checkout-eyebrow">Online Reservation Payment</p>
               <p className="checkout-copy">
-                Submit the application with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
+                Submit the booking form with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
               </p>
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
@@ -1658,7 +1658,7 @@ export default function Home() {
                 <div
                   className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
                   dangerouslySetInnerHTML={{
-                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-application'}"></stripe-buy-button>`,
+                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-booking'}"></stripe-buy-button>`,
                   }}
                 />
                 <a
@@ -1678,7 +1678,7 @@ export default function Home() {
                     onClick={e => { e.stopPropagation(); }}
                   >
                     <p>
-                      {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your application before payment'}
+                      {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your booking before payment'}
                     </p>
                   </div>
                 )}

@@ -73,7 +73,7 @@ export default function Page() {
         </section>
         <section style={{ marginTop: '2.5rem' }}>
           <h2 style={h2Style}>Booking enquiries</h2>
-          <p style={pStyle}>The fastest way to start is the application form on the homepage. It asks for your preferred date, riding experience, dietary restrictions, emergency contact, and any special notes so the team can assess fit and availability.</p>
+          <p style={pStyle}>The fastest way to start is the booking form on the homepage. It asks for your preferred date, riding experience, dietary restrictions, emergency contact, and any special notes so the team can prepare properly and check fit if anything needs review.</p>
           <p style={{...pStyle, marginTop: '1rem'}}><Link href="/#book" style={{ color: '#c8a96e' }}>Go to booking form →</Link></p>
         </section>
       </div>
