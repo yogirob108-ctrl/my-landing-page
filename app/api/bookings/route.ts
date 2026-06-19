@@ -19,6 +19,7 @@ type PublicBookingPayload = {
   riding_experience?: string;
   tour_date?: string;
   dietary_restrictions?: string;
+  how_heard?: string;
   notes?: string;
   signature?: string;
 };
@@ -53,6 +54,9 @@ export async function POST(request: Request) {
   const lastName = clean(payload.last_name);
   const email = clean(payload.email).toLowerCase();
   const signature = clean(payload.signature);
+  const howHeard = clean(payload.how_heard);
+  const guestNotes = clean(payload.notes);
+  const bookingNotes = [howHeard ? `How they heard about us: ${howHeard}` : '', guestNotes].filter(Boolean).join('\n\n') || null;
 
   if (!firstName || !lastName || !email || !signature) {
     return jsonError('Please complete your name, email, and waiver signature.');
@@ -126,7 +130,7 @@ export async function POST(request: Request) {
     status: 'awaiting_payment',
     riding_experience: clean(payload.riding_experience) || null,
     dietary_notes: clean(payload.dietary_restrictions) || null,
-    notes: clean(payload.notes) || null,
+    notes: bookingNotes,
     form_source: 'website',
     total_trip_value_usd: TOTAL_TRIP_VALUE_USD,
     online_due_usd: ONLINE_DUE_USD,
@@ -143,7 +147,7 @@ export async function POST(request: Request) {
     event_type: 'system',
     direction: 'system',
     title: 'Website booking submitted',
-    body: `${firstName} ${lastName} submitted the public reservation form and is awaiting online payment.`,
+    body: `${firstName} ${lastName} submitted the public reservation form and is awaiting online payment.${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
     created_by: 'website-form',
   });
 
@@ -156,7 +160,7 @@ export async function POST(request: Request) {
     phone: clean(payload.phone),
     tourDate,
     ridingExperience: clean(payload.riding_experience),
-    notes: clean(payload.notes),
+    notes: bookingNotes ?? '',
   });
   const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate });
   const internalRecipients = getInternalEmailRecipients();
