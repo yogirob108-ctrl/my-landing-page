@@ -67,8 +67,8 @@ const sections = [
     title: 'Countryside toilets and simple facilities',
     items: [
       'Once you leave the city, do not expect Western flush toilets. Countryside facilities are usually simple outhouses with squat toilets.',
-      'Accommodation can still be warm, welcoming, and comfortable in a rural way, but bathroom facilities are basic and part of the off-grid host-family experience.',
-      'Bring toilet paper, wet wipes, hand sanitiser, and a small personal wash kit; pack them where you can reach them easily during travel days.',
+      'Accommodation can still be warm, welcoming, and comfortable in a rural way, but bathroom facilities are basic and there are no regular showers in the countryside.',
+      'Bring wet wipes for cleaning hands and body between river washes. Washing in the river is part of the simple, therapeutic steppe rhythm when conditions allow.',
     ],
   },
   {
