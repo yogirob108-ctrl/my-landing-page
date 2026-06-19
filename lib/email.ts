@@ -179,7 +179,7 @@ export function bookingInternalEmail(input: {
 export function bookingCustomerEmail(input: { reference: string; firstName: string; tourDate: string }) {
   const subject = `8 Lakes Tours application received — ${input.reference}`;
   const name = firstName(input.firstName);
-  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours application has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\n\nPayment structure:\nTotal 2026 trip price: ${TOTAL_PRICE_USD} per person\nOnline booking payment: ${ONLINE_PAYMENT_USD}\nCash paid directly to the host family in Mongolia: ${FAMILY_CASH_USD}\n\nYour place is confirmed once the online booking payment has been completed and matched. The ${FAMILY_CASH_USD} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nNext steps:\n1. Complete the online booking payment on the website if you have not already done so.\n2. We review and match the application/payment.\n3. We send preparation notes before departure.\n\nQuestions? Reply to this email.\n\n8 Lakes Tours`;
+  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours application has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\n\nPayment structure:\nTotal 2026 trip price: ${TOTAL_PRICE_USD} per person\nOnline booking payment: ${ONLINE_PAYMENT_USD}\nCash paid directly to the host family in Mongolia: ${FAMILY_CASH_USD}\n\nYour place is confirmed once the online booking payment has been completed and matched. The ${FAMILY_CASH_USD} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nFood note:\nTraditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families often produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nNext steps:\n1. Complete the online booking payment on the website if you have not already done so.\n2. We review and match the application/payment.\n3. We send preparation notes before departure.\n\nQuestions? Reply to this email.\n\n8 Lakes Tours`;
 
   return {
     subject,
@@ -204,6 +204,11 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
 
         <h2 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:24px;margin:0 0 10px;color:#241d14">Why the payment is split</h2>
         <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">Many nomadic host families cannot reliably receive cards, online payments, or bank transfers. The local family portion is paid directly in cash so that money reaches the hosts cleanly and transparently.</p>
+
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Food note</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Traditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families often produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.</p>
+        </div>
 
         <h2 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:24px;margin:0 0 10px;color:#241d14">Next steps</h2>
         <ol style="margin:0 0 22px;padding-left:20px;color:#3a3024;line-height:1.75;font-size:15px">
@@ -263,12 +268,13 @@ export function leadCustomerEmail(input: { name: string }) {
   const greeting = greetingName ? `Hi ${escapeHtml(greetingName)},` : 'Hi,';
   return {
     subject: 'You’re on the 8 Lakes Tours update list',
-    text: `${greetingName ? `Hi ${greetingName},` : 'Hi,'}\n\nYou’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.\n\nIf you’re ready to reserve, you can complete the application here: ${SITE_URL}/#book\n\n8 Lakes Tours`,
+    text: `${greetingName ? `Hi ${greetingName},` : 'Hi,'}\n\nYou’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.\n\nOne thing worth knowing early: traditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip — often made from the family’s own yak or cow milk and served as milk tea, yoghurt, cheese, and other local foods.\n\nIf you’re ready to reserve, you can complete the application here: ${SITE_URL}/#book\n\n8 Lakes Tours`,
     html: emailShell({
       preheader: 'You are on the list for Mongolia trip updates and preparation notes.',
       title: greeting,
       intro: 'You’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.',
       children: `
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">One thing worth knowing early: traditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip — often made from the family&apos;s own yak or cow milk and served as milk tea, yoghurt, cheese, and other local foods.</p>
         <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">When you’re ready to reserve, complete the application on the website. The current 2026 price is split clearly: <strong>${ONLINE_PAYMENT_USD} online</strong> and <strong>${FAMILY_CASH_USD} cash paid directly to the host family</strong>.</p>
         <p style="margin:0"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">View the trip</a></p>
       `,

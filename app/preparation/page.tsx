@@ -59,6 +59,7 @@ const sections = [
     title: 'Food and dietary fit',
     items: [
       'Traditional remote host-family meals are meat- and dairy-heavy: milk tea, yoghurt, cheese, meat, and animal products are normal.',
+      'The dairy is part of the quality of the experience: host families often produce their own milk from yaks or cows, then serve it as milk tea, yoghurt, cheese, and other traditional foods.',
       'Vegetarian guests may be possible with advance notice, but strict vegan diets and serious dairy/lactose intolerance may make this the wrong trip.',
       'Contact the team before booking if food is a major health, allergy, or ethical requirement.',
     ],
