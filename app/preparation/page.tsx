@@ -41,8 +41,9 @@ const sections = [
   {
     title: 'Packing basics',
     items: [
-      'Layered clothing for warm days, cold nights, wind, rain, and sudden weather changes.',
-      'Comfortable riding trousers, warm socks, waterproof outer layer, sun protection, and sturdy shoes or boots suitable for camp life.',
+      'Pack for all seasons, even in summer. The Mongolian steppe can swing from warm sun to cold wind, rain, and freezing-feeling nights quickly.',
+      'Bring more warm layers than you think you need: base layers, fleece or down, warm socks, hat, gloves, and a proper waterproof shell.',
+      'Comfortable riding trousers, waterproof outer layer, sun protection, and sturdy shoes or boots suitable for camp life.',
       'A personal first-aid kit, blister care, prescriptions, painkillers or anti-inflammatory medication you normally use and can safely take, toiletries, and any personal medical essentials.',
     ],
   },
@@ -105,7 +106,7 @@ export default function PreparationPage() {
         <p style={eyebrowStyle}>Preparation</p>
         <h1 style={h1Style}>How to prepare for the steppe.</h1>
         <p style={{ ...pStyle, fontSize: '1.08rem', maxWidth: '700px' }}>
-          This page gives practical preparation guidance for accepted guests and serious applicants: what to bring, how the cash split works, what food is like, and what mindset fits a remote Mongolian horse trek.
+          This page gives practical preparation guidance for accepted guests and serious applicants: what to bring, how to pack for Mongolia&apos;s fast-changing steppe weather, how the cash split works, what food is like, and what mindset fits a remote Mongolian horse trek.
         </p>
 
         <div style={{ display: 'grid', gap: '1.1rem', marginTop: '3rem' }}>

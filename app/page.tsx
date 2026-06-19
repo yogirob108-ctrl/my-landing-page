@@ -75,11 +75,12 @@ const DISPLAY_EXCHANGE_RATES: Record<CurrencyCode, number> = {
 };
 
 const PACKING_LIST = [
-  'Warm sleeping bag rated for cold nights',
+  'Warm sleeping bag rated for cold steppe nights',
+  'Enough layers to handle all seasons in one trip — pack warmer rather than lighter',
   'Comfortable riding boots or sturdy hiking boots',
   'Light camp shoes or flip-flops',
-  'Rain jacket or waterproof shell',
-  'Warm layers for cold mornings and evenings',
+  'Rain jacket or waterproof shell for sudden weather changes',
+  'Warm base layer, fleece/down layer, hat and gloves for cold mornings and evenings',
   'Riding gloves or lightweight outdoor gloves',
   'Sun hat or cap',
   'Sunglasses with secure strap',
