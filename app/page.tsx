@@ -874,22 +874,16 @@ export default function Home() {
         .price-spec-row { display:flex; justify-content:space-between; gap:1rem; min-width:0; font-size:0.8rem; color:var(--mist); padding:0.6rem 0; border-bottom:1px solid rgba(245,240,232,0.07); }
         .price-spec-row span { min-width:0; overflow-wrap:anywhere; }
         .price-spec-row span:last-child { color:var(--cream); text-align:right; }
-        .tour-dates-card { margin-top: 1.5rem; padding: 1.5rem; background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.35); border-radius: 4px; }
-        .tour-date-list { display: flex; flex-direction: column; gap: 0.6rem; }
-        .tour-date-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; }
+        .tour-dates-card { margin-top: 1.5rem; padding: 1.25rem; background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.35); border-radius: 4px; }
+        .tour-date-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+        .tour-date-row { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.72rem 0.78rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; }
         .tour-date-row.muted { background: rgba(200,169,110,0.03); border-color: rgba(200,169,110,0.1); }
-        .tour-date-title { font-size: 1rem; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; margin-bottom: 0.15rem; }
+        .tour-date-title { font-size: 0.94rem; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; margin-bottom: 0.1rem; }
         .tour-date-row.muted .tour-date-title { color: var(--mist); }
-        .tour-date-detail { font-size: 0.72rem; color: var(--mist); opacity: 0.7; }
+        .tour-date-detail { font-size: 0.66rem; color: var(--mist); opacity: 0.7; }
         .tour-date-row.muted .tour-date-detail { opacity: 0.5; }
         .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: 2px; white-space: nowrap; }
         .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
-        .fit-filter { background: #120f0b; padding: 6rem; border-top: 1px solid rgba(200,169,110,0.14); border-bottom: 1px solid rgba(200,169,110,0.14); }
-        .fit-filter-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr); gap: 4rem; align-items: start; }
-        .fit-list { display: grid; gap: 0.7rem; list-style: none; margin: 0; padding: 0; }
-        .fit-list li { border: 1px solid rgba(185,74,48,0.22); background: rgba(185,74,48,0.07); color: rgba(212,207,196,0.84); padding: 0.95rem 1rem; font-size: 0.86rem; line-height: 1.62; }
-        .fit-list li strong { color: var(--cream); }
-        .fit-filter-cta { margin-top: 1.3rem; display: inline-flex; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.45); font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-section { border: 1px solid rgba(200,169,110,0.16); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
         .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
@@ -1026,9 +1020,6 @@ export default function Home() {
           .trust-link { justify-content: center; align-items: center; text-align: center; padding: 0.85rem 0.6rem; font-size: 0.58rem; letter-spacing: 0.12em; line-height: 1.35; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
-          .fit-filter { padding: 4rem 1.5rem; }
-          .fit-filter-inner { grid-template-columns: 1fr; gap: 2rem; }
-          .fit-list li { padding: 0.85rem; font-size: 0.82rem; }
           .booking { padding: 4rem 1.2rem; }
           .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
           .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
@@ -1046,7 +1037,7 @@ export default function Home() {
           .price-spec-list { gap:0.45rem; margin-top:1rem; }
           .price-spec-row { display:grid; grid-template-columns:0.8fr 1.2fr; gap:0.8rem; font-size:0.76rem; line-height:1.45; }
           .tour-dates-card { padding: 1rem 0.8rem; }
-          .tour-date-list { gap: 0.35rem; }
+          .tour-date-list { grid-template-columns: 1fr; gap: 0.35rem; }
           .tour-date-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; padding: 0.62rem 0.7rem; align-items: center; }
           .tour-date-title { font-size: 0.93rem; margin: 0; }
           .tour-date-detail { display: none; }
@@ -1424,24 +1415,6 @@ export default function Home() {
           <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
             <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver, provide proof of travel insurance, bring their own personal medical basics, and arrive mentally prepared for simple conditions, changing plans, physical discomfort, and group life in the wild.</p>
           </div>
-        </div>
-      </section>
-
-      <section className="fit-filter" id="fit">
-        <div className="fit-filter-inner">
-          <div className="reveal">
-            <span className="section-eyebrow">Who this is not for</span>
-            <h2 className="section-title">A beautiful trip,<br /><em>not an easy product.</em></h2>
-            <p className="section-body">We would rather repel the wrong guest than sell a remote horse trek to someone who needs comfort, control, or hotel-level predictability.</p>
-            <a className="fit-filter-cta" href="/preparation">Read preparation guide</a>
-          </div>
-          <ul className="fit-list reveal reveal-delay-1">
-            <li><strong>Not for luxury-only travellers.</strong> Gers, weather, dust, shared space, and simple conditions are part of the experience.</li>
-            <li><strong>Not for strict vegan or serious dairy-free diets.</strong> Remote host-family food is traditionally meat- and dairy-heavy.</li>
-            <li><strong>Not for people who need stable internet.</strong> Starlink or local connectivity may exist, but it is a bonus, not a guarantee.</li>
-            <li><strong>Not for rigid itinerary people.</strong> Horses, weather, roads, and host-family logistics can change the plan.</li>
-            <li><strong>Not for anyone uncomfortable around animals.</strong> You will be close to horses, dogs, yaks, livestock, and working family life.</li>
-          </ul>
         </div>
       </section>
 
