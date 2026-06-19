@@ -715,6 +715,12 @@ export default function Home() {
         .section-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.15; color: var(--cream); margin-bottom: 1.5rem; }
         .section-title em { font-style: italic; color: var(--gold); }
         .section-body { font-size: 1rem; line-height: 1.8; color: var(--mist); max-width: 560px; }
+        .faq-item { border-top: 1px solid rgba(200,169,110,0.15); }
+        .faq-summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.3rem 0; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--cream); }
+        .faq-summary::-webkit-details-marker { display: none; }
+        .faq-summary::after { content: '+'; color: var(--gold); font-family: var(--font-jost), 'Jost', sans-serif; font-size: 1.1rem; line-height: 1; transition: transform 0.2s ease; }
+        .faq-item[open] .faq-summary::after { content: '–'; transform: translateY(-1px); }
+        .faq-answer { padding: 0 0 1.35rem; font-size: 0.875rem; color: var(--mist); line-height: 1.75; opacity: 0.8; }
 
         .offer-strip { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.22); border-bottom: 1px solid rgba(200,169,110,0.22); padding: 1.3rem 6rem; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1.5fr) auto; gap: 1.5rem; align-items: center; }
         .offer-strip-kicker { font-size: 0.6rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
@@ -1094,7 +1100,8 @@ export default function Home() {
           .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
-          .partnership-inline-photo { display: block !important; }
+          .partnership-inline-photo { display: block !important; margin: 2.4rem 0 2.8rem; }
+          .partnership-inline-photo + .section-body { margin-top: 0.35rem; }
           .partnership-img { display: none; }
           .form-grid { grid-template-columns: 1fr; }
           .packing-grid { grid-template-columns: 1fr; }
@@ -1752,10 +1759,10 @@ export default function Home() {
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
             {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
           ].map(({q, a}, i) => (
-            <div key={i} className="reveal" style={{borderTop:'1px solid rgba(200,169,110,0.15)', padding:'1.8rem 0'}}>
-              <p style={{fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontSize:'1.15rem', fontWeight:400, color:'var(--cream)', marginBottom:'0.6rem'}}>{q}</p>
-              <p style={{fontSize:'0.875rem', color:'var(--mist)', lineHeight:1.75, opacity:0.8}}>{a}</p>
-            </div>
+            <details key={i} className="faq-item reveal">
+              <summary className="faq-summary">{q}</summary>
+              <p className="faq-answer">{a}</p>
+            </details>
           ))}
           <div style={{borderTop:'1px solid rgba(200,169,110,0.15)'}} />
         </div>

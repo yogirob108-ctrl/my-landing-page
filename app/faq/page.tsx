@@ -80,10 +80,10 @@ export default function Page() {
           ['Can children join?', 'No. The current experience is adults-only and participants must be 18 or older.'],
           ['How do I contact 8 Lakes Tours?', "Use the booking form on the website or email info@8lakestours.com. Instagram is available at @8lakestours, and Rob's personal Instagram is @robzaher108."],
         ].map(([q, a]) => (
-          <section key={q} style={{ borderTop: '1px solid rgba(200,169,110,0.15)', padding: '1.8rem 0' }}>
-            <h2 style={h2Style}>{q}</h2>
-            <p style={pStyle}>{a}</p>
-          </section>
+          <details key={q} style={{ borderTop: '1px solid rgba(200,169,110,0.15)' }}>
+            <summary style={{ ...h2Style, cursor: 'pointer', listStyle: 'none', padding: '1.35rem 0', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>{q}<span style={{ color: '#c8a96e', fontFamily: 'Jost, sans-serif' }}>+</span></summary>
+            <p style={{ ...pStyle, paddingBottom: '1.6rem' }}>{a}</p>
+          </details>
         ))}
       </div>
       <footer style={footerStyle}>
