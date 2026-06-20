@@ -973,17 +973,21 @@ export default function Home() {
         .lead-message.error { color: #ffb4a6; }
         .lead-privacy { margin-top: 0.75rem !important; margin-bottom: 0 !important; font-size: 0.68rem !important; line-height: 1.5 !important; color: rgba(212,207,196,0.56) !important; }
         .lightbox-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
-        .getting-there-section { background: var(--ink); padding: 7rem 6rem; }
-        .getting-there-grid { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr); gap: 5rem; margin-top: 3rem; align-items: start; }
-        .getting-there-copy { max-width: 680px; }
-        .journey-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; }
-        .journey-card { border: 1px solid rgba(200,169,110,0.18); background: rgba(245,240,232,0.035); padding: 1.1rem; min-height: 142px; display: flex; flex-direction: column; justify-content: space-between; }
-        .journey-card-number { display: inline-flex; align-items: center; justify-content: center; width: 1.85rem; height: 1.85rem; border-radius: 999px; border: 1px solid rgba(200,169,110,0.34); color: var(--gold); font-size: 0.68rem; letter-spacing: 0.08em; margin-bottom: 1.1rem; }
-        .journey-card-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.28rem; color: var(--cream); font-weight: 300; line-height: 1.18; margin-bottom: 0.45rem; }
-        .journey-card-copy { color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.55; }
-        .journey-help-card { margin-top: 0.9rem; padding: 1.25rem 1.4rem; background: rgba(200,169,110,0.06); border-left: 2px solid var(--gold); }
-        .journey-help-card p:first-child { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.65rem; }
-        .journey-help-card p:last-child { font-size: 0.88rem; color: var(--mist); line-height: 1.7; font-style: italic; }
+        .gallery-handoff { background:#0f0f0d; border-top:1px solid rgba(200,169,110,0.14); border-bottom:1px solid rgba(200,169,110,0.14); padding: 1.6rem 6rem; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2rem; align-items:center; }
+        .gallery-handoff-copy p:first-child { font-size:0.62rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--gold); margin-bottom:0.35rem; }
+        .gallery-handoff-copy p:last-child { font-size:0.88rem; color:rgba(212,207,196,0.72); line-height:1.55; max-width:640px; }
+        .getting-there-section { background: var(--ink); padding: 5.2rem 6rem 5.6rem; }
+        .getting-there-panel { border-top: 1px solid rgba(200,169,110,0.18); border-bottom: 1px solid rgba(200,169,110,0.18); padding: 3.2rem 0; display: grid; grid-template-columns: minmax(280px, 0.62fr) minmax(0, 1fr); gap: 5rem; align-items: start; }
+        .getting-there-section .section-title { margin-bottom: 0; }
+        .journey-route { display: grid; gap: 1.45rem; }
+        .journey-lede { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr); gap: 2rem; align-items: start; padding-bottom: 1.6rem; border-bottom: 1px solid rgba(245,240,232,0.08); }
+        .journey-copy { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.78); max-width: 720px; }
+        .journey-meta { border-left: 2px solid var(--gold); padding-left: 1rem; color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.65; }
+        .journey-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: rgba(200,169,110,0.18); border: 1px solid rgba(200,169,110,0.18); }
+        .journey-step { background: var(--ink); padding: 1.1rem 1rem; min-width: 0; }
+        .journey-step-number { display: block; color: var(--gold); font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.65rem; }
+        .journey-step-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-size: 1.25rem; line-height: 1.15; font-weight: 300; margin-bottom: 0.35rem; }
+        .journey-step-copy { color: rgba(212,207,196,0.66); font-size: 0.78rem; line-height: 1.5; }
         .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 6rem; }
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
@@ -1119,10 +1123,13 @@ export default function Home() {
           .lightbox-next { right: 0.5rem; }
           .footer-link { font-size: 0.66rem; letter-spacing: 0.14em; }
           .footer-note { margin-top: 2.5rem; padding-top: 1.2rem; flex-direction: column; font-size: 0.72rem; line-height: 1.6; }
-          .getting-there-section { padding: 4rem 1.5rem; }
-          .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
-          .journey-cards { grid-template-columns: 1fr; }
-          .journey-card { min-height: 0; }
+          .gallery-handoff { padding: 1.6rem 1.5rem; grid-template-columns: 1fr; gap: 1rem; text-align: left; }
+          .gallery-handoff .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+          .getting-there-section { padding: 3.5rem 1.5rem 4rem; }
+          .getting-there-panel { grid-template-columns: 1fr; gap: 2.2rem; padding: 2.3rem 0; }
+          .journey-lede { grid-template-columns: 1fr; gap: 1.2rem; }
+          .journey-steps { grid-template-columns: 1fr; }
+          .journey-step { padding: 1rem; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
           .partnership-inline-photo { display: block !important; margin: 2.4rem 0 2.8rem; }
@@ -1389,42 +1396,38 @@ export default function Home() {
         ))}
       </div>
 
-      <section style={{background:'#0f0f0d', padding:'3rem 2rem', textAlign:'center', borderTop:'1px solid rgba(200,169,110,0.14)', borderBottom:'1px solid rgba(200,169,110,0.14)'}}>
-        <p style={{fontSize:'0.65rem', letterSpacing:'0.26em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.75rem'}}>Want more photos?</p>
-        <p style={{fontSize:'0.95rem', color:'rgba(212,207,196,0.78)', lineHeight:1.7, maxWidth:'620px', margin:'0 auto 1.3rem'}}>We keep the homepage focused on the trip decision. The fuller Mongolia photo archive lives in the gallery.</p>
+      <section className="gallery-handoff">
+        <div className="gallery-handoff-copy">
+          <p>Want more photos?</p>
+          <p>The homepage stays focused on the trip decision. The fuller Mongolia photo archive lives in the gallery.</p>
+        </div>
         <a href="/gallery" className="btn-ghost">View Full Gallery</a>
       </section>
       {/* GETTING THERE */}
       <section className="getting-there-section">
-        <div className="reveal">
-          <span className="section-eyebrow">Getting There</span>
-          <h2 className="section-title">Your Journey<br /><em>Starts in UB</em></h2>
-        </div>
-        <div className="getting-there-grid">
-          <div className="getting-there-copy reveal">
-            <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside.</p>
-            <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Transport details, recommended local apps, and exact coordination notes will be included in your confirmation email after booking.</p>
+        <div className="getting-there-panel">
+          <div className="reveal">
+            <span className="section-eyebrow">Getting There</span>
+            <h2 className="section-title">Your Journey<br /><em>Starts in UB</em></h2>
           </div>
-          <div className="reveal reveal-delay-1">
-            <div className="journey-cards" aria-label="Getting to the 8 Lakes Tours host family">
+          <div className="journey-route reveal reveal-delay-1">
+            <div className="journey-lede">
+              <p className="journey-copy">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Once you arrive, your host family meets you and brings you to the ger village.</p>
+              <p className="journey-meta">Exact timing, recommended local apps, WhatsApp contacts, and coordination notes are sent after booking.</p>
+            </div>
+            <div className="journey-steps" aria-label="Getting to the 8 Lakes Tours host family">
               {[
                 ['01', 'Fly into UB', 'Arrive at Chinggis Khaan International Airport in Ulaanbaatar.'],
-                ['02', 'Public bus onward', 'Travel to Bat-Ulzii, Uvurkhangai — roughly 8 hours through open countryside.'],
-                ['03', 'Meet the family', 'Your hosts meet you in Bat-Ulzii and bring you to the ger village.'],
-                ['04', 'Exact notes by email', 'Booking confirmation includes timing, local apps, contacts, and coordination details.'],
+                ['02', 'Bus to Bat-Ulzii', 'Roughly 8 hours through open countryside.'],
+                ['03', 'Family pickup', 'Hosts meet you and bring you to the ger village.'],
+                ['04', 'Details by email', 'Timing, contacts, apps, and handoff notes after booking.'],
               ].map(([number, title, copy]) => (
-                <article className="journey-card" key={number}>
-                  <span className="journey-card-number">{number}</span>
-                  <div>
-                    <h3 className="journey-card-title">{title}</h3>
-                    <p className="journey-card-copy">{copy}</p>
-                  </div>
+                <article className="journey-step" key={number}>
+                  <span className="journey-step-number">{number}</span>
+                  <h3 className="journey-step-title">{title}</h3>
+                  <p className="journey-step-copy">{copy}</p>
                 </article>
               ))}
-            </div>
-            <div className="journey-help-card">
-              <p>Need Help?</p>
-              <p>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
             </div>
           </div>
         </div>
