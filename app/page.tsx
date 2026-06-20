@@ -973,8 +973,17 @@ export default function Home() {
         .lead-message.error { color: #ffb4a6; }
         .lead-privacy { margin-top: 0.75rem !important; margin-bottom: 0 !important; font-size: 0.68rem !important; line-height: 1.5 !important; color: rgba(212,207,196,0.56) !important; }
         .lightbox-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.94); display: flex; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
-        .getting-there-section { background: var(--ink); padding: 8rem 6rem; }
-        .getting-there-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 3rem; align-items: start; }
+        .getting-there-section { background: var(--ink); padding: 7rem 6rem; }
+        .getting-there-grid { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr); gap: 5rem; margin-top: 3rem; align-items: start; }
+        .getting-there-copy { max-width: 680px; }
+        .journey-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; }
+        .journey-card { border: 1px solid rgba(200,169,110,0.18); background: rgba(245,240,232,0.035); padding: 1.1rem; min-height: 142px; display: flex; flex-direction: column; justify-content: space-between; }
+        .journey-card-number { display: inline-flex; align-items: center; justify-content: center; width: 1.85rem; height: 1.85rem; border-radius: 999px; border: 1px solid rgba(200,169,110,0.34); color: var(--gold); font-size: 0.68rem; letter-spacing: 0.08em; margin-bottom: 1.1rem; }
+        .journey-card-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.28rem; color: var(--cream); font-weight: 300; line-height: 1.18; margin-bottom: 0.45rem; }
+        .journey-card-copy { color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.55; }
+        .journey-help-card { margin-top: 0.9rem; padding: 1.25rem 1.4rem; background: rgba(200,169,110,0.06); border-left: 2px solid var(--gold); }
+        .journey-help-card p:first-child { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.65rem; }
+        .journey-help-card p:last-child { font-size: 0.88rem; color: var(--mist); line-height: 1.7; font-style: italic; }
         .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 6rem; }
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
@@ -1112,6 +1121,8 @@ export default function Home() {
           .footer-note { margin-top: 2.5rem; padding-top: 1.2rem; flex-direction: column; font-size: 0.72rem; line-height: 1.6; }
           .getting-there-section { padding: 4rem 1.5rem; }
           .getting-there-grid { grid-template-columns: 1fr; gap: 3rem; }
+          .journey-cards { grid-template-columns: 1fr; }
+          .journey-card { min-height: 0; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
           .partnership-inline-photo { display: block !important; margin: 2.4rem 0 2.8rem; }
@@ -1389,13 +1400,31 @@ export default function Home() {
           <span className="section-eyebrow">Getting There</span>
           <h2 className="section-title">Your Journey<br /><em>Starts in UB</em></h2>
         </div>
-        <div className="getting-there-grid" style={{gridTemplateColumns:'minmax(0, 760px)', maxWidth:'900px'}}>
-          <div className="reveal">
+        <div className="getting-there-grid">
+          <div className="getting-there-copy reveal">
             <p className="section-body">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside.</p>
             <p className="section-body" style={{marginTop:'1.2rem'}}>Once you arrive in Bat-Ulzii, your host family will meet you and bring you to the ger village. Transport details, recommended local apps, and exact coordination notes will be included in your confirmation email after booking.</p>
-            <div style={{marginTop:'2.5rem', padding:'1.5rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
-              <p style={{fontSize:'0.65rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'0.8rem'}}>Need Help?</p>
-              <p style={{fontSize:'0.9rem', color:'var(--mist)', lineHeight:1.7, fontStyle:'italic'}}>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
+          </div>
+          <div className="reveal reveal-delay-1">
+            <div className="journey-cards" aria-label="Getting to the 8 Lakes Tours host family">
+              {[
+                ['01', 'Fly into UB', 'Arrive at Chinggis Khaan International Airport in Ulaanbaatar.'],
+                ['02', 'Public bus onward', 'Travel to Bat-Ulzii, Uvurkhangai — roughly 8 hours through open countryside.'],
+                ['03', 'Meet the family', 'Your hosts meet you in Bat-Ulzii and bring you to the ger village.'],
+                ['04', 'Exact notes by email', 'Booking confirmation includes timing, local apps, contacts, and coordination details.'],
+              ].map(([number, title, copy]) => (
+                <article className="journey-card" key={number}>
+                  <span className="journey-card-number">{number}</span>
+                  <div>
+                    <h3 className="journey-card-title">{title}</h3>
+                    <p className="journey-card-copy">{copy}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="journey-help-card">
+              <p>Need Help?</p>
+              <p>WhatsApp contact details for both English-speaking and local Mongolian support will be provided upon confirmed booking.</p>
             </div>
           </div>
         </div>
