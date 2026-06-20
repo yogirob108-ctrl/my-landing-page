@@ -297,6 +297,7 @@ export default function Home() {
   const [leadEmail, setLeadEmail] = useState('');
   const [leadStatus, setLeadStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [leadError, setLeadError] = useState('');
+  const [selectedTourDate, setSelectedTourDate] = useState('');
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -317,6 +318,15 @@ export default function Home() {
   };
   const showPreviousImage = () => setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
   const showNextImage = () => setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
+
+  const chooseTourDate = (date: string) => {
+    if (formSubmitted || formSubmitting) return;
+    setSelectedTourDate(date);
+    window.setTimeout(() => {
+      document.getElementById('application')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => document.getElementById('tour_date')?.focus({ preventScroll: true }), 520);
+    }, 40);
+  };
 
   const submitLead = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -882,14 +892,18 @@ export default function Home() {
         .price-spec-row span:last-child { color:var(--cream); text-align:right; }
         .tour-dates-card { margin-top: 1.5rem; padding: 1.25rem; background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.35); border-radius: 4px; }
         .tour-date-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
-        .tour-date-row { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.72rem 0.78rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; }
+        .tour-date-row { appearance: none; width: 100%; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.72rem 0.78rem; background: rgba(200,169,110,0.07); border: 1px solid rgba(200,169,110,0.2); border-radius: 3px; font: inherit; text-align: left; color: inherit; cursor: pointer; transition: background 0.24s ease, border-color 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease; }
+        .tour-date-row:hover, .tour-date-row:focus-visible { background: rgba(200,169,110,0.12); border-color: rgba(200,169,110,0.52); transform: translateY(-1px); outline: none; }
+        .tour-date-row.selected { border-color: var(--gold); background: rgba(200,169,110,0.16); box-shadow: inset 0 0 0 1px rgba(200,169,110,0.22), 0 10px 24px rgba(0,0,0,0.12); }
         .tour-date-row.muted { background: rgba(200,169,110,0.03); border-color: rgba(200,169,110,0.1); }
         .tour-date-title { font-size: 0.94rem; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; margin-bottom: 0.1rem; }
         .tour-date-row.muted .tour-date-title { color: var(--mist); }
         .tour-date-detail { font-size: 0.66rem; color: var(--mist); opacity: 0.7; }
         .tour-date-row.muted .tour-date-detail { opacity: 0.5; }
         .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: 2px; white-space: nowrap; }
+        .tour-date-row.selected .tour-date-status { background: var(--gold); color: var(--dark); border-color: var(--gold); }
         .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
+        #application { scroll-margin-top: 6rem; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-section { border: 1px solid rgba(200,169,110,0.16); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
         .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
@@ -1497,13 +1511,20 @@ export default function Home() {
             <p style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
             <div className="tour-date-list">
               {TOUR_DATES.map(dateOption => (
-                <div className={`tour-date-row${dateOption.muted ? ' muted' : ''}`} key={dateOption.date}>
+                <button
+                  type="button"
+                  className={`tour-date-row${dateOption.muted ? ' muted' : ''}${selectedTourDate === dateOption.date ? ' selected' : ''}`}
+                  key={dateOption.date}
+                  aria-pressed={selectedTourDate === dateOption.date}
+                  aria-label={`Select ${dateOption.date} and continue to the booking form`}
+                  onClick={() => chooseTourDate(dateOption.date)}
+                >
                   <div>
                     <p className="tour-date-title">{dateOption.date}</p>
                     <p className="tour-date-detail">{dateOption.detail}</p>
                   </div>
                   <span className="tour-date-status">{dateOption.status}</span>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -1547,10 +1568,10 @@ export default function Home() {
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="tour_date">Preferred Tour Date</label>
-                  <select id="tour_date" className="form-select" name="tour_date">
+                  <select id="tour_date" className="form-select" name="tour_date" value={selectedTourDate} onChange={e => setSelectedTourDate(e.target.value)}>
                     <option value="">Select date</option>
                     {TOUR_DATES.map(dateOption => (
-                      <option key={dateOption.date}>{dateOption.date}</option>
+                      <option key={dateOption.date} value={dateOption.date}>{dateOption.date}</option>
                     ))}
                   </select>
                 </div>
