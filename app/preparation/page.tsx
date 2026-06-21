@@ -35,7 +35,7 @@ const sections = [
     items: [
       'Comprehensive travel insurance is mandatory and must cover horseback riding or adventure activities, emergency medical treatment, evacuation, and repatriation.',
       'Bring passport, visa documentation if required for your nationality, insurance details, and emergency-contact information.',
-      'Bring $1,200 USD in clean cash notes for the host family. The online $959 booking payment is handled separately through 8 Lakes Tours / Adventure Therapy.',
+      'Bring $1,200 USD in clean cash notes for the host family. The online $959 booking payment is handled separately through 8 Lakes Tours.',
     ],
   },
   {
@@ -52,14 +52,14 @@ const sections = [
     items: [
       'Fly into Chinggis Khaan International Airport in Ulaanbaatar, Mongolia.',
       'Expect onward countryside travel toward Bat-Ulzii, the Orkhon Valley, and the Naiman Nuur / Eight Lakes region.',
-      'Exact timing, meet-up details, cash instructions, and local contacts are sent to accepted guests before departure.',
+      'Before arrival, Rob or the tour operator coordinates timing with you. Once your bus to Bat-Ulzii is booked by you or your hotel, contact the operator on WhatsApp and the host family pickup is arranged from Bat-Ulzii. There is usually one bus a day, so the handoff is simple once the bus is confirmed.',
     ],
   },
   {
     title: 'Food and dietary fit',
     items: [
       'Traditional remote host-family meals are meat- and dairy-heavy: milk tea, yoghurt, cheese, meat, and animal products are normal.',
-      'The dairy is part of the quality of the experience: host families often produce their own milk from yaks or cows, then serve it as milk tea, yoghurt, cheese, and other traditional foods.',
+      'The dairy is part of the quality of the experience: host families always produce their own milk from yaks or cows, then serve it as milk tea, yoghurt, cheese, and other traditional foods.',
       'Vegetarian guests may be possible with advance notice, but strict vegan diets and serious dairy/lactose intolerance may make this the wrong trip.',
       'Contact the team before booking if food is a major health, allergy, or ethical requirement.',
     ],
@@ -86,7 +86,7 @@ const sections = [
       'Guides and organisers handle the main logistics, but the host-family setting is cross-cultural and not every moment happens in perfect English.',
       'So far, ChatGPT voice mode has worked especially well for simple back-and-forth conversation with family members whose English is limited. You can say: “Please translate the following sentence into Mongolian for me,” then speak naturally and play or show the translation.',
       'Other translation apps can still help, but we have found ChatGPT voice mode more useful than most for this kind of real conversation.',
-      'Starlink or local connectivity may be available at some camps, but internet is a bonus — not something to depend on constantly.',
+      'The host nomadic camp has strong Starlink and a solar-powered inverter for charging phones, cameras, and other electronics. It is surprisingly well equipped for modern essentials — even coffee makers — while remote trek days can still be more offline.',
     ],
   },
 ];

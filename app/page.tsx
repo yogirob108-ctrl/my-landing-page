@@ -336,7 +336,7 @@ export default function Home() {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: 'Mongolia field notes, trip dates, preparation emails, and Adventure Therapy updates' }),
+        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: 'Mongolia field notes, trip dates, preparation emails, and 8 Lakes Tours updates' }),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
@@ -573,20 +573,20 @@ export default function Home() {
       {
         '@type': 'FAQPage',
         mainEntity: [
-          { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings are supported by Adventure Therapy, the parent adventure-company behind the online booking and payment flow, while the local family portion goes directly to your hosts in Mongolia.' } },
-          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and host-family cash payment instructions.' } },
+          { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings, preparation, and payment communication are handled through 8 Lakes Tours, while the local family portion goes directly to your hosts in Mongolia.' } },
+          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you; once your bus to Bat-Ulzii is booked, you contact the operator on WhatsApp and the host family pickup is arranged from there.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'How flexible do I need to be?', acceptedAnswer: { '@type': 'Answer', text: 'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. Guests should arrive flexible and open-minded. On the steppe, uncertainty has long been part of life: travellers could lose their way between gers, so hospitality, tea, food, shelter, directions, and mutual help became part of the culture. You may be encouraged to step outside your comfort zone, but nothing is forced: you can say no, rest, or take a quieter day around the host family and ger life.' } },
-          { '@type': 'Question', name: 'What if communication or translation gets difficult?', acceptedAnswer: { '@type': 'Answer', text: 'The host-family setting is cross-cultural, and not every moment will happen in perfect English. Guides and organisers help with the main logistics, but a phone with an AI translation app such as ChatGPT or another translator can be useful if you are stuck for words. Some camps may have Starlink or local connectivity, but internet should be treated as a helpful bonus, not something to depend on constantly.' } },
+          { '@type': 'Question', name: 'What if communication or translation gets difficult?', acceptedAnswer: { '@type': 'Answer', text: 'The host-family setting is cross-cultural, and not every moment will happen in perfect English. Guides and organisers help with the main logistics, but ChatGPT voice mode can be very useful for simple Mongolian translation. The host nomadic camp has strong Starlink and solar-powered inverter charging for devices, though remote trek days can still be more offline.' } },
           { '@type': 'Question', name: 'How physically demanding is the trek?', acceptedAnswer: { '@type': 'Answer', text: "Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. Guests should also be mentally prepared for simple conditions, physical discomfort, changing plans, and group life in the wild." } },
           { '@type': 'Question', name: 'Are there Western toilets or showers in the countryside?', acceptedAnswer: { '@type': 'Answer', text: 'No. Once guests leave the city, countryside toilet facilities are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Cabins and ger stays can be warm and welcoming, but bathroom facilities are basic. Guests should bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.' } },
           { '@type': 'Question', name: 'What medical supplies should I bring?', acceptedAnswer: { '@type': 'Answer', text: 'Bring your own personal first-aid kit, blister care, any prescription medication, basic toiletries, and any painkillers or anti-inflammatory medicine you normally use and can safely take. Guides carry basic first aid, but they are not a replacement for your personal medical needs.' } },
-          { '@type': 'Question', name: 'Can you support vegan, lactose-free, or strict dietary requirements?', acceptedAnswer: { '@type': 'Answer', text: 'This trip is not a good fit for strict vegan travellers and may be unsuitable for anyone with serious dairy or lactose intolerance. Rural Mongolian host-family meals are traditionally meat- and dairy-heavy, including milk tea, yoghurt, cheese, meat, and other animal products. The dairy is also part of the quality of the host-family experience: families often produce their own milk from yaks or cows and serve it fresh in traditional foods. Vegetarian guests may be possible with advance notice, but fully separate vegan or dairy-free meals cannot be reliably provided in this remote setting.' } },
+          { '@type': 'Question', name: 'Can you support vegan, lactose-free, or strict dietary requirements?', acceptedAnswer: { '@type': 'Answer', text: 'This trip is not a good fit for strict vegan travellers and may be unsuitable for anyone with serious dairy or lactose intolerance. Rural Mongolian host-family meals are traditionally meat- and dairy-heavy, including milk tea, yoghurt, cheese, meat, and other animal products. The dairy is also part of the quality of the host-family experience: families always produce their own milk from yaks or cows and serve it fresh in traditional foods. Vegetarian guests may be possible with advance notice, but fully separate vegan or dairy-free meals cannot be reliably provided in this remote setting.' } },
           { '@type': 'Question', name: 'What 2026 departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours currently shows seven fixed 2026 departures from June through September, plus private group dates on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours through Adventure Therapy. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
           { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 host-family cash payment is not collected online.' } },
         ],
       },
@@ -1220,7 +1220,7 @@ export default function Home() {
           <span className="section-eyebrow">What This Is</span>
           <h2 className="section-title">Mongolia<br /><em>Beyond Tourism</em></h2>
           <p className="section-body">This isn&apos;t a curated tourist experience. You&apos;ll wake up in a ger, ride across open steppe with experienced local horsemen, and camp under skies that have no end. Every meal is shared. Every kilometer is earned.</p>
-          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is an Adventure Therapy journey built for people who want to be somewhere real, not just pass through it.</p>
+          <p className="section-body" style={{marginTop:'1.2rem'}}>8 Lakes Tours is built for people who want to be somewhere real, not just pass through it.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>That means some flexibility is part of the experience. Weather, horses, roads, group rhythm, and traditional host-family food can shape the day. You may be invited to step outside your comfort zone, but you are never forced to do every challenge — saying no, resting, or taking a quieter day around nomadic life is always allowed.</p>
           <p className="section-body" style={{marginTop:'1.2rem'}}>Remote does not mean abandoned. On the steppe, uncertainty has always been part of life: travellers could lose their way between gers, so stopping at another family&apos;s home for tea, food, shelter, or directions became part of the culture. The same spirit runs through this trip — adapt to the land, accept hospitality, and let the day unfold without needing everything to go exactly to plan.</p>
           <div className="intro-points">
@@ -1404,6 +1404,15 @@ export default function Home() {
         <a href="/gallery" className="btn-ghost">View Full Gallery</a>
       </section>
       {/* GETTING THERE */}
+      <section className="riding-stay-section">
+        <div style={{maxWidth:'980px', margin:'0 auto', border:'1px solid rgba(200,169,110,0.24)', background:'rgba(200,169,110,0.065)', padding:'2rem'}}>
+          <span className="section-eyebrow">Prefer More Riding?</span>
+          <h2 className="section-title">Host-Family Stay<br /><em>&amp; Daily Horse Riding</em></h2>
+          <p className="section-body" style={{maxWidth:'760px'}}>Some guests want the Mongolian horse experience without committing to the full camping trek to Eight Lakes. If you&apos;d rather stay with the host family, be looked after at the ger camp, and focus on daily riding lessons or shorter rides, email Rob and the team. We can discuss a custom hosted riding stay around your dates.</p>
+          <a className="btn-primary" href="mailto:info@8lakestours.com?subject=Custom%20host-family%20riding%20stay" style={{marginTop:'1.4rem'}}>Ask About Riding-Only Stay</a>
+        </div>
+      </section>
+
       <section className="getting-there-section">
         <div className="getting-there-panel">
           <div className="reveal">
@@ -1413,14 +1422,14 @@ export default function Home() {
           <div className="journey-route reveal reveal-delay-1">
             <div className="journey-lede">
               <p className="journey-copy">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Once you arrive, your host family meets you and brings you to the ger village.</p>
-              <p className="journey-meta">Exact timing, recommended local apps, WhatsApp contacts, and coordination notes are sent after booking.</p>
+              <p className="journey-meta">Before arrival, Rob or the tour operator coordinates timing with you. Once your bus to Bat-Ulzii is booked by you or your hotel, contact the operator on WhatsApp and the host family pickup is arranged from there.</p>
             </div>
             <div className="journey-steps" aria-label="Getting to the 8 Lakes Tours host family">
               {[
                 ['01', 'Fly into UB', 'Arrive at Chinggis Khaan International Airport in Ulaanbaatar.'],
                 ['02', 'Bus to Bat-Ulzii', 'Roughly 8 hours through open countryside.'],
                 ['03', 'Family pickup', 'Hosts meet you and bring you to the ger village.'],
-                ['04', 'Details by email', 'Timing, contacts, apps, and handoff notes after booking.'],
+                ['04', 'WhatsApp handoff', 'Once your Bat-Ulzii bus is booked, message the operator and the host-family pickup is arranged.'],
               ].map(([number, title, copy]) => (
                 <article className="journey-step" key={number}>
                   <span className="journey-step-number">{number}</span>
@@ -1447,8 +1456,8 @@ export default function Home() {
           </ul>
         </div>
         <div className="reveal reveal-delay-1">
-          <h2 className="section-title" style={{fontSize:'2rem'}}>What to<br /><em>Bring</em></h2>
-          <p className="section-body" style={{marginBottom:'2rem'}}>A few essentials to sort before you arrive.</p>
+          <h2 className="section-title" style={{fontSize:'2rem'}}>Before<br /><em>You Arrive</em></h2>
+          <p className="section-body" style={{marginBottom:'2rem'}}>A few essentials to arrange and pack before you arrive.</p>
           <ul className="included-list not">
             <li><span className="icon">✦</span> International flights</li>
             <li><span className="icon">✦</span> Travel insurance (required) — <a href="https://www.worldnomads.com" target="_blank" rel="noopener noreferrer" style={{color:'var(--gold)'}}>World Nomads</a></li>
@@ -1478,7 +1487,7 @@ export default function Home() {
         <div className="trust-card-founder reveal reveal-delay-1">
           <span className="section-eyebrow">Who You&apos;re Booking With</span>
           <h2 className="section-title">Robert, the Family<br /><em>&amp; 8 Lakes Tours</em></h2>
-          <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Adventure Therapy supports the online booking flow and wider company structure, while the local family payment goes directly to your hosts in Mongolia.</p>
+          <p>8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold&apos;s family in the Orkhon Valley. Bookings, preparation, and payment communication are handled through 8 Lakes Tours, while the local family payment goes directly to your hosts in Mongolia.</p>
           <p style={{marginTop:'1rem'}}>All tour enquiries go through <strong style={{color:'var(--cream)'}}>info@8lakestours.com</strong>.</p>
           <div className="trust-actions">
             <a className="trust-link" href="mailto:info@8lakestours.com">Email the tour team</a>
@@ -1508,7 +1517,7 @@ export default function Home() {
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay online</span>
                 <span className="payment-split-amount">{pricing.onlinePayment}</span>
-                <p className="payment-split-copy">Reserves your place with 8 Lakes Tours / Adventure Therapy.</p>
+                <p className="payment-split-copy">Reserves your place with 8 Lakes Tours.</p>
               </div>
               <div className="payment-split-arrow" aria-hidden="true">+</div>
               <div className="payment-split-card">
@@ -1521,7 +1530,7 @@ export default function Home() {
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
                 <p>Total trip price: {pricing.tourPrice} per person.</p>
-                <p>The online payment goes through Adventure Therapy / 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>The online payment goes through 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
                 <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
@@ -1752,7 +1761,7 @@ export default function Home() {
           </div>
           <div className="lead-card-public reveal">
             <h3>Join the field notes</h3>
-            <p>Not ready to reserve yet? Join the 8 Lakes update list for Mongolia field notes, new dates, practical prep emails, and future Adventure Therapy trips.</p>
+            <p>Not ready to reserve yet? Join the 8 Lakes update list for Mongolia field notes, new dates, practical prep emails, and future 8 Lakes Tours updates.</p>
             <form className="lead-form" onSubmit={submitLead}>
               <input
                 type="text"
@@ -1790,9 +1799,9 @@ export default function Home() {
             <h2 className="section-title">Common<br /><em>Questions</em></h2>
           </div>
           {[
-            {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Adventure Therapy supports the online booking/payment system, while the local family portion is paid directly to your hosts in Mongolia."},
+            {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Bookings and payment communication are handled through 8 Lakes Tours, while the local family portion is paid directly to your hosts in Mongolia."},
             {q:'Can I speak to someone before booking?', a:"Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob's Instagram at @robzaher108 while we keep tour email communication centralised through the info@ address."},
-            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email, including transport guidance, recommended local apps, packing reminders, insurance requirements, WhatsApp contacts, arrival timing, and exact cash-payment instructions for the host family.'},
+            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you; once your bus to Bat-Ulzii is booked, you contact the operator on WhatsApp and the host family pickup is arranged from there.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'How flexible do I need to be?', a:'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. On the steppe, uncertainty has long been part of life: travellers could lose their way between gers, so hospitality, tea, food, shelter, directions, and mutual help became part of the culture. You may be encouraged to step outside your comfort zone, but nothing is forced — you can say no, rest, or take a quieter day around the host family and ger life.'},
             {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. You should also be mentally prepared for simple conditions, physical discomfort, changing plans, and sharing space with a group in the wild."},
@@ -1802,15 +1811,15 @@ export default function Home() {
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.'},
             {q:'What is the weather like in the summer?', a:'Expect warm days between 15–24°C (60–75°F) and cold nights that can drop to 0–5°C (32–41°F), especially at higher altitudes. Pack layers — mornings and evenings in the Naiman Nuur region can get very cold.'},
-            {q:'What do we eat?', a:'Three traditional Mongolian meals are provided daily. Meals are part of the host-family experience and are usually meat- and dairy-heavy: milk tea, yoghurt, cheese, meat, and animal products are normal. The dairy is one of the highest-quality parts of the experience — families often produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods. Vegetarian guests may be possible with advance notice, but strict vegan diets or serious dairy/lactose intolerance are difficult to support in this remote setting — contact us before booking if this is important.'},
-            {q:'Can you support vegan, lactose-free, or strict dietary requirements?', a:'Honestly, this may not be the right tour for strict vegan travellers or anyone with serious dairy or lactose intolerance. Rural Mongolian families cannot reliably provide separate vegan or fully dairy-free meals, and we do not want to sell the trip to someone whose core food needs cannot be met safely or respectfully. For guests who can enjoy it, the host-family dairy is a special part of the trip: often made from the family’s own yak or cow milk and served fresh in traditional foods.'},
-            {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas. Starlink or local connectivity may be available at some family camps or ger village stays, but treat internet as a helpful bonus rather than something to depend on constantly. If communication gets tricky, a phone with an AI translation app such as ChatGPT or another translator can be a great way to find words and connect across languages when a connection is available.'},
+            {q:'What do we eat?', a:'Three traditional Mongolian meals are provided daily. Meals are part of the host-family experience and are usually meat- and dairy-heavy: milk tea, yoghurt, cheese, meat, and animal products are normal. The dairy is one of the highest-quality parts of the experience — families always produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods. Vegetarian guests may be possible with advance notice, but strict vegan diets or serious dairy/lactose intolerance are difficult to support in this remote setting — contact us before booking if this is important.'},
+            {q:'Can you support vegan, lactose-free, or strict dietary requirements?', a:'Honestly, this may not be the right tour for strict vegan travellers or anyone with serious dairy or lactose intolerance. Rural Mongolian families cannot reliably provide separate vegan or fully dairy-free meals, and we do not want to sell the trip to someone whose core food needs cannot be met safely or respectfully. For guests who can enjoy it, the host-family dairy is a special part of the trip: always made from the family’s own yak or cow milk and served fresh in traditional foods.'},
+            {q:'Is there WiFi or cell service?', a:'Cell service is limited to none in the remote trek areas, but the host nomadic camp has strong Starlink and a solar-powered inverter for charging phones, cameras, and other electronics. The camp is surprisingly well equipped for modern essentials — even coffee makers — while the trek itself can still be more offline. ChatGPT voice mode is useful for simple Mongolian translation when you have connection.'},
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'This experience is designed for adults only. We do not accept participants under 18.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through Adventure Therapy / 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
-            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide accepted guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by Adventure Therapy or 8 Lakes Tours.'},
+            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide booked guests through exactly when and how to bring the cash payment before departure.'},
+            {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours.'},
           ].map(({q, a}, i) => (
             <details key={i} className="faq-item reveal">
               <summary className="faq-summary">{q}</summary>
@@ -1826,7 +1835,7 @@ export default function Home() {
           <div>
             <div className="footer-kicker">Mongolia · Small-group horseback expeditions</div>
             <div className="footer-logo">8 Lakes<br />Tours</div>
-            <div className="footer-tagline">An Adventure Therapy journey through the Orkhon Valley and Eight Lakes region.</div>
+            <div className="footer-tagline">A horseback journey through the Orkhon Valley and Eight Lakes region.</div>
             <a className="footer-cta" href="#application">Reserve a Spot</a>
           </div>
           <nav className="footer-links" aria-label="Footer navigation">

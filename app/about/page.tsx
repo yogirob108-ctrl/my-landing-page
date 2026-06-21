@@ -4,7 +4,7 @@ import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
   title: 'About 8 Lakes Tours',
-  description: 'About 8 Lakes Tours, Robert Zaher, Adventure Therapy, and the nomadic host-family horse trekking experience in Mongolia.',
+  description: 'About 8 Lakes Tours, Robert Zaher, and the nomadic host-family horse trekking experience in Mongolia.',
   alternates: { canonical: 'https://www.8lakestours.com/about' },
   openGraph: {
     title: 'About 8 Lakes Tours',
@@ -31,8 +31,8 @@ const storyCards = [
     body: 'Guests stay close to local life: gers, horses, shared meals, weather, tea, work, rest, and the rhythm of the valley. The local family portion of the price is paid directly in cash to the hosts because many families cannot reliably receive online transfers.',
   },
   {
-    title: 'Part of Adventure Therapy',
-    body: 'Adventure Therapy is not clinical therapy. It is our philosophy for trips: real environments over artificial comfort, movement over passive consumption, and wild places that invite people to come back stronger.',
+    title: 'Built around the real thing',
+    body: '8 Lakes Tours is not a polished resort product. It is built around real environments over artificial comfort, movement over passive consumption, and a host-family experience that asks guests to arrive open, flexible, and ready for the land as it is.',
   },
 ];
 
@@ -60,7 +60,7 @@ export default function Page() {
         '@id': 'https://www.8lakestours.com/about#about-page',
         url: 'https://www.8lakestours.com/about',
         name: 'About 8 Lakes Tours',
-        description: 'About 8 Lakes Tours, Robert Zaher, Adventure Therapy, and the nomadic host-family horse trekking experience in Mongolia.',
+        description: 'About 8 Lakes Tours, Robert Zaher, and the nomadic host-family horse trekking experience in Mongolia.',
         inLanguage: 'en',
         isPartOf: { '@id': 'https://www.8lakestours.com/#website' },
         about: { '@id': 'https://www.8lakestours.com/#organization' },
@@ -160,7 +160,7 @@ export default function Page() {
         <div>
           <p className="eyebrow">Transparent payment</p>
           <h2>$2,159 total. $959 online. $1,200 cash to hosts.</h2>
-          <p>Many nomadic families live outside reliable online banking. The online payment confirms your place with 8 Lakes Tours / Adventure Therapy. The local family portion is paid directly in clean USD cash in Mongolia so the host payment reaches the family clearly.</p>
+          <p>Many nomadic families live outside reliable online banking. The online payment confirms your place with 8 Lakes Tours. The local family portion is paid directly in clean USD cash in Mongolia so the host payment reaches the family clearly.</p>
         </div>
         <Link href="/faq">Read payment FAQ</Link>
       </section>
