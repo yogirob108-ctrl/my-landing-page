@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
-import { subscribeToNewsletter } from '@/lib/newsletter';
 
 const TOTAL_TRIP_VALUE_USD = 2159;
 const ONLINE_DUE_USD = 959;
@@ -106,19 +105,6 @@ export async function POST(request: Request) {
 
   if (customerResult.error || !customerResult.data) {
     return jsonError(customerResult.error?.message ?? 'Customer record could not be saved.', 500);
-  }
-
-  const subscription = await subscribeToNewsletter(supabase, {
-    firstName,
-    lastName,
-    email,
-    source: 'booking_form',
-    interest: '8 Lakes Tours booking follow-up and newsletter updates',
-    consentContext: 'Booking form submitted; form states guests receive relevant trip/prep updates and can opt out by reply',
-  });
-
-  if (!subscription.ok) {
-    return jsonError(subscription.error, 500);
   }
 
   const { data: booking, error: bookingError } = await supabase.from('bookings').insert({

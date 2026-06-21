@@ -47,7 +47,7 @@ function newsletterNote(input: NewsletterSubscribeInput, subscribedAt: string) {
     `Interest: ${input.interest || '8 Lakes Tours updates'}`,
     `Consent: ${subscribedAt}`,
     `Consent context: ${input.consentContext || 'Website newsletter signup / booking form'}`,
-    'Use: practical Mongolia trip updates, new dates, preparation notes, and relevant 8 Lakes Tours follow-up.',
+    'Use: newsletter, offers, deals, blog posts, business updates, field notes, and future 8 Lakes Tours promotions.',
     'Opt-out: remove or mark unsubscribed if the contact replies asking not to receive updates.',
   ].join('\n');
 }

@@ -336,7 +336,7 @@ export default function Home() {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: 'Mongolia field notes, trip dates, preparation emails, and 8 Lakes Tours updates' }),
+        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: '8 Lakes Tours newsletter, offers, deals, blog posts, field notes, and business updates' }),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
@@ -1760,8 +1760,8 @@ export default function Home() {
             </a>
           </div>
           <div className="lead-card-public reveal">
-            <h3>Join the field notes</h3>
-            <p>Not ready to reserve yet? Join the 8 Lakes update list for Mongolia field notes, new dates, practical prep emails, and future 8 Lakes Tours updates.</p>
+            <h3>Join the newsletter</h3>
+            <p>Get occasional 8 Lakes Tours news, offers, deals, new dates, blog posts, field notes, and behind-the-scenes updates from the business.</p>
             <form className="lead-form" onSubmit={submitLead}>
               <input
                 type="text"

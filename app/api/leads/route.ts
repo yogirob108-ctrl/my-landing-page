@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const email = normalizeEmail(payload.email);
   const name = clean(payload.name);
   const source = clean(payload.source) || 'homepage_subscribe';
-  const interest = clean(payload.interest) || 'Trip updates';
+  const interest = clean(payload.interest) || '8 Lakes Tours newsletter, offers, deals, blog posts, and business updates';
 
   if (!isValidEmail(email)) {
     return jsonError('Please enter a valid email address.');
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     email,
     source,
     interest,
-    consentContext: 'Homepage trip-updates/newsletter CTA form',
+    consentContext: 'Homepage newsletter/promotional updates CTA form',
   });
 
   if (!subscription.ok) {

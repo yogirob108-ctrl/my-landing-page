@@ -22,6 +22,12 @@ type EmailResult = {
   error?: string;
 };
 
+type LifecycleEmailInput = {
+  reference: string;
+  firstName: string;
+  tourDate: string;
+};
+
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
   return apiKey ? new Resend(apiKey) : null;
@@ -234,14 +240,112 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
         </div>
 
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
-          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Trip updates</p>
-          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">We’ll keep you on the 8 Lakes update list for relevant preparation notes and future date updates. Reply any time if you do not want marketing updates.</p>
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Booking communication</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">We’ll send the practical preparation and arrival emails needed for this booking. Those are separate from the general newsletter.</p>
         </div>
 
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8">
           <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Keep this reference</p>
           <p style="margin:0;color:#241d14;font-size:18px;font-weight:700">${escapeHtml(input.reference)}</p>
         </div>
+      `,
+    }),
+  };
+}
+
+
+export function paymentConfirmedCustomerEmail(input: LifecycleEmailInput & { amountUsd: number }) {
+  const subject = `Payment received — 8 Lakes Tours ${input.reference}`;
+  const name = firstName(input.firstName);
+  const amount = `$${input.amountUsd.toLocaleString('en-US')}`;
+
+  return {
+    subject,
+    text: `Hi ${name},\n\nGood news — we’ve received your ${amount} online booking payment for 8 Lakes Tours.\n\nBooking reference: ${input.reference}\nTour date: ${input.tourDate || 'TBC'}\n\nYour place is now confirmed.\n\nThe remaining ${FAMILY_CASH_USD} is paid directly to the host family in Mongolia in clean USD cash. We’ll send preparation notes, packing guidance, insurance reminders, and arrival coordination before departure.\n\nIf you have any questions before then, just reply to this email.\n\n8 Lakes Tours`,
+    html: emailShell({
+      preheader: `Payment received for booking ${input.reference}. Your 8 Lakes Tours place is confirmed.`,
+      title: `Payment received — you’re confirmed.`,
+      intro: `Hi ${escapeHtml(name)}, we’ve received your <strong>${escapeHtml(amount)} online booking payment</strong> for 8 Lakes Tours.`,
+      children: `
+        <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Booking confirmed</p>
+          <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">Your place is now confirmed for <strong>${escapeHtml(input.tourDate || 'TBC')}</strong>.</p>
+        </div>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:18px">
+          ${detailRow('Reference', escapeHtml(input.reference))}
+          ${detailRow('Online payment received', escapeHtml(amount))}
+          ${detailRow('Paid locally in Mongolia', FAMILY_CASH_USD)}
+        </table>
+
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">The remaining <strong>${FAMILY_CASH_USD}</strong> is paid directly to the host family in Mongolia in clean USD cash. We’ll send preparation notes, packing guidance, insurance reminders, and arrival coordination before departure.</p>
+        <p style="margin:0;color:#3a3024;line-height:1.65;font-size:15px">If you have any questions before then, just reply to this email.</p>
+      `,
+    }),
+  };
+}
+
+export function preparationCustomerEmail(input: LifecycleEmailInput) {
+  const subject = `Preparing for Mongolia — 8 Lakes Tours ${input.reference}`;
+  const name = firstName(input.firstName);
+  return {
+    subject,
+    text: `Hi ${name},\n\nHere are the main preparation notes for your 8 Lakes Tours booking.\n\nBooking reference: ${input.reference}\nTour date: ${input.tourDate || 'TBC'}\n\nPack for all seasons, even in summer. Mongolia’s steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights. Bring warm layers, waterproof outerwear, comfortable riding clothes, warm socks, hat, gloves, and basic toiletries.\n\nCountryside facilities are simple. Once outside the city, expect outhouse squat toilets rather than Western flush toilets, and no regular showers. Bring wet wipes for cleaning hands and body between river washes.\n\nFood is traditional host-family food: meat- and dairy-heavy, with fresh milk tea, yoghurt, cheese, and other local foods. Strict vegan or serious dairy-free needs are difficult in this remote setting.\n\nPlease also make sure you have travel insurance that covers horseback riding/adventure activity and emergency evacuation.\n\nIf you have any last questions, just reply to this email.\n\n8 Lakes Tours`,
+    html: emailShell({
+      preheader: `Packing, food, facilities, insurance, and practical prep for booking ${input.reference}.`,
+      title: `Preparing for Mongolia.`,
+      intro: `Hi ${escapeHtml(name)}, here are the main preparation notes for your 8 Lakes Tours booking.`,
+      children: `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:18px">
+          ${detailRow('Reference', escapeHtml(input.reference))}
+          ${detailRow('Tour date', escapeHtml(input.tourDate || 'TBC'))}
+          ${detailRow('Local cash payment', FAMILY_CASH_USD)}
+        </table>
+
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Packing</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Pack for all seasons, even in summer. Mongolia’s steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights. Bring warm layers, waterproof outerwear, comfortable riding clothes, warm socks, hat, gloves, and basic toiletries.</p>
+        </div>
+
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Facilities</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Once outside the city, expect simple outhouse squat toilets rather than Western flush toilets, and no regular showers. Bring wet wipes for cleaning hands and body between river washes.</p>
+        </div>
+
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Food</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Food is traditional host-family food: meat- and dairy-heavy, with fresh milk tea, yoghurt, cheese, and other local foods. Strict vegan or serious dairy-free needs are difficult in this remote setting.</p>
+        </div>
+
+        <p style="margin:0;color:#3a3024;line-height:1.65;font-size:15px">Please also make sure you have travel insurance that covers horseback riding/adventure activity and emergency evacuation. If you have any last questions, just reply to this email.</p>
+      `,
+    }),
+  };
+}
+
+export function insuranceReminderCustomerEmail(input: LifecycleEmailInput) {
+  const subject = `Travel insurance check — 8 Lakes Tours ${input.reference}`;
+  const name = firstName(input.firstName);
+  return {
+    subject,
+    text: `Hi ${name},\n\nQuick check before your 8 Lakes Tours departure: please make sure your travel insurance is active and covers horseback riding or adventure activity, medical treatment, emergency evacuation, and repatriation.\n\nBooking reference: ${input.reference}\nTour date: ${input.tourDate || 'TBC'}\n\nAlso check that your passport, flights, warm layers, personal medication, first-aid basics, and ${FAMILY_CASH_USD} clean USD cash for the host family are sorted.\n\nIf you have any last questions, don’t hesitate to reply.\n\n8 Lakes Tours`,
+    html: emailShell({
+      preheader: `Insurance, documents, cash, and final preparation check for booking ${input.reference}.`,
+      title: `Quick insurance check.`,
+      intro: `Hi ${escapeHtml(name)}, a quick check before your 8 Lakes Tours departure.`,
+      children: `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:18px">
+          ${detailRow('Reference', escapeHtml(input.reference))}
+          ${detailRow('Tour date', escapeHtml(input.tourDate || 'TBC'))}
+        </table>
+
+        <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Required insurance</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Please make sure your travel insurance is active and covers horseback riding or adventure activity, medical treatment, emergency evacuation, and repatriation.</p>
+        </div>
+
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">Also check that your passport, flights, warm layers, personal medication, first-aid basics, and <strong>${FAMILY_CASH_USD} clean USD cash</strong> for the host family are sorted.</p>
+        <p style="margin:0;color:#3a3024;line-height:1.65;font-size:15px">If you have any last questions, don’t hesitate to reply.</p>
       `,
     }),
   };
@@ -272,16 +376,17 @@ export function leadCustomerEmail(input: { name: string }) {
   const greetingName = input.name ? firstName(input.name) : '';
   const greeting = greetingName ? `Hi ${escapeHtml(greetingName)},` : 'Hi,';
   return {
-    subject: 'You’re on the 8 Lakes Tours update list',
-    text: `${greetingName ? `Hi ${greetingName},` : 'Hi,'}\n\nYou’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.\n\nOne thing worth knowing early: traditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip — always made from the family’s own yak or cow milk and served as milk tea, yoghurt, cheese, and other local foods.\n\nIf you’re ready to reserve, you can complete the booking form here: ${SITE_URL}/#book\n\n8 Lakes Tours`,
+    subject: 'Welcome to the 8 Lakes Tours newsletter',
+    text: `${greetingName ? `Hi ${greetingName},` : 'Hi,'}\n\nThanks for joining the 8 Lakes Tours newsletter. We’ll send occasional updates about Mongolia horse trekking, new departure dates, offers, deals, blog posts, field notes, and behind-the-scenes news from the business.\n\nNo booking has been made from this signup. If you ever want to reserve a place, you can do that on the website: ${SITE_URL}/#book\n\nYou can opt out any time by replying to this email.\n\n8 Lakes Tours`,
     html: emailShell({
-      preheader: 'You are on the list for Mongolia trip updates and preparation notes.',
+      preheader: 'Occasional 8 Lakes Tours news, offers, dates, blog posts, and field notes.',
       title: greeting,
-      intro: 'You’re on the list for practical Mongolia trip updates, new dates, and preparation notes from 8 Lakes Tours.',
+      intro: 'Thanks for joining the 8 Lakes Tours newsletter.',
       children: `
-        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">One thing worth knowing early: traditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip — always made from the family&apos;s own yak or cow milk and served as milk tea, yoghurt, cheese, and other local foods.</p>
-        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">When you’re ready to reserve, complete the booking form on the website. The current 2026 price is split clearly: <strong>${ONLINE_PAYMENT_USD} online</strong> and <strong>${FAMILY_CASH_USD} cash paid directly to the host family</strong>.</p>
-        <p style="margin:0"><a href="${SITE_URL}/#book" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">View the trip</a></p>
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">We’ll send occasional updates about Mongolia horse trekking, new departure dates, offers, deals, blog posts, field notes, and behind-the-scenes news from the business.</p>
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">No booking has been made from this signup. If you ever want to reserve a place, you can do that on the website.</p>
+        <p style="margin:0 0 18px;color:#3a3024;line-height:1.65;font-size:15px">You can opt out any time by replying to this email.</p>
+        <p style="margin:0"><a href="${SITE_URL}" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:12px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Visit 8 Lakes Tours</a></p>
       `,
     }),
   };

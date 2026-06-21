@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
+import { getInternalEmailRecipients, paymentConfirmedCustomerEmail, sendEmail } from '@/lib/email';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const stripe = new Stripe('sk_test_webhook_signature_verification_only');
@@ -61,7 +62,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const { data: booking, error: bookingError } = await supabase
     .from('bookings')
-    .select('id, public_reference, status, online_paid_usd, online_due_usd')
+    .select('id, public_reference, status, online_paid_usd, online_due_usd, tour_date, customer_id, customer:customers(first_name, email)')
     .eq('public_reference', reference)
     .single();
 
@@ -76,7 +77,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const existingPaid = Number(booking.online_paid_usd ?? 0);
   const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 959;
-  const alreadyRecorded = existingPaid >= amountToRecord && booking.status === 'confirmed';
+  const alreadyRecorded = existingPaid >= amountToRecord && ['confirmed', 'prep_sent', 'ready_for_departure', 'completed'].includes(booking.status);
 
   if (paymentIntentId) {
     const { data: existingPayment, error: existingPaymentError } = await supabase
@@ -121,6 +122,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
       .update({
         status: 'confirmed',
         online_paid_usd: amountToRecord,
+        confirmed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', booking.id);
@@ -144,6 +146,46 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
     if (eventError) {
       throw new Error(`Payment event insert failed: ${eventError.message}`);
+    }
+
+    const customer = Array.isArray(booking.customer) ? booking.customer[0] : booking.customer;
+    const customerEmail = typeof customer?.email === 'string' ? customer.email : '';
+    const firstName = typeof customer?.first_name === 'string' ? customer.first_name : 'there';
+
+    if (customerEmail) {
+      const confirmationEmail = paymentConfirmedCustomerEmail({
+        reference: booking.public_reference,
+        firstName,
+        tourDate: booking.tour_date || 'TBC',
+        amountUsd: amountToRecord,
+      });
+      const emailResult = await sendEmail({
+        to: customerEmail,
+        replyTo: getInternalEmailRecipients()[0],
+        ...confirmationEmail,
+      });
+
+      await supabase.from('booking_events').insert({
+        booking_id: booking.id,
+        event_type: emailResult.sent ? 'email' : 'system',
+        direction: 'outbound',
+        title: emailResult.sent ? 'Payment confirmation email sent' : 'Payment confirmation email failed',
+        body: emailResult.sent ? `Resend email id: ${emailResult.id ?? 'unknown'}` : emailResult.error,
+        created_by: 'resend',
+      });
+
+      await supabase.from('email_events').insert({
+        booking_id: booking.id,
+        customer_id: booking.customer_id ?? null,
+        template_key: 'payment_confirmed',
+        to_email: customerEmail,
+        subject: confirmationEmail.subject,
+        body_snapshot: confirmationEmail.text,
+        provider_message_id: emailResult.id ?? null,
+        sent_by: 'stripe-webhook',
+        status: emailResult.sent ? 'sent' : 'failed',
+        raw_response: emailResult,
+      });
     }
   }
 
