@@ -179,13 +179,13 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk', orientation: 'portrait', collage: 'extra-tall' },
   { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape', collage: 'wide' },
   { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', orientation: 'landscape', collage: 'extra-wide' },
-  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Rider under dramatic storm clouds in the valley', orientation: 'portrait', mobileFullWidth: true, collage: 'finale' },
+  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Horseback point of view crossing a grassy Mongolian valley under storm clouds', orientation: 'portrait', mobileFullWidth: true, collage: 'finale' },
 ];
 
 const GALLERY_IMAGES = [
   { src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' },
   { src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' },
-  { src: '/images/testimonial-irik-clawson.jpg', alt: 'Irik Clawson riding on horseback at sunset in Mongolia' },
+  { src: '/images/testimonial-irik-clawson.jpg', alt: 'Robert Zaher smiling on horseback beside a river valley' },
   { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin Bennet with children beside a traditional ger in Mongolia' },
   { src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' },
   { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' },
@@ -1288,7 +1288,7 @@ export default function Home() {
             {
               name: 'Irik',
               src: '/images/testimonial-irik-clawson.jpg',
-              alt: 'Irik Clawson riding on horseback at sunset in Mongolia',
+              alt: 'Robert Zaher smiling on horseback beside a river valley',
               quote: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
             },
             {
