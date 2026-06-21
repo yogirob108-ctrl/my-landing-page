@@ -84,7 +84,8 @@ const sections = [
     title: 'Communication and translation',
     items: [
       'Guides and organisers handle the main logistics, but the host-family setting is cross-cultural and not every moment happens in perfect English.',
-      'A phone with an AI translator such as ChatGPT or another translation app can help if you are stuck for words.',
+      'So far, ChatGPT voice mode has worked especially well for simple back-and-forth conversation with family members whose English is limited. You can say: “Please translate the following sentence into Mongolian for me,” then speak naturally and play or show the translation.',
+      'Other translation apps can still help, but we have found ChatGPT voice mode more useful than most for this kind of real conversation.',
       'Starlink or local connectivity may be available at some camps, but internet is a bonus — not something to depend on constantly.',
     ],
   },
