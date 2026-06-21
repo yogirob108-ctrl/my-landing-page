@@ -14,7 +14,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/gallery-extra/packed-horses-rain-camp.jpg', alt: 'Packed horses waiting under storm clouds', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/gallery-extra/rain-jacket-valley-view.jpg', alt: 'Rain jacket view across the valley', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/gallery-extra/rainy-horseback-overlook.jpg', alt: 'Rainy horseback overlook above the valley', width: 1620, height: 1080, orientation: 'landscape' },
-  { src: '/images/gallery-extra/rearing-horse-over-valley.jpg', alt: 'Horse rearing above the valley', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/gallery-extra/rider-mountain-clouds.jpg', alt: 'Rider and horse below mountain clouds', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/gallery-extra/rider-rearing-horse-wide.jpg', alt: 'Rider on a rearing horse against the sky', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/expedition-originals/eagle-black-white-portrait.jpg', alt: 'Black and white portrait of a Mongolian eagle', width: 1080, height: 1620, orientation: 'portrait' },

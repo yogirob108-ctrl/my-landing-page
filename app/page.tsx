@@ -171,7 +171,6 @@ const MAIN_ALBUM_IMAGES = [
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center', collage: 'tall' },
   { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait', collage: 'square' },
   { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape', collage: 'panorama' },
-  { src: '/images/gallery-extra/rearing-horse-over-valley.jpg', alt: 'Horse rearing above the green valley', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/gallery-extra/rider-rearing-horse-wide.jpg', alt: 'Rider on a rearing horse against the sky', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/gallery-extra/packed-horses-rain-camp.jpg', alt: 'Packed horses waiting under storm clouds', orientation: 'landscape', collage: 'extra-wide' },
   { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape', collage: 'wide' },

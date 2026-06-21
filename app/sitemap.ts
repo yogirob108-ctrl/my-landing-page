@@ -52,7 +52,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
       images: [
         `${siteUrl}/images/og-8-lakes-gallery-2026.jpg`,
-        `${siteUrl}/images/gallery-extra/rearing-horse-over-valley.jpg`,
         `${siteUrl}/images/gallery-extra/packed-horses-rain-camp.jpg`,
         `${siteUrl}/images/expedition-originals/storm-cloud-valley-panorama.jpg`,
       ],
