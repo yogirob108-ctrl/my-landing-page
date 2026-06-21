@@ -86,13 +86,15 @@ export default function SiteNav() {
         }
         .site-nav-links a:hover { color: #c8a96e; }
         .site-nav-links .site-nav-cta {
-          color: #f5f0e8;
-          border: 1px solid rgba(245,240,232,0.4);
+          color: #0e0c09;
+          background: #c8a96e;
+          border: 1px solid #c8a96e;
           padding: 0.6rem 1.4rem;
+          font-weight: 700;
         }
         .site-nav-links .site-nav-cta:hover {
-          background: #c8a96e;
-          border-color: #c8a96e;
+          background: #f5f0e8;
+          border-color: #f5f0e8;
           color: #0e0c09;
         }
         @media (max-width: 900px) {

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { GalleryImage } from './gallery-data';
 
 type Filter = 'all' | 'portrait' | 'landscape';
@@ -15,14 +15,35 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
   }, [filter, images]);
   const lightboxImage = lightboxIndex === null ? null : visibleImages[lightboxIndex];
 
-  const openLightbox = (index: number) => setLightboxIndex(index);
-  const closeLightbox = () => setLightboxIndex(null);
-  const showPrevious = () => setLightboxIndex(current => current === null ? current : (current + visibleImages.length - 1) % visibleImages.length);
-  const showNext = () => setLightboxIndex(current => current === null ? current : (current + 1) % visibleImages.length);
+  const openLightbox = useCallback((index: number) => setLightboxIndex(index), []);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const showPrevious = useCallback(() => {
+    setLightboxIndex(current => current === null ? current : (current + visibleImages.length - 1) % visibleImages.length);
+  }, [visibleImages.length]);
+  const showNext = useCallback(() => {
+    setLightboxIndex(current => current === null ? current : (current + 1) % visibleImages.length);
+  }, [visibleImages.length]);
 
   useEffect(() => {
     if (lightboxIndex === null || typeof window === 'undefined') return;
     document.documentElement.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeLightbox();
+      }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        showPrevious();
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        showNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
 
     const preloadIndexes = [
       lightboxIndex,
@@ -40,9 +61,10 @@ export default function GalleryClient({ images }: { images: GalleryImage[] }) {
     });
 
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       document.documentElement.style.overflow = '';
     };
-  }, [lightboxIndex, visibleImages]);
+  }, [closeLightbox, lightboxIndex, showNext, showPrevious, visibleImages]);
 
   return (
     <>
