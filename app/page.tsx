@@ -838,7 +838,7 @@ export default function Home() {
         .lightbox-next { right: 1rem; }
         .trust-conversion { background: var(--ink); display: grid; grid-template-columns: minmax(260px, 0.8fr) 1.2fr; gap: 4rem; align-items: center; }
         .rob-photo { position: relative; aspect-ratio: 1; border: 1px solid rgba(200,169,110,0.24); background: rgba(200,169,110,0.06); overflow: hidden; }
-        .rob-photo img { object-fit: cover; object-position: 50% 32%; }
+        .rob-photo img { object-fit: cover; object-position: 50% 44%; }
         .trust-card-founder h3 { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 300; color: var(--cream); margin-bottom: 0.8rem; }
         .trust-card-founder p { font-size: 0.9rem; line-height: 1.75; color: rgba(212,207,196,0.82); }
         .trust-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.6rem; }
@@ -1481,7 +1481,7 @@ export default function Home() {
 
       <section className="trust-conversion">
         <div className="rob-photo reveal">
-          <Image src="/images/rob-zaher.jpg" alt="Robert Zaher outdoors in warm evening light" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
+          <Image src="/images/rob-riding-horse.jpg" alt="Robert Zaher riding a horse across the Mongolian valley" fill quality={72} sizes="(max-width: 900px) 100vw, 35vw" />
         </div>
         <div className="trust-card-founder reveal reveal-delay-1">
           <span className="section-eyebrow">Who You&apos;re Booking With</span>
