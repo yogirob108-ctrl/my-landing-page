@@ -45,7 +45,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/lake.jpg', alt: 'Eight Lakes valley and water', width: 1200, height: 1600, orientation: 'portrait' },
   { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback', width: 1200, height: 900, orientation: 'landscape' },
   { src: '/images/gallery-extra/rob-horseback-river-valley.jpg', alt: 'Robert Zaher smiling on horseback beside a river valley', width: 1152, height: 864, orientation: 'landscape' },
-  { src: '/images/rob-zaher.jpg', alt: 'Robert Zaher in Mongolia', width: 768, height: 1024, orientation: 'portrait' },
   { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin with children beside a ger', width: 1400, height: 1050, orientation: 'landscape' },
   { src: '/images/testimonial-irik-clawson.jpg', alt: 'Irik riding at sunset', width: 1024, height: 768, orientation: 'landscape' },
 ]
