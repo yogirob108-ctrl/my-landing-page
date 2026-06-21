@@ -84,7 +84,7 @@ export default function Page() {
       <SiteNav />
 
       <section className="about-hero">
-        <div className="about-hero-image" role="img" aria-label="Robert with the host family outside a traditional ger in Mongolia">
+        <div className="about-hero-image" role="img" aria-label="Host family and guests watching a white horse in the Mongolian valley">
           <div className="about-hero-overlay" />
         </div>
         <div className="about-hero-copy">
@@ -196,7 +196,7 @@ export default function Page() {
         p { color:rgba(212,207,196,.84); line-height:1.75; }
         a { color:inherit; }
         .about-hero { min-height:92vh; position:relative; display:flex; align-items:flex-end; padding:8rem 6rem 5rem; box-sizing:border-box; }
-        .about-hero-image { position:absolute; inset:0; overflow:hidden; background-image:url('/images/rob-family.jpg'); background-size:cover; background-position:center 42%; }
+        .about-hero-image { position:absolute; inset:0; overflow:hidden; background-image:url('/images/gallery-extra/host-family-horse-training-valley.jpg'); background-size:cover; background-position:center 48%; }
         .about-hero-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(14,12,9,.96) 0%, rgba(14,12,9,.72) 42%, rgba(14,12,9,.18) 100%); }
         .about-hero-copy { position:relative; z-index:1; max-width:1040px; }
         .about-hero-copy > p:last-of-type { max-width:680px; font-size:1.08rem; }

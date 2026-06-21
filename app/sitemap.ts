@@ -25,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
       images: [
         `${siteUrl}/images/og-8-lakes-about-2026.jpg`,
-        `${siteUrl}/images/rob-family.jpg`,
+        `${siteUrl}/images/gallery-extra/host-family-horse-training-valley.jpg`,
         `${siteUrl}/images/rob-zaher.jpg`,
       ],
     },

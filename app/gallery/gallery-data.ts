@@ -28,6 +28,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/gallery-extra/horses-in-forest-rain.jpg', alt: 'Pack horses resting in the forest rain', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/expedition-originals/yaks-river-backlit-portrait.jpg', alt: 'Yaks grazing beside the river in backlit evening sun', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/gallery-extra/ger-family-meal.jpg', alt: 'Guests sharing a meal with the host family inside a ger', width: 1152, height: 864, orientation: 'landscape' },
+  { src: '/images/gallery-extra/host-family-horse-training-valley.jpg', alt: 'Host family and guests watching a white horse in the Mongolian valley', width: 864, height: 1152, orientation: 'portrait' },
   { src: '/images/gallery-extra/ger-and-land-cruiser-rain.jpg', alt: 'Ger and Land Cruiser in the rain', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/family.jpg', alt: 'Host family life in the valley', width: 1140, height: 822, orientation: 'landscape' },
   { src: '/images/gallery-extra/horseman-under-larch-trees.jpg', alt: 'Horseman under larch trees', width: 1080, height: 1620, orientation: 'portrait' },
