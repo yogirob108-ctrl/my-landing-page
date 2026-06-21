@@ -29,6 +29,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', width: 2048, height: 1536, orientation: 'landscape' },
   { src: '/images/expedition-originals/suma-motorbike-field-portrait.jpg', alt: 'Suma on a motorbike in the open field', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/expedition-originals/suma-river-crossing-original.jpg', alt: 'Suma riding through a shallow river crossing', width: 1200, height: 1600, orientation: 'portrait' },
+  { src: '/images/gallery-extra/local-guide-mountain-portrait.jpg', alt: 'Local guide resting beside the rocks above the Mongolian valley', width: 768, height: 1024, orientation: 'portrait' },
   { src: '/images/expedition-originals/yaks-river-backlit-portrait.jpg', alt: 'Yaks grazing beside the river in backlit evening sun', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/family.jpg', alt: 'Host family life in the valley', width: 1140, height: 822, orientation: 'landscape' },
