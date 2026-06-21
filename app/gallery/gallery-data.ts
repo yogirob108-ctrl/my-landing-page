@@ -27,7 +27,6 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', width: 1620, height: 1080, orientation: 'landscape' },
   { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Horseback point of view crossing a grassy Mongolian valley under storm clouds', width: 864, height: 1152, orientation: 'portrait' },
   { src: '/images/expedition-originals/river-horseman-silhouette-portrait.jpg', alt: 'Horseman silhouetted beside the river', width: 1036, height: 1439, orientation: 'portrait' },
-  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', width: 2048, height: 1536, orientation: 'landscape' },
   { src: '/images/expedition-originals/suma-motorbike-field-portrait.jpg', alt: 'Suma on a motorbike in the open field', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/gallery-extra/suma-hunting-binoculars-portrait.jpg', alt: 'Suma scanning the valley with binoculars while hunting', width: 864, height: 1152, orientation: 'portrait' },
   { src: '/images/gallery-extra/suma-rifle-mountain-portrait.jpg', alt: 'Suma resting beside a rifle above the mountain valley', width: 864, height: 1152, orientation: 'portrait' },

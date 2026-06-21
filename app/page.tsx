@@ -167,19 +167,15 @@ const STRIP_IMAGES = [
 
 const MAIN_ALBUM_IMAGES = [
   { src: '/images/guide-horse-portrait.jpg', alt: 'Suma standing with his horse on the open steppe', orientation: 'portrait', collage: 'lead' },
-  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape', collage: 'wide' },
-  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '75% center', collage: 'tall' },
-  { src: '/images/ger-camp-yaks-portrait.jpg', alt: 'Gers and grazing yaks in the valley', orientation: 'portrait', collage: 'square' },
-  { src: '/images/expedition-originals/mountain-sunset-river-wide.jpg', alt: 'Mountain sunset above a winding river', orientation: 'landscape', collage: 'panorama' },
-  { src: '/images/gallery-extra/rider-rearing-horse-wide.jpg', alt: 'Rider on a rearing horse against the sky', orientation: 'landscape', collage: 'extra-wide' },
-  { src: '/images/gallery-extra/packed-horses-rain-camp.jpg', alt: 'Packed horses waiting under storm clouds', orientation: 'landscape', collage: 'extra-wide' },
-  { src: '/images/expedition-originals/layered-hills-sunset-wide.jpg', alt: 'Layered hills at sunset', orientation: 'landscape', collage: 'wide' },
-  { src: '/images/gallery-extra/horses-in-forest-rain.jpg', alt: 'Pack horses resting in the forest rain', orientation: 'landscape', collage: 'extra-wide' },
-  { src: '/images/expedition-originals/van-river-sunset-portrait.jpg', alt: 'Van parked below a glowing river sunset', orientation: 'portrait', mobileFullWidth: true, collage: 'feature' },
-  { src: '/images/expedition-originals/motorbike-valley-dusk-portrait.jpg', alt: 'Motorbike above the valley at dusk', orientation: 'portrait', collage: 'extra-tall' },
-  { src: '/images/expedition-originals/ger-with-sun-original.jpg', alt: 'Ger with low sun over the valley', orientation: 'landscape', collage: 'wide' },
-  { src: '/images/expedition-originals/storm-cloud-valley-panorama.jpg', alt: 'Panoramic storm clouds over the valley', orientation: 'landscape', collage: 'extra-wide' },
-  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Horseback point of view crossing a grassy Mongolian valley under storm clouds', orientation: 'portrait', mobileFullWidth: true, collage: 'finale' },
+  { src: '/images/gallery-extra/horseback-storm-valley-pov.jpg', alt: 'Horseback point of view riding into a stormy mountain valley', orientation: 'landscape', collage: 'hero' },
+  { src: '/images/gallery-extra/packed-horses-rain-camp.jpg', alt: 'Packed horses waiting under storm clouds', orientation: 'landscape', collage: 'wide-left' },
+  { src: '/images/gallery-extra/horses-in-forest-rain.jpg', alt: 'Pack horses resting in the forest rain', orientation: 'landscape', collage: 'wide-right' },
+  { src: '/images/expedition-originals/ger-blue-hour-original.jpg', alt: 'Ger at blue hour beneath the mountains', orientation: 'landscape', collage: 'small-a' },
+  { src: '/images/gallery-extra/orkhon-valley-sunburst-panorama.jpg', alt: 'Sunburst over the Orkhon Valley river bends after rain', orientation: 'landscape', collage: 'small-b' },
+  { src: '/images/eagle-portrait-original.jpg', alt: 'Close portrait of a Mongolian eagle', orientation: 'portrait', objectPosition: '72% center', collage: 'tall' },
+  { src: '/images/gallery-extra/rider-rearing-horse-wide.jpg', alt: 'Rider on a rearing horse against the sky', orientation: 'landscape', collage: 'bottom-left' },
+  { src: '/images/gers2.jpg', alt: 'White gers spread across open grassland below the mountains', orientation: 'landscape', collage: 'bottom-mid' },
+  { src: '/images/expedition-originals/rider-storm-valley-panorama-portrait.jpg', alt: 'Horseback point of view crossing a grassy Mongolian valley under storm clouds', orientation: 'portrait', mobileFullWidth: true, collage: 'bottom-right' },
 ];
 
 const GALLERY_IMAGES = [
@@ -809,19 +805,18 @@ export default function Home() {
         .mosaic-item:hover img { transform: scale(1.04); }
         .mosaic-item.portrait-full:hover img { transform: none; }
         .mosaic-item.tall { grid-row: span 2; }
-        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(78px, 7vw, 118px); gap: 3px; background: #0f0f0d; }
+        .main-album { padding: 3px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: clamp(82px, 7vw, 116px); gap: 3px; background: #0f0f0d; }
         .main-album-item { position: relative; overflow: hidden; background: var(--ink); min-height: 0; }
-        .main-album-item.collage-lead { grid-column: 1 / 5; grid-row: 1 / 7; }
-        .main-album-item.collage-wide:nth-of-type(2) { grid-column: 5 / 9; grid-row: 1 / 4; }
+        .main-album-item.collage-lead { grid-column: 1 / 4; grid-row: 1 / 7; }
+        .main-album-item.collage-hero { grid-column: 4 / 9; grid-row: 1 / 4; }
         .main-album-item.collage-tall { grid-column: 9 / 11; grid-row: 1 / 5; }
-        .main-album-item.collage-square { grid-column: 11 / 13; grid-row: 1 / 3; }
-        .main-album-item.collage-panorama { grid-column: 5 / 9; grid-row: 4 / 7; }
-        .main-album-item.collage-wide:nth-of-type(6) { grid-column: 11 / 13; grid-row: 3 / 5; }
-        .main-album-item.collage-feature { grid-column: 9 / 13; grid-row: 5 / 10; }
-        .main-album-item.collage-wide:nth-of-type(13) { grid-column: 1 / 7; grid-row: 7 / 10; }
-        .main-album-item.collage-finale { grid-column: 7 / 9; grid-row: 7 / 10; }
-        .main-album-item.collage-extra-wide { grid-column: span 4; grid-row: span 3; }
-        .main-album-item.collage-extra-tall { grid-column: span 3; grid-row: span 5; }
+        .main-album-item.collage-wide-left { grid-column: 4 / 7; grid-row: 4 / 7; }
+        .main-album-item.collage-wide-right { grid-column: 7 / 9; grid-row: 4 / 7; }
+        .main-album-item.collage-small-a { grid-column: 11 / 13; grid-row: 1 / 3; }
+        .main-album-item.collage-small-b { grid-column: 11 / 13; grid-row: 3 / 5; }
+        .main-album-item.collage-bottom-left { grid-column: 1 / 5; grid-row: 7 / 10; }
+        .main-album-item.collage-bottom-mid { grid-column: 5 / 9; grid-row: 7 / 10; }
+        .main-album-item.collage-bottom-right { grid-column: 9 / 13; grid-row: 5 / 10; }
         .main-album-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .main-album-item:hover img { transform: scale(1.04); }
         .image-button { all: unset; display: block; width: 100%; height: 100%; position: relative; cursor: zoom-in; }
@@ -1108,14 +1103,15 @@ export default function Home() {
           .main-album { display: block; column-count: 2; column-gap: 3px; }
           .main-album-item { display: block; width: 100%; margin: 0 0 3px; break-inside: avoid; page-break-inside: avoid; transform: translateZ(0); }
           .main-album-item.collage-lead { aspect-ratio: 3 / 4.25; }
-          .main-album-item.collage-wide { aspect-ratio: 1 / 1; }
+          .main-album-item.collage-hero,
+          .main-album-item.collage-wide-left,
+          .main-album-item.collage-wide-right,
+          .main-album-item.collage-bottom-left,
+          .main-album-item.collage-bottom-mid { aspect-ratio: 4 / 3; }
           .main-album-item.collage-tall { aspect-ratio: 3 / 4.6; }
-          .main-album-item.collage-square { aspect-ratio: 1 / 1; }
-          .main-album-item.collage-panorama { aspect-ratio: 4 / 3; }
-          .main-album-item.collage-feature { aspect-ratio: 3 / 4.1; }
-          .main-album-item.collage-finale { aspect-ratio: 4 / 5; }
-          .main-album-item.collage-extra-wide { aspect-ratio: 4 / 3; }
-          .main-album-item.collage-extra-tall { aspect-ratio: 3 / 4.6; }
+          .main-album-item.collage-small-a,
+          .main-album-item.collage-small-b { aspect-ratio: 1 / 1; }
+          .main-album-item.collage-bottom-right { aspect-ratio: 3 / 4.1; }
           .lightbox-nav { width: 2.7rem; height: 2.7rem; font-size: 1.6rem; }
           .lightbox-close { top: calc(0.8rem + env(safe-area-inset-top)); right: calc(0.8rem + env(safe-area-inset-right)); width: 3.4rem; height: 3.4rem; font-size: 1.5rem; background: rgba(14,12,9,0.9); border-color: rgba(245,240,232,0.5); }
           .lightbox-prev { left: 0.5rem; }
