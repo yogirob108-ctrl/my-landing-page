@@ -655,21 +655,37 @@ export default function Home() {
         }
         .hero-bg {
           position: absolute; inset: 0;
-
-          animation: heroZoom 12s ease-out forwards;
+          transform-origin: 54% 58%;
+          animation: droneDrift 18s ease-in-out infinite alternate;
+          will-change: transform;
         }
-        .hero-bg img { object-fit: cover; object-position: center 30%; }
-        @keyframes heroZoom {
-          from { transform: scale(1.05); }
-          to { transform: scale(1.0); }
+        .hero-bg img { object-fit: cover; object-position: center 43%; }
+        @keyframes droneDrift {
+          from { transform: scale(1.08) translate3d(-1.2%, 1.4%, 0); }
+          to { transform: scale(1.14) translate3d(1.4%, -1.1%, 0); }
         }
         .hero-overlay {
           position: absolute; inset: 0;
-          background: linear-gradient(to top, rgba(14,12,9,0.92) 0%, rgba(14,12,9,0.3) 50%, rgba(14,12,9,0.1) 100%);
+          background:
+            radial-gradient(circle at 47% 38%, rgba(255,190,112,0.18), transparent 25%),
+            linear-gradient(to top, rgba(14,12,9,0.88) 0%, rgba(14,12,9,0.34) 44%, rgba(14,12,9,0.08) 100%),
+            radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.34) 100%);
+        }
+        .hero::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+          background:
+            radial-gradient(circle at 47% 36%, rgba(255,215,148,0.12), transparent 20%),
+            linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.035) 38%, transparent 58%);
+          mix-blend-mode: screen;
+          opacity: 0.58;
         }
         .hero-content {
           position: relative; z-index: 2;
-          padding: 0 6rem 6.5rem; max-width: 980px;
+          padding: 0 6rem 6.5rem; max-width: 920px;
           animation: heroFade 1.5s ease-out 0.3s both;
         }
         @keyframes heroFade {
@@ -682,7 +698,7 @@ export default function Home() {
         }
         .hero-title {
           font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-          font-size: clamp(3.5rem, 7vw, 6.5rem);
+          font-size: clamp(3.2rem, 6.2vw, 5.85rem);
           font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 1.5rem;
         }
         .hero-title em { font-style: italic; color: var(--gold); }
