@@ -27,15 +27,15 @@ export default function TermsAndConditions() {
           },
           {
             title: '2. Booking & Payment Structure',
-            body: 'A $959 USD online booking payment, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with 8 Lakes Tours. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining $1,200 USD local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
+            body: 'A $999 USD online booking payment, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with 8 Lakes Tours. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining $1,000 USD local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
           },
           {
             title: '3. Tour Price',
-            body: 'The current 2026 tour price is $2,159 USD per person for the 9-day / 8-night programme. This is split into a $959 USD online booking payment through 8 Lakes Tours and a $1,200 USD cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The current 2026 tour price is $1,999 USD per person for the 9-day / 8-night programme. This is split into a $999 USD online booking payment through 8 Lakes Tours and a $1,000 USD cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
-            body: 'If you cancel more than 3 weeks / 21 days before departure, the $959 USD online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If you cancel within 3 weeks / 21 days of departure, we will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us will be refunded minus unrecoverable Stripe/payment processing fees. The $1,200 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
+            body: 'If you cancel more than 3 weeks / 21 days before departure, the $999 USD online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If you cancel within 3 weeks / 21 days of departure, we will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us will be refunded minus unrecoverable Stripe/payment processing fees. The $1,000 USD local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours before departure. We strongly recommend comprehensive travel insurance that includes trip cancellation coverage.',
           },
           {
             title: '5. Travel Insurance',

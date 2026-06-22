@@ -7,9 +7,9 @@ const STRIPE_LINK = 'https://buy.stripe.com/4gM8wI2whczu9gI1LT0gw04';
 const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TiGFd3OYuYvjeqEw1PHV27M';
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 
-const BASE_PRICE_USD = 2159;
-const BASE_ONLINE_PAYMENT_USD = 959;
-const BASE_LOCAL_FAMILY_PAYMENT_USD = 1200;
+const BASE_PRICE_USD = 1999;
+const BASE_ONLINE_PAYMENT_USD = 999;
+const BASE_LOCAL_FAMILY_PAYMENT_USD = 1000;
 
 function stripePaymentLink(reference: string, email: string) {
   const params = new URLSearchParams();
@@ -519,7 +519,7 @@ export default function Home() {
         },
         offers: {
           '@type': 'Offer',
-          price: '2159',
+          price: '1999',
           priceCurrency: 'USD',
           availability: 'https://schema.org/LimitedAvailability',
           validFrom: '2026-01-01',
@@ -582,8 +582,8 @@ export default function Home() {
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'US citizens receive a 90-day visa on arrival. All other nationalities should check with their local Mongolian embassy for current requirements.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $2,159 USD per person. A $959 online booking payment confirms your place with 8 Lakes Tours. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
-          { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 host-family cash payment is not collected online.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $1,999 USD per person. A $999 online booking payment confirms your place with 8 Lakes Tours. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'What is the cancellation policy?', acceptedAnswer: { '@type': 'Answer', text: 'If your plans change more than 3 weeks / 21 days before departure, the $999 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,000 host-family cash payment is not collected online.' } },
         ],
       },
     ],
@@ -1818,9 +1818,9 @@ export default function Home() {
             {q:'What happens in a medical emergency?', a:'Basic first aid is available on site. All participants are required to have travel insurance with emergency evacuation coverage before the trip begins.'},
             {q:'Can I bring my children?', a:'For the full horse trek, we generally encourage families with younger children not to book the standard expedition because the riding days, remote conditions, weather, and group pace can be too much. Riders aged 16+ can join the trek with a parent or guardian if the fit is right. For younger children, a custom stay-only setup with shorter horse rides around the host family can be arranged — the families can facilitate that without problem.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
-            {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
-            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide booked guests through exactly when and how to bring the cash payment before departure.'},
-            {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours.'},
+            {q:'How does payment work?', a:'The current 2026 rate is $1,999 per person. You pay $999 online through 8 Lakes Tours to confirm your place. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,000 local family portion in cash ensures that money reaches the families directly. We will guide booked guests through exactly when and how to bring the cash payment before departure.'},
+            {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $999 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,000 local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours.'},
           ].map(({q, a}, i) => {
             const isOpen = openFaqIndex === i;
             const panelId = `home-faq-panel-${i}`;

@@ -76,7 +76,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
   }
 
   const existingPaid = Number(booking.online_paid_usd ?? 0);
-  const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 959;
+  const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 999;
   const alreadyRecorded = existingPaid >= amountToRecord && ['confirmed', 'prep_sent', 'ready_for_departure', 'completed'].includes(booking.status);
 
   if (paymentIntentId) {

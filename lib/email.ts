@@ -4,9 +4,9 @@ const DEFAULT_FROM = '8 Lakes Tours <info@8lakestours.com>';
 const DEFAULT_INTERNAL_RECIPIENTS = ['8lakestours@gmail.com'];
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.8lakestours.com';
 const OPS_URL = process.env.OPS_BASE_URL || 'https://adventure-therapy-ops.vercel.app';
-const TOTAL_PRICE_USD = '$2,159';
-const ONLINE_PAYMENT_USD = '$959';
-const FAMILY_CASH_USD = '$1,200';
+const TOTAL_PRICE_USD = '$1,999';
+const ONLINE_PAYMENT_USD = '$999';
+const FAMILY_CASH_USD = '$1,000';
 
 type SendEmailInput = {
   to: string | string[];
