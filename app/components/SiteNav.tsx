@@ -32,7 +32,6 @@ export default function SiteNav() {
       </div>
 
       <div className="site-nav-mobile-actions" aria-label="Quick navigation">
-        <Link href="/" className="site-nav-home-mobile">Home</Link>
         <Link href="/#book" className="site-nav-cta">Book</Link>
       </div>
     </nav>
