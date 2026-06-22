@@ -119,10 +119,16 @@ body {
     align-items: center;
     padding: 0.72rem max(0.78rem, env(safe-area-inset-right)) 0.72rem max(0.86rem, env(safe-area-inset-left));
     gap: 0.38rem;
+    background: linear-gradient(to bottom, rgba(14, 12, 9, 0.88) 0%, transparent 100%);
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    overflow: hidden;
+  }
+
+  #site-nav.site-nav.nav-solid {
     background: rgba(14, 12, 9, 0.96);
     border-bottom-color: rgba(200, 169, 110, 0.14);
     backdrop-filter: blur(12px);
-    overflow: hidden;
   }
 
   #site-nav .site-nav-desktop-links {
