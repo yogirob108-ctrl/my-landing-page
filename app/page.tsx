@@ -1424,7 +1424,6 @@ export default function Home() {
                 ['01', 'Fly into UB', 'Arrive at Chinggis Khaan International Airport in Ulaanbaatar.'],
                 ['02', 'Bus to Bat-Ulzii', 'Roughly 8 hours through open countryside.'],
                 ['03', 'Family pickup', 'Hosts meet you and bring you to the ger village.'],
-                ['04', 'WhatsApp handoff', 'Once your Bat-Ulzii bus is booked, message the operator and the host-family pickup is arranged.'],
               ].map(([number, title, copy]) => (
                 <article className="journey-step" key={number}>
                   <span className="journey-step-number">{number}</span>
