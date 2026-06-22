@@ -5,24 +5,12 @@ import { useEffect } from 'react';
 
 export default function SiteNav() {
   useEffect(() => {
-    let lastScrollY = window.scrollY;
     const nav = document.getElementById('site-nav');
     if (!nav) return;
 
     const updateNav = () => {
       const currentScrollY = window.scrollY;
-      const isMobile = window.matchMedia('(max-width: 900px)').matches;
-      const scrollDelta = currentScrollY - lastScrollY;
-
       nav.classList.toggle('nav-solid', currentScrollY > 80);
-
-      if (!isMobile || currentScrollY <= 120 || scrollDelta < -4) {
-        nav.classList.remove('mobile-nav-hidden');
-      } else if (scrollDelta > 4) {
-        nav.classList.add('mobile-nav-hidden');
-      }
-
-      lastScrollY = Math.max(currentScrollY, 0);
     };
 
     updateNav();
@@ -113,7 +101,6 @@ export default function SiteNav() {
           }
           .site-nav-links .site-nav-cta { padding: 0.55rem 0.82rem; }
           .site-nav-logo { font-size: 1rem; letter-spacing: 0.14em; }
-          .site-nav.mobile-nav-hidden { transform: translateY(-100%); }
         }
         @media (max-width: 390px) {
           .site-nav-logo { font-size: 0.86rem; letter-spacing: 0.1em; }
