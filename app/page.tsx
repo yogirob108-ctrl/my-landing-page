@@ -1,8 +1,11 @@
 "use client";
 import Image from 'next/image';
+import Script from 'next/script';
 import { type FormEvent, useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://book.stripe.com/6oUaEQc6R8jecsUaip0gw05';
+const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TkyTO3OYuYvjeqEXmuFK4aq';
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 
 const BASE_PRICE_USD = 1999;
 const BASE_ONLINE_PAYMENT_USD = 999;
@@ -951,6 +954,10 @@ export default function Home() {
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
         .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
+        .stripe-buy-button-frame { width:100%; max-width:100%; overflow:hidden; min-height: 230px; transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-buy-button-frame stripe-buy-button { display:block; max-width:100%; overflow:hidden; }
+        .stripe-buy-button-frame.locked { opacity: 0.42; filter: grayscale(0.2); pointer-events: none; }
+        .stripe-link-fallback { display: inline-flex; justify-content: center; margin-top: 0.75rem; color: rgba(245,240,232,0.58); font-size: 0.68rem; text-decoration: underline; text-underline-offset: 3px; }
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .checkout-lock-overlay p { max-width:calc(100% - 1rem); box-sizing:border-box; font-size: 0.7rem; letter-spacing: 0.12em; line-height:1.45; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); padding: 0.5rem 0.75rem; pointer-events: none; white-space:normal; overflow-wrap:anywhere; }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
@@ -1137,6 +1144,7 @@ export default function Home() {
           .checkout-copy { font-size:0.78rem; }
           .checkout-note { font-size:0.68rem; }
           .stripe-embed-wrap { max-width:100%; }
+          .stripe-buy-button-frame { min-height:220px; }
           .checkout-lock-overlay p { font-size:0.58rem; letter-spacing:0.09em; padding:0.45rem 0.5rem; }
           .intro-img-accent { display: none; }
         }
@@ -1690,8 +1698,15 @@ export default function Home() {
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
               <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
+                <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
+                <div
+                  className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
+                  dangerouslySetInnerHTML={{
+                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-booking'}"></stripe-buy-button>`,
+                  }}
+                />
                 <a
-                  className={`stripe-pay-button${canPay ? '' : ' disabled'}`}
+                  className="stripe-link-fallback"
                   href={checkoutFallbackHref}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1701,8 +1716,7 @@ export default function Home() {
                     if (!canPay) event.preventDefault();
                   }}
                 >
-                  <span>Open secure Stripe checkout</span>
-                  <strong>{pricing.onlinePayment}</strong>
+                  Open Stripe checkout
                 </a>
                 {!canPay && (
                   <div
