@@ -293,6 +293,7 @@ export default function Home() {
   const [leadStatus, setLeadStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [leadError, setLeadError] = useState('');
   const [selectedTourDate, setSelectedTourDate] = useState('');
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -569,7 +570,7 @@ export default function Home() {
         '@type': 'FAQPage',
         mainEntity: [
           { '@type': 'Question', name: 'Who organises the trip?', acceptedAnswer: { '@type': 'Answer', text: '8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold’s family in the Orkhon Valley. Bookings, preparation, and payment communication are handled through 8 Lakes Tours, while the local family portion goes directly to your hosts in Mongolia.' } },
-          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you; once your bus to Bat-Ulzii is booked, you contact the operator on WhatsApp and the host family pickup is arranged from there.' } },
+          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'How flexible do I need to be?', acceptedAnswer: { '@type': 'Answer', text: 'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. Guests should arrive flexible and open-minded. On the steppe, uncertainty has long been part of life: travellers could lose their way between gers, so hospitality, tea, food, shelter, directions, and mutual help became part of the culture. You may be encouraged to step outside your comfort zone, but nothing is forced: you can say no, rest, or take a quieter day around the host family and ger life.' } },
           { '@type': 'Question', name: 'What if communication or translation gets difficult?', acceptedAnswer: { '@type': 'Answer', text: 'The host-family setting is cross-cultural, and not every moment will happen in perfect English. Guides and organisers help with the main logistics, but ChatGPT voice mode can be very useful for simple Mongolian translation. The host nomadic camp has strong Starlink and solar-powered inverter charging for devices, though remote trek days can still be more offline.' } },
@@ -721,10 +722,16 @@ export default function Home() {
         .section-title em { font-style: italic; color: var(--gold); }
         .section-body { font-size: 1rem; line-height: 1.8; color: var(--mist); max-width: 560px; }
         .faq-item { border-top: 1px solid rgba(200,169,110,0.15); }
-        .faq-summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.3rem 0; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--cream); }
-        .faq-summary::-webkit-details-marker { display: none; }
-        .faq-summary::after { content: '+'; color: var(--gold); font-family: var(--font-jost), 'Jost', sans-serif; font-size: 1.1rem; line-height: 1; transition: transform 0.2s ease; }
-        .faq-item[open] .faq-summary::after { content: '–'; transform: translateY(-1px); }
+        .faq-question { width: 100%; cursor: pointer; appearance: none; border: 0; background: transparent; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.3rem 0; text-align: left; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--cream); }
+        .faq-question:focus-visible { outline: 1px solid rgba(200,169,110,0.75); outline-offset: 4px; }
+        .faq-toggle { position: relative; width: 1rem; height: 1rem; flex: 0 0 auto; color: var(--gold); }
+        .faq-toggle::before,
+        .faq-toggle::after { content: ''; position: absolute; top: 50%; left: 50%; width: 0.85rem; height: 1px; background: currentColor; transform: translate(-50%, -50%); transition: transform 0.25s ease, opacity 0.25s ease; }
+        .faq-toggle::after { transform: translate(-50%, -50%) rotate(90deg); }
+        .faq-item.is-open .faq-toggle::after { transform: translate(-50%, -50%) rotate(0deg); opacity: 0; }
+        .faq-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.34s ease; }
+        .faq-item.is-open .faq-panel { grid-template-rows: 1fr; }
+        .faq-panel-inner { overflow: hidden; }
         .faq-answer { padding: 0 0 1.35rem; font-size: 0.875rem; color: var(--mist); line-height: 1.75; opacity: 0.8; }
 
         .offer-strip { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.22); border-bottom: 1px solid rgba(200,169,110,0.22); padding: 1.3rem 6rem; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1.5fr) auto; gap: 1.5rem; align-items: center; }
@@ -1417,7 +1424,7 @@ export default function Home() {
           <div className="journey-route reveal reveal-delay-1">
             <div className="journey-lede">
               <p className="journey-copy">From Ulaanbaatar, take a public bus to <strong style={{color:'var(--cream)'}}>Bat-Ulzii, Uvurkhangai</strong> — about an 8-hour ride through stunning Mongolian countryside. Once you arrive, your host family meets you and brings you to the ger village.</p>
-              <p className="journey-meta">Before arrival, Rob or the tour operator coordinates timing with you. Once your bus to Bat-Ulzii is booked by you or your hotel, contact the operator on WhatsApp and the host family pickup is arranged from there.</p>
+              <p className="journey-meta">Before arrival, Rob or the tour operator coordinates timing with you and the host-family pickup from Bat-Ulzii once your bus timing is confirmed.</p>
             </div>
             <div className="journey-steps" aria-label="Getting to the 8 Lakes Tours host family">
               {[
@@ -1795,7 +1802,7 @@ export default function Home() {
           {[
             {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher after travelling and riding with Ganbold's family in the Orkhon Valley. Bookings and payment communication are handled through 8 Lakes Tours, while the local family portion is paid directly to your hosts in Mongolia."},
             {q:'Can I speak to someone before booking?', a:"Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob's Instagram at @robzaher108 while we keep tour email communication centralised through the info@ address."},
-            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you; once your bus to Bat-Ulzii is booked, you contact the operator on WhatsApp and the host family pickup is arranged from there.'},
+            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'How flexible do I need to be?', a:'This is a real remote adventure, not a perfectly controlled resort itinerary. Weather, horse conditions, road access, and group dynamics can affect the plan. On the steppe, uncertainty has long been part of life: travellers could lose their way between gers, so hospitality, tea, food, shelter, directions, and mutual help became part of the culture. You may be encouraged to step outside your comfort zone, but nothing is forced — you can say no, rest, or take a quieter day around the host family and ger life.'},
             {q:'How physically demanding is the trek?', a:"Moderate. You'll ride several hours a day across open terrain and camp outdoors. A reasonable level of fitness is recommended but you don't need to be an athlete. You should also be mentally prepared for simple conditions, physical discomfort, changing plans, and sharing space with a group in the wild."},
@@ -1814,12 +1821,29 @@ export default function Home() {
             {q:'How does payment work?', a:'The current 2026 rate is $2,159 per person. You pay $959 online through 8 Lakes Tours to confirm your place. The remaining $1,200 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'Why is part of the trip paid in cash locally?', a:'Many of the nomadic families we work with live outside traditional banking systems. Paying the $1,200 local family portion in cash ensures that money reaches the families directly. We will guide booked guests through exactly when and how to bring the cash payment before departure.'},
             {q:'What is your cancellation policy?', a:'If your plans change more than 3 weeks / 21 days before departure, the $959 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we will still try to help with a transfer to another date, an approved replacement traveller, or a partial refund where costs have not already been committed. If 8 Lakes Tours cancels your departure, the online amount you paid to us is refunded minus unrecoverable Stripe/payment processing fees. The $1,200 local family payment is paid in cash in Mongolia and is not collected online by 8 Lakes Tours.'},
-          ].map(({q, a}, i) => (
-            <details key={i} className="faq-item reveal">
-              <summary className="faq-summary">{q}</summary>
-              <p className="faq-answer">{a}</p>
-            </details>
-          ))}
+          ].map(({q, a}, i) => {
+            const isOpen = openFaqIndex === i;
+            const panelId = `home-faq-panel-${i}`;
+            return (
+              <div key={i} className={`faq-item reveal${isOpen ? ' is-open' : ''}`}>
+                <button
+                  type="button"
+                  className="faq-question"
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                  onClick={() => setOpenFaqIndex(current => current === i ? null : i)}
+                >
+                  <span>{q}</span>
+                  <span className="faq-toggle" aria-hidden="true" />
+                </button>
+                <div id={panelId} className="faq-panel">
+                  <div className="faq-panel-inner">
+                    <p className="faq-answer">{a}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
           <div style={{borderTop:'1px solid rgba(200,169,110,0.15)'}} />
         </div>
       </section>
