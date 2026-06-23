@@ -2,7 +2,26 @@
 import Image from 'next/image';
 import Script from 'next/script';
 import { track } from '@vercel/analytics';
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
+
+type FunnelEventProperties = Record<string, string | number | boolean>;
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+function trackFunnelEvent(name: string, properties: FunnelEventProperties = {}) {
+  track(name, properties);
+
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+
+  window.gtag('event', name, {
+    event_category: 'booking_funnel',
+    ...properties,
+  });
+}
 
 const STRIPE_LINK = 'https://book.stripe.com/6oUaEQc6R8jecsUaip0gw05';
 const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TkyTO3OYuYvjeqEXmuFK4aq';
@@ -295,6 +314,8 @@ export default function Home() {
   const [leadError, setLeadError] = useState('');
   const [selectedTourDate, setSelectedTourDate] = useState('');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const bookingFormStartedRef = useRef(false);
+  const stripeClickTrackedRef = useRef(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
     currency: 'EUR',
     countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
@@ -316,9 +337,25 @@ export default function Home() {
   const showPreviousImage = () => setLightboxIndex(current => current === null ? current : (current + GALLERY_IMAGES.length - 1) % GALLERY_IMAGES.length);
   const showNextImage = () => setLightboxIndex(current => current === null ? current : (current + 1) % GALLERY_IMAGES.length);
 
+  const markBookingFormStarted = () => {
+    if (bookingFormStartedRef.current) return;
+    bookingFormStartedRef.current = true;
+    trackFunnelEvent('booking_form_start');
+  };
+
+  const trackStripePaymentClick = () => {
+    if (!canPay || stripeClickTrackedRef.current) return;
+    stripeClickTrackedRef.current = true;
+    trackFunnelEvent('stripe_payment_click', {
+      reference: bookingReference || 'unknown',
+      currency: 'USD',
+      value: BASE_ONLINE_PAYMENT_USD,
+    });
+  };
+
   const chooseTourDate = (date: string) => {
     if (formSubmitted || formSubmitting) return;
-    track('date_selected', { tourDate: date });
+    trackFunnelEvent('date_selected', { tour_date: date });
     setSelectedTourDate(date);
     window.setTimeout(() => {
       document.getElementById('application')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -338,7 +375,7 @@ export default function Home() {
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
-      track('newsletter_signup', { source: 'homepage_newsletter_cta' });
+      trackFunnelEvent('newsletter_signup', { source: 'homepage_newsletter_cta' });
       setLeadStatus('saved');
     } catch (error) {
       setLeadError(error instanceof Error ? error.message : 'Could not save your email. Please try again.');
@@ -487,14 +524,18 @@ export default function Home() {
       }
 
       setBookingReference(payload.reference);
-      track('booking_form_submit', {
-        tourDate: String(formData.get('tour_date') || 'TBC'),
-        ridingExperience: String(formData.get('riding_experience') || 'Not provided'),
+      stripeClickTrackedRef.current = false;
+      trackFunnelEvent('booking_form_submit', {
+        tour_date: String(formData.get('tour_date') || 'TBC'),
+        riding_experience: String(formData.get('riding_experience') || 'Not provided'),
+        reference: payload.reference,
+        currency: 'USD',
+        value: BASE_ONLINE_PAYMENT_USD,
       });
       setFormSubmitted(true);
 
     } catch (error) {
-      track('booking_form_error', { status: 'client' });
+      trackFunnelEvent('booking_form_error', { status: 'client' });
       setFormError(error instanceof Error ? error.message : 'The booking could not be saved. Please try again or email info@8lakestours.com.');
     } finally {
       setFormSubmitting(false);
@@ -1612,7 +1653,7 @@ export default function Home() {
           <span className="section-eyebrow">Booking</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
           <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Fill in your details, submit the booking, then complete the online payment to confirm your place.</p>
-          <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
+          <form className="booking-form" onFocusCapture={markBookingFormStarted} onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
             <input type="hidden" name="display_online_payment" value={pricing.onlinePayment} />
@@ -1733,7 +1774,12 @@ export default function Home() {
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
               </p>
-              <div className="checkout-button-wrap stripe-embed-wrap" aria-disabled={!canPay}>
+              <div
+                className="checkout-button-wrap stripe-embed-wrap"
+                aria-disabled={!canPay}
+                onMouseDown={trackStripePaymentClick}
+                onTouchStart={trackStripePaymentClick}
+              >
                 <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
                 <div
                   className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
@@ -1750,7 +1796,7 @@ export default function Home() {
                   tabIndex={canPay ? 0 : -1}
                   onClick={event => {
                     if (!canPay) event.preventDefault();
-                    else track('stripe_payment_click', { reference: bookingReference || 'unknown' });
+                    else trackStripePaymentClick();
                   }}
                 >
                   Open Stripe checkout
