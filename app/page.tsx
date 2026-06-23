@@ -1074,7 +1074,7 @@ export default function Home() {
           .trust-link { justify-content: center; align-items: center; text-align: center; padding: 0.85rem 0.6rem; font-size: 0.58rem; letter-spacing: 0.12em; line-height: 1.35; }
           .stats-bar { grid-template-columns: repeat(2,1fr); padding: 1.5rem 2rem; }
           .intro, .partnership, .booking, .included, .trust-conversion { grid-template-columns: 1fr; gap: 3rem; }
-          .booking { padding: 4rem 1.2rem; }
+          .booking { padding: 3.4rem 1.05rem; gap: 1.55rem; }
           .scarcity-pill { display:flex; width:100%; padding:0.55rem 0.7rem; }
           .scarcity-pill span:last-child { font-size:0.6rem; letter-spacing:0.12em; }
           .price-card { padding: 1.25rem 0.9rem; margin-top:1.5rem !important; }
@@ -1097,12 +1097,13 @@ export default function Home() {
           .ask-card h3 { font-size:1.05rem; margin-bottom:0.35rem; }
           .ask-card p { display:none; }
           .ask-card a { font-size:0.58rem; letter-spacing:0.12em; }
-          .tour-dates-card { padding: 1rem 0.8rem; }
-          .tour-date-list { grid-template-columns: 1fr; gap: 0.35rem; }
-          .tour-date-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; padding: 0.62rem 0.7rem; align-items: center; }
-          .tour-date-title { font-size: 0.93rem; margin: 0; }
+          .tour-dates-card { margin-top: 1rem; padding: 0.8rem 0.62rem; border-radius: var(--radius-card); }
+          .tour-dates-heading { font-size:0.52rem !important; letter-spacing:0.22em !important; margin-bottom:0.62rem !important; }
+          .tour-date-list { grid-template-columns: 1fr; gap: 0.26rem; }
+          .tour-date-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.38rem; padding: 0.48rem 0.54rem; min-height: 3.08rem; align-items: center; border-radius: var(--radius-soft); }
+          .tour-date-title { font-size: clamp(0.78rem, 4.7vw, 0.9rem); line-height:1.08; margin: 0; }
           .tour-date-detail { display: none; }
-          .tour-date-status { font-size: 0.48rem; letter-spacing: 0.08em; padding: 0.24rem 0.42rem; }
+          .tour-date-status { font-size: 0.42rem; letter-spacing: 0.07em; padding: 0.2rem 0.34rem; }
           .booking-form { gap: 0.85rem; }
           .form-section { padding: 0.85rem; gap: 0.75rem; }
           .form-section-title { font-size: 0.56rem; letter-spacing: 0.16em; }
@@ -1577,7 +1578,7 @@ export default function Home() {
             </div>
           </div>
           <div className="tour-dates-card">
-            <p style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
+            <p className="tour-dates-heading" style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
             <div className="tour-date-list">
               {TOUR_DATES.map(dateOption => (
                 <button
