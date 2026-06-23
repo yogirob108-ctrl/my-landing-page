@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Script from 'next/script';
 import { track } from '@vercel/analytics';
-import { type FormEvent, useEffect, useRef, useState } from 'react';
+import { type FormEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
 
 type FunnelEventProperties = Record<string, string | number | boolean>;
 
@@ -361,6 +361,14 @@ export default function Home() {
       document.getElementById('application')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       window.setTimeout(() => document.getElementById('tour_date')?.focus({ preventScroll: true }), 520);
     }, 40);
+  };
+
+  const scrollToTourDates = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const target = document.getElementById('tour-dates');
+    if (!target) return;
+    history.pushState(null, '', '#tour-dates');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const submitLead = async (event: FormEvent<HTMLFormElement>) => {
@@ -973,7 +981,7 @@ export default function Home() {
         .tour-date-status { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3); padding: 0.3rem 0.7rem; border-radius: var(--radius-soft); white-space: nowrap; }
         .tour-date-row.selected .tour-date-status { background: var(--gold); color: var(--dark); border-color: var(--gold); }
         .tour-date-row.muted .tour-date-status { color: var(--mist); background: transparent; border-color: transparent; opacity: 0.5; }
-        #application { scroll-margin-top: 6rem; }
+        #application, #tour-dates { scroll-margin-top: 6rem; }
         .booking-form { display: flex; flex-direction: column; gap: 1rem; }
         .form-section { border: 1px solid rgba(200,169,110,0.16); border-radius: var(--radius-card); background: rgba(245,240,232,0.025); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
         .form-section-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(200,169,110,0.9); margin-bottom: 0.1rem; }
@@ -1279,7 +1287,7 @@ export default function Home() {
           <div className="offer-fact"><strong>{pricing.localFamilyPayment}</strong><span>Cash direct to hosts</span></div>
           <div className="offer-fact"><strong>Max 8</strong><span>Guests per departure</span></div>
         </div>
-        <a className="offer-strip-cta" href="#book">See dates</a>
+        <a className="offer-strip-cta" href="#tour-dates" onClick={scrollToTourDates}>See dates</a>
       </section>
 
 
@@ -1627,7 +1635,7 @@ export default function Home() {
               <a href="mailto:info@8lakestours.com?subject=Question%20before%20booking%208%20Lakes%20Tours">Ask a question first</a>
             </div>
           </div>
-          <div className="tour-dates-card">
+          <div className="tour-dates-card" id="tour-dates">
             <p className="tour-dates-heading" style={{fontSize:'0.6rem', letterSpacing:'0.3em', textTransform:'uppercase', color:'var(--gold)', marginBottom:'1rem'}}>Available Tour Dates — 2026</p>
             <div className="tour-date-list">
               {TOUR_DATES.map(dateOption => (
