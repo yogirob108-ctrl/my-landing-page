@@ -1023,12 +1023,12 @@ export default function Home() {
         .stripe-pay-button strong { font-size: 0.78rem; color: #fff; white-space: nowrap; }
         .stripe-pay-button.disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
         .stripe-pay-button.disabled:hover { transform: none; box-shadow: none; }
-        .stripe-buy-button-frame { width:100%; max-width:100%; overflow:hidden; min-height: 230px; border-radius: var(--radius-payment); transition: opacity 0.25s ease, filter 0.25s ease; }
+        .stripe-buy-button-frame { width:100%; max-width:100%; overflow:hidden; min-height: 230px; border-radius: var(--radius-payment); }
         .stripe-buy-button-frame stripe-buy-button { display:block; max-width:100%; overflow:hidden; }
-        .stripe-buy-button-frame.locked { opacity: 0.42; filter: grayscale(0.2); pointer-events: none; }
+        .stripe-buy-button-frame.locked { pointer-events: none; }
         .stripe-link-fallback { display: inline-flex; justify-content: center; margin-top: 0.75rem; color: rgba(245,240,232,0.58); font-size: 0.68rem; text-decoration: underline; text-underline-offset: 3px; }
-        .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .checkout-lock-overlay p { max-width:calc(100% - 1rem); box-sizing:border-box; font-size: 0.7rem; letter-spacing: 0.12em; line-height:1.45; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.88); border: 1px solid rgba(200,169,110,0.24); border-radius: var(--radius-soft); padding: 0.5rem 0.75rem; pointer-events: none; white-space:normal; overflow-wrap:anywhere; }
+        .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: flex-start; justify-content: center; padding-top: 0.65rem; background: transparent; }
+        .checkout-lock-overlay p { max-width:calc(100% - 1.5rem); box-sizing:border-box; font-size: 0.62rem; letter-spacing: 0.1em; line-height:1.35; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.72); border: 1px solid rgba(200,169,110,0.32); border-radius: var(--radius-soft); padding: 0.36rem 0.58rem; pointer-events: none; white-space:normal; overflow-wrap:anywhere; box-shadow: 0 8px 18px rgba(0,0,0,0.22); }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
         .lead-card-public { margin: 2.2rem auto 0; max-width: 460px; padding: 1.2rem; border: 1px solid rgba(200,169,110,0.22); border-radius: var(--radius-card); background: rgba(245,240,232,0.045); }
         .lead-card-public h3 { color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; margin: 0 0 0.4rem; }
@@ -1222,7 +1222,8 @@ export default function Home() {
           .checkout-note { font-size:0.68rem; }
           .stripe-embed-wrap { max-width:100%; }
           .stripe-buy-button-frame { min-height:220px; }
-          .checkout-lock-overlay p { font-size:0.58rem; letter-spacing:0.09em; padding:0.45rem 0.5rem; }
+          .checkout-lock-overlay { padding-top:0.5rem; }
+          .checkout-lock-overlay p { font-size:0.52rem; letter-spacing:0.08em; padding:0.32rem 0.46rem; }
           .intro-img-accent { display: none; }
         }
       `}</style>
