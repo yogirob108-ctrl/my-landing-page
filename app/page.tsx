@@ -1011,12 +1011,20 @@ export default function Home() {
         .trust-link { display: inline-flex; padding: 0.8rem 1rem; border: 1px solid rgba(200,169,110,0.35); border-radius: var(--radius-soft); color: var(--gold); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; }
         .trust-link:hover { background: var(--gold); color: var(--dark); }
 
-        .included { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
-        .included-list { list-style: none; }
-        .included-list li { padding: 1rem 0; border-bottom: 1px solid rgba(245,240,232,0.07); font-size: 0.9rem; color: var(--mist); display: flex; align-items: center; gap: 1rem; }
-        .included-list li .icon { color: var(--gold); font-size: 1rem; flex-shrink: 0; }
-        .included-list.not li .icon { color: var(--rust); opacity: 0.7; }
-        .packing-details { margin-top: 1.5rem; border: 1px solid rgba(200,169,110,0.22); border-radius: var(--radius-card); background: rgba(200,169,110,0.045); overflow: hidden; }
+        .included { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; padding-top: 6rem; }
+        .included-list { list-style: none; display: grid; gap: 0.45rem; }
+        .included-list li { position: relative; overflow: hidden; padding: 1rem 1rem 1rem 0.9rem; border: 1px solid rgba(245,240,232,0.065); border-left-color: rgba(200,169,110,0.26); border-radius: var(--radius-soft); font-size: 0.9rem; color: var(--mist); display: flex; align-items: center; gap: 1rem; background: rgba(245,240,232,0.018); transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; }
+        .included-list li::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(200,169,110,0.12), transparent 45%); opacity: 0; transform: translateX(-18%); transition: opacity 0.25s ease, transform 0.25s ease; }
+        .included-list li:hover { color: var(--cream); border-color: rgba(200,169,110,0.34); background: rgba(200,169,110,0.055); transform: translateX(6px); box-shadow: 0 14px 32px rgba(0,0,0,0.16); }
+        .included-list li:hover::before { opacity: 1; transform: translateX(0); }
+        .included-list li .icon { position: relative; z-index: 1; color: var(--gold); font-size: 1rem; flex-shrink: 0; transition: transform 0.25s ease, color 0.25s ease; }
+        .included-list li:hover .icon { transform: rotate(45deg) scale(1.1); }
+        .included-list li > * { position: relative; z-index: 1; }
+        .included-list.not li .icon { color: var(--rust); opacity: 0.82; }
+        .included-list.not li:hover { border-color: rgba(185,74,48,0.34); background: rgba(185,74,48,0.05); }
+        .included-list.not li::before { background: linear-gradient(90deg, rgba(185,74,48,0.13), transparent 45%); }
+        .packing-details { margin-top: 1.5rem; border: 1px solid rgba(200,169,110,0.22); border-radius: var(--radius-card); background: rgba(200,169,110,0.045); overflow: hidden; transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease; }
+        .packing-details:hover { border-color: rgba(200,169,110,0.42); background: rgba(200,169,110,0.07); transform: translateY(-2px); }
         .packing-summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; color: var(--gold); font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; }
         .packing-summary::-webkit-details-marker { display: none; }
         .packing-summary::after { content: '▼'; font-size: 0.7rem; transition: transform 0.25s ease; }
@@ -1141,18 +1149,25 @@ export default function Home() {
         .gallery-handoff { background:#0f0f0d; border-top:1px solid rgba(200,169,110,0.14); border-bottom:1px solid rgba(200,169,110,0.14); padding: 1.6rem 6rem; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2rem; align-items:center; }
         .gallery-handoff-copy p:first-child { font-size:0.62rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--gold); margin-bottom:0.35rem; }
         .gallery-handoff-copy p:last-child { font-size:0.88rem; color:rgba(212,207,196,0.72); line-height:1.55; max-width:640px; }
-        .getting-there-section { background: var(--ink); padding: 5.2rem 6rem 5.6rem; }
-        .getting-there-panel { border-top: 1px solid rgba(200,169,110,0.18); border-bottom: 1px solid rgba(200,169,110,0.18); padding: 3.2rem 0; display: grid; grid-template-columns: minmax(280px, 0.62fr) minmax(0, 1fr); gap: 5rem; align-items: start; }
+        .getting-there-section { background: var(--ink); padding: 5.2rem 6rem 3.4rem; }
+        .getting-there-panel { border-top: 1px solid rgba(200,169,110,0.18); border-bottom: 1px solid rgba(200,169,110,0.18); padding: 3.2rem 0 2.7rem; display: grid; grid-template-columns: minmax(280px, 0.62fr) minmax(0, 1fr); gap: 5rem; align-items: start; }
         .getting-there-section .section-title { margin-bottom: 0; }
         .journey-route { display: grid; gap: 1.45rem; }
         .journey-lede { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 0.72fr); gap: 2rem; align-items: start; padding-bottom: 1.6rem; border-bottom: 1px solid rgba(245,240,232,0.08); }
         .journey-copy { font-size: 1rem; line-height: 1.85; color: rgba(245,240,232,0.78); max-width: 720px; }
-        .journey-meta { border-left: 2px solid var(--gold); padding-left: 1rem; color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.65; }
-        .journey-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(200,169,110,0.18); border: 1px solid rgba(200,169,110,0.18); border-radius: var(--radius-card); overflow: hidden; }
-        .journey-step { background: var(--ink); padding: 1.1rem 1rem; min-width: 0; }
+        .journey-meta { position: relative; border-left: 2px solid var(--gold); padding-left: 1rem; color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.65; transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease; }
+        .journey-meta:hover { color: rgba(245,240,232,0.86); border-color: var(--cream); transform: translateX(4px); }
+        .journey-steps { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(200,169,110,0.18); border: 1px solid rgba(200,169,110,0.18); border-radius: var(--radius-card); overflow: hidden; }
+        .journey-steps::before { content: ''; position: absolute; left: 7%; right: 7%; top: 1.9rem; height: 1px; background: linear-gradient(90deg, transparent, rgba(200,169,110,0.55), transparent); opacity: 0.55; pointer-events: none; z-index: 1; }
+        .journey-step { position: relative; z-index: 2; background: linear-gradient(180deg, rgba(245,240,232,0.018), rgba(14,12,9,0.08)), var(--ink); padding: 1.35rem 1rem 1.15rem; min-width: 0; transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; }
+        .journey-step::before { content: ''; display: block; width: 0.58rem; height: 0.58rem; border: 1px solid rgba(200,169,110,0.78); border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 4px rgba(200,169,110,0.08); margin-bottom: 0.72rem; transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease; }
+        .journey-step:hover { background: linear-gradient(180deg, rgba(200,169,110,0.105), rgba(200,169,110,0.035)), var(--ink); transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,0.22); }
+        .journey-step:hover::before { background: var(--gold); transform: scale(1.12); box-shadow: 0 0 0 7px rgba(200,169,110,0.13); }
         .journey-step-number { display: block; color: var(--gold); font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.65rem; }
-        .journey-step-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-size: 1.25rem; line-height: 1.15; font-weight: 300; margin-bottom: 0.35rem; }
-        .journey-step-copy { color: rgba(212,207,196,0.66); font-size: 0.78rem; line-height: 1.5; }
+        .journey-step-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; color: var(--cream); font-size: 1.25rem; line-height: 1.15; font-weight: 300; margin-bottom: 0.35rem; transition: color 0.25s ease; }
+        .journey-step:hover .journey-step-title { color: var(--gold); }
+        .journey-step-copy { color: rgba(212,207,196,0.66); font-size: 0.78rem; line-height: 1.5; transition: color 0.25s ease; }
+        .journey-step:hover .journey-step-copy { color: rgba(245,240,232,0.82); }
         .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 6rem; }
         .divider-line { flex: 1; height: 1px; background: rgba(200,169,110,0.15); }
         .divider-ornament { color: var(--gold); font-size: 0.8rem; }
@@ -1303,7 +1318,9 @@ export default function Home() {
           .getting-there-panel { grid-template-columns: 1fr; gap: 2.2rem; padding: 2.3rem 0; }
           .journey-lede { grid-template-columns: 1fr; gap: 1.2rem; }
           .journey-steps { grid-template-columns: 1fr; }
-          .journey-step { padding: 1rem; }
+          .journey-steps::before { left: 1.28rem; right: auto; top: 1.2rem; bottom: 1.2rem; width: 1px; height: auto; background: linear-gradient(180deg, transparent, rgba(200,169,110,0.5), transparent); }
+          .journey-step { padding: 1rem 1rem 1rem 2.05rem; }
+          .journey-step::before { position: absolute; left: 0.98rem; top: 1.25rem; margin: 0; }
           .divider { padding: 0 2rem; }
           .partnership-text { padding: 4rem 2rem; }
           .partnership-inline-photo { display: block !important; margin: 2.4rem 0 2.8rem; }
