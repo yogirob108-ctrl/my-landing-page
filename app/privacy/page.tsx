@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
           },
           {
             title: '5. Third-Party Services',
-            body: 'We store bookings and newsletter subscriptions in our private 8 Lakes Tours operations database hosted on Supabase. We use Resend (resend.com) to send transactional emails such as booking confirmations and internal booking notifications. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. Please refer to Supabase, Resend, and Stripe\'s respective privacy policies for details on how they handle data as processors.'
+            body: 'We store bookings and newsletter subscriptions in our private 8 Lakes Tours operations database hosted on Supabase. We use Resend (resend.com) to send transactional emails such as booking confirmations and internal booking notifications. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. We use Google Analytics, Vercel Web Analytics, and Vercel Speed Insights to understand site traffic and basic performance. Please refer to Supabase, Resend, Stripe, Google, and Vercel\'s respective privacy policies for details on how they handle data.',
           },
           {
             title: '6. Data Retention',
@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
           },
           {
             title: '8. Cookies',
-            body: 'This website does not use tracking cookies or analytics cookies. We do not use Google Analytics or third-party advertising trackers. The only third-party script loaded on the main booking page is Stripe\'s buy button script for payment functionality.',
+            body: 'This website uses analytics and performance measurement tools, including Google Analytics, Vercel Web Analytics, and Vercel Speed Insights, to understand page views, visitor activity, and site performance. We do not use third-party advertising trackers. Stripe payment scripts may also load on the booking page for payment functionality.',
           },
           {
             title: '9. Data Security',
