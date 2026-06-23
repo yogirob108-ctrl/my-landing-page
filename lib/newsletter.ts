@@ -1,5 +1,21 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+export type AttributionPayload = {
+  landing_url?: unknown;
+  current_url?: unknown;
+  referrer?: unknown;
+  source?: unknown;
+  medium?: unknown;
+  campaign?: unknown;
+  term?: unknown;
+  content?: unknown;
+  gclid?: unknown;
+  fbclid?: unknown;
+  ttclid?: unknown;
+  msclkid?: unknown;
+  ga_client_id?: unknown;
+};
+
 export type NewsletterSubscribeInput = {
   email: string;
   name?: string;
@@ -8,6 +24,7 @@ export type NewsletterSubscribeInput = {
   source: string;
   interest?: string;
   consentContext?: string;
+  attribution?: AttributionPayload;
 };
 
 function clean(value: unknown) {
@@ -20,6 +37,33 @@ export function normalizeEmail(value: unknown) {
 
 export function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function attributionNote(attribution: AttributionPayload | undefined) {
+  if (!attribution || typeof attribution !== 'object') return '';
+  const fields: Array<[keyof AttributionPayload, string]> = [
+    ['source', 'UTM source'],
+    ['medium', 'UTM medium'],
+    ['campaign', 'UTM campaign'],
+    ['term', 'UTM term'],
+    ['content', 'UTM content'],
+    ['gclid', 'Google click ID'],
+    ['fbclid', 'Meta click ID'],
+    ['ttclid', 'TikTok click ID'],
+    ['msclkid', 'Microsoft click ID'],
+    ['referrer', 'Referrer'],
+    ['landing_url', 'Landing URL'],
+    ['current_url', 'Current URL'],
+    ['ga_client_id', 'GA client ID'],
+  ];
+  const lines = fields
+    .map(([key, label]) => {
+      const value = clean(attribution[key]);
+      return value ? `${label}: ${value.slice(0, 500)}` : '';
+    })
+    .filter(Boolean);
+
+  return lines.length ? ['--- Attribution ---', ...lines].join('\n') : '';
 }
 
 function nameParts(input: NewsletterSubscribeInput) {
@@ -49,7 +93,8 @@ function newsletterNote(input: NewsletterSubscribeInput, subscribedAt: string) {
     `Consent context: ${input.consentContext || 'Website newsletter signup / booking form'}`,
     'Use: newsletter, offers, deals, blog posts, business updates, field notes, and future 8 Lakes Tours promotions.',
     'Opt-out: remove or mark unsubscribed if the contact replies asking not to receive updates.',
-  ].join('\n');
+    attributionNote(input.attribution),
+  ].filter(Boolean).join('\n');
 }
 
 function appendNotes(existingNotes: string | null | undefined, block: string) {

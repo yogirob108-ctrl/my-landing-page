@@ -20,6 +20,7 @@ Notes:
 - 8 Lakes Tours is the first `tour_projects` row in that database.
 - Do not commit `.env.local`; it is intentionally ignored by git.
 - `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, and Stripe secrets must never be exposed in browser code.
+- `GA4_MEASUREMENT_API_SECRET` is optional but recommended. When present, the Stripe webhook sends a server-side `payment_received` event to GA4 after a confirmed payment, using the GA client id captured from the original booking session.
 
 ## Required for Stripe payment tracking
 
@@ -27,6 +28,8 @@ The public booking form saves a booking with `status = awaiting_payment`. Stripe
 
 ```bash
 STRIPE_WEBHOOK_SECRET=whsec_...
+GA4_MEASUREMENT_ID=G-E9PW7T08LZ
+GA4_MEASUREMENT_API_SECRET=
 ```
 
 Production webhook endpoint:

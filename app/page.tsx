@@ -6,6 +6,22 @@ import { type FormEvent, type MouseEvent, useEffect, useRef, useState } from 're
 
 type FunnelEventProperties = Record<string, string | number | boolean>;
 
+type AttributionPayload = {
+  landing_url?: string;
+  current_url?: string;
+  referrer?: string;
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  term?: string;
+  content?: string;
+  gclid?: string;
+  fbclid?: string;
+  ttclid?: string;
+  msclkid?: string;
+  ga_client_id?: string;
+};
+
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
@@ -21,6 +37,64 @@ function trackFunnelEvent(name: string, properties: FunnelEventProperties = {}) 
     event_category: 'booking_funnel',
     ...properties,
   });
+}
+
+const ATTRIBUTION_STORAGE_KEY = 'eight_lakes_first_attribution';
+
+function getGaClientId() {
+  if (typeof document === 'undefined') return '';
+  const gaCookie = document.cookie
+    .split('; ')
+    .find(cookie => cookie.startsWith('_ga='))
+    ?.split('=')[1];
+
+  if (!gaCookie) return '';
+  const parts = gaCookie.split('.');
+  return parts.length >= 4 ? `${parts[2]}.${parts[3]}` : gaCookie;
+}
+
+function collectAttribution(): AttributionPayload {
+  if (typeof window === 'undefined') return {};
+
+  const params = new URLSearchParams(window.location.search);
+  const current: AttributionPayload = {
+    landing_url: window.location.href,
+    current_url: window.location.href,
+    referrer: document.referrer || '',
+    source: params.get('utm_source') || '',
+    medium: params.get('utm_medium') || '',
+    campaign: params.get('utm_campaign') || '',
+    term: params.get('utm_term') || '',
+    content: params.get('utm_content') || '',
+    gclid: params.get('gclid') || '',
+    fbclid: params.get('fbclid') || '',
+    ttclid: params.get('ttclid') || '',
+    msclkid: params.get('msclkid') || '',
+    ga_client_id: getGaClientId(),
+  };
+
+  let first: AttributionPayload = {};
+  try {
+    const stored = window.localStorage.getItem(ATTRIBUTION_STORAGE_KEY);
+    first = stored ? JSON.parse(stored) as AttributionPayload : {};
+  } catch {
+    first = {};
+  }
+
+  if (!first.landing_url) {
+    first = current;
+    try {
+      window.localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(first));
+    } catch {
+      // Storage can be blocked in private browsing; attribution is best-effort.
+    }
+  }
+
+  return {
+    ...first,
+    current_url: current.current_url,
+    ga_client_id: current.ga_client_id || first.ga_client_id || '',
+  };
 }
 
 const STRIPE_LINK = 'https://book.stripe.com/6oUaEQc6R8jecsUaip0gw05';
@@ -379,7 +453,13 @@ export default function Home() {
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: leadName, email: leadEmail, source: 'homepage_newsletter_cta', interest: '8 Lakes Tours newsletter, offers, deals, blog posts, field notes, and business updates' }),
+        body: JSON.stringify({
+          name: leadName,
+          email: leadEmail,
+          source: 'homepage_newsletter_cta',
+          interest: '8 Lakes Tours newsletter, offers, deals, blog posts, field notes, and business updates',
+          attribution: collectAttribution(),
+        }),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
@@ -411,6 +491,7 @@ export default function Home() {
   }, [lightboxIndex]);
 
   useEffect(() => {
+    collectAttribution();
     setPricing(getLocalizedPricing());
   }, []);
 
@@ -520,10 +601,14 @@ export default function Home() {
     setFormSubmitting(true);
     try {
       const formData = new FormData(form);
+      const bookingPayload = {
+        ...Object.fromEntries(formData.entries()),
+        attribution: collectAttribution(),
+      };
       const response = await fetch('/api/bookings', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(formData.entries())),
+        body: JSON.stringify(bookingPayload),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; reference?: string; error?: string } | null;
 
@@ -842,10 +927,12 @@ export default function Home() {
         .partnership { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
         .partnership-text { padding: 6rem; display: flex; flex-direction: column; justify-content: center; }
         .partnership-inline-photo { display: none !important; position: relative; width: 100%; height: auto; aspect-ratio: 1.46; margin: 2rem 0; overflow: hidden; border: 1px solid rgba(200,169,110,0.22); border-radius: var(--radius-photo); }
-        .partnership-inline-photo img { object-fit: cover; }
+        .partnership-inline-photo img { object-fit: cover; filter: saturate(0.88) contrast(1.04) brightness(0.9); }
         .partnership-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; font-weight: 300; color: var(--cream); line-height: 1.6; border-left: 2px solid var(--gold); padding-left: 2rem; margin: 2.5rem 0; }
-        .partnership-img { overflow: hidden; min-height: 600px; }
-        .partnership-img img { width: 100%; height: 100%; object-fit: cover; }
+        .partnership-img { position: relative; overflow: hidden; min-height: 600px; border-left: 1px solid rgba(200,169,110,0.18); background: #0f0f0d; }
+        .partnership-img::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(18,15,11,0.38), rgba(18,15,11,0.06) 42%, rgba(18,15,11,0.18)), linear-gradient(180deg, rgba(200,169,110,0.10), transparent 38%, rgba(14,12,9,0.30)); mix-blend-mode: multiply; }
+        .partnership-img::after { content: ''; position: absolute; inset: 1rem; z-index: 2; pointer-events: none; border: 1px solid rgba(200,169,110,0.20); }
+        .partnership-img img { width: 100%; height: 100%; object-fit: cover; object-position: 52% center; filter: saturate(0.84) contrast(1.08) brightness(0.88); }
 
         .trust { background: var(--dark); padding: 7rem 5rem; }
         .trust-header { max-width: 760px; margin: 0 auto 3rem; text-align: center; }
@@ -1659,9 +1746,9 @@ export default function Home() {
         </div>
 
         <div className="reveal reveal-delay-1" id="application">
-          <span className="section-eyebrow">Booking</span>
-          <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
-          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Fill in your details, submit the booking, then complete the online payment to confirm your place.</p>
+          <span className="section-eyebrow">Booking Details</span>
+          <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Secure<br /><em>Your Place</em></h2>
+          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Choose your date, tell us who&apos;s coming, then continue to secure payment. Once the online payment is complete, your place is confirmed.</p>
           <form className="booking-form" onFocusCapture={markBookingFormStarted} onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1765,7 +1852,7 @@ export default function Home() {
                 className="submit-btn"
                 style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
-                {formSubmitting ? 'Submitting…' : 'Submit Booking & Continue to Payment'}
+                {formSubmitting ? 'Saving your booking…' : 'Continue to Secure Payment'}
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'var(--radius-soft)', textAlign:'center'}}>

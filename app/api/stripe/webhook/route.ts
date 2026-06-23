@@ -5,7 +5,9 @@ import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { getInternalEmailRecipients, paymentConfirmedCustomerEmail, sendEmail } from '@/lib/email';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-const stripe = new Stripe('sk_test_webhook_signature_verification_only');
+const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID || 'G-E9PW7T08LZ';
+const ga4ApiSecret = process.env.GA4_MEASUREMENT_API_SECRET;
+const stripe = new Stripe('sk_tes...only');
 
 function jsonError(message: string, status = 400) {
   return NextResponse.json({ ok: false, error: message }, { status });
@@ -32,6 +34,51 @@ function getCheckoutReference(session: Stripe.Checkout.Session) {
 function getPaymentIntentId(value: Stripe.PaymentIntent | string | null) {
   if (!value) return null;
   return typeof value === 'string' ? value : value.id;
+}
+
+function extractGaClientId(notes: unknown) {
+  if (typeof notes !== 'string') return '';
+  const match = notes.match(/^GA client ID:\s*(.+)$/im);
+  return match?.[1]?.trim() || '';
+}
+
+async function sendGa4PaymentReceived(input: {
+  clientId: string;
+  reference: string;
+  amountUsd: number;
+  currency: string;
+  tourDate: string;
+}) {
+  if (!ga4ApiSecret || !ga4MeasurementId || !input.clientId) {
+    return { sent: false as const, reason: 'missing_ga4_config_or_client_id' };
+  }
+
+  const endpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${encodeURIComponent(ga4MeasurementId)}&api_secret=${encodeURIComponent(ga4ApiSecret)}`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: input.clientId,
+      events: [
+        {
+          name: 'payment_received',
+          params: {
+            event_category: 'booking_funnel',
+            currency: input.currency,
+            value: input.amountUsd,
+            reference: input.reference,
+            tour_date: input.tourDate || 'TBC',
+          },
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    return { sent: false as const, reason: `ga4_http_${response.status}` };
+  }
+
+  return { sent: true as const };
 }
 
 async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
@@ -62,7 +109,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const { data: booking, error: bookingError } = await supabase
     .from('bookings')
-    .select('id, public_reference, status, online_paid_usd, online_due_usd, tour_date, customer_id, customer:customers(first_name, email)')
+    .select('id, public_reference, status, online_paid_usd, online_due_usd, tour_date, notes, customer_id, customer:customers(first_name, email)')
     .eq('public_reference', reference)
     .single();
 
@@ -147,6 +194,23 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
     if (eventError) {
       throw new Error(`Payment event insert failed: ${eventError.message}`);
     }
+
+    const gaResult = await sendGa4PaymentReceived({
+      clientId: extractGaClientId(booking.notes),
+      reference: booking.public_reference,
+      amountUsd: amountToRecord,
+      currency,
+      tourDate: booking.tour_date || 'TBC',
+    });
+
+    await supabase.from('booking_events').insert({
+      booking_id: booking.id,
+      event_type: 'system',
+      direction: 'system',
+      title: gaResult.sent ? 'GA4 payment_received event sent' : 'GA4 payment_received event skipped',
+      body: gaResult.sent ? 'Server-side GA4 Measurement Protocol event sent for confirmed Stripe payment.' : `Reason: ${gaResult.reason}`,
+      created_by: 'stripe-webhook',
+    });
 
     const customer = Array.isArray(booking.customer) ? booking.customer[0] : booking.customer;
     const customerEmail = typeof customer?.email === 'string' ? customer.email : '';

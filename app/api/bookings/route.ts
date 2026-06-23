@@ -8,6 +8,22 @@ const TOTAL_TRIP_VALUE_USD = 1999;
 const ONLINE_DUE_USD = 999;
 const FAMILY_CASH_DUE_USD = 1000;
 
+type AttributionPayload = {
+  landing_url?: unknown;
+  current_url?: unknown;
+  referrer?: unknown;
+  source?: unknown;
+  medium?: unknown;
+  campaign?: unknown;
+  term?: unknown;
+  content?: unknown;
+  gclid?: unknown;
+  fbclid?: unknown;
+  ttclid?: unknown;
+  msclkid?: unknown;
+  ga_client_id?: unknown;
+};
+
 type PublicBookingPayload = {
   first_name?: string;
   last_name?: string;
@@ -21,10 +37,43 @@ type PublicBookingPayload = {
   how_heard?: string;
   notes?: string;
   signature?: string;
+  attribution?: AttributionPayload;
 };
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function attributionLines(attribution: AttributionPayload | undefined) {
+  if (!attribution || typeof attribution !== 'object') return [];
+  const fields: Array<[keyof AttributionPayload, string]> = [
+    ['source', 'UTM source'],
+    ['medium', 'UTM medium'],
+    ['campaign', 'UTM campaign'],
+    ['term', 'UTM term'],
+    ['content', 'UTM content'],
+    ['gclid', 'Google click ID'],
+    ['fbclid', 'Meta click ID'],
+    ['ttclid', 'TikTok click ID'],
+    ['msclkid', 'Microsoft click ID'],
+    ['referrer', 'Referrer'],
+    ['landing_url', 'Landing URL'],
+    ['current_url', 'Current URL'],
+    ['ga_client_id', 'GA client ID'],
+  ];
+
+  return fields
+    .map(([key, label]) => {
+      const value = clean(attribution[key]);
+      return value ? `${label}: ${value.slice(0, 500)}` : '';
+    })
+    .filter(Boolean);
+}
+
+function attributionNote(attribution: AttributionPayload | undefined) {
+  const lines = attributionLines(attribution);
+  if (!lines.length) return '';
+  return ['--- Attribution ---', ...lines].join('\n');
 }
 
 function jsonError(message: string, status = 400) {
@@ -55,7 +104,12 @@ export async function POST(request: Request) {
   const signature = clean(payload.signature);
   const howHeard = clean(payload.how_heard);
   const guestNotes = clean(payload.notes);
-  const bookingNotes = [howHeard ? `How they heard about us: ${howHeard}` : '', guestNotes].filter(Boolean).join('\n\n') || null;
+  const attributionBlock = attributionNote(payload.attribution);
+  const bookingNotes = [
+    howHeard ? `How they heard about us: ${howHeard}` : '',
+    guestNotes,
+    attributionBlock,
+  ].filter(Boolean).join('\n\n') || null;
 
   if (!firstName || !lastName || !email || !signature) {
     return jsonError('Please complete your name, email, and waiver signature.');
@@ -82,7 +136,7 @@ export async function POST(request: Request) {
     phone: clean(payload.phone) || null,
     nationality: clean(payload.nationality) || null,
     emergency_contact: clean(payload.emergency_contact) || null,
-    notes: signature ? `Waiver signed online as: ${signature}` : null,
+    notes: [signature ? `Waiver signed online as: ${signature}` : '', attributionBlock].filter(Boolean).join('\n\n') || null,
     updated_at: now.toISOString(),
   };
 

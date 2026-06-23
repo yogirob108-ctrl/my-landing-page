@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { getInternalEmailRecipients, leadCustomerEmail, leadInternalEmail, sendEmail } from '@/lib/email';
-import { isValidEmail, normalizeEmail, subscribeToNewsletter } from '@/lib/newsletter';
+import { isValidEmail, normalizeEmail, subscribeToNewsletter, type AttributionPayload } from '@/lib/newsletter';
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     return jsonError('Newsletter signup is temporarily unavailable. Please email info@8lakestours.com.', 503);
   }
 
-  let payload: { name?: string; email?: string; source?: string; interest?: string };
+  let payload: { name?: string; email?: string; source?: string; interest?: string; attribution?: AttributionPayload };
   try {
     payload = await request.json();
   } catch {
@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     source,
     interest,
     consentContext: 'Homepage newsletter/promotional updates CTA form',
+    attribution: payload.attribution,
   });
 
   if (!subscription.ok) {
