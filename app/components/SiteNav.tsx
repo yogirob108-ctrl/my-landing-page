@@ -28,11 +28,11 @@ export default function SiteNav() {
         <Link href="/preparation">Prep</Link>
         <Link href="/faq">FAQ</Link>
         <Link href="/contact">Contact</Link>
-        <Link href="/#book" className="site-nav-cta">Reserve</Link>
+        <Link href="/#application" className="site-nav-cta">Reserve</Link>
       </div>
 
       <div className="site-nav-mobile-actions" aria-label="Quick navigation">
-        <Link href="/#book" className="site-nav-cta">Book</Link>
+        <Link href="/#application" className="site-nav-cta">Book</Link>
       </div>
     </nav>
   );

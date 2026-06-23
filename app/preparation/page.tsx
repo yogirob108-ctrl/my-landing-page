@@ -137,7 +137,7 @@ export default function PreparationPage() {
         </section>
 
         <p style={{ ...pStyle, marginTop: '2rem' }}>
-          Ready to book? <Link href="/#book" style={linkStyle}>Return to the booking form</Link>.
+          Ready to book? <Link href="/#application" style={linkStyle}>Return to the booking form</Link>.
         </p>
       </div>
     </main>

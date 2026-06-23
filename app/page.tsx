@@ -1,6 +1,7 @@
 "use client";
 import Image from 'next/image';
 import Script from 'next/script';
+import { track } from '@vercel/analytics';
 import { type FormEvent, useEffect, useState } from 'react';
 
 const STRIPE_LINK = 'https://book.stripe.com/6oUaEQc6R8jecsUaip0gw05';
@@ -317,6 +318,7 @@ export default function Home() {
 
   const chooseTourDate = (date: string) => {
     if (formSubmitted || formSubmitting) return;
+    track('date_selected', { tourDate: date });
     setSelectedTourDate(date);
     window.setTimeout(() => {
       document.getElementById('application')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -336,6 +338,7 @@ export default function Home() {
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) throw new Error(payload?.error || 'Could not save your email. Please try again.');
+      track('newsletter_signup', { source: 'homepage_newsletter_cta' });
       setLeadStatus('saved');
     } catch (error) {
       setLeadError(error instanceof Error ? error.message : 'Could not save your email. Please try again.');
@@ -484,9 +487,14 @@ export default function Home() {
       }
 
       setBookingReference(payload.reference);
+      track('booking_form_submit', {
+        tourDate: String(formData.get('tour_date') || 'TBC'),
+        ridingExperience: String(formData.get('riding_experience') || 'Not provided'),
+      });
       setFormSubmitted(true);
 
     } catch (error) {
+      track('booking_form_error', { status: 'client' });
       setFormError(error instanceof Error ? error.message : 'The booking could not be saved. Please try again or email info@8lakestours.com.');
     } finally {
       setFormSubmitting(false);
@@ -1187,7 +1195,7 @@ export default function Home() {
           <a href="/preparation" className="nav-social">Prep</a>
           <a href="/faq" className="nav-social">FAQ</a>
           <a href="/contact" className="nav-social">Contact</a>
-          <a href="#book" className="nav-cta">Reserve</a>
+          <a href="#application" className="nav-cta">Reserve</a>
         </div>
       </nav>
 
@@ -1212,7 +1220,7 @@ export default function Home() {
             <span className="desktop-line">A 9-day small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and open to beginner/intermediate riders who want the real thing.</span>
           </p>
           <div className="hero-actions">
-            <a href="#book" className="btn-primary">Reserve Online</a>
+            <a href="#application" className="btn-primary">Reserve Online</a>
             <a href="#experience" className="btn-ghost">Explore the Journey</a>
           </div>
         </div>
@@ -1603,7 +1611,7 @@ export default function Home() {
         <div className="reveal reveal-delay-1" id="application">
           <span className="section-eyebrow">Booking</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Reserve<br /><em>Your Place</em></h2>
-          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>We ask for a few details so we can match riders safely, prepare the host family, and send the right confirmation notes.</p>
+          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Fill in your details, submit the booking, then complete the online payment to confirm your place.</p>
           <form className="booking-form" onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1707,7 +1715,7 @@ export default function Home() {
                 className="submit-btn"
                 style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
-                {formSubmitting ? 'Submitting…' : 'Submit Booking'}
+                {formSubmitting ? 'Submitting…' : 'Submit Booking & Continue to Payment'}
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'var(--radius-soft)', textAlign:'center'}}>
@@ -1742,6 +1750,7 @@ export default function Home() {
                   tabIndex={canPay ? 0 : -1}
                   onClick={event => {
                     if (!canPay) event.preventDefault();
+                    else track('stripe_payment_click', { reference: bookingReference || 'unknown' });
                   }}
                 >
                   Open Stripe checkout
@@ -1758,7 +1767,7 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.5, textAlign:'center', lineHeight:1.6}}>Submitting this form does not guarantee a spot. We&apos;ll be in touch within 48 hours to confirm.</p>
+            <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.58, textAlign:'center', lineHeight:1.6}}>Your booking is confirmed once the online payment is completed. If anything needs checking, we&apos;ll contact you directly.</p>
             <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.4, textAlign:'center', lineHeight:1.6, marginTop:'0.5rem'}}>
               By submitting this form you agree to our{' '}
               <a href="/terms" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Terms &amp; Conditions</a>
