@@ -1081,15 +1081,22 @@ export default function Home() {
           .price-badge { display:block; width:100%; padding:0.45rem 0.55rem; text-align:center; font-size:0.52rem; letter-spacing:0.18em; }
           .price-amount { font-size: clamp(2.15rem, 15vw, 3.05rem); line-height:0.95; }
           .price-per { font-size:0.62rem; letter-spacing:0.1em; margin-bottom:1.15rem; }
-          .price-note { padding:0.8rem; font-size:0.76rem; }
-          .payment-split { grid-template-columns: 1fr; gap: 0.45rem; }
-          .payment-split-card { padding: 0.85rem; }
-          .payment-split-amount { font-size: 1.3rem; }
-          .payment-split-arrow { transform: rotate(90deg); height: 1.1rem; }
-          .payment-summary { padding:0.75rem 0.8rem; font-size:0.56rem; letter-spacing:0.12em; line-height:1.45; }
+          .price-note { display:none; }
+          .payment-split { grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 0.35rem; margin:0.9rem 0 0.75rem; }
+          .payment-split-card { padding: 0.68rem 0.55rem; text-align:center; border-radius: var(--radius-soft); }
+          .payment-split-label { font-size:0.46rem; letter-spacing:0.12em; margin-bottom:0.28rem; }
+          .payment-split-amount { font-size: clamp(1.05rem, 6.2vw, 1.35rem); margin-bottom:0; }
+          .payment-split-copy { display:none; }
+          .payment-split-arrow { transform:none; height:auto; font-size:0.9rem; padding-top:1.3rem; }
+          .payment-summary { padding:0.72rem 0.8rem; font-size:0.54rem; letter-spacing:0.12em; line-height:1.45; }
           .payment-detail-body { padding:0 0.8rem 0.85rem; }
-          .price-spec-list { gap:0.45rem; margin-top:1rem; }
-          .price-spec-row { display:grid; grid-template-columns:0.8fr 1.2fr; gap:0.8rem; font-size:0.76rem; line-height:1.45; }
+          .price-spec-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; margin-top:0.9rem; background:rgba(245,240,232,0.08); border:1px solid rgba(245,240,232,0.08); border-radius:var(--radius-card); overflow:hidden; }
+          .price-spec-row { display:flex; flex-direction:column; gap:0.18rem; background:var(--ink); border-bottom:0; padding:0.62rem 0.68rem; font-size:0.68rem; line-height:1.28; }
+          .price-spec-row span:last-child { text-align:left; font-size:0.74rem; }
+          .ask-card { padding:0.78rem; margin-top:0.85rem; }
+          .ask-card h3 { font-size:1.05rem; margin-bottom:0.35rem; }
+          .ask-card p { display:none; }
+          .ask-card a { font-size:0.58rem; letter-spacing:0.12em; }
           .tour-dates-card { padding: 1rem 0.8rem; }
           .tour-date-list { grid-template-columns: 1fr; gap: 0.35rem; }
           .tour-date-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; padding: 0.62rem 0.7rem; align-items: center; }
