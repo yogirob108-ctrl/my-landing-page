@@ -1985,7 +1985,7 @@ export default function Home() {
             </form>
             {leadStatus === 'saved' && <p className="lead-message">✓ You&apos;re on the list. We&apos;ll send only relevant trip notes and updates.</p>}
             {leadStatus === 'error' && <p className="lead-message error">{leadError}</p>}
-            <p className="lead-privacy">Applicants are added automatically too, so nobody falls through the cracks. No spam — opt out by replying to any email.</p>
+            <p className="lead-privacy">Booking guests can receive relevant trip preparation notes after booking. Newsletter subscribers receive occasional 8 Lakes Tours updates, offers, deals, blog posts, and field notes. No spam — opt out by replying to any email.</p>
           </div>
         </div>
       </section>
