@@ -290,7 +290,7 @@ export function preparationCustomerEmail(input: LifecycleEmailInput) {
   const name = firstName(input.firstName);
   return {
     subject,
-    text: `Hi ${name},\n\nHere are the main preparation notes for your 8 Lakes Tours booking.\n\nBooking reference: ${input.reference}\nTour date: ${input.tourDate || 'TBC'}\n\nPack for all seasons, even in summer. Mongolia’s steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights. Bring warm layers, waterproof outerwear, comfortable riding clothes, warm socks, hat, gloves, and basic toiletries.\n\nCountryside facilities are simple. Once outside the city, expect outhouse squat toilets rather than Western flush toilets, and no regular showers. Bring wet wipes for cleaning hands and body between river washes.\n\nFood is traditional host-family food: meat- and dairy-heavy, with fresh milk tea, yoghurt, cheese, and other local foods. Strict vegan or serious dairy-free needs are difficult in this remote setting.\n\nPlease also make sure you have travel insurance that covers horseback riding/adventure activity and emergency evacuation.\n\nIf you have any last questions, just reply to this email.\n\n8 Lakes Tours`,
+    text: `Hi ${name},\n\nHere are the main preparation notes for your 8 Lakes Tours booking.\n\nBooking reference: ${input.reference}\nTour date: ${input.tourDate || 'TBC'}\n\nPack for all seasons, even in summer. Mongolia’s steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights. Bring warm layers, waterproof outerwear, comfortable riding clothes, warm socks, hat, gloves, and basic toiletries.\n\nCountryside facilities are simple. Once outside the city, expect outhouse squat toilets rather than Western flush toilets, and no regular showers. Bring wet wipes for cleaning hands and body between river washes.\n\nFood is traditional host-family food: meat- and dairy-heavy, with fresh milk tea, yoghurt, cheese, and other local foods. Strict vegan or serious dairy-free needs are difficult in this remote setting.\n\nFor getting around Ulaanbaatar before or after the trip, the tapa. app works well for scooter and bicycle rental and accepts international cards: https://apps.apple.com/app/id1563199559\n\nPlease also make sure you have travel insurance that covers horseback riding/adventure activity and emergency evacuation.\n\nIf you have any last questions, just reply to this email.\n\n8 Lakes Tours`,
     html: emailShell({
       preheader: `Packing, food, facilities, insurance, and practical prep for booking ${input.reference}.`,
       title: `Preparing for Mongolia.`,
@@ -315,6 +315,11 @@ export function preparationCustomerEmail(input: LifecycleEmailInput) {
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
           <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Food</p>
           <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">Food is traditional host-family food: meat- and dairy-heavy, with fresh milk tea, yoghurt, cheese, and other local foods. Strict vegan or serious dairy-free needs are difficult in this remote setting.</p>
+        </div>
+
+        <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">
+          <p style="margin:0 0 6px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Ulaanbaatar transport tip</p>
+          <p style="margin:0;color:#3a3024;line-height:1.6;font-size:15px">For getting around Ulaanbaatar before or after the trip, the <a href="https://apps.apple.com/app/id1563199559" style="color:#8a5a13">tapa. app</a> works well for scooter and bicycle rental and accepts international cards.</p>
         </div>
 
         <p style="margin:0;color:#3a3024;line-height:1.65;font-size:15px">Please also make sure you have travel insurance that covers horseback riding/adventure activity and emergency evacuation. If you have any last questions, just reply to this email.</p>
