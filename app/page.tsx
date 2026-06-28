@@ -28,6 +28,8 @@ declare global {
   }
 }
 
+const GA_MEASUREMENT_ID = 'G-E9PW7T08LZ';
+
 function trackFunnelEvent(name: string, properties: FunnelEventProperties = {}) {
   track(name, properties);
 
@@ -51,6 +53,40 @@ function getGaClientId() {
   if (!gaCookie) return '';
   const parts = gaCookie.split('.');
   return parts.length >= 4 ? `${parts[2]}.${parts[3]}` : gaCookie;
+}
+
+function getGaClientIdFromGtag(): Promise<string> {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return Promise.resolve('');
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (value: unknown) => {
+      if (settled) return;
+      settled = true;
+      resolve(typeof value === 'string' ? value : '');
+    };
+
+    window.setTimeout(() => finish(''), 700);
+    window.gtag?.('get', GA_MEASUREMENT_ID, 'client_id', finish);
+  });
+}
+
+async function collectAttributionWithGaRetry() {
+  const attribution = collectAttribution();
+  if (attribution.ga_client_id) return attribution;
+
+  const clientId = await getGaClientIdFromGtag();
+  if (!clientId) return attribution;
+
+  const next = { ...attribution, ga_client_id: clientId };
+  try {
+    const stored = window.localStorage.getItem(ATTRIBUTION_STORAGE_KEY);
+    const first = stored ? JSON.parse(stored) as AttributionPayload : {};
+    window.localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify({ ...first, ga_client_id: first.ga_client_id || clientId }));
+  } catch {
+    // Storage can be blocked; the current submit payload still carries the client id.
+  }
+  return next;
 }
 
 function collectAttribution(): AttributionPayload {
@@ -458,7 +494,7 @@ export default function Home() {
           email: leadEmail,
           source: 'homepage_newsletter_cta',
           interest: '8 Lakes Tours newsletter, offers, deals, blog posts, field notes, and business updates',
-          attribution: collectAttribution(),
+          attribution: await collectAttributionWithGaRetry(),
         }),
       });
       const payload = await response.json().catch(() => null) as { ok?: boolean; error?: string } | null;
@@ -603,7 +639,7 @@ export default function Home() {
       const formData = new FormData(form);
       const bookingPayload = {
         ...Object.fromEntries(formData.entries()),
-        attribution: collectAttribution(),
+        attribution: await collectAttributionWithGaRetry(),
       };
       const response = await fetch('/api/bookings', {
         method: 'POST',

@@ -235,6 +235,33 @@ export async function POST(request: Request) {
     },
   ]);
 
+  await supabase.from('email_events').insert([
+    {
+      booking_id: booking.id,
+      customer_id: customerResult.data.id,
+      template_key: 'internal_booking_notification',
+      to_email: internalRecipients.join(', '),
+      subject: internalEmail.subject,
+      body_snapshot: internalEmail.text,
+      provider_message_id: internalResult.id ?? null,
+      sent_by: 'website-form',
+      status: internalResult.sent ? 'sent' : 'failed',
+      raw_response: internalResult,
+    },
+    {
+      booking_id: booking.id,
+      customer_id: customerResult.data.id,
+      template_key: 'booking_received',
+      to_email: email,
+      subject: customerEmail.subject,
+      body_snapshot: customerEmail.text,
+      provider_message_id: customerEmailResult.id ?? null,
+      sent_by: 'website-form',
+      status: customerEmailResult.sent ? 'sent' : 'failed',
+      raw_response: customerEmailResult,
+    },
+  ]);
+
 
   return NextResponse.json({ ok: true, reference });
 }
