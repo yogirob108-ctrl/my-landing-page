@@ -254,6 +254,35 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
 }
 
 
+export function paymentReceivedInternalEmail(input: LifecycleEmailInput & { amountUsd: number; customerName: string; customerEmail: string; stripeReference: string }) {
+  const amount = `$${input.amountUsd.toLocaleString('en-US')}`;
+  const subject = `Payment received: ${input.customerName} ${input.reference}`;
+  const text = `8 Lakes payment received\n\nReference: ${input.reference}\nGuest: ${input.customerName}\nEmail: ${input.customerEmail}\nTour date: ${input.tourDate || 'TBC'}\nOnline payment received: ${amount}\nStripe reference: ${input.stripeReference}\n\nThe booking has been matched by the Stripe webhook and marked paid/confirmed in the ops dashboard.`;
+
+  return {
+    subject,
+    text,
+    html: emailShell({
+      preheader: `${amount} Stripe payment matched for ${input.reference}.`,
+      title: 'Payment received',
+      intro: `<strong>${escapeHtml(input.customerName)}</strong> has paid the online reservation amount for booking <strong>${escapeHtml(input.reference)}</strong>.`,
+      footer: false,
+      children: `
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:18px">
+          ${detailRow('Reference', escapeHtml(input.reference))}
+          ${detailRow('Guest', escapeHtml(input.customerName))}
+          ${detailRow('Email', `<a href="mailto:${escapeHtml(input.customerEmail)}" style="color:#8a5a13">${escapeHtml(input.customerEmail)}</a>`)}
+          ${detailRow('Tour date', escapeHtml(input.tourDate || 'TBC'))}
+          ${detailRow('Online payment received', escapeHtml(amount))}
+          ${detailRow('Stripe reference', escapeHtml(input.stripeReference))}
+        </table>
+        <p style="margin:0 0 14px;color:#3a3024;line-height:1.65;font-size:15px">The Stripe webhook matched this payment to the booking and marked the online reservation amount as paid in the ops dashboard.</p>
+        <p style="margin:0"><a href="${OPS_URL}/ops/bookings/${escapeHtml(input.reference)}" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Open booking record</a></p>
+      `,
+    }),
+  };
+}
+
 export function paymentConfirmedCustomerEmail(input: LifecycleEmailInput & { amountUsd: number }) {
   const subject = `Payment received — 8 Lakes Tours ${input.reference}`;
   const name = firstName(input.firstName);

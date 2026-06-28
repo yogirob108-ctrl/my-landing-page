@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
-import { getInternalEmailRecipients, paymentConfirmedCustomerEmail, sendEmail } from '@/lib/email';
+import { getInternalEmailRecipients, paymentConfirmedCustomerEmail, paymentReceivedInternalEmail, sendEmail } from '@/lib/email';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID || 'G-E9PW7T08LZ';
@@ -109,7 +109,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
 
   const { data: booking, error: bookingError } = await supabase
     .from('bookings')
-    .select('id, public_reference, status, online_paid_usd, online_due_usd, tour_date, notes, customer_id, customer:customers(first_name, email)')
+    .select('id, public_reference, status, online_paid_usd, online_due_usd, tour_date, notes, customer_id, customer:customers(first_name, last_name, email)')
     .eq('public_reference', reference)
     .single();
 
@@ -215,6 +215,9 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
     const customer = Array.isArray(booking.customer) ? booking.customer[0] : booking.customer;
     const customerEmail = typeof customer?.email === 'string' ? customer.email : '';
     const firstName = typeof customer?.first_name === 'string' ? customer.first_name : 'there';
+    const lastName = typeof customer?.last_name === 'string' ? customer.last_name : '';
+    const customerName = `${firstName === 'there' ? '' : firstName} ${lastName}`.trim() || customerEmail || booking.public_reference;
+    const internalRecipients = getInternalEmailRecipients();
 
     if (customerEmail) {
       const confirmationEmail = paymentConfirmedCustomerEmail({
@@ -249,6 +252,45 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
         sent_by: 'stripe-webhook',
         status: emailResult.sent ? 'sent' : 'failed',
         raw_response: emailResult,
+      });
+    }
+
+    if (internalRecipients.length) {
+      const internalPaymentEmail = paymentReceivedInternalEmail({
+        reference: booking.public_reference,
+        firstName,
+        customerName,
+        customerEmail: customerEmail || 'not provided',
+        tourDate: booking.tour_date || 'TBC',
+        amountUsd: amountToRecord,
+        stripeReference: paymentIntentId ?? session.id,
+      });
+      const internalEmailResult = await sendEmail({
+        to: internalRecipients,
+        replyTo: customerEmail || internalRecipients[0],
+        ...internalPaymentEmail,
+      });
+
+      await supabase.from('booking_events').insert({
+        booking_id: booking.id,
+        event_type: internalEmailResult.sent ? 'email' : 'system',
+        direction: 'outbound',
+        title: internalEmailResult.sent ? 'Internal payment notification email sent' : 'Internal payment notification email failed',
+        body: internalEmailResult.sent ? `Resend email id: ${internalEmailResult.id ?? 'unknown'}` : internalEmailResult.error,
+        created_by: 'resend',
+      });
+
+      await supabase.from('email_events').insert({
+        booking_id: booking.id,
+        customer_id: booking.customer_id ?? null,
+        template_key: 'internal_payment_received',
+        to_email: internalRecipients.join(', '),
+        subject: internalPaymentEmail.subject,
+        body_snapshot: internalPaymentEmail.text,
+        provider_message_id: internalEmailResult.id ?? null,
+        sent_by: 'stripe-webhook',
+        status: internalEmailResult.sent ? 'sent' : 'failed',
+        raw_response: internalEmailResult,
       });
     }
   }
