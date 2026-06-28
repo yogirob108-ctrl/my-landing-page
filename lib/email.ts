@@ -141,22 +141,22 @@ export function bookingInternalEmail(input: {
 }) {
   const name = `${input.firstName} ${input.lastName}`.trim();
   const subject = `Action needed: ${name} booked 8 Lakes (${input.reference})`;
-  const text = `New 8 Lakes booking\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nAction checklist:\n1. Check for the ${ONLINE_PAYMENT_USD} Stripe payment.\n2. Mark the booking paid in the 8 Lakes ops dashboard when matched.\n3. Reply personally if anything looks odd or needs referral/review.\n4. Remind the guest to bring ${FAMILY_CASH_USD} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
+  const text = `New 8 Lakes booking\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nOperator checklist:\n1. Open the 8 Lakes ops dashboard and confirm ${input.reference} is visible.\n2. Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.\n3. Reply personally if anything looks odd or needs referral/review.\n4. Make sure the guest knows to bring ${FAMILY_CASH_USD} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
 
   return {
     subject,
     text,
     html: emailShell({
-      preheader: `${name} booked ${input.tourDate || 'a future 8 Lakes date'}. Check Stripe and the 8 Lakes ops dashboard.`,
+      preheader: `${name} booked ${input.tourDate || 'a future 8 Lakes date'}. Check the 8 Lakes ops dashboard; Stripe should auto-match after payment.`,
       title: 'New booking received',
-      intro: `<strong>${escapeHtml(name)}</strong> submitted the booking form. Their place is confirmed once the ${ONLINE_PAYMENT_USD} online payment is matched.`,
+      intro: `<strong>${escapeHtml(name)}</strong> submitted the booking form. Payment should automatically match and confirm the booking once Stripe checkout completes.`,
       footer: false,
       children: `
         <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
           <p style="margin:0 0 8px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Operator checklist</p>
           <ol style="margin:0;padding-left:20px;color:#3a3024;line-height:1.7;font-size:15px">
-            <li>Check Stripe for the <strong>${ONLINE_PAYMENT_USD}</strong> online booking payment.</li>
-            <li>Open the 8 Lakes ops dashboard and mark <strong>${escapeHtml(input.reference)}</strong> paid when matched.</li>
+            <li>Open the 8 Lakes ops dashboard and confirm <strong>${escapeHtml(input.reference)}</strong> is visible.</li>
+            <li>Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.</li>
             <li>Reply personally if the booking needs clarification, referral, or review.</li>
             <li>Make sure the guest knows to bring <strong>${FAMILY_CASH_USD} clean USD cash</strong> for the host family.</li>
           </ol>
