@@ -69,7 +69,7 @@ const sections = [
     items: [
       'Once you leave the city, do not expect Western flush toilets. Countryside facilities are usually simple outhouses with squat toilets.',
       'Accommodation can still be warm, welcoming, and comfortable in a rural way, but bathroom facilities are basic and there are no regular showers in the countryside.',
-      'Bring wet wipes for cleaning hands and body between river washes. Washing in the river is part of the simple, therapeutic steppe rhythm when conditions allow.',
+      'Bring wet wipes for cleaning hands and body between river washes. Optional daily river ice baths are part of the simple, therapeutic steppe rhythm when conditions allow.',
     ],
   },
   {
@@ -84,8 +84,8 @@ const sections = [
     title: 'Communication and translation',
     items: [
       'Guides and organisers handle the main logistics, but the host-family setting is cross-cultural and not every moment happens in perfect English.',
-      'So far, ChatGPT voice mode has worked especially well for simple back-and-forth conversation with family members whose English is limited. You can say: “Please translate the following sentence into Mongolian for me,” then speak naturally and play or show the translation.',
-      'Other translation apps can still help, but we have found ChatGPT voice mode more useful than most for this kind of real conversation.',
+      'So far, Grok has worked best for simple back-and-forth communication with family members whose English is limited. ChatGPT voice mode also works well for translation. You can say: “Please translate the following sentence into Mongolian for me,” then speak naturally and play or show the translation.',
+      'Other translation apps can still help, but Grok and ChatGPT are the two we would suggest trying first for real conversation.',
       'The host nomadic camp has strong Starlink and a solar-powered inverter for charging phones, cameras, and other electronics. It is surprisingly well equipped for modern essentials — even coffee makers — while remote trek days can still be more offline.',
     ],
   },

@@ -214,7 +214,7 @@ const PACKING_LIST = [
   'Riding gloves or lightweight outdoor gloves',
   'Sun hat or cap',
   'Sunglasses with secure strap',
-  'Swimsuit for lakes, rivers or hot springs',
+  'Swimsuit for daily river ice baths, lakes or hot springs',
   'Headlamp or small flashlight',
   'Reusable water bottle',
   'Sunscreen and lip balm with SPF',
@@ -755,7 +755,7 @@ export default function Home() {
           { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $1,999 USD per person. A $999 online booking payment confirms your place with 8 Lakes Tours. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.' } },
-          { '@type': 'Question', name: 'Is there WiFi or cell service?', acceptedAnswer: { '@type': 'Answer', text: 'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. Translation apps can help with simple Mongolian phrases when you have signal.' } },
+          { '@type': 'Question', name: 'Is there WiFi or cell service?', acceptedAnswer: { '@type': 'Answer', text: 'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.' } },
           { '@type': 'Question', name: 'Is this trip safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Basic first aid is available on site and experienced local guides are with you throughout the journey. Ground transportation is on call for emergencies. All participants are required to carry travel insurance with emergency evacuation coverage before departure.' } },
         ],
       },
@@ -1568,6 +1568,7 @@ export default function Home() {
               <li>Traditional ger accommodation</li>
               <li>Yak milking & daily routines</li>
               <li>Horse handling & riding practice</li>
+              <li>Optional daily river ice baths</li>
               <li>Cultural exchange & shared meals</li>
               <li style={{opacity:1, color:'var(--gold)'}}>Optional: van day trip to nearby historic sites & waterfalls</li>
             </ul>
@@ -1580,7 +1581,7 @@ export default function Home() {
             <ul className="itin-list">
               <li>Daily multi-hour horseback riding</li>
               <li>Wilderness camping</li>
-              <li>Alpine lakes & dramatic terrain</li>
+              <li>Alpine lakes, rivers & cold-water plunges</li>
               <li>Far from mass tourism</li>
             </ul>
           </div>
@@ -2042,7 +2043,7 @@ export default function Home() {
             {q:'How does payment work?', a:'The current 2026 rate is $1,999 per person. You pay $999 online through 8 Lakes Tours to confirm your place. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.'},
-            {q:'Is there WiFi or cell service?', a:'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. Translation apps can help with simple Mongolian phrases when you have signal.'},
+            {q:'Is there WiFi or cell service?', a:'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.'},
             {q:'Is this trip safe?', a:'Yes. Basic first aid is available on site and experienced local guides — including Suma, who has led numerous tourist groups through this terrain — are with you throughout the journey. Ground transportation is on call for emergencies and can reach the ger village within a few hours. All participants are required to carry travel insurance with emergency evacuation coverage before departure.'},
           ].map(({q, a}, i) => {
             const isOpen = openFaqIndex === i;
