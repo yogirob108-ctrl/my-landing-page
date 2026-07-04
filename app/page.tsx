@@ -1634,7 +1634,7 @@ export default function Home() {
       </section>
       {/* GETTING THERE */}
       <section className="riding-stay-section">
-        <div style={{maxWidth:'980px', margin:'0 auto', border:'1px solid rgba(200,169,110,0.24)', background:'rgba(200,169,110,0.065)', padding:'2rem'}}>
+        <div style={{maxWidth:'980px', margin:'0 auto', border:'1px solid rgba(200,169,110,0.24)', borderRadius:'var(--radius-card)', background:'rgba(200,169,110,0.065)', padding:'2rem'}}>
           <span className="section-eyebrow">Prefer More Riding?</span>
           <h2 className="section-title">Host-Family Stay<br /><em>&amp; Daily Horse Riding</em></h2>
           <p className="section-body" style={{maxWidth:'760px'}}>Some guests want the Mongolian horse experience without committing to the full camping trek to Eight Lakes. If you&apos;d rather stay with the host family, be looked after at the ger camp, and focus on daily riding lessons or shorter rides, email Rob and the team. We can discuss a custom hosted riding stay around your dates.</p>
@@ -1702,7 +1702,7 @@ export default function Home() {
               ))}
             </ul>
           </details>
-          <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)'}}>
+          <div style={{marginTop:'2rem', padding:'1.2rem', background:'rgba(200,169,110,0.06)', borderLeft:'2px solid var(--gold)', borderRadius:'var(--radius-soft)'}}>
             <p style={{fontSize:'0.8rem', color:'var(--mist)', opacity:0.8, lineHeight:1.6}}>All participants must sign a liability waiver, provide proof of travel insurance, bring their own personal medical basics, and arrive mentally prepared for simple conditions, changing plans, physical discomfort, and group life in the wild.</p>
           </div>
         </div>
@@ -1892,7 +1892,7 @@ export default function Home() {
                 value={signature}
                 onChange={e => setSignature(e.target.value)}
                 placeholder="Your full name"
-                style={{width:'100%', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(200,169,110,0.3)', padding:'0.7rem 1rem', color:'var(--cream)', fontSize:'0.95rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontStyle:'italic', outline:'none', boxSizing:'border-box'}}
+                style={{width:'100%', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'var(--radius-soft)', padding:'0.7rem 1rem', color:'var(--cream)', fontSize:'0.95rem', fontFamily:"var(--font-cormorant), 'Cormorant Garamond', serif", fontStyle:'italic', outline:'none', boxSizing:'border-box'}}
               />
               <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.5, marginTop:'0.4rem', lineHeight:1.5}}>By typing your name you confirm you have read and agree to the liability waiver.</p>
             </div>

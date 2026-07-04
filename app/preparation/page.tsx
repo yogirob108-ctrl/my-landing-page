@@ -121,7 +121,7 @@ export default function PreparationPage() {
 
         <div style={{ display: 'grid', gap: '1.1rem', marginTop: '3rem' }}>
           {sections.map(section => (
-            <section key={section.title} style={{ border: '1px solid rgba(200,169,110,0.18)', background: 'rgba(245,240,232,0.035)', padding: '1.35rem' }}>
+            <section key={section.title} style={{ border: '1px solid rgba(200,169,110,0.18)', borderRadius: '12px', background: 'rgba(245,240,232,0.035)', padding: '1.35rem' }}>
               <h2 style={h2Style}>{section.title}</h2>
               <ul style={{ display: 'grid', gap: '0.7rem', margin: 0, paddingLeft: '1.1rem' }}>
                 {section.items.map(item => <li key={item} style={pStyle}>{item}</li>)}
@@ -130,7 +130,7 @@ export default function PreparationPage() {
           ))}
         </div>
 
-        <section style={{ marginTop: '2rem', border: '1px solid rgba(200,169,110,0.32)', background: 'rgba(200,169,110,0.065)', padding: '1.35rem' }}>
+        <section style={{ marginTop: '2rem', border: '1px solid rgba(200,169,110,0.32)', borderRadius: '12px', background: 'rgba(200,169,110,0.065)', padding: '1.35rem' }}>
           <h2 style={h2Style}>Not sure if this fits?</h2>
           <p style={pStyle}>Ask before paying. We would rather check riding level, diet, expectations, dates, and comfort with remote conditions before you commit.</p>
           <p style={{ ...pStyle, marginTop: '0.8rem' }}><a href="mailto:info@8lakestours.com?subject=Preparation%20question%20for%208%20Lakes%20Tours" style={linkStyle}>Email info@8lakestours.com →</a></p>

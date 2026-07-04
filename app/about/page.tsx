@@ -186,7 +186,7 @@ export default function Page() {
       </footer>
 
       <style>{`
-        .about-page { background:#0e0c09; min-height:100vh; color:#d4cfc4; font-family:var(--font-jost),'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+        .about-page { --radius-soft:10px; --radius-card:12px; --radius-photo:4px; background:#0e0c09; min-height:100vh; color:#d4cfc4; font-family:var(--font-jost),'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
         .eyebrow { margin:0 0 .85rem; color:#c8a96e; text-transform:uppercase; letter-spacing:.26em; font-size:.66rem; font-weight:600; }
         h1,h2,h3,p { margin-top:0; }
         h1,h2,h3 { color:#f5f0e8; font-family:var(--font-cormorant),'Cormorant Garamond',serif; font-weight:300; line-height:1; }
@@ -201,21 +201,21 @@ export default function Page() {
         .about-hero-copy { position:relative; z-index:1; max-width:1040px; }
         .about-hero-copy > p:last-of-type { max-width:680px; font-size:1.08rem; }
         .hero-actions,.link-row { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1.8rem; }
-        .hero-actions a,.link-row a,.payment-strip a { display:inline-flex; align-items:center; justify-content:center; border:1px solid #c8a96e; background:#c8a96e; color:#0e0c09; text-decoration:none; text-transform:uppercase; letter-spacing:.16em; font-size:.7rem; font-weight:600; padding:.92rem 1.25rem; }
+        .hero-actions a,.link-row a,.payment-strip a { display:inline-flex; align-items:center; justify-content:center; border:1px solid #c8a96e; border-radius:var(--radius-soft); background:#c8a96e; color:#0e0c09; text-decoration:none; text-transform:uppercase; letter-spacing:.16em; font-size:.7rem; font-weight:600; padding:.92rem 1.25rem; }
         .hero-actions a.ghost,.link-row a { background:rgba(14,12,9,.28); color:#c8a96e; }
         .intro-grid,.story-section,.cards-section,.payment-strip,.next-links { padding:6rem; }
         .intro-grid { display:grid; grid-template-columns:.9fr 1.1fr; gap:4rem; border-bottom:1px solid rgba(200,169,110,.14); }
         .intro-copy { display:grid; gap:1rem; font-size:1.02rem; }
         .story-section { display:grid; grid-template-columns:minmax(260px,.7fr) 1fr; gap:4rem; align-items:center; background:#18130e; }
-        .story-image { position:relative; min-height:560px; background:#080806 url('/images/rob-zaher.jpg') center / cover no-repeat; overflow:hidden; border:1px solid rgba(200,169,110,.18); }
+        .story-image { position:relative; min-height:560px; background:#080806 url('/images/rob-zaher.jpg') center / cover no-repeat; overflow:hidden; border:1px solid rgba(200,169,110,.18); border-radius:var(--radius-photo); }
         .story-copy { max-width:720px; }
         .story-copy p { font-size:1rem; }
         .card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:2rem; }
-        .info-card { border:1px solid rgba(200,169,110,.16); border-left:3px solid rgba(200,169,110,.52); background:rgba(245,240,232,.035); padding:1.25rem; min-height:230px; }
+        .info-card { border:1px solid rgba(200,169,110,.16); border-left:3px solid rgba(200,169,110,.52); border-radius:var(--radius-card); background:rgba(245,240,232,.035); padding:1.25rem; min-height:230px; }
         .info-card.strong { background:rgba(200,169,110,.065); }
         .info-card p { font-size:.93rem; line-height:1.7; }
         .photo-band { display:grid; grid-template-columns:2fr 1fr 1fr; gap:4px; background:#080806; padding:4px; }
-        .band-image { position:relative; min-height:420px; background:#18130e center / cover no-repeat; overflow:hidden; }
+        .band-image { position:relative; min-height:420px; background:#18130e center / cover no-repeat; overflow:hidden; border-radius:var(--radius-photo); }
         .band-image.ger { background-image:url('/images/expedition-originals/ger-blue-hour-original.jpg'); }
         .band-image.guide { background-image:url('/images/guide-horse-portrait.jpg'); background-position:center 36%; }
         .band-image.riders { background-image:url('/images/gallery-extra/rainy-horseback-overlook.jpg'); }
@@ -224,7 +224,7 @@ export default function Page() {
         .payment-strip p { max-width:820px; }
         .next-links { text-align:center; }
         .next-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.85rem; margin-top:2rem; text-align:left; }
-        .next-grid a { border:1px solid rgba(200,169,110,.18); background:rgba(245,240,232,.035); text-decoration:none; padding:1.1rem; min-height:130px; }
+        .next-grid a { border:1px solid rgba(200,169,110,.18); border-radius:var(--radius-card); background:rgba(245,240,232,.035); text-decoration:none; padding:1.1rem; min-height:130px; }
         .next-grid strong { display:block; color:#f5f0e8; margin-bottom:.45rem; }
         .next-grid span { display:block; color:rgba(212,207,196,.68); line-height:1.45; font-size:.86rem; }
         .about-footer { border-top:1px solid rgba(200,169,110,.15); padding:2rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }

@@ -79,7 +79,7 @@ export default function GalleryPage() {
         .filter-button { border: 1px solid rgba(200,169,110,0.28); background: transparent; color: rgba(245,240,232,0.72); padding: 0.65rem 0.9rem; border-radius: 999px; cursor: pointer; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; }
         .filter-button.active { background: #c8a96e; color: #0e0c09; border-color: #c8a96e; }
         .gallery-grid { padding: 3px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; background: #0f0f0d; }
-        .gallery-card { all: unset; position: relative; display: block; overflow: hidden; background: #17130e; cursor: zoom-in; min-height: 260px; }
+        .gallery-card { all: unset; position: relative; display: block; overflow: hidden; border-radius: 4px; background: #17130e; cursor: zoom-in; min-height: 260px; }
         .gallery-card.portrait { grid-row: span 2; }
         .gallery-card img { display: block; width: 100%; height: 100%; min-height: inherit; object-fit: cover; transition: transform 0.5s ease, filter 0.5s ease; }
         .gallery-card:hover img { transform: scale(1.035); filter: brightness(1.08); }
