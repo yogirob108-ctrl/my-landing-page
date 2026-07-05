@@ -1516,25 +1516,25 @@ export default function Home() {
         <div className="testimonial-grid">
           {[
             {
-              name: 'Irik',
+              name: 'Irik · USA',
               src: '/images/testimonial-irik-clawson.jpg',
               alt: 'Robert Zaher smiling on horseback beside a river valley',
               quote: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
               objectPosition: 'center',
             },
             {
-              name: 'Fin',
-              src: '/images/testimonial-fin-bennet.jpg',
-              alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
-              quote: 'It couldn’t be further from back home and that makes me so excited.',
-              objectPosition: 'center',
-            },
-            {
-              name: 'Milou',
+              name: 'Milou · AU',
               src: '/images/testimonial-milou.jpeg',
               alt: 'Milou travelling by motorbike through the Mongolian steppe',
               quote: 'So grateful to be able to stay with the loveliest family in Mongolia, experience life on the steppe and trek with horses through the most beautiful landscapes!',
               objectPosition: '76% center',
+            },
+            {
+              name: 'Fin · UK',
+              src: '/images/testimonial-fin-bennet.jpg',
+              alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
+              quote: 'It couldn’t be further from back home and that makes me so excited.',
+              objectPosition: 'center',
             },
           ].map(testimonial => (
             <article className="testimonial-card reveal" key={testimonial.name}>
