@@ -313,6 +313,7 @@ const GALLERY_IMAGES = [
   { src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' },
   { src: '/images/testimonial-irik-clawson.jpg', alt: 'Robert Zaher smiling on horseback beside a river valley' },
   { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin Bennet with children beside a traditional ger in Mongolia' },
+  { src: '/images/testimonial-milou.jpeg', alt: 'Milou travelling by motorbike through the Mongolian steppe' },
   { src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' },
   { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' },
   { src: '/images/mosaic1.jpg', alt: 'Traditional Mongolian gers with grazing animals' },
@@ -976,7 +977,7 @@ export default function Home() {
         .trust-card { border: 1px solid rgba(200,169,110,0.2); border-radius: var(--radius-card); background: rgba(200,169,110,0.045); padding: 1.6rem; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; }
         .trust-quote { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--cream); line-height: 1.55; font-style: italic; }
         .trust-source { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-top: 1.4rem; }
-        .testimonial-grid { max-width: 1000px; margin: 0 auto 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+        .testimonial-grid { max-width: 1120px; margin: 0 auto 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
         .testimonial-card { background: rgba(245,240,232,0.04); border: 1px solid rgba(200,169,110,0.18); border-radius: var(--radius-card); overflow: hidden; }
         .testimonial-photo { position: relative; height: 360px; overflow: hidden; display: block; width: 100%; }
         .testimonial-photo img { object-fit: cover; }
@@ -1519,12 +1520,21 @@ export default function Home() {
               src: '/images/testimonial-irik-clawson.jpg',
               alt: 'Robert Zaher smiling on horseback beside a river valley',
               quote: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
+              objectPosition: 'center',
             },
             {
               name: 'Fin',
               src: '/images/testimonial-fin-bennet.jpg',
               alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
               quote: 'It couldn’t be further from back home and that makes me so excited.',
+              objectPosition: 'center',
+            },
+            {
+              name: 'Milou',
+              src: '/images/testimonial-milou.jpeg',
+              alt: 'Milou travelling by motorbike through the Mongolian steppe',
+              quote: 'So grateful to be able to stay with the loveliest family in Mongolia, experience life on the steppe and trek with horses through the most beautiful landscapes!',
+              objectPosition: '76% center',
             },
           ].map(testimonial => (
             <article className="testimonial-card reveal" key={testimonial.name}>
@@ -1534,7 +1544,7 @@ export default function Home() {
                 aria-label={`View larger image: ${testimonial.alt}`}
                 onClick={() => openLightbox(testimonial.src, testimonial.alt)}
               >
-                <Image src={testimonial.src} alt={testimonial.alt} fill quality={76} sizes="(max-width: 900px) 100vw, 50vw" />
+                <Image src={testimonial.src} alt={testimonial.alt} fill quality={76} sizes="(max-width: 900px) 100vw, 33vw" style={{ objectPosition: testimonial.objectPosition ?? 'center' }} />
               </button>
               <div className="testimonial-body">
                 <p className="testimonial-quote">“{testimonial.quote}”</p>
