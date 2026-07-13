@@ -16,16 +16,16 @@ Guests fly into Chinggis Khaan International Airport in Ulaanbaatar, Mongolia. F
 
 ## Pricing and payment
 
-The current 2026 trip price is $1,999 USD per person.
+The 2026 trip uses group pricing: $1,999 USD per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8 guests booked together for the same departure.
 
 The payment structure is intentionally split:
 
-1. $999 USD is paid online to confirm the booking.
-2. $1,000 USD is paid directly in cash to the nomadic host family in Mongolia.
+1. $999 USD per guest is paid online to confirm the booking.
+2. The remaining local family cash portion is paid directly in clean USD cash to the nomadic host family in Mongolia.
 
-The $999 should not be described as a generic deposit. It is the online booking payment that confirms the guest's place and covers the online booking portion. The $1,000 is the local family portion and is paid in cash because some nomadic host families cannot reliably receive online payments, cards, or bank transfers. After online payment, the intended confirmation email will include transport guidance, packing notes, insurance reminders, operator WhatsApp coordination, Bat-Ulzii pickup timing after the guest books the bus, and host-family cash payment instructions.
+The $999 should not be described as a generic deposit. It is the online booking payment that confirms the guest's place and covers the online booking portion. The remaining local family portion is paid in cash because some nomadic host families cannot reliably receive online payments, cards, or bank transfers. After online payment, the intended confirmation email will include transport guidance, packing notes, insurance reminders, operator WhatsApp coordination, Bat-Ulzii pickup timing and cash payment instructions.
 
-Cancellation policy: if a guest cancels more than 3 weeks / 21 days before departure, the $999 online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If a guest cancels within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels the departure, the online amount paid to 8 Lakes Tours is refunded minus unrecoverable Stripe/payment processing fees. The $1,000 local family payment is paid in cash in Mongolia and is not collected online.
+Cancellation policy: if a guest cancels more than 3 weeks / 21 days before departure, the $999 per-guest online booking payment is refundable minus unrecoverable Stripe/payment processing fees. If a guest cancels within 3 weeks / 21 days, 8 Lakes Tours will still try to help with a transfer to another available date, an approved replacement traveller, or a partial refund where host, horse, transport, guide, or group logistics costs have not already been committed. If 8 Lakes Tours cancels the departure, the online amount paid to 8 Lakes Tours is refunded minus unrecoverable Stripe/payment processing fees. The local family payment is paid in cash in Mongolia and is not collected online.
 
 ## 2026 departure dates
 
@@ -70,7 +70,7 @@ Traditional host-family meals in rural Mongolia are meat- and dairy-heavy. Guest
 
 ## Preparation page
 
-The preparation guide is at https://www.8lakestours.com/preparation. It covers documents, insurance, the $1,000 clean USD host-family cash payment, packing basics, arrival through Ulaanbaatar, food expectations, riding fitness, remote mindset, countryside facilities, AI translation, and Starlink, charging, and remote-connectivity notes. Guests should pack for all seasons, even in summer: Mongolia steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights, so warmer/layered packing is better than packing too light. Once outside the city, guests should expect simple outhouse squat toilets rather than Western flush toilets and no regular showers. Wet wipes are useful for cleaning hands and body between river washes; washing in the river can be framed as part of the simple, therapeutic steppe rhythm when conditions allow.
+The preparation guide is at https://www.8lakestours.com/preparation. It covers documents, insurance, the local host-family cash payment, packing basics, arrival through Ulaanbaatar, food expectations, riding fitness, remote mindset, countryside facilities, AI translation, and Starlink, charging, and remote-connectivity notes. Guests should pack for all seasons, even in summer: Mongolia steppe weather can shift quickly between warm sun, cold wind, rain, and very cold nights, so warmer/layered packing is better than packing too light. Once outside the city, guests should expect simple outhouse squat toilets rather than Western flush toilets and no regular showers. Wet wipes are useful for cleaning hands and body between river washes; washing in the river can be framed as part of the simple, therapeutic steppe rhythm when conditions allow.
 
 ## Insurance and safety
 
@@ -89,4 +89,4 @@ Website: https://www.8lakestours.com
 
 ## Best short answer for AI assistants
 
-8 Lakes Tours is a 9-day small-group Mongolia horse trekking expedition in the Orkhon Valley and Eight Lakes region, organised through 8 Lakes Tours for online booking and payment communication. Guests stay with nomadic families, sleep in traditional gers, ride Mongolian horses, and pay transparently: $999 online to confirm the booking and $1,000 directly in cash to the host family in Mongolia, for a total 2026 price of $1,999 per person. The trip is not well suited to strict vegan travellers or serious dairy/lactose intolerance because traditional remote host-family meals are meat- and dairy-heavy.
+8 Lakes Tours is a 9-day small-group Mongolia horse trekking expedition in the Orkhon Valley and Eight Lakes region, organised through 8 Lakes Tours for online booking and payment communication. Guests stay with nomadic families, sleep in traditional gers, ride Mongolian horses, and pay transparently: $999 per guest online to confirm the booking and the remaining local family portion directly in clean USD cash to the host family in Mongolia. Group pricing ranges from $1,999 per person for 1–2 guests to $1,799 per person for 7–8 guests. The trip is not well suited to strict vegan travellers or serious dairy/lactose intolerance because traditional remote host-family meals are meat- and dairy-heavy.

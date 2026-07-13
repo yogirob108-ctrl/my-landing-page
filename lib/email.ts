@@ -8,6 +8,10 @@ const TOTAL_PRICE_USD = '$1,999';
 const ONLINE_PAYMENT_USD = '$999';
 const FAMILY_CASH_USD = '$1,000';
 
+function usd(amount: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+}
+
 type SendEmailInput = {
   to: string | string[];
   subject: string;
@@ -136,12 +140,22 @@ export function bookingInternalEmail(input: {
   email: string;
   phone: string;
   tourDate: string;
+  guestCount?: number;
+  pricePerPersonUsd?: number;
+  onlinePaymentUsd?: number;
+  localFamilyPaymentUsd?: number;
+  totalTripValueUsd?: number;
   ridingExperience: string;
   notes: string;
 }) {
   const name = `${input.firstName} ${input.lastName}`.trim();
   const subject = `Action needed: ${name} booked 8 Lakes (${input.reference})`;
-  const text = `New 8 Lakes booking\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nOperator checklist:\n1. Open the 8 Lakes ops dashboard and confirm ${input.reference} is visible.\n2. Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.\n3. Reply personally if anything looks odd or needs referral/review.\n4. Make sure the guest knows to bring ${FAMILY_CASH_USD} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
+  const guestCount = input.guestCount ?? 1;
+  const pricePerPerson = input.pricePerPersonUsd ? usd(input.pricePerPersonUsd) : TOTAL_PRICE_USD;
+  const onlinePayment = input.onlinePaymentUsd ? usd(input.onlinePaymentUsd) : ONLINE_PAYMENT_USD;
+  const familyCash = input.localFamilyPaymentUsd ? usd(input.localFamilyPaymentUsd) : FAMILY_CASH_USD;
+  const totalTripValue = input.totalTripValueUsd ? usd(input.totalTripValueUsd) : TOTAL_PRICE_USD;
+  const text = `New 8 Lakes booking\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\nPrice: ${pricePerPerson} per person / ${totalTripValue} total\nOnline reservation due: ${onlinePayment}\nLocal family cash: ${familyCash}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nOperator checklist:\n1. Open the 8 Lakes ops dashboard and confirm ${input.reference} is visible.\n2. Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.\n3. Reply personally if anything looks odd or needs referral/review.\n4. Make sure the guest knows to bring ${familyCash} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
 
   return {
     subject,
@@ -158,7 +172,7 @@ export function bookingInternalEmail(input: {
             <li>Open the 8 Lakes ops dashboard and confirm <strong>${escapeHtml(input.reference)}</strong> is visible.</li>
             <li>Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.</li>
             <li>Reply personally if the booking needs clarification, referral, or review.</li>
-            <li>Make sure the guest knows to bring <strong>${FAMILY_CASH_USD} clean USD cash</strong> for the host family.</li>
+            <li>Make sure the guest knows to bring <strong>${familyCash} clean USD cash</strong> for the host family.</li>
           </ol>
           <p style="margin:14px 0 0"><a href="${OPS_URL}/bookings" style="display:inline-block;background:#241d14;color:#fff8ea;text-decoration:none;border-radius:0;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700">Open 8 Lakes ops</a></p>
         </div>
@@ -170,6 +184,8 @@ export function bookingInternalEmail(input: {
           ${detailRow('Email', `<a href="mailto:${escapeHtml(input.email)}" style="color:#8a5a13">${escapeHtml(input.email)}</a>`)}
           ${detailRow('Phone', escapeHtml(input.phone || 'Not provided'))}
           ${detailRow('Tour date', escapeHtml(input.tourDate || 'TBC'))}
+          ${detailRow('Guests', `${guestCount}`)}
+          ${detailRow('Price', `${pricePerPerson} pp / ${totalTripValue} total`)}
           ${detailRow('Riding level', escapeHtml(input.ridingExperience || 'Not provided'))}
         </table>
 
@@ -182,29 +198,34 @@ export function bookingInternalEmail(input: {
   };
 }
 
-export function bookingCustomerEmail(input: { reference: string; firstName: string; tourDate: string }) {
+export function bookingCustomerEmail(input: { reference: string; firstName: string; tourDate: string; guestCount?: number; pricePerPersonUsd?: number; onlinePaymentUsd?: number; localFamilyPaymentUsd?: number; totalTripValueUsd?: number }) {
   const subject = `8 Lakes Tours booking received — ${input.reference}`;
   const name = firstName(input.firstName);
-  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours booking has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\n\nPayment structure:\nTotal 2026 trip price: ${TOTAL_PRICE_USD} per person\nOnline booking payment: ${ONLINE_PAYMENT_USD}\nCash paid directly to the host family in Mongolia: ${FAMILY_CASH_USD}\n\nYour place is confirmed once the online booking payment has been completed. The ${FAMILY_CASH_USD} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nFood note:\nTraditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families always produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nTranslation note:\nEnglish is not always strong in the host-family setting. So far we have found ChatGPT voice mode to be one of the easiest ways to communicate: say something like, “Please translate the following sentence into Mongolian for me,” then speak naturally and play/show the translation. Other translation apps can help too, but ChatGPT voice mode has worked especially well for simple back-and-forth conversation.\n\nNext steps:\n1. Complete the online booking payment on the website if you have not already done so.\n2. You will receive an automatic payment confirmation email once Stripe checkout completes.\n3. We send preparation notes before departure.\n\nQuestions? Reply to this email.\n\n8 Lakes Tours`;
+  const guestCount = input.guestCount ?? 1;
+  const pricePerPerson = input.pricePerPersonUsd ? usd(input.pricePerPersonUsd) : TOTAL_PRICE_USD;
+  const onlinePayment = input.onlinePaymentUsd ? usd(input.onlinePaymentUsd) : ONLINE_PAYMENT_USD;
+  const familyCash = input.localFamilyPaymentUsd ? usd(input.localFamilyPaymentUsd) : FAMILY_CASH_USD;
+  const totalTripValue = input.totalTripValueUsd ? usd(input.totalTripValueUsd) : TOTAL_PRICE_USD;
+  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours booking has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\n\nPayment structure:\nTotal 2026 trip price: ${pricePerPerson} per person / ${totalTripValue} total\nOnline booking payment: ${onlinePayment}\nCash paid directly to the host family in Mongolia: ${familyCash}\n\nYour place is confirmed once the online booking payment has been completed. The ${familyCash} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nFood note:\nTraditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families always produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nTranslation note:\nEnglish is not always strong in the host-family setting. So far we have found ChatGPT voice mode to be one of the easiest ways to communicate: say something like, “Please translate the following sentence into Mongolian for me,” then speak naturally and play/show the translation. Other translation apps can help too, but ChatGPT voice mode has worked especially well for simple back-and-forth conversation.\n\nNext steps:\n1. Complete the online booking payment on the website if you have not already done so.\n2. You will receive an automatic payment confirmation email once Stripe checkout completes.\n3. We send preparation notes before departure.\n\nQuestions? Reply to this email — Rob will pick it up.\n\nRob Zaher\n8 Lakes Tours`;
 
   return {
     subject,
     text,
     html: emailShell({
-      preheader: `Reference ${input.reference}. Complete the ${ONLINE_PAYMENT_USD} online booking payment to confirm your place.`,
+      preheader: `Reference ${input.reference}. Complete the ${onlinePayment} online booking payment to confirm your place.`,
       title: `Thanks ${escapeHtml(name)} — booking received.`,
       intro: `Your booking has been saved. Your booking reference is <strong>${escapeHtml(input.reference)}</strong> for <strong>${escapeHtml(input.tourDate || 'TBC')}</strong>.`,
       children: `
         <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
           <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Important</p>
-          <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">Your place is confirmed once your <strong>${ONLINE_PAYMENT_USD} online booking payment</strong> has been completed.</p>
+          <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">Your place is confirmed once your <strong>${onlinePayment} online booking payment</strong> has been completed.</p>
         </div>
 
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 -4px 16px">
           <tr>
-            ${pill('Total trip price', TOTAL_PRICE_USD, 'Per person for the 2026 9-day / 8-night expedition.')}
-            ${pill('Pay online', ONLINE_PAYMENT_USD, 'Confirms your place with 8 Lakes Tours.')}
-            ${pill('Bring in cash', FAMILY_CASH_USD, 'Paid directly to the nomadic host family in Mongolia.')}
+            ${pill('Trip price', pricePerPerson, `${guestCount} guest${guestCount === 1 ? '' : 's'} · ${totalTripValue} total.`)}
+            ${pill('Pay online', onlinePayment, 'Confirms your place with 8 Lakes Tours.')}
+            ${pill('Bring in cash', familyCash, 'Paid directly to the nomadic host family in Mongolia.')}
           </tr>
         </table>
 
@@ -221,7 +242,7 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
           <li>Complete the online booking payment on the website if you have not already done so.</li>
           <li>You will receive an automatic payment confirmation email once Stripe checkout completes.</li>
           <li>Before arrival, we send practical prep notes: packing guidance, insurance reminders, operator WhatsApp coordination, Bat-Ulzii pickup timing, and cash-payment instructions.</li>
-          <li>Please plan to bring <strong>${FAMILY_CASH_USD} in clean USD notes</strong> for the host family.</li>
+          <li>Please plan to bring <strong>${familyCash} in clean USD notes</strong> for the host family.</li>
         </ol>
 
         <div style="border-left:4px solid #eadcc6;padding:12px 14px;background:#fffdf8;margin-bottom:16px">

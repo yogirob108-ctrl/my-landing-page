@@ -5,9 +5,15 @@ import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 import { subscribeToNewsletter } from '@/lib/newsletter';
 
-const TOTAL_TRIP_VALUE_USD = 1999;
 const ONLINE_DUE_USD = 999;
-const FAMILY_CASH_DUE_USD = 1000;
+const MAX_GROUP_SIZE = 8;
+
+const GROUP_PRICING_TIERS = [
+  { min: 1, max: 2, perPersonUsd: 1999 },
+  { min: 3, max: 4, perPersonUsd: 1949 },
+  { min: 5, max: 6, perPersonUsd: 1899 },
+  { min: 7, max: 8, perPersonUsd: 1799 },
+] as const;
 
 type AttributionPayload = {
   landing_url?: unknown;
@@ -34,6 +40,7 @@ type PublicBookingPayload = {
   emergency_contact?: string;
   riding_experience?: string;
   tour_date?: string;
+  guest_count?: string;
   dietary_restrictions?: string;
   how_heard?: string;
   notes?: string;
@@ -43,6 +50,28 @@ type PublicBookingPayload = {
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
+}
+
+function clampGuestCount(value: unknown) {
+  const parsed = Number.parseInt(String(value ?? '1'), 10);
+  if (!Number.isFinite(parsed)) return 1;
+  return Math.min(MAX_GROUP_SIZE, Math.max(1, parsed));
+}
+
+function getGroupPricing(value: unknown) {
+  const guestCount = clampGuestCount(value);
+  const tier = GROUP_PRICING_TIERS.find(option => guestCount >= option.min && guestCount <= option.max) ?? GROUP_PRICING_TIERS[0];
+  const onlinePerPersonUsd = ONLINE_DUE_USD;
+  const localFamilyPerPersonUsd = tier.perPersonUsd - onlinePerPersonUsd;
+  return {
+    guestCount,
+    perPersonUsd: tier.perPersonUsd,
+    onlinePerPersonUsd,
+    localFamilyPerPersonUsd,
+    totalTripValueUsd: tier.perPersonUsd * guestCount,
+    onlinePaymentUsd: onlinePerPersonUsd * guestCount,
+    localFamilyPaymentUsd: localFamilyPerPersonUsd * guestCount,
+  };
 }
 
 function attributionLines(attribution: AttributionPayload | undefined) {
@@ -105,8 +134,11 @@ export async function POST(request: Request) {
   const signature = clean(payload.signature);
   const howHeard = clean(payload.how_heard);
   const guestNotes = clean(payload.notes);
+  const groupPricing = getGroupPricing(payload.guest_count);
   const attributionBlock = attributionNote(payload.attribution);
   const bookingNotes = [
+    `Guests booking together: ${groupPricing.guestCount}`,
+    `Group rate: $${groupPricing.perPersonUsd.toLocaleString('en-US')} per person ($${groupPricing.onlinePerPersonUsd.toLocaleString('en-US')} online + $${groupPricing.localFamilyPerPersonUsd.toLocaleString('en-US')} local family cash)`,
     howHeard ? `How they heard about us: ${howHeard}` : '',
     guestNotes,
     attributionBlock,
@@ -181,16 +213,16 @@ export async function POST(request: Request) {
     project_id: project.id,
     customer_id: customerResult.data.id,
     tour_date: clean(payload.tour_date) || 'TBC',
-    guest_count: 1,
+    guest_count: groupPricing.guestCount,
     status: 'awaiting_payment',
     riding_experience: clean(payload.riding_experience) || null,
     dietary_notes: clean(payload.dietary_restrictions) || null,
     notes: bookingNotes,
     form_source: 'website',
-    total_trip_value_usd: TOTAL_TRIP_VALUE_USD,
-    online_due_usd: ONLINE_DUE_USD,
+    total_trip_value_usd: groupPricing.totalTripValueUsd,
+    online_due_usd: groupPricing.onlinePaymentUsd,
     online_paid_usd: 0,
-    family_cash_due_usd: FAMILY_CASH_DUE_USD,
+    family_cash_due_usd: groupPricing.localFamilyPaymentUsd,
   }).select('id').single();
 
   if (bookingError || !booking) {
@@ -202,7 +234,7 @@ export async function POST(request: Request) {
     event_type: 'system',
     direction: 'system',
     title: 'Website booking submitted',
-    body: `${firstName} ${lastName} submitted the public reservation form and is awaiting online payment.${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
+    body: `${firstName} ${lastName} submitted the public reservation form for ${groupPricing.guestCount} guest${groupPricing.guestCount === 1 ? '' : 's'} and is awaiting online payment.${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
     created_by: 'website-form',
   });
 
@@ -214,10 +246,15 @@ export async function POST(request: Request) {
     email,
     phone: clean(payload.phone),
     tourDate,
+    guestCount: groupPricing.guestCount,
+    pricePerPersonUsd: groupPricing.perPersonUsd,
+    onlinePaymentUsd: groupPricing.onlinePaymentUsd,
+    localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd,
+    totalTripValueUsd: groupPricing.totalTripValueUsd,
     ridingExperience: clean(payload.riding_experience),
     notes: bookingNotes ?? '',
   });
-  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate });
+  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd });
   const internalRecipients = getInternalEmailRecipients();
 
   const internalResult = await sendEmail({

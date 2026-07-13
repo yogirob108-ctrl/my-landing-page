@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Script from 'next/script';
 import { track } from '@vercel/analytics';
-import { type FormEvent, type MouseEvent, useEffect, useRef, useState } from 'react';
+import { type FormEvent, type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type FunnelEventProperties = Record<string, string | number | boolean>;
 
@@ -140,6 +140,38 @@ const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECz
 const BASE_PRICE_USD = 1999;
 const BASE_ONLINE_PAYMENT_USD = 999;
 const BASE_LOCAL_FAMILY_PAYMENT_USD = 1000;
+const MAX_GROUP_SIZE = 8;
+
+const GROUP_PRICING_TIERS = [
+  { min: 1, max: 2, label: '1–2 guests', perPersonUsd: 1999 },
+  { min: 3, max: 4, label: '3–4 guests', perPersonUsd: 1949 },
+  { min: 5, max: 6, label: '5–6 guests', perPersonUsd: 1899 },
+  { min: 7, max: 8, label: '7–8 guests', perPersonUsd: 1799 },
+] as const;
+
+function clampGuestCount(value: unknown) {
+  const parsed = Number.parseInt(String(value ?? '1'), 10);
+  if (!Number.isFinite(parsed)) return 1;
+  return Math.min(MAX_GROUP_SIZE, Math.max(1, parsed));
+}
+
+function getGroupPricing(guestCountValue: unknown) {
+  const guestCount = clampGuestCount(guestCountValue);
+  const tier = GROUP_PRICING_TIERS.find(option => guestCount >= option.min && guestCount <= option.max) ?? GROUP_PRICING_TIERS[0];
+  const onlinePerPersonUsd = BASE_ONLINE_PAYMENT_USD;
+  const localFamilyPerPersonUsd = tier.perPersonUsd - onlinePerPersonUsd;
+  return {
+    guestCount,
+    tier,
+    perPersonUsd: tier.perPersonUsd,
+    onlinePerPersonUsd,
+    localFamilyPerPersonUsd,
+    totalTripValueUsd: tier.perPersonUsd * guestCount,
+    onlinePaymentUsd: onlinePerPersonUsd * guestCount,
+    localFamilyPaymentUsd: localFamilyPerPersonUsd * guestCount,
+    perPersonSavingsUsd: BASE_PRICE_USD - tier.perPersonUsd,
+  };
+}
 
 function stripePaymentLink(reference: string, email: string) {
   const params = new URLSearchParams();
@@ -262,16 +294,16 @@ function formatApproxUsd(amountUsd: number, currency: CurrencyCode) {
   }).format(rounded);
 }
 
-function getLocalizedPricing(): LocalizedPricing {
+function getLocalizedPricing(groupPricing = getGroupPricing(1)): LocalizedPricing {
   const region = detectRegion();
   const currency = region ? CURRENCY_BY_REGION[region] ?? 'USD' : 'USD';
 
   return {
     currency,
     countryLabel: COUNTRY_LABEL_BY_CURRENCY[currency],
-    tourPrice: formatApproxUsd(BASE_PRICE_USD, currency),
-    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, currency),
-    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, currency),
+    tourPrice: formatApproxUsd(groupPricing.perPersonUsd, currency),
+    onlinePayment: formatApproxUsd(groupPricing.onlinePerPersonUsd, currency),
+    localFamilyPayment: formatApproxUsd(groupPricing.localFamilyPerPersonUsd, currency),
   };
 }
 
@@ -419,12 +451,14 @@ export default function Home() {
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [bookingReference, setBookingReference] = useState('');
+  const [guestCount, setGuestCount] = useState(1);
   const [leadName, setLeadName] = useState('');
   const [leadEmail, setLeadEmail] = useState('');
   const [leadStatus, setLeadStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [leadError, setLeadError] = useState('');
   const [selectedTourDate, setSelectedTourDate] = useState('');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const groupPricing = useMemo(() => getGroupPricing(guestCount), [guestCount]);
   const bookingFormStartedRef = useRef(false);
   const stripeClickTrackedRef = useRef(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
@@ -460,7 +494,7 @@ export default function Home() {
     trackFunnelEvent('stripe_payment_click', {
       reference: bookingReference || 'unknown',
       currency: 'USD',
-      value: BASE_ONLINE_PAYMENT_USD,
+      value: groupPricing.onlinePaymentUsd,
     });
   };
 
@@ -529,8 +563,8 @@ export default function Home() {
 
   useEffect(() => {
     collectAttribution();
-    setPricing(getLocalizedPricing());
-  }, []);
+    setPricing(getLocalizedPricing(groupPricing));
+  }, [groupPricing]);
 
   useEffect(() => {
     if (!isLightboxOpen) return;
@@ -657,10 +691,12 @@ export default function Home() {
       stripeClickTrackedRef.current = false;
       trackFunnelEvent('booking_form_submit', {
         tour_date: String(formData.get('tour_date') || 'TBC'),
+        guest_count: groupPricing.guestCount,
+        price_per_person_usd: groupPricing.perPersonUsd,
         riding_experience: String(formData.get('riding_experience') || 'Not provided'),
         reference: payload.reference,
         currency: 'USD',
-        value: BASE_ONLINE_PAYMENT_USD,
+        value: groupPricing.onlinePaymentUsd,
       });
       setFormSubmitted(true);
 
@@ -753,7 +789,7 @@ export default function Home() {
           { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'What 2026 departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: 'The 2026 season runs from June through September, with fixed small-group departures listed on this page and private group dates available on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The current 2026 rate is $1,999 USD per person. A $999 online booking payment confirms your place with 8 Lakes Tours. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia so the local portion reaches them directly.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. A $999 per-guest online booking payment confirms your place with 8 Lakes Tours. The remaining local family cash portion is paid directly to the nomadic host families in Mongolia.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.' } },
           { '@type': 'Question', name: 'Is there WiFi or cell service?', acceptedAnswer: { '@type': 'Answer', text: 'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.' } },
@@ -1078,8 +1114,12 @@ export default function Home() {
         .price-amount { max-width:100%; font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: clamp(2.45rem, 8vw, 4rem); font-weight: 300; color: var(--gold); line-height: 0.98; margin-bottom: 0.4rem; overflow-wrap:anywhere; word-break: normal; }
         .price-per { max-width:100%; font-size: 0.75rem; letter-spacing: 0.15em; line-height:1.5; text-transform: uppercase; color: var(--mist); opacity: 0.6; margin-bottom: 2rem; overflow-wrap:anywhere; }
         .price-note { max-width:100%; box-sizing:border-box; font-size: 0.8rem; color: var(--mist); opacity: 0.7; line-height: 1.6; margin-bottom: 1rem; padding: 1rem; background: rgba(245,240,232,0.04); border-left: 2px solid var(--gold); border-radius: 0 var(--radius-soft) var(--radius-soft) 0; overflow-wrap:anywhere; }
-        .payment-split { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.65rem; align-items: stretch; margin: 1.1rem 0; }
-        .payment-split-card { border: 1px solid rgba(200,169,110,0.24); border-radius: var(--radius-card); background: rgba(245,240,232,0.035); padding: 1rem; min-width: 0; }
+        .group-rate-table { margin:1rem 0 0; display:grid; gap:0.45rem; }
+        .group-rate-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; border:1px solid rgba(200,169,110,0.18); background:rgba(14,12,9,0.28); border-radius:var(--radius-soft); padding:0.62rem 0.75rem; }
+        .group-rate-row span { color:var(--mist); font-size:0.78rem; }
+        .group-rate-row strong { color:var(--cream); font-size:0.86rem; letter-spacing:0.02em; }
+        .payment-split { display:grid; grid-template-columns:1fr auto 1fr; gap:0.85rem; align-items:stretch; margin:1.1rem 0; }
+        .payment-split-card { border:1px solid rgba(200,169,110,0.2); background:rgba(14,12,9,0.32); border-radius:var(--radius-card); padding:0.9rem; text-align:left; }
         .payment-split-label { display: block; color: rgba(212,207,196,0.62); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.35rem; }
         .payment-split-amount { display: block; color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.45rem; line-height: 1; margin-bottom: 0.35rem; overflow-wrap: anywhere; }
         .payment-split-copy { color: rgba(212,207,196,0.76); font-size: 0.72rem; line-height: 1.5; }
@@ -1129,6 +1169,11 @@ export default function Home() {
         .form-textarea { resize: vertical; min-height: 80px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .form-check { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.8rem; color: var(--mist); opacity: 0.8; line-height: 1.5; cursor: pointer; }
+        .group-pricing-card { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0.85rem; border:1px solid rgba(200,169,110,0.28); background:rgba(200,169,110,0.075); border-radius:var(--radius-card); padding:1rem; }
+        .group-pricing-card div { min-width:0; }
+        .group-pricing-card strong { display:block; color:var(--cream); font-family:var(--font-cormorant), 'Cormorant Garamond', serif; font-size:1.35rem; line-height:1.05; font-weight:400; }
+        .group-pricing-card small, .group-pricing-card span { display:block; color:var(--mist); font-size:0.74rem; line-height:1.45; opacity:0.76; margin-top:0.28rem; }
+        .group-pricing-eyebrow { font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin:0 0 0.45rem; }
         .form-check input[type="checkbox"] { appearance: none; width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; border: 1px solid rgba(245,240,232,0.3); border-radius: 4px; background: transparent; cursor: pointer; position: relative; }
         .form-check input[type="checkbox"]:checked { background: var(--gold); border-color: var(--gold); }
         .submit-btn { background: var(--gold); color: var(--dark); border: none; border-radius: var(--radius-soft); padding: 1.1rem 2rem; font-family: var(--font-jost), 'Jost', sans-serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-top: 0.5rem; }
@@ -1364,6 +1409,8 @@ export default function Home() {
           .partnership-inline-photo + .section-body { margin-top: 0.35rem; }
           .partnership-img { display: none; }
           .form-grid { grid-template-columns: 1fr; }
+          .group-pricing-card { grid-template-columns:1fr; padding:0.82rem; gap:0.7rem; }
+          .group-pricing-card strong { font-size:1.18rem; }
           .packing-grid { grid-template-columns: 1fr; }
           .payment-checkout-card { padding:0.8rem 0.55rem; }
           .checkout-eyebrow { font-size:0.58rem; letter-spacing:0.13em; }
@@ -1683,7 +1730,7 @@ export default function Home() {
       <section className="included">
         <div className="reveal">
           <h2 className="section-title">What&apos;s<br /><em>Included</em></h2>
-          <p className="section-body" style={{marginBottom:'2rem'}}>Your {pricing.tourPrice} covers the full experience. No hidden costs.</p>
+          <p className="section-body" style={{marginBottom:'2rem'}}>Your group rate covers the full experience. No hidden costs.</p>
           <ul className="included-list">
             <li><span className="icon">✦</span> Transportation from Bat-Ulzii to the ger village & return</li>
             <li><span className="icon">✦</span> Host family accommodation (traditional gers)</li>
@@ -1741,34 +1788,42 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Choose Your<br /><em>2026 Expedition</em></h2>
-          <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open at {pricing.tourPrice} per person, with each departure capped at 8 participants.</p>
+          <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open from $1,999 per person, with stronger private group rates when you book together. Each departure is capped at 8 participants.</p>
           <div className="scarcity-pill">
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span>Small groups only — each departure capped at 8 guests</span>
           </div>
           <div className="price-card" style={{marginTop:'2.5rem'}}>
-            <span className="price-badge">2026 Season Rate — Limited Availability</span>
-            <div className="price-amount">{pricing.tourPrice}</div>
-            <div className="price-per">Per Person · 9 Days / 8 Nights · {pricing.countryLabel}</div>
-            <div className="price-note">Pay {pricing.onlinePayment} online now to confirm your place. Bring {pricing.localFamilyPayment} in cash for the host family.</div>
+            <span className="price-badge">2026 Private Group Pricing — Limited Availability</span>
+            <div className="price-amount">$1,799–$1,999</div>
+            <div className="price-per">Per Person · 9 Days / 8 Nights · Group rates for 1–8 guests</div>
+            <div className="price-note">Bring a group and the per-person price drops. Pay $999 per guest online to reserve; the remaining local family cash portion adjusts by group size.</div>
+            <div className="group-rate-table" aria-label="8 Lakes Tours private group rates">
+              {GROUP_PRICING_TIERS.map(tier => (
+                <div className="group-rate-row" key={tier.label}>
+                  <span>{tier.label}</span>
+                  <strong>${tier.perPersonUsd.toLocaleString('en-US')} pp</strong>
+                </div>
+              ))}
+            </div>
             <div className="payment-split" aria-label="How the 8 Lakes Tours payment is split">
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay online</span>
-                <span className="payment-split-amount">{pricing.onlinePayment}</span>
+                <span className="payment-split-amount">$999 pp</span>
                 <p className="payment-split-copy">Reserves your place with 8 Lakes Tours.</p>
               </div>
               <div className="payment-split-arrow" aria-hidden="true">+</div>
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay locally</span>
-                <span className="payment-split-amount">{pricing.localFamilyPayment}</span>
+                <span className="payment-split-amount">$800–$1,000 pp</span>
                 <p className="payment-split-copy">Clean USD cash paid directly to the nomadic host family in Mongolia.</p>
               </div>
             </div>
             <details className="payment-details">
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
-                <p>Total trip price: {pricing.tourPrice} per person.</p>
-                <p>The online payment goes through 8 Lakes Tours to reserve your place. The {pricing.localFamilyPayment} local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>Total trip price depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8.</p>
+                <p>The $999 per-guest online payment goes through 8 Lakes Tours to reserve your place. The remaining local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
                 <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
@@ -1855,6 +1910,30 @@ export default function Home() {
                   </select>
                 </div>
               </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="guest_count">Guests booking together</label>
+                <select id="guest_count" className="form-select" name="guest_count" value={guestCount} onChange={e => setGuestCount(clampGuestCount(e.target.value))}>
+                  {Array.from({ length: MAX_GROUP_SIZE }, (_, index) => index + 1).map(count => (
+                    <option key={count} value={count}>{count} guest{count === 1 ? '' : 's'}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="group-pricing-card" aria-live="polite">
+                <div>
+                  <p className="group-pricing-eyebrow">Private group pricing</p>
+                  <strong>{pricing.tourPrice} per person</strong>
+                  <small>{groupPricing.tier.label}{groupPricing.perPersonSavingsUsd > 0 ? ` · save $${groupPricing.perPersonSavingsUsd} pp` : ' · standard rate'}</small>
+                </div>
+                <div>
+                  <span>{groupPricing.guestCount} guest{groupPricing.guestCount === 1 ? '' : 's'} total</span>
+                  <strong>${groupPricing.totalTripValueUsd.toLocaleString('en-US')}</strong>
+                  <small>${groupPricing.onlinePaymentUsd.toLocaleString('en-US')} online · ${groupPricing.localFamilyPaymentUsd.toLocaleString('en-US')} cash to family</small>
+                </div>
+              </div>
+              <input type="hidden" name="price_per_person_usd" value={groupPricing.perPersonUsd} />
+              <input type="hidden" name="online_payment_usd" value={groupPricing.onlinePaymentUsd} />
+              <input type="hidden" name="local_family_payment_usd" value={groupPricing.localFamilyPaymentUsd} />
+              <input type="hidden" name="total_trip_value_usd" value={groupPricing.totalTripValueUsd} />
               <div className="form-group"><label className="form-label" htmlFor="dietary_restrictions">Dietary Restrictions</label><input id="dietary_restrictions" className="form-input" name="dietary_restrictions" type="text" placeholder="None, vegetarian, allergies, serious dairy/lactose issues, etc." /></div>
               <div className="form-group"><label className="form-label" htmlFor="how_heard">How did you hear about us?</label><input id="how_heard" className="form-input" name="how_heard" type="text" placeholder="Instagram, ChatGPT, friend, Google, retreat group, etc." /></div>
               <div className="form-group"><label className="form-label" htmlFor="notes">Special Notes or Questions</label><textarea id="notes" className="form-textarea" name="notes" placeholder="Anything else we should know?"></textarea></div>
@@ -1929,7 +2008,7 @@ export default function Home() {
             <div className="payment-checkout-card">
               <p className="checkout-eyebrow">Online Reservation Payment</p>
               <p className="checkout-copy">
-                Submit the booking form with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
+                Submit the booking form with a valid email first, then pay <strong>{pricing.onlinePayment} per guest online</strong> to reserve your place. For group bookings, make sure the Stripe quantity matches your guest count if quantity is shown. The host-family cash portion is handled in Mongolia.
               </p>
               <p className="checkout-note">
                 Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
@@ -2050,7 +2129,7 @@ export default function Home() {
             {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'What 2026 departure dates are available?', a:'The 2026 season runs from June through September, with fixed small-group departures listed on this page and private group dates available on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.'},
-            {q:'How does payment work?', a:'The current 2026 rate is $1,999 per person. You pay $999 online through 8 Lakes Tours to confirm your place. The remaining $1,000 is paid directly in cash to the nomadic host families in Mongolia, which keeps the local family portion transparent and direct.'},
+            {q:'How does payment work?', a:'The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. You pay $999 per guest online through 8 Lakes Tours to confirm your place. The remaining local family portion is paid directly in clean USD cash to the nomadic host families in Mongolia.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.'},
             {q:'Is there WiFi or cell service?', a:'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.'},

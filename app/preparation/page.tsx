@@ -35,7 +35,7 @@ const sections = [
     items: [
       'Comprehensive travel insurance is mandatory and must cover horseback riding or adventure activities, emergency medical treatment, evacuation, and repatriation.',
       'Bring passport, visa documentation if required for your nationality, insurance details, and emergency-contact information.',
-      'Bring $1,000 USD in clean cash notes for the host family. The online $999 booking payment is handled separately through 8 Lakes Tours.',
+      'Bring the local family cash amount shown on your confirmation in clean USD notes. The online $999-per-guest booking payment is handled separately through 8 Lakes Tours.',
     ],
   },
   {

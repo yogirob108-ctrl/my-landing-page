@@ -159,7 +159,7 @@ export default function Page() {
       <section className="payment-strip">
         <div>
           <p className="eyebrow">Transparent payment</p>
-          <h2>$1,999 total. $999 online. $1,000 cash to hosts.</h2>
+          <h2>Group rates from $1,799–$1,999 pp. $999 online, rest cash to hosts.</h2>
           <p>Many nomadic families live outside reliable online banking. The online payment confirms your place with 8 Lakes Tours. The local family portion is paid directly in clean USD cash in Mongolia so the host payment reaches the family clearly.</p>
         </div>
         <Link href="/faq">Read payment FAQ</Link>
