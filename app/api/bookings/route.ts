@@ -135,10 +135,12 @@ export async function POST(request: Request) {
   const howHeard = clean(payload.how_heard);
   const guestNotes = clean(payload.notes);
   const groupPricing = getGroupPricing(payload.guest_count);
+  const requiresManualPaymentLink = groupPricing.guestCount >= 3;
   const attributionBlock = attributionNote(payload.attribution);
   const bookingNotes = [
     `Guests booking together: ${groupPricing.guestCount}`,
     `Group rate: $${groupPricing.perPersonUsd.toLocaleString('en-US')} per person ($${groupPricing.onlinePerPersonUsd.toLocaleString('en-US')} online + $${groupPricing.localFamilyPerPersonUsd.toLocaleString('en-US')} local family cash)`,
+    requiresManualPaymentLink ? 'GROUP REQUEST: Rob should confirm date/horse/guide/host-family capacity before sending a custom Stripe payment link or order. Do not assume the public Buy Button collected payment.' : '',
     howHeard ? `How they heard about us: ${howHeard}` : '',
     guestNotes,
     attributionBlock,
@@ -234,7 +236,7 @@ export async function POST(request: Request) {
     event_type: 'system',
     direction: 'system',
     title: 'Website booking submitted',
-    body: `${firstName} ${lastName} submitted the public reservation form for ${groupPricing.guestCount} guest${groupPricing.guestCount === 1 ? '' : 's'} and is awaiting online payment.${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
+    body: `${firstName} ${lastName} submitted the public reservation form for ${groupPricing.guestCount} guest${groupPricing.guestCount === 1 ? '' : 's'}.${requiresManualPaymentLink ? ' This is a human-confirmed group request: Rob should confirm availability and send a custom Stripe payment link/order.' : ' The booking is awaiting online payment.'}${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
     created_by: 'website-form',
   });
 
@@ -251,10 +253,11 @@ export async function POST(request: Request) {
     onlinePaymentUsd: groupPricing.onlinePaymentUsd,
     localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd,
     totalTripValueUsd: groupPricing.totalTripValueUsd,
+    requiresManualPaymentLink,
     ridingExperience: clean(payload.riding_experience),
     notes: bookingNotes ?? '',
   });
-  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd });
+  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd, requiresManualPaymentLink });
   const internalRecipients = getInternalEmailRecipients();
 
   const internalResult = await sendEmail({

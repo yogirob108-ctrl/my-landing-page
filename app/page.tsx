@@ -192,34 +192,6 @@ type LocalizedPricing = {
   localFamilyPayment: string;
 };
 
-const CURRENCY_BY_REGION: Record<string, CurrencyCode> = {
-  US: 'USD',
-  CA: 'USD',
-  GB: 'GBP',
-  IE: 'EUR',
-  AT: 'EUR',
-  BE: 'EUR',
-  HR: 'EUR',
-  CY: 'EUR',
-  EE: 'EUR',
-  FI: 'EUR',
-  FR: 'EUR',
-  DE: 'EUR',
-  GR: 'EUR',
-  IT: 'EUR',
-  LV: 'EUR',
-  LT: 'EUR',
-  LU: 'EUR',
-  MT: 'EUR',
-  NL: 'EUR',
-  PT: 'EUR',
-  SK: 'EUR',
-  SI: 'EUR',
-  ES: 'EUR',
-  RU: 'RUB',
-  MN: 'MNT',
-};
-
 const COUNTRY_LABEL_BY_CURRENCY: Record<CurrencyCode, string> = {
   USD: 'USD pricing',
   EUR: 'Europe pricing',
@@ -295,8 +267,11 @@ function formatApproxUsd(amountUsd: number, currency: CurrencyCode) {
 }
 
 function getLocalizedPricing(groupPricing = getGroupPricing(1)): LocalizedPricing {
-  const region = detectRegion();
-  const currency = region ? CURRENCY_BY_REGION[region] ?? 'USD' : 'USD';
+  // Official trip pricing is USD for all customers. We avoid browser-localized
+  // conversion estimates because checkout and the host-family cash portion are
+  // both operationally USD.
+  detectRegion();
+  const currency: CurrencyCode = 'USD';
 
   return {
     currency,
@@ -462,16 +437,17 @@ export default function Home() {
   const bookingFormStartedRef = useRef(false);
   const stripeClickTrackedRef = useRef(false);
   const [pricing, setPricing] = useState<LocalizedPricing>({
-    currency: 'EUR',
-    countryLabel: COUNTRY_LABEL_BY_CURRENCY.EUR,
-    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'EUR'),
-    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'EUR'),
-    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'EUR'),
+    currency: 'USD',
+    countryLabel: COUNTRY_LABEL_BY_CURRENCY.USD,
+    tourPrice: formatApproxUsd(BASE_PRICE_USD, 'USD'),
+    onlinePayment: formatApproxUsd(BASE_ONLINE_PAYMENT_USD, 'USD'),
+    localFamilyPayment: formatApproxUsd(BASE_LOCAL_FAMILY_PAYMENT_USD, 'USD'),
   });
   const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const signatureIsValid = signature.trim().length > 1;
   const hasRequiredContact = signatureIsValid && emailIsValid;
-  const canPay = formSubmitted && hasRequiredContact;
+  const isHumanConfirmedGroup = guestCount >= 3;
+  const canPay = formSubmitted && hasRequiredContact && !isHumanConfirmedGroup;
   const checkoutFallbackHref = canPay ? stripePaymentLink(bookingReference, email.trim()) : '#book';
   const lightboxImage = lightboxIndex === null ? null : GALLERY_IMAGES[lightboxIndex];
   const isLightboxOpen = lightboxIndex !== null;
@@ -786,10 +762,10 @@ export default function Home() {
         mainEntity: [
           { '@type': 'Question', name: 'Is this trip legit?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. 8 Lakes Tours is organised by Robert Zaher through a direct relationship with Ganbold’s family in the Orkhon Valley. Online bookings and preparation are handled by 8 Lakes Tours; the local family portion is paid directly to your hosts in Mongolia.' } },
           { '@type': 'Question', name: 'Can I speak to someone before booking?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob’s Instagram at @robzaher108 while tour email communication stays centralised through the info@ address.' } },
-          { '@type': 'Question', name: 'What happens after I pay online?', acceptedAnswer: { '@type': 'Answer', text: 'You will receive confirmation and preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.' } },
+          { '@type': 'Question', name: 'What happens after I submit the form?', acceptedAnswer: { '@type': 'Answer', text: 'For standard 1–2 guest bookings, guests can continue to online payment and receive confirmation once payment is complete. For groups of 3–8, Rob reviews the request, confirms availability, and sends the correct payment link or custom order before payment. Before arrival, Rob or the tour operator coordinates timing and host-family pickup from Bat-Ulzii.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'What 2026 departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: 'The 2026 season runs from June through September, with fixed small-group departures listed on this page and private group dates available on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. A $999 per-guest online booking payment confirms your place with 8 Lakes Tours. The remaining local family cash portion is paid directly to the nomadic host families in Mongolia.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Standard 1–2 guest bookings can pay the $999 online booking payment after the form. Groups of 3–8 submit a request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local family cash portion is paid directly to the nomadic host families in Mongolia.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.' } },
           { '@type': 'Question', name: 'Is there WiFi or cell service?', acceptedAnswer: { '@type': 'Answer', text: 'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.' } },
@@ -1215,6 +1191,9 @@ export default function Home() {
         .checkout-lock-overlay { position: absolute; inset: 0; z-index: 2; cursor: pointer; display: flex; align-items: flex-start; justify-content: center; padding-top: 0.65rem; background: transparent; }
         .checkout-lock-overlay p { max-width:calc(100% - 1.5rem); box-sizing:border-box; font-size: 0.62rem; letter-spacing: 0.1em; line-height:1.35; text-transform: uppercase; color: var(--gold); background: rgba(14,12,9,0.72); border: 1px solid rgba(200,169,110,0.32); border-radius: var(--radius-soft); padding: 0.36rem 0.58rem; pointer-events: none; white-space:normal; overflow-wrap:anywhere; box-shadow: 0 8px 18px rgba(0,0,0,0.22); }
         .checkout-error { margin-top: 0.75rem; color: #ffb4a6; font-size: 0.72rem; line-height: 1.5; text-align: center; }
+        .group-request-next-step { display:flex; flex-direction:column; gap:0.35rem; border:1px solid rgba(200,169,110,0.28); background:rgba(200,169,110,0.08); border-radius:var(--radius-card); padding:0.9rem; text-align:left; }
+        .group-request-next-step strong { color:var(--cream); font-size:0.86rem; }
+        .group-request-next-step span { color:var(--mist); font-size:0.76rem; line-height:1.55; opacity:0.78; }
         .lead-card-public { margin: 2.2rem auto 0; max-width: 460px; padding: 1.2rem; border: 1px solid rgba(200,169,110,0.22); border-radius: var(--radius-card); background: rgba(245,240,232,0.045); }
         .lead-card-public h3 { color: var(--cream); font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; margin: 0 0 0.4rem; }
         .lead-card-public p { color: rgba(212,207,196,0.72); font-size: 0.82rem; line-height: 1.6; margin: 0 0 1rem; }
@@ -1788,7 +1767,7 @@ export default function Home() {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Choose Your<br /><em>2026 Expedition</em></h2>
-          <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open from $1,999 per person, with stronger private group rates when you book together. Each departure is capped at 8 participants.</p>
+          <p className="section-body">Real guests have already made the journey. The 2026 8 Lakes Tours season is now open from $1,999 per person. Private group rates are available for 3–8 guests and are confirmed personally by Rob before payment. All official prices are in USD.</p>
           <div className="scarcity-pill">
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span>Small groups only — each departure capped at 8 guests</span>
@@ -1797,7 +1776,7 @@ export default function Home() {
             <span className="price-badge">2026 Private Group Pricing — Limited Availability</span>
             <div className="price-amount">$1,799–$1,999</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · Group rates for 1–8 guests</div>
-            <div className="price-note">Bring a group and the per-person price drops. Pay $999 per guest online to reserve; the remaining local family cash portion adjusts by group size.</div>
+            <div className="price-note">All official prices are in USD. Standard 1–2 guest bookings can pay online after the form; groups of 3–8 submit a request first and Rob confirms the date, group size, and correct payment link.</div>
             <div className="group-rate-table" aria-label="8 Lakes Tours private group rates">
               {GROUP_PRICING_TIERS.map(tier => (
                 <div className="group-rate-row" key={tier.label}>
@@ -1823,7 +1802,7 @@ export default function Home() {
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
                 <p>Total trip price depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8.</p>
-                <p>The $999 per-guest online payment goes through 8 Lakes Tours to reserve your place. The remaining local portion is paid directly in cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>For 1–2 guests, the $999 per-guest online payment goes through 8 Lakes Tours to reserve your place. For 3–8 guests, submit the group request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local portion is paid directly in clean USD cash to the nomadic host families because they cannot reliably receive online transfers.</p>
                 <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
@@ -1867,7 +1846,7 @@ export default function Home() {
         <div className="reveal reveal-delay-1" id="application">
           <span className="section-eyebrow">Booking Details</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Secure<br /><em>Your Place</em></h2>
-          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Choose your date, tell us who&apos;s coming, then continue to secure payment. Once the online payment is complete, your place is confirmed.</p>
+          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Choose your date and tell us who&apos;s coming. Standard 1–2 guest bookings can continue to payment after submitting. Groups of 3–8 are saved as a group request so Rob can confirm availability and send the correct payment link.</p>
           <form className="booking-form" onFocusCapture={markBookingFormStarted} onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1995,11 +1974,11 @@ export default function Home() {
                 className="submit-btn"
                 style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
-                {formSubmitting ? 'Saving your booking…' : 'Continue to Secure Payment'}
+                {formSubmitting ? 'Saving your booking…' : isHumanConfirmedGroup ? 'Submit Group Request' : 'Continue to Secure Payment'}
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'var(--radius-soft)', textAlign:'center'}}>
-                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>✓ Booking saved — complete your online booking payment below</p>
+                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>{isHumanConfirmedGroup ? '✓ Group request saved — Rob will confirm before payment' : '✓ Booking saved — complete your online booking payment below'}</p>
                 {bookingReference && <p style={{fontSize:'0.68rem', color:'rgba(245,240,232,0.62)', marginTop:'0.4rem'}}>Reference: {bookingReference}</p>}
               </div>
             )}
@@ -2007,52 +1986,65 @@ export default function Home() {
 
             <div className="payment-checkout-card">
               <p className="checkout-eyebrow">Online Reservation Payment</p>
-              <p className="checkout-copy">
-                Submit the booking form with a valid email first, then pay <strong>{pricing.onlinePayment} per guest online</strong> to reserve your place. For group bookings, make sure the Stripe quantity matches your guest count if quantity is shown. The host-family cash portion is handled in Mongolia.
-              </p>
+              {isHumanConfirmedGroup ? (
+                <p className="checkout-copy">
+                  For <strong>{groupPricing.guestCount} guests</strong>, this is a human-confirmed group request. Rob will check the date, horses, guide, host-family capacity, and any custom details before sending the correct Stripe payment link or custom order.
+                </p>
+              ) : (
+                <p className="checkout-copy">
+                  Submit the booking form with a valid email first, then pay <strong>{pricing.onlinePayment} online</strong> to reserve your place. The host-family cash portion is handled in Mongolia.
+                </p>
+              )}
               <p className="checkout-note">
-                Localized prices are estimates for browsing. Stripe checkout confirms the final charge before payment.
+                All official prices are in USD. Card issuers may show a converted amount or charge their own FX fees.
               </p>
-              <div
-                className="checkout-button-wrap stripe-embed-wrap"
-                aria-disabled={!canPay}
-                onMouseDown={trackStripePaymentClick}
-                onTouchStart={trackStripePaymentClick}
-              >
-                <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
+              {!isHumanConfirmedGroup ? (
                 <div
-                  className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
-                  dangerouslySetInnerHTML={{
-                    __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-booking'}"></stripe-buy-button>`,
-                  }}
-                />
-                <a
-                  className="stripe-link-fallback"
-                  href={checkoutFallbackHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  className="checkout-button-wrap stripe-embed-wrap"
                   aria-disabled={!canPay}
-                  tabIndex={canPay ? 0 : -1}
-                  onClick={event => {
-                    if (!canPay) event.preventDefault();
-                    else trackStripePaymentClick();
-                  }}
+                  onMouseDown={trackStripePaymentClick}
+                  onTouchStart={trackStripePaymentClick}
                 >
-                  Open Stripe checkout
-                </a>
-                {!canPay && (
+                  <Script async src="https://js.stripe.com/v3/buy-button.js" strategy="afterInteractive" />
                   <div
-                    className="checkout-lock-overlay"
-                    onClick={e => { e.stopPropagation(); }}
+                    className={`stripe-buy-button-frame${canPay ? '' : ' locked'}`}
+                    dangerouslySetInnerHTML={{
+                      __html: `<stripe-buy-button buy-button-id="${STRIPE_BUY_BUTTON_ID}" publishable-key="${STRIPE_PUBLISHABLE_KEY}" client-reference-id="${bookingReference || 'pending-booking'}"></stripe-buy-button>`,
+                    }}
+                  />
+                  <a
+                    className="stripe-link-fallback"
+                    href={checkoutFallbackHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-disabled={!canPay}
+                    tabIndex={canPay ? 0 : -1}
+                    onClick={event => {
+                      if (!canPay) event.preventDefault();
+                      else trackStripePaymentClick();
+                    }}
                   >
-                    <p>
-                      {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your booking before payment'}
-                    </p>
-                  </div>
-                )}
-              </div>
+                    Open Stripe checkout
+                  </a>
+                  {!canPay && (
+                    <div
+                      className="checkout-lock-overlay"
+                      onClick={e => { e.stopPropagation(); }}
+                    >
+                      <p>
+                        {!emailIsValid ? 'Please enter a valid email address above' : !signatureIsValid ? 'Please type your full name as a signature above' : 'Submit your booking before payment'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="group-request-next-step">
+                  <strong>No automatic group checkout yet.</strong>
+                  <span>Rob confirms the group booking in the ops dashboard, then creates or sends the right Stripe payment link.</span>
+                </div>
+              )}
             </div>
-            <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.58, textAlign:'center', lineHeight:1.6}}>Your booking is confirmed once the online payment is completed. If anything needs checking, we&apos;ll contact you directly.</p>
+            <p style={{fontSize:'0.72rem', color:'var(--mist)', opacity:0.58, textAlign:'center', lineHeight:1.6}}>{isHumanConfirmedGroup ? 'Your group is not charged automatically. Rob will reply with availability and the next payment step.' : 'Your booking is confirmed once the online payment is completed. If anything needs checking, we\'ll contact you directly.'}</p>
             <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.4, textAlign:'center', lineHeight:1.6, marginTop:'0.5rem'}}>
               By submitting this form you agree to our{' '}
               <a href="/terms" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Terms &amp; Conditions</a>
@@ -2126,10 +2118,10 @@ export default function Home() {
           {[
             {q:'Is this trip legit?', a:"Yes. 8 Lakes Tours is organised by Robert Zaher through a direct relationship with Ganbold's family in the Orkhon Valley. Online bookings and preparation are handled by 8 Lakes Tours; the local family portion is paid directly to your hosts in Mongolia."},
             {q:'Can I speak to someone before booking?', a:"Yes. Email info@8lakestours.com with any questions before paying. You can also check Rob's Instagram at @robzaher108 while we keep tour email communication centralised through the info@ address."},
-            {q:'What happens after I pay online?', a:'You will receive confirmation and practical preparation notes by email. Before arrival, Rob or the tour operator will coordinate timing with you and the host-family pickup from Bat-Ulzii.'},
+            {q:'What happens after I submit the form?', a:'For standard 1–2 guest bookings, you can continue to the online payment and receive confirmation once payment is complete. For groups of 3–8, Rob reviews the request, confirms availability, and sends the correct payment link or custom order before payment. Before arrival, Rob or the tour operator coordinates timing with you and the host-family pickup from Bat-Ulzii.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'What 2026 departure dates are available?', a:'The 2026 season runs from June through September, with fixed small-group departures listed on this page and private group dates available on request through late September. Each departure is capped at 8 guests and final availability depends on host-family, horse, guide, and group logistics.'},
-            {q:'How does payment work?', a:'The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. You pay $999 per guest online through 8 Lakes Tours to confirm your place. The remaining local family portion is paid directly in clean USD cash to the nomadic host families in Mongolia.'},
+            {q:'How does payment work?', a:'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Standard 1–2 guest bookings can pay the $999 online booking payment after the form. Groups of 3–8 submit a request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local family portion is paid directly in clean USD cash to the nomadic host families in Mongolia.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.'},
             {q:'Is there WiFi or cell service?', a:'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.'},

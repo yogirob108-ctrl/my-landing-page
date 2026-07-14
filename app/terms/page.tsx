@@ -27,11 +27,11 @@ export default function TermsAndConditions() {
           },
           {
             title: '2. Booking & Payment Structure',
-            body: 'A $999 USD online booking payment per guest, or the local-currency equivalent shown at checkout where supported, is required to confirm your place with 8 Lakes Tours. Your spot is not guaranteed until this online payment has been received and confirmed by us. The remaining local family payment is paid directly in cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
+            body: 'All official prices are in USD. For standard 1–2 guest bookings, a $999 USD online booking payment per guest is required to confirm your place with 8 Lakes Tours. For groups of 3–8, submitting the form creates a group request first: Rob confirms the date, horse, guide, and host-family capacity before sending the correct Stripe payment link or custom order. Your spot is not guaranteed until the required online payment has been received and confirmed by us. The remaining local family payment is paid directly in clean USD cash to the nomadic host families in Mongolia and is not collected online by 8 Lakes Tours.',
           },
           {
             title: '3. Tour Price',
-            body: 'The 2026 tour price depends on group size: $1,999 USD per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8 guests booking together for the same departure. Each price includes a $999 USD online booking payment through 8 Lakes Tours and a local family cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
+            body: 'The 2026 tour price depends on group size: $1,999 USD per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8 guests booking together for the same departure. Group prices are confirmed personally by Rob before payment. Each price includes a $999 USD online booking payment through 8 Lakes Tours and a local family cash payment made directly to the nomadic host families in Mongolia. The tour price includes all accommodation, meals, horses and guiding as described on our website. Flights, travel insurance, visas, and personal expenses are not included.',
           },
           {
             title: '4. Cancellation Policy',
