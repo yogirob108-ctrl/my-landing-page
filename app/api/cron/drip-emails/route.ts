@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getInternalEmailRecipients, insuranceReminderCustomerEmail, preparationCustomerEmail, sendEmail } from '@/lib/email';
+import { getLifecycleEmailSchedule } from '@/lib/lifecycle-email-schedule.mjs';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 const TEMPLATE_PREP = 'preparation_packing';
 const TEMPLATE_INSURANCE = 'insurance_final_check';
 
@@ -18,20 +18,6 @@ type BookingRow = {
   customer?: { first_name?: string | null; email?: string | null } | { first_name?: string | null; email?: string | null }[] | null;
 };
 
-const MONTHS: Record<string, number> = {
-  january: 0,
-  february: 1,
-  march: 2,
-  april: 3,
-  may: 4,
-  june: 5,
-  july: 6,
-  august: 7,
-  september: 8,
-  october: 9,
-  november: 10,
-  december: 11,
-};
 
 function isAuthorized(request: Request) {
   const secret = process.env.CRON_SECRET;
@@ -45,17 +31,6 @@ function isAuthorized(request: Request) {
   return userAgent.toLowerCase().includes('vercel-cron');
 }
 
-function parseTourStartDate(value: string | null | undefined) {
-  if (!value) return null;
-  const match = value.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:\s*[–-]\s*(?:[A-Za-z]+\s+)?\d{1,2})?,\s*(\d{4})/i);
-  if (!match) return null;
-
-  const month = MONTHS[match[1].toLowerCase()];
-  const day = Number(match[2]);
-  const year = Number(match[3]);
-  if (month === undefined || !day || !year) return null;
-  return new Date(Date.UTC(year, month, day, 9, 0, 0));
-}
 
 function getCustomer(booking: BookingRow) {
   const customer = Array.isArray(booking.customer) ? booking.customer[0] : booking.customer;
@@ -65,14 +40,6 @@ function getCustomer(booking: BookingRow) {
   };
 }
 
-function daysBetween(a: Date, b: Date) {
-  return Math.ceil((b.getTime() - a.getTime()) / DAY_MS);
-}
-
-function daysSince(date: string | null | undefined, now: Date) {
-  if (!date) return 0;
-  return Math.floor((now.getTime() - new Date(date).getTime()) / DAY_MS);
-}
 
 async function alreadySent(supabase: ReturnType<typeof createSupabaseAdminClient>, bookingIds: string[]) {
   if (bookingIds.length === 0) return new Set<string>();
@@ -171,31 +138,29 @@ export async function GET(request: Request) {
   const results: Array<Record<string, unknown>> = [];
 
   for (const booking of rows) {
-    const startDate = parseTourStartDate(booking.tour_date);
-    if (!startDate) {
+    const prepAlreadySent = sent.has(`${booking.id}:${TEMPLATE_PREP}`);
+    const insuranceAlreadySent = sent.has(`${booking.id}:${TEMPLATE_INSURANCE}`);
+    const schedule = getLifecycleEmailSchedule({
+      now,
+      tourDate: booking.tour_date,
+      prepAlreadySent,
+      insuranceAlreadySent,
+    });
+    if (!schedule.startDate) {
       results.push({ reference: booking.public_reference, skipped: true, reason: 'unparseable_tour_date', tourDate: booking.tour_date });
       continue;
     }
+    if ((schedule.daysUntilDeparture ?? -1) < 0) continue;
 
-    const daysUntilDeparture = daysBetween(now, startDate);
-    const daysAfterConfirmation = daysSince(booking.confirmed_at || booking.created_at, now);
-    if (daysUntilDeparture < -1) continue;
-
-    const prepAlreadySent = sent.has(`${booking.id}:${TEMPLATE_PREP}`);
-    const insuranceAlreadySent = sent.has(`${booking.id}:${TEMPLATE_INSURANCE}`);
-
-    const prepDue = !prepAlreadySent && (daysAfterConfirmation >= 2 || daysUntilDeparture <= 21);
-    const insuranceDue = !insuranceAlreadySent && (daysUntilDeparture <= 2 || (daysUntilDeparture <= 14 && daysAfterConfirmation >= 2));
-
-    if (prepDue) {
+    if (schedule.prepDue) {
       const result = await sendLifecycleEmail({ supabase, booking, templateKey: TEMPLATE_PREP, createdBy: 'drip-cron' });
-      results.push({ reference: booking.public_reference, template: TEMPLATE_PREP, daysUntilDeparture, daysAfterConfirmation, ...result });
+      results.push({ reference: booking.public_reference, template: TEMPLATE_PREP, daysUntilDeparture: schedule.daysUntilDeparture, ...result });
       if (result.sent) sent.add(`${booking.id}:${TEMPLATE_PREP}`);
     }
 
-    if (insuranceDue) {
+    if (schedule.insuranceDue) {
       const result = await sendLifecycleEmail({ supabase, booking, templateKey: TEMPLATE_INSURANCE, createdBy: 'drip-cron' });
-      results.push({ reference: booking.public_reference, template: TEMPLATE_INSURANCE, daysUntilDeparture, daysAfterConfirmation, ...result });
+      results.push({ reference: booking.public_reference, template: TEMPLATE_INSURANCE, daysUntilDeparture: schedule.daysUntilDeparture, ...result });
       if (result.sent) sent.add(`${booking.id}:${TEMPLATE_INSURANCE}`);
     }
   }
