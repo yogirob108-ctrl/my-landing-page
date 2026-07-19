@@ -6,6 +6,12 @@ test('parses month-first tour ranges used by live bookings', () => {
   assert.equal(parseTourStartDate('June 5–13, 2027')?.toISOString(), '2027-06-05T00:00:00.000Z');
 });
 
+test('parses legacy ordinal dates without a written year', () => {
+  const referenceDate = new Date('2026-07-19T08:00:00Z');
+  assert.equal(parseTourStartDate('August 31st - September 9th', referenceDate)?.toISOString(), '2026-08-31T00:00:00.000Z');
+  assert.equal(parseTourStartDate('7 June - 15 June', referenceDate)?.toISOString(), '2026-06-07T00:00:00.000Z');
+});
+
 test('does not send lifecycle prep or insurance eleven months early', () => {
   const schedule = getLifecycleEmailSchedule({ now: new Date('2026-07-19T08:00:00Z'), tourDate: 'June 5–13, 2027' });
   assert.equal(schedule.prepDue, false);
