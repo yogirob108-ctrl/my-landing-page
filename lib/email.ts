@@ -18,6 +18,7 @@ type SendEmailInput = {
   html: string;
   text?: string;
   replyTo?: string;
+  idempotencyKey?: string;
 };
 
 type EmailResult = {
@@ -116,7 +117,7 @@ export function getInternalEmailRecipients() {
   return configured.length > 0 ? configured : DEFAULT_INTERNAL_RECIPIENTS;
 }
 
-export async function sendEmail({ to, subject, html, text, replyTo }: SendEmailInput): Promise<EmailResult> {
+export async function sendEmail({ to, subject, html, text, replyTo, idempotencyKey }: SendEmailInput): Promise<EmailResult> {
   const resend = getResendClient();
   if (!resend) return { sent: false, error: 'RESEND_API_KEY is not configured' };
 
@@ -127,7 +128,7 @@ export async function sendEmail({ to, subject, html, text, replyTo }: SendEmailI
     html,
     text,
     replyTo,
-  });
+  }, idempotencyKey ? { idempotencyKey } : undefined);
 
   if (error) return { sent: false, error: error.message };
   return { sent: true, id: data?.id };
