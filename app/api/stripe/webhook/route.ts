@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { getInternalEmailRecipients, paymentConfirmedCustomerEmail, paymentReceivedInternalEmail, sendEmail } from '@/lib/email';
+import { findExistingStripePayment } from '@/lib/stripe-payment-match.mjs';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID || 'G-E9PW7T08LZ';
@@ -126,41 +127,39 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
   const amountToRecord = onlinePaidUsd || Number(booking.online_due_usd ?? 0) || 999;
   const alreadyRecorded = existingPaid >= amountToRecord && ['confirmed', 'prep_sent', 'ready_for_departure', 'completed'].includes(booking.status);
 
-  if (paymentIntentId) {
-    const { data: existingPayment, error: existingPaymentError } = await supabase
-      .from('payments')
-      .select('id')
-      .eq('stripe_payment_intent_id', paymentIntentId)
-      .maybeSingle();
+  const existingPayment = await findExistingStripePayment({
+    sessionId: session.id,
+    paymentIntentId,
+    lookup: async (column: string, value: string) => {
+      const { data, error } = await supabase.from('payments').select('id').eq(column, value).maybeSingle();
+      if (error) throw new Error(`Payment lookup failed: ${error.message}`);
+      return data;
+    },
+  });
 
-    if (existingPaymentError) {
-      throw new Error(`Payment lookup failed: ${existingPaymentError.message}`);
-    }
+  const paymentPayload = {
+    booking_id: booking.id,
+    provider: 'stripe',
+    stripe_checkout_session_id: session.id,
+    stripe_payment_intent_id: paymentIntentId || null,
+    amount_usd: amountToRecord,
+    status: 'paid',
+    paid_at: new Date().toISOString(),
+    raw_event: {
+      checkout_session_id: session.id,
+      payment_intent_id: paymentIntentId || null,
+      event_source: 'checkout.session.completed',
+      amount_total: session.amount_total,
+      currency: session.currency,
+    },
+  };
 
-    const paymentPayload = {
-      booking_id: booking.id,
-      provider: 'stripe',
-      stripe_checkout_session_id: session.id,
-      stripe_payment_intent_id: paymentIntentId,
-      amount_usd: amountToRecord,
-      status: 'paid',
-      paid_at: new Date().toISOString(),
-      raw_event: {
-        checkout_session_id: session.id,
-        payment_intent_id: paymentIntentId,
-        event_source: 'checkout.session.completed',
-        amount_total: session.amount_total,
-        currency: session.currency,
-      },
-    };
+  const paymentWrite = existingPayment
+    ? await supabase.from('payments').update(paymentPayload).eq('id', existingPayment.id)
+    : await supabase.from('payments').insert(paymentPayload);
 
-    const paymentWrite = existingPayment
-      ? await supabase.from('payments').update(paymentPayload).eq('id', existingPayment.id)
-      : await supabase.from('payments').insert(paymentPayload);
-
-    if (paymentWrite.error) {
-      throw new Error(`Payment row write failed: ${paymentWrite.error.message}`);
-    }
+  if (paymentWrite.error) {
+    throw new Error(`Payment row write failed: ${paymentWrite.error.message}`);
   }
 
   if (!alreadyRecorded) {

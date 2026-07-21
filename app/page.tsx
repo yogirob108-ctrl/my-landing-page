@@ -1964,6 +1964,10 @@ export default function Home() {
               />
               <p style={{fontSize:'0.7rem', color:'var(--mist)', opacity:0.5, marginTop:'0.4rem', lineHeight:1.5}}>By typing your name you confirm you have read and agree to the liability waiver.</p>
             </div>
+            <label style={{display:'flex', gap:'0.7rem', alignItems:'flex-start', marginTop:'1rem', color:'var(--mist)', fontSize:'0.76rem', lineHeight:1.55, cursor:'pointer'}}>
+              <input type="checkbox" name="newsletter_opt_in" value="on" style={{marginTop:'0.2rem', accentColor:'var(--gold)'}} />
+              <span>Yes, email me occasional 8 Lakes Tours news, new dates, offers, deals, field notes, and business updates. This is optional and I can unsubscribe at any time.</span>
+            </label>
             </fieldset>
 
             {/* Submit booking to ops */}
@@ -2050,7 +2054,7 @@ export default function Home() {
               <a href="/terms" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Terms &amp; Conditions</a>
               {' '}and{' '}
               <a href="/privacy" style={{color:'var(--gold)', opacity:0.7, textDecoration:'underline', textUnderlineOffset:'3px'}}>Privacy Policy</a>.
-              Your data will be used to process your booking enquiry and send relevant trip/prep updates. Reply to any email to opt out of marketing updates.
+              Your data will be used to process your booking enquiry and send relevant transactional trip and preparation updates. Marketing emails are sent only if you select the optional newsletter checkbox above.
             </p>
           </form>
         </div>

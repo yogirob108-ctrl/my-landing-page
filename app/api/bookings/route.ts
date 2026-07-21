@@ -4,6 +4,7 @@ import { isSupabaseAdminConfigured } from '@/lib/ops-config';
 import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 import { subscribeToNewsletter } from '@/lib/newsletter';
+import { hasExplicitNewsletterOptIn } from '@/lib/newsletter-consent.mjs';
 
 const ONLINE_DUE_USD = 999;
 const MAX_GROUP_SIZE = 8;
@@ -45,6 +46,7 @@ type PublicBookingPayload = {
   how_heard?: string;
   notes?: string;
   signature?: string;
+  newsletter_opt_in?: unknown;
   attribution?: AttributionPayload;
 };
 
@@ -196,18 +198,20 @@ export async function POST(request: Request) {
     return jsonError(customerResult.error?.message ?? 'Customer record could not be saved.', 500);
   }
 
-  const newsletterResult = await subscribeToNewsletter(supabase, {
-    firstName,
-    lastName,
-    email,
-    source: 'booking_form',
-    interest: '8 Lakes Tours booking customer, newsletter, offers, deals, blog posts, field notes, and business updates',
-    consentContext: 'Automatically added from completed 8 Lakes Tours booking form',
-    attribution: payload.attribution,
-  });
+  if (hasExplicitNewsletterOptIn(payload.newsletter_opt_in)) {
+    const newsletterResult = await subscribeToNewsletter(supabase, {
+      firstName,
+      lastName,
+      email,
+      source: 'booking_form_explicit_opt_in',
+      interest: '8 Lakes Tours newsletter, offers, deals, blog posts, field notes, and business updates',
+      consentContext: 'Explicit optional newsletter checkbox selected on the 8 Lakes Tours booking form',
+      attribution: payload.attribution,
+    });
 
-  if (!newsletterResult.ok) {
-    console.warn('Booking customer newsletter audience update failed', { email, error: newsletterResult.error });
+    if (!newsletterResult.ok) {
+      console.warn('Booking customer newsletter audience update failed', { email, error: newsletterResult.error });
+    }
   }
 
   const { data: booking, error: bookingError } = await supabase.from('bookings').insert({
