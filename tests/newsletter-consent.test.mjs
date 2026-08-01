@@ -20,7 +20,7 @@ test('newsletter consent accepts only explicit checked values', () => {
 });
 
 test('booking UI exposes a separate unchecked newsletter choice', async () => {
-  const source = await readFile(new URL('../app/page.tsx', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../app/HomePageClient.tsx', import.meta.url), 'utf8');
   assert.match(source, /name="newsletter_opt_in"/);
   assert.match(source, /occasional 8 Lakes Tours news/i);
 });
