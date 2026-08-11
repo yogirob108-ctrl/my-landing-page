@@ -12,6 +12,7 @@ import {
   resolveStripePaymentBooking,
   shouldProcessRefundStatus,
 } from '@/lib/stripe-payment-match.mjs';
+import { canAutomaticallyConfirmBooking } from '@/lib/tour-booking.mjs';
 
 // Keep the provider side-effect window well inside the five-minute booking lease.
 // Vercel terminates this invocation before an operator may reclaim a stale lease.
@@ -317,7 +318,7 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
   }
   const paymentIntentId = getPaymentIntentId(session.payment_intent);
   const supabase = createSupabaseAdminClient();
-  const bookingSelect = 'id, public_reference, status, online_paid_usd, online_due_usd, tour_date, notes, customer_id, customer:customers(first_name, last_name, email)';
+  const bookingSelect = 'id, public_reference, status, online_paid_usd, online_due_usd, tour_date, guest_count, notes, customer_id, customer:customers(first_name, last_name, email)';
 
   const existingPayment = await findExistingStripePayment({
     sessionId: session.id,
@@ -459,7 +460,6 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
     processingToken = lease.token;
   }
 
-  await transitionBookingAfterPaymentClaim(booking.id, now);
   await reconcileBookingPaymentBalance({ paymentId, bookingId: booking.id });
   let currentBookingStatus = await readBookingStatus(booking.id);
   const alreadyRecorded = decision.reason === 'recover_incomplete_processing';
@@ -502,6 +502,50 @@ async function handleCheckoutSessionPaid(session: Stripe.Checkout.Session) {
     };
   };
 
+  if (currentBookingStatus === 'cancelled') return finishCancelledPayment();
+
+  const automaticConfirmationAllowed = canAutomaticallyConfirmBooking(booking.tour_date, booking.guest_count);
+  if (!automaticConfirmationAllowed) {
+    const { data: existingManualReviewEvent, error: manualReviewLookupError } = await supabase
+      .from('booking_events')
+      .select('id')
+      .eq('booking_id', booking.id)
+      .eq('title', 'Stripe payment received — manual confirmation required')
+      .contains('metadata', { stripe_checkout_session_id: session.id })
+      .limit(1)
+      .maybeSingle();
+    if (manualReviewLookupError) throw new Error(`Manual-review payment event lookup failed: ${manualReviewLookupError.message}`);
+
+    if (!existingManualReviewEvent) {
+      const { error: manualReviewEventError } = await supabase.from('booking_events').insert({
+        booking_id: booking.id,
+        event_type: 'payment',
+        direction: 'system',
+        title: 'Stripe payment received — manual confirmation required',
+        body: `Stripe checkout session ${session.id} paid ${amountToRecord} ${currency}. Booking remains ${currentBookingStatus}; request-only, group, expired, or invalid inventory is never confirmed automatically. An operator must verify the booking and payment before confirmation.`,
+        metadata: {
+          stripe_checkout_session_id: session.id,
+          stripe_payment_intent_id: paymentIntentId,
+          automatic_confirmation_allowed: false,
+        },
+        created_by: 'stripe-webhook',
+      });
+      if (manualReviewEventError) throw new Error(`Manual-review payment event insert failed: ${manualReviewEventError.message}`);
+    }
+
+    await reconcileBookingPaymentBalance({ paymentId, bookingId: booking.id, processingToken });
+    return {
+      matched: true,
+      reason: 'manual_confirmation_required',
+      reference,
+      bookingId: booking.id,
+      paymentIntentId,
+      alreadyRecorded,
+    };
+  }
+
+  await transitionBookingAfterPaymentClaim(booking.id, now);
+  currentBookingStatus = await readBookingStatus(booking.id);
   if (currentBookingStatus === 'cancelled') return finishCancelledPayment();
 
   {

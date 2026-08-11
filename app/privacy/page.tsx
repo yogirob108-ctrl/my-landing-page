@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
       <div style={{ maxWidth: '720px', margin: '0 auto', padding: '5rem 2rem' }}>
         <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#c8a96e', marginBottom: '1rem' }}>Legal</p>
         <h1 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', serif", fontSize: '2.8rem', fontWeight: 300, color: '#f5f0e8', marginBottom: '0.5rem', lineHeight: 1.1 }}>Privacy Policy</h1>
-        <p style={{ fontSize: '0.8rem', color: '#d4cfc4', opacity: 0.5, marginBottom: '3rem' }}>Last updated: April 2026</p>
+        <p style={{ fontSize: '0.8rem', color: '#d4cfc4', opacity: 0.5, marginBottom: '3rem' }}>Last updated: August 2026</p>
 
         {[
           {
@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
           },
           {
             title: '5. Third-Party Services',
-            body: 'We store bookings and newsletter subscriptions in our private 8 Lakes Tours operations database hosted on Supabase. We use Resend (resend.com) to send transactional emails such as booking confirmations and internal booking notifications. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. We use Google Analytics, Vercel Web Analytics, and Vercel Speed Insights to understand site traffic and basic performance. Please refer to Supabase, Resend, Stripe, Google, and Vercel\'s respective privacy policies for details on how they handle data.',
+            body: 'We store bookings and newsletter subscriptions in our private 8 Lakes Tours operations database hosted on Supabase. We use Resend (resend.com) to send transactional emails such as booking confirmations and internal booking notifications. We use Stripe (stripe.com) to process payments — Stripe handles payment data directly and we never receive or store your card details. Google Consent Mode may send limited cookieless consent and measurement pings while optional storage is denied. With your permission, Google Analytics and non-personalized Google Ads conversion measurement may additionally use measurement identifiers to help us understand site traffic and whether an advertisement leads to a real enquiry or booking. Vercel Web Analytics and Vercel Speed Insights provide basic privacy-focused traffic and performance measurement. Please refer to Supabase, Resend, Stripe, Google, and Vercel\'s respective privacy policies for details on how they handle data.',
           },
           {
             title: '6. Data Retention',
@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
           },
           {
             title: '8. Cookies',
-            body: 'This website uses analytics and performance measurement tools, including Google Analytics, Vercel Web Analytics, and Vercel Speed Insights, to understand page views, visitor activity, and site performance. We do not use third-party advertising trackers. Stripe payment scripts may also load on the booking page for payment functionality.',
+            body: 'Necessary site functions work without optional Google storage. Google Consent Mode defaults analytics and advertising storage to denied. In this denied state, Google may still receive limited cookieless consent and measurement pings but cannot use optional analytics or advertising cookies. If you choose Allow measurement, Google Analytics and non-personalized Google Ads conversion measurement may store or read measurement identifiers; ad personalization remains disabled. Choose Necessary only to keep optional Google storage denied. You can withdraw or change your choice at any time using the Privacy choices control on the site; withdrawing also removes Google Analytics cookies that this site can access. Vercel Web Analytics and Speed Insights provide privacy-focused performance measurement, and Stripe payment scripts may load where required for payment functionality.',
           },
           {
             title: '9. Data Security',

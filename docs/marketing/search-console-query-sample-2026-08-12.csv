@@ -1,0 +1,11 @@
+query,clicks,impressions,ctr_percent,classification,notes
+8 lakes mongolia,6,94,6.38,brand_or_destination,"Top disclosed query; mixed brand/destination intent"
+8 lakes trek mongolia,2,7,28.57,high_intent,"Tiny sample but strongest disclosed commercial CTR"
+eight lakes mongolia,1,46,2.17,brand_or_destination,"Spelling variant with lower CTR"
+8lakes,0,8,0.00,brand,"Compact brand spelling"
+8 lakes,0,7,0.00,ambiguous,"Could be brand or informational destination intent"
+twin lakes mongolia,0,7,0.00,irrelevant,"Different destination; negative candidate"
+eight lakes,0,6,0.00,ambiguous,"No Mongolia/product qualifier"
+8-lakes.com,0,3,0.00,brand_navigation,"Domain-style navigation"
+eight lake,0,1,0.00,ambiguous,"Singular spelling variant"
+lakes in mongolia map,0,1,0.00,informational,"Map research; negative candidate for booking campaign"

@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import "./globals.css";
+import GoogleConsentBanner from "./components/GoogleConsentBanner";
+import { GOOGLE_CONSENT_DEFAULTS } from "@/lib/google-consent.mjs";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -134,15 +136,22 @@ export default function RootLayout({
         <link rel="alternate" type="text/plain" href="/llms-full.txt" title="8 Lakes Tours full AI reference" />
       </head>
       <body className="min-h-full flex flex-col">
+        <Script id="google-consent-defaults" strategy="beforeInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = window.gtag || gtag;
+          gtag('consent', 'default', ${JSON.stringify(GOOGLE_CONSENT_DEFAULTS)});
+          gtag('set', 'ads_data_redaction', true);
+          gtag('set', 'url_passthrough', true);
+        `}</Script>
         {children}
         <Analytics />
         <SpeedInsights />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-E9PW7T08LZ" strategy="lazyOnload" />
-        <Script id="google-analytics" strategy="lazyOnload">{`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+        <GoogleConsentBanner />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-E9PW7T08LZ" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">{`
           gtag('js', new Date());
-          gtag('config', 'G-E9PW7T08LZ');
+          gtag('config', 'G-E9PW7T08LZ', { allow_google_signals: false });
         `}</Script>
       </body>
     </html>

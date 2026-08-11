@@ -5,6 +5,7 @@ import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 import { subscribeToNewsletter } from '@/lib/newsletter';
 import { hasExplicitNewsletterOptIn } from '@/lib/newsletter-consent.mjs';
+import { isBookableTourDate, requiresManualPaymentLink } from '@/lib/tour-booking.mjs';
 
 const ONLINE_DUE_USD = 999;
 const MAX_GROUP_SIZE = 8;
@@ -136,13 +137,14 @@ export async function POST(request: Request) {
   const signature = clean(payload.signature);
   const howHeard = clean(payload.how_heard);
   const guestNotes = clean(payload.notes);
+  const tourDate = clean(payload.tour_date);
   const groupPricing = getGroupPricing(payload.guest_count);
-  const requiresManualPaymentLink = groupPricing.guestCount >= 3;
+  const manualPaymentRequired = requiresManualPaymentLink(tourDate, groupPricing.guestCount);
   const attributionBlock = attributionNote(payload.attribution);
   const bookingNotes = [
     `Guests booking together: ${groupPricing.guestCount}`,
     `Group rate: $${groupPricing.perPersonUsd.toLocaleString('en-US')} per person ($${groupPricing.onlinePerPersonUsd.toLocaleString('en-US')} online + $${groupPricing.localFamilyPerPersonUsd.toLocaleString('en-US')} local family cash)`,
-    requiresManualPaymentLink ? 'GROUP REQUEST: Rob should confirm date/horse/guide/host-family capacity before sending a custom Stripe payment link or order. Do not assume the public Buy Button collected payment.' : '',
+    manualPaymentRequired ? 'CONFIRMATION REQUIRED: Rob should confirm date/horse/guide/host-family capacity before sending a custom Stripe payment link or order. Do not assume the public Buy Button collected payment.' : '',
     howHeard ? `How they heard about us: ${howHeard}` : '',
     guestNotes,
     attributionBlock,
@@ -150,6 +152,9 @@ export async function POST(request: Request) {
 
   if (!firstName || !lastName || !email || !signature) {
     return jsonError('Please complete your name, email, and waiver signature.');
+  }
+  if (!tourDate || !isBookableTourDate(tourDate)) {
+    return jsonError('Please choose a currently available departure or request option.');
   }
 
   const supabase = createSupabaseAdminClient();
@@ -218,7 +223,7 @@ export async function POST(request: Request) {
     public_reference: reference,
     project_id: project.id,
     customer_id: customerResult.data.id,
-    tour_date: clean(payload.tour_date) || 'TBC',
+    tour_date: tourDate,
     guest_count: groupPricing.guestCount,
     status: 'awaiting_payment',
     riding_experience: clean(payload.riding_experience) || null,
@@ -240,11 +245,10 @@ export async function POST(request: Request) {
     event_type: 'system',
     direction: 'system',
     title: 'Website booking submitted',
-    body: `${firstName} ${lastName} submitted the public reservation form for ${groupPricing.guestCount} guest${groupPricing.guestCount === 1 ? '' : 's'}.${requiresManualPaymentLink ? ' This is a human-confirmed group request: Rob should confirm availability and send a custom Stripe payment link/order.' : ' The booking is awaiting online payment.'}${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
+    body: `${firstName} ${lastName} submitted the public reservation form for ${groupPricing.guestCount} guest${groupPricing.guestCount === 1 ? '' : 's'}.${manualPaymentRequired ? ' This request requires human confirmation: Rob should confirm availability and send a custom Stripe payment link/order.' : ' The booking is awaiting online payment.'}${howHeard ? `\n\nHow they heard about us: ${howHeard}` : ''}`,
     created_by: 'website-form',
   });
 
-  const tourDate = clean(payload.tour_date) || 'TBC';
   const internalEmail = bookingInternalEmail({
     reference,
     firstName,
@@ -257,11 +261,11 @@ export async function POST(request: Request) {
     onlinePaymentUsd: groupPricing.onlinePaymentUsd,
     localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd,
     totalTripValueUsd: groupPricing.totalTripValueUsd,
-    requiresManualPaymentLink,
+    requiresManualPaymentLink: manualPaymentRequired,
     ridingExperience: clean(payload.riding_experience),
     notes: bookingNotes ?? '',
   });
-  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd, requiresManualPaymentLink });
+  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd, requiresManualPaymentLink: manualPaymentRequired });
   const internalRecipients = getInternalEmailRecipients();
 
   const internalResult = await sendEmail({
