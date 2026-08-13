@@ -40,7 +40,13 @@ test('three or more guests always require manual confirmation', () => {
 });
 
 test('a fixed departure for one or two guests can retain the standard payment path', () => {
-  assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 1), false);
+  assert.equal(requiresManualPaymentLink('August 24 – September 1, 2026', 1), false);
+});
+
+test('the September campaign departure always requires personal confirmation', () => {
+  assert.equal(isRequestOnlyTourDate('September 14 – 22, 2026'), true);
+  assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 1), true);
+  assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 2), true);
 });
 
 test('unknown date labels fail closed and cannot use automatic payment', () => {
@@ -57,14 +63,21 @@ test('server bookability excludes expired departures and allows visible inventor
 
 test('automatic Stripe confirmation is limited to visible fixed dates for one or two guests', () => {
   const now = new Date('2026-08-12T12:00:00Z');
-  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 1, now), true);
-  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 2, now), true);
-  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 3, now), false);
+  assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 1, now), true);
+  assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 2, now), true);
+  assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 3, now), false);
+  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 1, now), false);
   assert.equal(canAutomaticallyConfirmBooking('2027 Small-Group Departures', 1, now), false);
   assert.equal(canAutomaticallyConfirmBooking('2027 Private Group Date', 2, now), false);
   assert.equal(canAutomaticallyConfirmBooking('August 4 – 12, 2026', 1, now), false);
   assert.equal(canAutomaticallyConfirmBooking('', 1, now), false);
   assert.equal(canAutomaticallyConfirmBooking('invented-date', 1, now), false);
+});
+
+test('manual-confirmation emails use neutral availability-request wording', async () => {
+  const email = await readFile(new URL('../lib/email.ts', import.meta.url), 'utf8');
+  assert.match(email, /availability request/);
+  assert.doesNotMatch(email, /\$\{guestCount\}-guest group request|group request from/);
 });
 
 test('client and booking API both use the shared payment-gating contract', async () => {

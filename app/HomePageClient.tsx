@@ -418,6 +418,7 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 }
 
 export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
+  const septemberDepartureVisible = tourDates.some(option => option.date === 'September 14 – 22, 2026');
   const [showWaiver, setShowWaiver] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
@@ -951,6 +952,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         .offer-strip { background: var(--ink); border-top: 1px solid rgba(200,169,110,0.22); border-bottom: 1px solid rgba(200,169,110,0.22); padding: 1.3rem 6rem; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1.5fr) auto; gap: 1.5rem; align-items: center; }
         .offer-strip-kicker { font-size: 0.6rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; }
         .offer-strip-title { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 300; color: var(--cream); line-height: 1.12; }
+        .offer-strip-note { margin-top: 0.45rem; max-width: 36rem; color: rgba(212,207,196,0.72); font-size: 0.72rem; line-height: 1.5; }
         .offer-strip-facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.6rem; }
         .offer-fact { border-left: 1px solid rgba(200,169,110,0.28); padding-left: 0.85rem; min-width: 0; }
         .offer-fact strong { display: block; color: var(--cream); font-size: 0.92rem; line-height: 1.25; overflow-wrap: anywhere; }
@@ -1446,19 +1448,20 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         </div>
       </div>
 
-      <section className="offer-strip" aria-label="2026 expedition price and booking summary">
+      {septemberDepartureVisible && <section className="offer-strip" aria-label="September 2026 expedition availability and price summary">
         <div>
-          <p className="offer-strip-kicker">2026 expeditions open</p>
-          <h2 className="offer-strip-title">Small-group Mongolia horse trek</h2>
+          <p className="offer-strip-kicker">Still hoping to ride this season?</p>
+          <h2 className="offer-strip-title">Ask about September 14–22, 2026 availability</h2>
+          <p className="offer-strip-note">Late-season places and logistics are personally confirmed before payment.</p>
         </div>
         <div className="offer-strip-facts">
           <div className="offer-fact"><strong>{pricing.tourPrice}</strong><span>Total per person</span></div>
-          <div className="offer-fact"><strong>{pricing.onlinePayment}</strong><span>Pay online to reserve</span></div>
-          <div className="offer-fact"><strong>{pricing.localFamilyPayment}</strong><span>Cash direct to hosts</span></div>
+          <div className="offer-fact"><strong>9 days</strong><span>Orkhon & Eight Lakes</span></div>
+          <div className="offer-fact"><strong>Beginner friendly</strong><span>Local horsemen guide</span></div>
           <div className="offer-fact"><strong>Max 8</strong><span>Guests per departure</span></div>
         </div>
-        <a className="offer-strip-cta" href="#tour-dates" onClick={scrollToTourDates}>See dates</a>
-      </section>
+        <a className="offer-strip-cta" href="#tour-dates" onClick={scrollToTourDates}>Request availability</a>
+      </section>}
 
 
       {/* INTRO */}
@@ -1779,7 +1782,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
             <span className="price-badge">2026 Trips &amp; 2027 Requests — Limited Availability</span>
             <div className="price-amount">$1,799–$1,999</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · Group rates for 1–8 guests</div>
-            <div className="price-note">All official prices are in USD. Standard 1–2 guest bookings can pay online after the form; groups of 3–8 submit a request first and Rob confirms the date, group size, and correct payment link.</div>
+            <div className="price-note">All official prices are in USD. Dates marked open can retain the standard 1–2 guest payment path. September 14–22 availability, groups of 3–8, and all request dates are personally confirmed before Rob sends the correct payment step.</div>
             <div className="group-rate-table" aria-label="8 Lakes Tours private group rates">
               {GROUP_PRICING_TIERS.map(tier => (
                 <div className="group-rate-row" key={tier.label}>
@@ -1792,7 +1795,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay online</span>
                 <span className="payment-split-amount">$999 pp</span>
-                <p className="payment-split-copy">Reserves your place with 8 Lakes Tours.</p>
+                <p className="payment-split-copy">After availability confirmation, reserves your place with 8 Lakes Tours.</p>
               </div>
               <div className="payment-split-arrow" aria-hidden="true">+</div>
               <div className="payment-split-card">
@@ -1805,7 +1808,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
                 <p>Total trip price depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8.</p>
-                <p>For 1–2 guests, the $999 per-guest online payment goes through 8 Lakes Tours to reserve your place. For 3–8 guests, submit the group request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local portion is paid directly in clean USD cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>The $999 per-guest online payment goes through 8 Lakes Tours after the relevant availability check. Dates marked open can retain the standard 1–2 guest payment path. September 14–22 availability, groups of 3–8, and all request dates are confirmed personally before Rob sends the correct payment link or custom order. The remaining local portion is paid directly in clean USD cash to the nomadic host families because they cannot reliably receive online transfers.</p>
                 <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>

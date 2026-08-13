@@ -1,0 +1,21 @@
+status,negative_keyword,match_type,reason
+PAUSED,twin lakes,Phrase,Different destination
+PAUSED,map,Phrase,Informational navigation intent
+PAUSED,weather,Phrase,Informational research
+PAUSED,jobs,Phrase,Employment intent
+PAUSED,free,Phrase,Low commercial intent
+PAUSED,horse for sale,Phrase,Product purchase rather than travel
+PAUSED,riding lessons,Phrase,Local lesson intent
+PAUSED,hotel,Phrase,Accommodation-only intent
+PAUSED,car rental,Phrase,Transport-only intent
+PAUSED,flight only,Phrase,Flight-only intent
+PAUSED,fishing,Phrase,Different activity intent
+PAUSED,minecraft,Phrase,Game-related searches
+PAUSED,therapy,Phrase,Avoid account-shell traffic
+PAUSED,rehab,Phrase,Avoid rehabilitation searches
+PAUSED,counselling,Phrase,Avoid mental-health service searches
+PAUSED,volunteer,Phrase,Volunteer intent
+PAUSED,images,Phrase,Image-only research intent
+PAUSED,horse rental,Phrase,Equipment or local rental intent
+PAUSED,equine therapy,Phrase,Avoid therapeutic service searches
+PAUSED,adventure therapy,Phrase,Avoid internal account-shell traffic
