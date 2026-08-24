@@ -8,7 +8,7 @@ Test whether a very small amount of high-intent Google Search traffic can produc
 
 ## Campaign settings
 
-- Account: Adventure Therapy (`680-357-7915`); public ad brand: **8 Lakes Tours**
+- Account: 8 Lakes Tours (`285-034-4584`), owned by `8lakestours@gmail.com`
 - Campaign: `Search | September 2026 | Mongolia Horse Trek | EN`
 - Status while building: **PAUSED**
 - Final URL: `https://www.8lakestours.com/?utm_source=google&utm_medium=cpc&utm_campaign=september_2026_last_minute&utm_term={keyword}&utm_content=responsive_search_ad`
@@ -44,7 +44,7 @@ Because this account has no reliable conversion history and the budget is tiny: 
 ## Activation checklist
 
 1. Henry completes Google Ads billing profile and payment method directly. Do not share card or identity details.
-2. Open normal Ads dashboard for client `680-357-7915`; verify Netherlands country; Amsterdam-compatible time zone; EUR currency.
+2. Open normal Ads dashboard for client `285-034-4584`; verify Netherlands country; Amsterdam-compatible time zone; EUR currency.
 3. Link the exact GA4 web stream for `https://www.8lakestours.com/` with measurement ID `G-E9PW7T08LZ`.
 4. Import conversion actions with the roles above and check for duplicates.
 5. Create one Search campaign using this file and the three CSVs in this folder. Keep it PAUSED while building.

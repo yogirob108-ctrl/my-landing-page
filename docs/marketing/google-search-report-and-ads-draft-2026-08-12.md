@@ -2,7 +2,7 @@
 
 **Prepared:** 12 August 2026
 **Site:** https://www.8lakestours.com/
-**Google Ads client shell:** Adventure Therapy (`680-357-7915`)
+**Google Ads client:** 8 Lakes Tours (`285-034-4584`), owned by `8lakestours@gmail.com`
 **Status:** Research and draft only. No campaign, billing submission, budget activation, ads, or spend.
 
 ## Executive summary
@@ -18,7 +18,7 @@ The right first paid test is therefore not a broad or automated campaign. It is 
 3. Orkhon Valley horse riding;
 4. authentic nomadic-family adventure travel.
 
-The public-facing brand in ads should be **8 Lakes Tours**. “Adventure Therapy” is the Ads account shell, not the brand shown on the landing page.
+The account and public-facing brand are both **8 Lakes Tours**.
 
 ## 1. What currently brings organic Google traffic
 
@@ -189,7 +189,7 @@ High-priority exclusions include:
 - `minecraft`
 - `therapy`
 
-“Therapy” should be negative because the public product is 8 Lakes Tours; the Adventure Therapy account-shell name must not attract clinical, rehabilitation, or counselling searches.
+“Therapy” should remain negative because this campaign sells a Mongolia horse trek, not clinical, rehabilitation, counselling, or equine-therapy services.
 
 ## 6. Implementation and launch status
 
@@ -200,7 +200,7 @@ High-priority exclusions include:
 5. **Approved test control.** The test is capped at €20/day: €17/day non-brand and €3/day brand, with a €600 planning ceiling for 30 days.
 6. **Required from day one.** Apply the negative list and review actual search terms daily for the first week.
 7. **Guardrail.** Do not use broad match, Performance Max, Display expansion, or auto-applied recommendations during the initial low-data test.
-8. **Brand guardrail.** Use 8 Lakes Tours consistently in ads and landing pages; Adventure Therapy remains only the account-shell name.
+8. **Brand guardrail.** Use 8 Lakes Tours consistently in the Ads account, ads, and landing pages.
 9. **Pending user participation.** Google Ads billing/payment-profile completion may require Henry to enter or confirm sensitive details directly.
 10. **Source of truth.** Public date options come from `lib/tour-dates.mjs`; expired departures are removed using the Mongolia date boundary.
 

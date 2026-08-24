@@ -11,11 +11,11 @@ PAUSED,car rental,Phrase,Transport-only intent
 PAUSED,flight only,Phrase,Flight-only intent
 PAUSED,fishing,Phrase,Different activity intent
 PAUSED,minecraft,Phrase,Game-related searches
-PAUSED,therapy,Phrase,Avoid account-shell traffic
+PAUSED,therapy,Phrase,Avoid clinical and counselling traffic
 PAUSED,rehab,Phrase,Avoid rehabilitation searches
 PAUSED,counselling,Phrase,Avoid mental-health service searches
 PAUSED,volunteer,Phrase,Volunteer intent
 PAUSED,images,Phrase,Image-only research intent
 PAUSED,horse rental,Phrase,Equipment or local rental intent
 PAUSED,equine therapy,Phrase,Avoid therapeutic service searches
-PAUSED,adventure therapy,Phrase,Avoid internal account-shell traffic
+PAUSED,adventure therapy,Phrase,Avoid therapeutic-service traffic

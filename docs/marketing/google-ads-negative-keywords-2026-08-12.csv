@@ -11,11 +11,11 @@ car rental,Phrase,Transport-only intent
 flight only,Phrase,Flight-only intent
 fishing,Phrase,Different activity intent
 minecraft,Phrase,Game-related lake searches
-therapy,Phrase,Avoid clinical and counselling traffic caused by account-shell name
+therapy,Phrase,Avoid clinical and counselling traffic
 rehab,Phrase,Avoid rehabilitation searches
 counselling,Phrase,Avoid mental-health service searches
 volunteer,Phrase,Volunteer intent rather than a paid tour
 images,Phrase,Image-only research intent
 horse rental,Phrase,Equipment or local rental intent
 equine therapy,Phrase,Avoid clinical or therapeutic horse-service searches
-adventure therapy,Phrase,Avoid traffic caused by the internal account-shell name
+adventure therapy,Phrase,Avoid therapeutic-service traffic
