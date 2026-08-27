@@ -71,5 +71,5 @@ Because this account has no reliable conversion history and the budget is tiny: 
 - Say “Ask about September availability” rather than “places available.”
 - Do not use “last places” or a numerical scarcity claim without operational confirmation.
 - Total price is $1,799–$1,999 per person.
-- The $999 online booking payment is only after availability confirmation and is not the total trip price.
-- The remaining $800–$1,000 is paid in clean USD cash directly to the host family.
+- The $899–$999 per-guest online booking payment is not the total trip price.
+- The remaining $900–$1,000 per guest is paid in clean USD cash directly to the host family.

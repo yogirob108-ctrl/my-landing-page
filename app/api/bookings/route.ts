@@ -5,17 +5,9 @@ import { createSupabaseAdminClient } from '@/lib/supabase-admin';
 import { bookingCustomerEmail, bookingInternalEmail, getInternalEmailRecipients, sendEmail } from '@/lib/email';
 import { subscribeToNewsletter } from '@/lib/newsletter';
 import { hasExplicitNewsletterOptIn } from '@/lib/newsletter-consent.mjs';
-import { isBookableTourDate, requiresManualPaymentLink } from '@/lib/tour-booking.mjs';
+import { GROUP_INVOICE, isBookableTourDate, manualPaymentReason, requiresManualPaymentLink } from '@/lib/tour-booking.mjs';
+import { getGroupPricing } from '@/lib/group-pricing.mjs';
 
-const ONLINE_DUE_USD = 999;
-const MAX_GROUP_SIZE = 8;
-
-const GROUP_PRICING_TIERS = [
-  { min: 1, max: 2, perPersonUsd: 1999 },
-  { min: 3, max: 4, perPersonUsd: 1949 },
-  { min: 5, max: 6, perPersonUsd: 1899 },
-  { min: 7, max: 8, perPersonUsd: 1799 },
-] as const;
 
 type AttributionPayload = {
   landing_url?: unknown;
@@ -53,28 +45,6 @@ type PublicBookingPayload = {
 
 function clean(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
-}
-
-function clampGuestCount(value: unknown) {
-  const parsed = Number.parseInt(String(value ?? '1'), 10);
-  if (!Number.isFinite(parsed)) return 1;
-  return Math.min(MAX_GROUP_SIZE, Math.max(1, parsed));
-}
-
-function getGroupPricing(value: unknown) {
-  const guestCount = clampGuestCount(value);
-  const tier = GROUP_PRICING_TIERS.find(option => guestCount >= option.min && guestCount <= option.max) ?? GROUP_PRICING_TIERS[0];
-  const onlinePerPersonUsd = ONLINE_DUE_USD;
-  const localFamilyPerPersonUsd = tier.perPersonUsd - onlinePerPersonUsd;
-  return {
-    guestCount,
-    perPersonUsd: tier.perPersonUsd,
-    onlinePerPersonUsd,
-    localFamilyPerPersonUsd,
-    totalTripValueUsd: tier.perPersonUsd * guestCount,
-    onlinePaymentUsd: onlinePerPersonUsd * guestCount,
-    localFamilyPaymentUsd: localFamilyPerPersonUsd * guestCount,
-  };
 }
 
 function attributionLines(attribution: AttributionPayload | undefined) {
@@ -140,11 +110,14 @@ export async function POST(request: Request) {
   const tourDate = clean(payload.tour_date);
   const groupPricing = getGroupPricing(payload.guest_count);
   const manualPaymentRequired = requiresManualPaymentLink(tourDate, groupPricing.guestCount);
+  const manualReason = manualPaymentReason(tourDate, groupPricing.guestCount);
   const attributionBlock = attributionNote(payload.attribution);
   const bookingNotes = [
     `Guests booking together: ${groupPricing.guestCount}`,
     `Group rate: $${groupPricing.perPersonUsd.toLocaleString('en-US')} per person ($${groupPricing.onlinePerPersonUsd.toLocaleString('en-US')} online + $${groupPricing.localFamilyPerPersonUsd.toLocaleString('en-US')} local family cash)`,
-    manualPaymentRequired ? 'CONFIRMATION REQUIRED: Rob should confirm date/horse/guide/host-family capacity before sending a custom Stripe payment link or order. Do not assume the public Buy Button collected payment.' : '',
+    manualReason === GROUP_INVOICE
+      ? `GROUP INVOICE REQUIRED: send one personal Stripe invoice for $${groupPricing.onlinePaymentUsd.toLocaleString('en-US')} covering all ${groupPricing.guestCount} guests. Do not assume the public Buy Button collected payment.`
+      : manualPaymentRequired ? 'CONFIRMATION REQUIRED: Rob should confirm date/horse/guide/host-family capacity before sending a custom Stripe payment link or order. Do not assume the public Buy Button collected payment.' : '',
     howHeard ? `How they heard about us: ${howHeard}` : '',
     guestNotes,
     attributionBlock,
@@ -262,10 +235,11 @@ export async function POST(request: Request) {
     localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd,
     totalTripValueUsd: groupPricing.totalTripValueUsd,
     requiresManualPaymentLink: manualPaymentRequired,
+    manualPaymentReason: manualReason,
     ridingExperience: clean(payload.riding_experience),
     notes: bookingNotes ?? '',
   });
-  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd, requiresManualPaymentLink: manualPaymentRequired });
+  const customerEmail = bookingCustomerEmail({ reference, firstName, tourDate, guestCount: groupPricing.guestCount, pricePerPersonUsd: groupPricing.perPersonUsd, onlinePaymentUsd: groupPricing.onlinePaymentUsd, localFamilyPaymentUsd: groupPricing.localFamilyPaymentUsd, totalTripValueUsd: groupPricing.totalTripValueUsd, requiresManualPaymentLink: manualPaymentRequired, manualPaymentReason: manualReason });
   const internalRecipients = getInternalEmailRecipients();
 
   const internalResult = await sendEmail({

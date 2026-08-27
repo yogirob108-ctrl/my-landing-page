@@ -12,7 +12,8 @@ test('paid-search landing page states the exact offer and request-only 2027 inve
   assert.match(source, /Orkhon Valley/i);
   assert.match(source, /Naiman Nuur|Eight Lakes/i);
   assert.match(source, /\$1,799–\$1,999/);
-  assert.match(source, /\$999 online booking payment/i);
+  assert.match(source, /\$899–\$999 pp/);
+  assert.match(source, /\$900–\$1,000 pp/);
   assert.match(source, /2027 small-group dates are being planned/i);
   assert.match(source, /private 2027 departures.*request/i);
   assert.doesNotMatch(source, /2027-\d{2}-\d{2}/);

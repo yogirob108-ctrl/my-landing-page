@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import { canAutomaticallyConfirmBooking, isBookableTourDate, isRequestOnlyTourDate, requiresManualPaymentLink } from '../lib/tour-booking.mjs';
+import { AVAILABILITY_CHECK, GROUP_INVOICE, UNKNOWN_SELECTION, canAutomaticallyConfirmBooking, isBookableTourDate, isRequestOnlyTourDate, manualPaymentReason, requiresManualPaymentLink } from '../lib/tour-booking.mjs';
 import { TOUR_DATES, getVisibleTourDates } from '../lib/tour-dates.mjs';
 
 test('2027 public inventory is request-only and contains no invented fixed dates', () => {
@@ -39,14 +39,41 @@ test('three or more guests always require manual confirmation', () => {
   assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 3), true);
 });
 
+test('a group on a fixed date is invoiced rather than availability-checked', () => {
+  assert.equal(manualPaymentReason('September 14 – 22, 2026', 2), null);
+  assert.equal(manualPaymentReason('September 14 – 22, 2026', 3), GROUP_INVOICE);
+  assert.equal(manualPaymentReason('September 23 – October 1, 2026', 8), GROUP_INVOICE);
+});
+
+test('request-only options stay an availability question at every group size', () => {
+  assert.equal(manualPaymentReason('2027 Private Group Date', 1), AVAILABILITY_CHECK);
+  assert.equal(manualPaymentReason('2027 Private Group Date', 5), AVAILABILITY_CHECK);
+  assert.equal(manualPaymentReason('2027 Small-Group Departures', 4), AVAILABILITY_CHECK);
+});
+
+test('an unselected or invented date is neither an invoice nor an availability check', () => {
+  assert.equal(manualPaymentReason('', 1), UNKNOWN_SELECTION);
+  assert.equal(manualPaymentReason('invented-date', 6), UNKNOWN_SELECTION);
+});
+
 test('a fixed departure for one or two guests can retain the standard payment path', () => {
   assert.equal(requiresManualPaymentLink('August 24 – September 1, 2026', 1), false);
 });
 
-test('the September campaign departure always requires personal confirmation', () => {
-  assert.equal(isRequestOnlyTourDate('September 14 – 22, 2026'), true);
-  assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 1), true);
-  assert.equal(requiresManualPaymentLink('September 14 – 22, 2026', 2), true);
+test('late-season fixed departures are directly bookable for one or two guests', () => {
+  for (const date of ['September 14 – 22, 2026', 'September 23 – October 1, 2026']) {
+    assert.equal(isRequestOnlyTourDate(date), false);
+    assert.equal(requiresManualPaymentLink(date, 1), false);
+    assert.equal(requiresManualPaymentLink(date, 2), false);
+  }
+});
+
+test('every fixed 2026 departure is free of the request-only gate', () => {
+  const fixedDepartures = TOUR_DATES.filter(option => option.startDate);
+  assert.ok(fixedDepartures.length > 0);
+  for (const option of fixedDepartures) {
+    assert.notEqual(option.requiresConfirmation, true, `${option.date} should be directly bookable`);
+  }
 });
 
 test('unknown date labels fail closed and cannot use automatic payment', () => {
@@ -58,6 +85,7 @@ test('server bookability excludes expired departures and allows visible inventor
   const now = new Date('2026-08-12T12:00:00Z');
   assert.equal(isBookableTourDate('August 4 – 12, 2026', now), false);
   assert.equal(isBookableTourDate('September 14 – 22, 2026', now), true);
+  assert.equal(isBookableTourDate('September 23 – October 1, 2026', now), true);
   assert.equal(isBookableTourDate('2027 Small-Group Departures', now), true);
 });
 
@@ -66,7 +94,9 @@ test('automatic Stripe confirmation is limited to visible fixed dates for one or
   assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 1, now), true);
   assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 2, now), true);
   assert.equal(canAutomaticallyConfirmBooking('August 24 – September 1, 2026', 3, now), false);
-  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 1, now), false);
+  assert.equal(canAutomaticallyConfirmBooking('September 14 – 22, 2026', 1, now), true);
+  assert.equal(canAutomaticallyConfirmBooking('September 23 – October 1, 2026', 2, now), true);
+  assert.equal(canAutomaticallyConfirmBooking('September 23 – October 1, 2026', 4, now), false);
   assert.equal(canAutomaticallyConfirmBooking('2027 Small-Group Departures', 1, now), false);
   assert.equal(canAutomaticallyConfirmBooking('2027 Private Group Date', 2, now), false);
   assert.equal(canAutomaticallyConfirmBooking('August 4 – 12, 2026', 1, now), false);
@@ -87,9 +117,10 @@ test('client and booking API both use the shared payment-gating contract', async
     readFile(new URL('../app/api/stripe/webhook/route.ts', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(client, /requiresManualPaymentLink\(selectedTourDate, guestCount\)/);
+  assert.match(client, /manualPaymentReason\(selectedTourDate, guestCount\)/);
   assert.match(api, /isBookableTourDate\(tourDate\)/);
   assert.match(api, /requiresManualPaymentLink\(tourDate, groupPricing\.guestCount\)/);
+  assert.match(api, /manualPaymentReason\(tourDate, groupPricing\.guestCount\)/);
   assert.match(webhook, /canAutomaticallyConfirmBooking\(booking\.tour_date, booking\.guest_count\)/);
   assert.ok(
     webhook.indexOf('if (!automaticConfirmationAllowed)') < webhook.indexOf('await transitionBookingAfterPaymentClaim'),

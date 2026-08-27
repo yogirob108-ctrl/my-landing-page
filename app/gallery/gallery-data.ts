@@ -41,7 +41,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/gallery-extra/horses-and-child-by-lake.jpg', alt: 'Child walking past horses beside the lake', width: 1080, height: 1620, orientation: 'portrait' },
   { src: '/images/lake.jpg', alt: 'Eight Lakes valley and water', width: 1200, height: 1600, orientation: 'portrait' },
   { src: '/images/gallery-extra/rain-jacket-valley-view.jpg', alt: 'Rain jacket view across the valley', width: 1620, height: 1080, orientation: 'landscape' },
-  { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin with children beside a ger', width: 1400, height: 1050, orientation: 'landscape' },
+  { src: '/images/testimonial-fin-bennet-host.jpg', alt: 'Fin and his Mongolian host in traditional deels on the steppe', width: 724, height: 1086, orientation: 'portrait' },
   { src: '/images/ger-interior.jpg', alt: 'Inside a traditional ger', width: 2000, height: 1500, orientation: 'landscape' },
   { src: '/images/gallery-extra/heated-ger-interior.jpg', alt: 'Warm ger interior with beds and a wood stove', width: 1448, height: 1086, orientation: 'landscape' },
 ]

@@ -40,18 +40,21 @@ function parseCsv(source) {
   return rows;
 }
 
-test('homepage gives last-minute visitors an honest September availability path', async () => {
+test('homepage gives last-minute visitors a bookable late-season path', async () => {
   const [source, tourDatesSource] = await Promise.all([
     readFile(new URL('../app/HomePageClient.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../lib/tour-dates.mjs', import.meta.url), 'utf8'),
   ]);
 
-  assert.match(source, /September 14\s*[–-]\s*22, 2026/);
-  assert.match(source, /tourDates\.some\(option => option\.date === 'September 14 – 22, 2026'\)/);
-  assert.match(source, /ask.*availability|availability.*request/i);
-  assert.match(source, /personally confirmed.*before payment|before payment.*personally confirmed/i);
+  // The strip is driven by live inventory rather than a hardcoded departure label.
+  assert.match(source, /lateSeasonDepartures\.length > 0/);
+  assert.match(source, /option\.startDate >= '2026-09-01'/);
   assert.doesNotMatch(source, /September places available|last places|only \d+ places/i);
-  assert.match(tourDatesSource, /September 14 – 22, 2026[^\n]+status: 'Availability by request'[^\n]+requiresConfirmation: true/);
+
+  for (const date of ['September 14 – 22, 2026', 'September 23 – October 1, 2026']) {
+    assert.match(tourDatesSource, new RegExp(`${date}[^\\n]+status: 'Open · max 8'`));
+  }
+  assert.doesNotMatch(tourDatesSource, /startDate:[^\n]+requiresConfirmation: true/);
 });
 
 test('campaign pack is paused, homepage-led, narrow and bounded to the approved test', async () => {

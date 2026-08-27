@@ -161,12 +161,12 @@ export default function HorseTrekkingMongoliaPage() {
         <div className={styles.priceLead}>
           <p className={styles.eyebrow}>Transparent pricing</p>
           <h2>$1,799–$1,999<br /><em>per person.</em></h2>
-          <p>Price depends on the number of guests booking together. The $999 online booking payment is taken only after request-only availability is confirmed; no automatic payment is taken for 2027 interest or private-date requests.</p>
+          <p>Price depends on the number of guests booking together, and the group discount is shared evenly between 8 Lakes Tours and your host family. Fixed 2026 departures can be booked and paid online; no automatic payment is taken for 2027 interest or private-date requests.</p>
         </div>
         <div className={styles.paymentCard}>
-          <div><span>Online booking payment</span><strong>$999 pp</strong><p>Paid only after availability is confirmed for request-only dates.</p></div>
+          <div><span>Online booking payment</span><strong>$899–$999 pp</strong><p>Paid online for fixed 2026 dates; confirmed first for request-only dates.</p></div>
           <div className={styles.plus}>+</div>
-          <div><span>Direct to host family</span><strong>$800–$1,000 pp</strong><p>Clean USD cash paid locally in Mongolia.</p></div>
+          <div><span>Direct to host family</span><strong>$900–$1,000 pp</strong><p>Clean USD cash paid locally in Mongolia.</p></div>
           <p className={styles.total}>Total: $1,799–$1,999 per person · flights and insurance not included</p>
         </div>
       </section>

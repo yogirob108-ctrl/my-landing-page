@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { GROUP_INVOICE } from './tour-booking.mjs';
 
 const DEFAULT_FROM = '8 Lakes Tours <info@8lakestours.com>';
 const DEFAULT_INTERNAL_RECIPIENTS = ['8lakestours@gmail.com'];
@@ -147,30 +148,36 @@ export function bookingInternalEmail(input: {
   localFamilyPaymentUsd?: number;
   totalTripValueUsd?: number;
   requiresManualPaymentLink?: boolean;
+  manualPaymentReason?: string | null;
   ridingExperience: string;
   notes: string;
 }) {
   const name = `${input.firstName} ${input.lastName}`.trim();
-  const subject = input.requiresManualPaymentLink
-    ? `Action needed: availability request from ${name} (${input.reference})`
-    : `Action needed: ${name} booked 8 Lakes (${input.reference})`;
   const guestCount = input.guestCount ?? 1;
+  const needsGroupInvoice = input.manualPaymentReason === GROUP_INVOICE;
+  const subject = needsGroupInvoice
+    ? `Action needed: group invoice for ${name}, ${guestCount} guests (${input.reference})`
+    : input.requiresManualPaymentLink
+      ? `Action needed: availability request from ${name} (${input.reference})`
+      : `Action needed: ${name} booked 8 Lakes (${input.reference})`;
   const pricePerPerson = input.pricePerPersonUsd ? usd(input.pricePerPersonUsd) : TOTAL_PRICE_USD;
   const onlinePayment = input.onlinePaymentUsd ? usd(input.onlinePaymentUsd) : ONLINE_PAYMENT_USD;
   const familyCash = input.localFamilyPaymentUsd ? usd(input.localFamilyPaymentUsd) : FAMILY_CASH_USD;
   const totalTripValue = input.totalTripValueUsd ? usd(input.totalTripValueUsd) : TOTAL_PRICE_USD;
-  const operatorPaymentStep = input.requiresManualPaymentLink
-    ? 'Confirm date/horse/guide/host-family capacity, then create or send the correct Stripe payment link/custom order for the online reservation amount.'
-    : 'Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.';
-  const text = `New 8 Lakes ${input.requiresManualPaymentLink ? 'availability request' : 'booking'}\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\nPrice: ${pricePerPerson} per person / ${totalTripValue} total\nOnline reservation due: ${onlinePayment}\nLocal family cash: ${familyCash}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nOperator checklist:\n1. Open the 8 Lakes ops dashboard and confirm ${input.reference} is visible.\n2. ${operatorPaymentStep}\n3. Reply personally if anything looks odd or needs referral/review.\n4. Make sure the guest knows to bring ${familyCash} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
+  const operatorPaymentStep = needsGroupInvoice
+    ? `Send one personal Stripe invoice for ${onlinePayment} covering all ${guestCount} guests, then confirm the booking once it is paid.`
+    : input.requiresManualPaymentLink
+      ? 'Confirm date/horse/guide/host-family capacity, then create or send the correct Stripe payment link/custom order for the online reservation amount.'
+      : 'Stripe payment should auto-match via webhook and mark the booking confirmed/paid. Only check Stripe manually if the dashboard has not updated after a few minutes.';
+  const text = `New 8 Lakes ${needsGroupInvoice ? 'group booking (invoice needed)' : input.requiresManualPaymentLink ? 'availability request' : 'booking'}\n\nReference: ${input.reference}\nGuest: ${name}\nEmail: ${input.email}\nPhone: ${input.phone || 'Not provided'}\nTour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\nPrice: ${pricePerPerson} per person / ${totalTripValue} total\nOnline reservation due: ${onlinePayment}\nLocal family cash: ${familyCash}\nRiding experience: ${input.ridingExperience || 'Not provided'}\n\nOperator checklist:\n1. Open the 8 Lakes ops dashboard and confirm ${input.reference} is visible.\n2. ${operatorPaymentStep}\n3. Reply personally if anything looks odd or needs referral/review.\n4. Make sure the guest knows to bring ${familyCash} clean USD cash for the host family.\n\nNotes:\n${input.notes || 'None'}`;
 
   return {
     subject,
     text,
     html: emailShell({
-      preheader: input.requiresManualPaymentLink ? `${name} requested availability for ${guestCount} guest${guestCount === 1 ? '' : 's'}. Confirm manually before payment.` : `${name} booked ${input.tourDate || 'a future 8 Lakes date'}. Check the 8 Lakes ops dashboard; Stripe should auto-match after payment.`,
-      title: input.requiresManualPaymentLink ? 'New availability request received' : 'New booking received',
-      intro: input.requiresManualPaymentLink ? `<strong>${escapeHtml(name)}</strong> submitted an availability request for ${guestCount} guest${guestCount === 1 ? '' : 's'}. Confirm availability and send the correct payment link/custom order before taking payment.` : `<strong>${escapeHtml(name)}</strong> submitted the booking form. Payment should automatically match and confirm the booking once Stripe checkout completes.`,
+      preheader: needsGroupInvoice ? `${name} booked ${input.tourDate || 'a future 8 Lakes date'} for ${guestCount} guests. Send a ${onlinePayment} invoice.` : input.requiresManualPaymentLink ? `${name} requested availability for ${guestCount} guest${guestCount === 1 ? '' : 's'}. Confirm manually before payment.` : `${name} booked ${input.tourDate || 'a future 8 Lakes date'}. Check the 8 Lakes ops dashboard; Stripe should auto-match after payment.`,
+      title: needsGroupInvoice ? 'New group booking — invoice needed' : input.requiresManualPaymentLink ? 'New availability request received' : 'New booking received',
+      intro: needsGroupInvoice ? `<strong>${escapeHtml(name)}</strong> booked ${guestCount} guests together on a fixed date. Send one personal invoice for <strong>${onlinePayment}</strong>; the public Buy Button cannot collect a group amount.` : input.requiresManualPaymentLink ? `<strong>${escapeHtml(name)}</strong> submitted an availability request for ${guestCount} guest${guestCount === 1 ? '' : 's'}. Confirm availability and send the correct payment link/custom order before taking payment.` : `<strong>${escapeHtml(name)}</strong> submitted the booking form. Payment should automatically match and confirm the booking once Stripe checkout completes.`,
       footer: false,
       children: `
         <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
@@ -205,33 +212,38 @@ export function bookingInternalEmail(input: {
   };
 }
 
-export function bookingCustomerEmail(input: { reference: string; firstName: string; tourDate: string; guestCount?: number; pricePerPersonUsd?: number; onlinePaymentUsd?: number; localFamilyPaymentUsd?: number; totalTripValueUsd?: number; requiresManualPaymentLink?: boolean }) {
+export function bookingCustomerEmail(input: { reference: string; firstName: string; tourDate: string; guestCount?: number; pricePerPersonUsd?: number; onlinePaymentUsd?: number; localFamilyPaymentUsd?: number; totalTripValueUsd?: number; requiresManualPaymentLink?: boolean; manualPaymentReason?: string | null }) {
   const subject = `8 Lakes Tours booking received — ${input.reference}`;
   const name = firstName(input.firstName);
   const guestCount = input.guestCount ?? 1;
+  const needsGroupInvoice = input.manualPaymentReason === GROUP_INVOICE;
   const pricePerPerson = input.pricePerPersonUsd ? usd(input.pricePerPersonUsd) : TOTAL_PRICE_USD;
   const onlinePayment = input.onlinePaymentUsd ? usd(input.onlinePaymentUsd) : ONLINE_PAYMENT_USD;
   const familyCash = input.localFamilyPaymentUsd ? usd(input.localFamilyPaymentUsd) : FAMILY_CASH_USD;
   const totalTripValue = input.totalTripValueUsd ? usd(input.totalTripValueUsd) : TOTAL_PRICE_USD;
-  const paymentIntro = input.requiresManualPaymentLink
-    ? `Because this date or group needs an availability check, Rob will personally confirm the details and the correct payment link before you pay.`
-    : `Your place is confirmed once the online booking payment has been completed.`;
-  const nextSteps = input.requiresManualPaymentLink
-    ? `1. Rob will check the date, group size, horses, guide, and host-family capacity.\n2. If everything is available, Rob will send the correct Stripe payment link or custom order for the online reservation amount.\n3. We send preparation notes before departure once the booking is confirmed.`
-    : `1. Complete the online booking payment on the website if you have not already done so.\n2. You will receive an automatic payment confirmation email once Stripe checkout completes.\n3. We send preparation notes before departure.`;
-  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours ${input.requiresManualPaymentLink ? 'availability request' : 'booking'} has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\n\nPayment structure:\nTotal 2026 trip price: ${pricePerPerson} per person / ${totalTripValue} total\nOnline booking payment: ${onlinePayment}\nCash paid directly to the host family in Mongolia: ${familyCash}\n\n${paymentIntro} The ${familyCash} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nFood note:\nTraditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families always produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nTranslation note:\nEnglish is not always strong in the host-family setting. So far we have found ChatGPT voice mode to be one of the easiest ways to communicate: say something like, “Please translate the following sentence into Mongolian for me,” then speak naturally and play/show the translation. Other translation apps can help too, but ChatGPT voice mode has worked especially well for simple back-and-forth conversation.\n\nNext steps:\n${nextSteps}\n\nQuestions? Reply to this email — Rob will pick it up.\n\nRob Zaher\n8 Lakes Tours`;
+  const paymentIntro = needsGroupInvoice
+    ? `Because you are booking ${guestCount} guests together, Rob will email you one personal invoice for the ${onlinePayment} online amount so the whole group can pay in a single step.`
+    : input.requiresManualPaymentLink
+      ? `Because this date or group needs an availability check, Rob will personally confirm the details and the correct payment link before you pay.`
+      : `Your place is confirmed once the online booking payment has been completed.`;
+  const nextSteps = needsGroupInvoice
+    ? `1. Rob will email a personal invoice for ${onlinePayment}, covering all ${guestCount} guests.\n2. Pay that invoice to reserve the group's places.\n3. We send preparation notes before departure once the booking is confirmed.`
+    : input.requiresManualPaymentLink
+      ? `1. Rob will check the date, group size, horses, guide, and host-family capacity.\n2. If everything is available, Rob will send the correct Stripe payment link or custom order for the online reservation amount.\n3. We send preparation notes before departure once the booking is confirmed.`
+      : `1. Complete the online booking payment on the website if you have not already done so.\n2. You will receive an automatic payment confirmation email once Stripe checkout completes.\n3. We send preparation notes before departure.`;
+  const text = `Hi ${name},\n\nThanks — your 8 Lakes Tours ${needsGroupInvoice ? 'group booking' : input.requiresManualPaymentLink ? 'availability request' : 'booking'} has been received.\n\nBooking reference: ${input.reference}\nSelected tour date: ${input.tourDate || 'TBC'}\nGuests: ${guestCount}\n\nPayment structure:\nTotal 2026 trip price: ${pricePerPerson} per person / ${totalTripValue} total\nOnline booking payment: ${onlinePayment}\nCash paid directly to the host family in Mongolia: ${familyCash}\n\n${paymentIntro} The ${familyCash} family portion is not collected online; please plan to bring clean USD notes to Mongolia for the host family.\n\nFood note:\nTraditional host-family food is meat- and dairy-heavy. For guests who can enjoy it, the dairy is one of the highest-quality parts of the trip: families always produce their own milk from yaks or cows and serve it fresh as milk tea, yoghurt, cheese, and other traditional foods.\n\nPacking note:\nMongolia's steppe weather can change fast. Pack for all seasons, even in summer, and bring more warm layers than you think you need.\n\nFacilities note:\nOnce you leave the city, countryside toilets are simple outhouses with squat toilets rather than Western flush toilets, and there are no regular showers. Bring wet wipes for cleaning hands and body between river washes; washing in the river can be part of the simple, therapeutic steppe rhythm when conditions allow.\n\nTranslation note:\nEnglish is not always strong in the host-family setting. So far we have found ChatGPT voice mode to be one of the easiest ways to communicate: say something like, “Please translate the following sentence into Mongolian for me,” then speak naturally and play/show the translation. Other translation apps can help too, but ChatGPT voice mode has worked especially well for simple back-and-forth conversation.\n\nNext steps:\n${nextSteps}\n\nQuestions? Reply to this email — Rob will pick it up.\n\nRob Zaher\n8 Lakes Tours`;
 
   return {
     subject,
     text,
     html: emailShell({
-      preheader: input.requiresManualPaymentLink ? `Reference ${input.reference}. Rob will confirm availability before payment.` : `Reference ${input.reference}. Complete the ${onlinePayment} online booking payment to confirm your place.`,
-      title: input.requiresManualPaymentLink ? `Thanks ${escapeHtml(name)} — availability request received.` : `Thanks ${escapeHtml(name)} — booking received.`,
+      preheader: needsGroupInvoice ? `Reference ${input.reference}. Rob will email a ${onlinePayment} invoice for your group.` : input.requiresManualPaymentLink ? `Reference ${input.reference}. Rob will confirm availability before payment.` : `Reference ${input.reference}. Complete the ${onlinePayment} online booking payment to confirm your place.`,
+      title: needsGroupInvoice ? `Thanks ${escapeHtml(name)} — group booking received.` : input.requiresManualPaymentLink ? `Thanks ${escapeHtml(name)} — availability request received.` : `Thanks ${escapeHtml(name)} — booking received.`,
       intro: `Your booking has been saved. Your booking reference is <strong>${escapeHtml(input.reference)}</strong> for <strong>${escapeHtml(input.tourDate || 'TBC')}</strong>.`,
       children: `
         <div style="border-left:4px solid #c8a96e;background:#fff3dd;padding:12px 14px;margin-bottom:16px">
           <p style="margin:0 0 10px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:#8a6a2c;font-weight:700">Important</p>
-          <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">${input.requiresManualPaymentLink ? `Rob will confirm availability for ${guestCount} guest${guestCount === 1 ? '' : 's'} before sending the correct payment link or custom order.` : `Your place is confirmed once your <strong>${onlinePayment} online booking payment</strong> has been completed.`}</p>
+          <p style="margin:0;color:#3a3024;font-size:16px;line-height:1.55">${needsGroupInvoice ? `Rob will email one personal invoice for <strong>${onlinePayment}</strong> covering all ${guestCount} guests. Your places are confirmed once that invoice is paid.` : input.requiresManualPaymentLink ? `Rob will confirm availability for ${guestCount} guest${guestCount === 1 ? '' : 's'} before sending the correct payment link or custom order.` : `Your place is confirmed once your <strong>${onlinePayment} online booking payment</strong> has been completed.`}</p>
         </div>
 
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 -4px 16px">
@@ -252,7 +264,7 @@ export function bookingCustomerEmail(input: { reference: string; firstName: stri
 
         <h2 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:24px;margin:0 0 10px;color:#241d14">Next steps</h2>
         <ol style="margin:0 0 22px;padding-left:20px;color:#3a3024;line-height:1.75;font-size:15px">
-          ${input.requiresManualPaymentLink ? '<li>Rob will check the date, horse, guide, host-family capacity, and group details.</li><li>If available, Rob will send the correct Stripe payment link or custom order for the online reservation amount.</li>' : '<li>Complete the online booking payment on the website if you have not already done so.</li><li>You will receive an automatic payment confirmation email once Stripe checkout completes.</li>'}
+          ${needsGroupInvoice ? `<li>Rob will email a personal invoice for <strong>${onlinePayment}</strong>, covering all ${guestCount} guests.</li><li>Pay that invoice to reserve the group&apos;s places — no one has to pay separately.</li>` : input.requiresManualPaymentLink ? '<li>Rob will check the date, horse, guide, host-family capacity, and group details.</li><li>If available, Rob will send the correct Stripe payment link or custom order for the online reservation amount.</li>' : '<li>Complete the online booking payment on the website if you have not already done so.</li><li>You will receive an automatic payment confirmation email once Stripe checkout completes.</li>'}
           <li>Before arrival, we send practical prep notes: packing guidance, insurance reminders, operator WhatsApp coordination, Bat-Ulzii pickup timing, and cash-payment instructions.</li>
           <li>Please plan to bring <strong>${familyCash} in clean USD notes</strong> for the host family.</li>
         </ol>

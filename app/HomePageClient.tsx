@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Script from 'next/script';
 import { track } from '@vercel/analytics';
 import { type FormEvent, type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { requiresManualPaymentLink } from '@/lib/tour-booking.mjs';
+import { GROUP_INVOICE, manualPaymentReason } from '@/lib/tour-booking.mjs';
+import { BASE_LOCAL_FAMILY_PAYMENT_USD, BASE_ONLINE_PAYMENT_USD, BASE_PRICE_USD, GROUP_PRICING_TIERS, MAX_GROUP_SIZE, clampGuestCount, getGroupPricing } from '@/lib/group-pricing.mjs';
 
 type FunnelEventProperties = Record<string, string | number | boolean>;
 
@@ -149,42 +150,6 @@ const STRIPE_LINK = 'https://book.stripe.com/6oUaEQc6R8jecsUaip0gw05';
 const STRIPE_BUY_BUTTON_ID = 'buy_btn_1TkyTO3OYuYvjeqEXmuFK4aq';
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TKXhu3OYuYvjeqE8C4eWygroOMleiInT2mBECzwPdsKBNGY1C5AbaFRN8fmn2I8srp5oKHY6k8hL2toCLAKvgrT000S89GE2w';
 
-const BASE_PRICE_USD = 1999;
-const BASE_ONLINE_PAYMENT_USD = 999;
-const BASE_LOCAL_FAMILY_PAYMENT_USD = 1000;
-const MAX_GROUP_SIZE = 8;
-
-const GROUP_PRICING_TIERS = [
-  { min: 1, max: 2, label: '1–2 guests', perPersonUsd: 1999 },
-  { min: 3, max: 4, label: '3–4 guests', perPersonUsd: 1949 },
-  { min: 5, max: 6, label: '5–6 guests', perPersonUsd: 1899 },
-  { min: 7, max: 8, label: '7–8 guests', perPersonUsd: 1799 },
-] as const;
-
-function clampGuestCount(value: unknown) {
-  const parsed = Number.parseInt(String(value ?? '1'), 10);
-  if (!Number.isFinite(parsed)) return 1;
-  return Math.min(MAX_GROUP_SIZE, Math.max(1, parsed));
-}
-
-function getGroupPricing(guestCountValue: unknown) {
-  const guestCount = clampGuestCount(guestCountValue);
-  const tier = GROUP_PRICING_TIERS.find(option => guestCount >= option.min && guestCount <= option.max) ?? GROUP_PRICING_TIERS[0];
-  const onlinePerPersonUsd = BASE_ONLINE_PAYMENT_USD;
-  const localFamilyPerPersonUsd = tier.perPersonUsd - onlinePerPersonUsd;
-  return {
-    guestCount,
-    tier,
-    perPersonUsd: tier.perPersonUsd,
-    onlinePerPersonUsd,
-    localFamilyPerPersonUsd,
-    totalTripValueUsd: tier.perPersonUsd * guestCount,
-    onlinePaymentUsd: onlinePerPersonUsd * guestCount,
-    localFamilyPaymentUsd: localFamilyPerPersonUsd * guestCount,
-    perPersonSavingsUsd: BASE_PRICE_USD - tier.perPersonUsd,
-  };
-}
-
 function stripePaymentLink(reference: string, email: string) {
   const params = new URLSearchParams();
   if (reference) params.set('client_reference_id', reference);
@@ -319,8 +284,8 @@ const MAIN_ALBUM_IMAGES = [
 const GALLERY_IMAGES = [
   { src: '/images/guide.jpg', alt: 'Mongolian horseman in traditional dress' },
   { src: '/images/rob-family.jpg', alt: 'Robert with the host family outside a traditional ger in Mongolia' },
-  { src: '/images/testimonial-irik-clawson.jpg', alt: 'Robert Zaher smiling on horseback beside a river valley' },
-  { src: '/images/testimonial-fin-bennet.jpg', alt: 'Fin Bennet with children beside a traditional ger in Mongolia' },
+  { src: '/images/testimonial-irik-clawson-sunset.jpg', alt: 'Robert Zaher smiling on horseback beside a river valley' },
+  { src: '/images/testimonial-fin-bennet-host.jpg', alt: 'Fin Bennet and his Mongolian host wearing traditional deels on the open steppe' },
   { src: '/images/testimonial-milou.jpeg', alt: 'Milou travelling by motorbike through the Mongolian steppe' },
   { src: '/images/lake.jpg', alt: 'Sunlit river valley in Mongolia' },
   { src: '/images/riding2.jpg', alt: 'Rider crossing shallow water on horseback' },
@@ -418,7 +383,8 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 }
 
 export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
-  const septemberDepartureVisible = tourDates.some(option => option.date === 'September 14 – 22, 2026');
+  const lateSeasonDepartures = tourDates.filter(option => option.startDate && option.startDate >= '2026-09-01');
+  const lateSeasonDateLabel = lateSeasonDepartures.map(option => option.date.replace(', 2026', '')).join(' or ');
   const [showWaiver, setShowWaiver] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
@@ -448,7 +414,9 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
   const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const signatureIsValid = signature.trim().length > 1;
   const hasRequiredContact = signatureIsValid && emailIsValid;
-  const requiresHumanConfirmation = requiresManualPaymentLink(selectedTourDate, guestCount);
+  const manualReason = manualPaymentReason(selectedTourDate, guestCount);
+  const requiresHumanConfirmation = manualReason !== null;
+  const awaitsGroupInvoice = manualReason === GROUP_INVOICE;
   const canPay = formSubmitted && hasRequiredContact && !requiresHumanConfirmation;
   const checkoutFallbackHref = canPay ? stripePaymentLink(bookingReference, email.trim()) : '#book';
   const lightboxImage = lightboxIndex === null ? null : GALLERY_IMAGES[lightboxIndex];
@@ -769,7 +737,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
           { '@type': 'Question', name: 'What happens after I submit the form?', acceptedAnswer: { '@type': 'Answer', text: 'For standard 1–2 guest bookings, guests can continue to online payment and receive confirmation once payment is complete. For groups of 3–8, Rob reviews the request, confirms availability, and sends the correct payment link or custom order before payment. Before arrival, Rob or the tour operator coordinates timing and host-family pickup from Bat-Ulzii.' } },
           { '@type': 'Question', name: 'Do I need riding experience?', acceptedAnswer: { '@type': 'Answer', text: 'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.' } },
           { '@type': 'Question', name: 'What departure dates are available?', acceptedAnswer: { '@type': 'Answer', text: 'Remaining 2026 fixed departures are listed while they are still bookable. 2027 small-group dates are being planned, and private 2027 departures can be requested for June through September. All 2027 requests require personal confirmation of the host family, horses, guide and logistics before payment.' } },
-          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Standard 1–2 guest bookings can pay the $999 online booking payment after the form. Groups of 3–8 submit a request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local family cash portion is paid directly to the nomadic host families in Mongolia.' } },
+          { '@type': 'Question', name: 'How does payment work?', acceptedAnswer: { '@type': 'Answer', text: 'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Bookings of 1–2 guests on a fixed date pay the $999 per-guest online booking payment straight after the form. Groups of 3–8 book together and Rob emails one personal invoice covering every guest. Group discounts are shared evenly between 8 Lakes Tours and the host family, so the online payment runs $899–$999 per guest and the local family cash runs $900–$1,000 per guest. The family portion is paid directly to the nomadic host families in Mongolia.' } },
           { '@type': 'Question', name: 'What airport do I fly into?', acceptedAnswer: { '@type': 'Answer', text: "Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside." } },
           { '@type': 'Question', name: 'Do I need a visa?', acceptedAnswer: { '@type': 'Answer', text: 'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.' } },
           { '@type': 'Question', name: 'Is there WiFi or cell service?', acceptedAnswer: { '@type': 'Answer', text: 'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.' } },
@@ -1448,11 +1416,11 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         </div>
       </div>
 
-      {septemberDepartureVisible && <section className="offer-strip" aria-label="September 2026 expedition availability and price summary">
+      {lateSeasonDepartures.length > 0 && <section className="offer-strip" aria-label="Late-season 2026 expedition availability and price summary">
         <div>
           <p className="offer-strip-kicker">Still hoping to ride this season?</p>
-          <h2 className="offer-strip-title">Ask about September 14–22, 2026 availability</h2>
-          <p className="offer-strip-note">Late-season places and logistics are personally confirmed before payment.</p>
+          <h2 className="offer-strip-title">Book {lateSeasonDateLabel}, 2026</h2>
+          <p className="offer-strip-note">Late-season places are open now — choose your date and reserve online.</p>
         </div>
         <div className="offer-strip-facts">
           <div className="offer-fact"><strong>{pricing.tourPrice}</strong><span>Total per person</span></div>
@@ -1460,7 +1428,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
           <div className="offer-fact"><strong>Beginner friendly</strong><span>Local horsemen guide</span></div>
           <div className="offer-fact"><strong>Max 8</strong><span>Guests per departure</span></div>
         </div>
-        <a className="offer-strip-cta" href="#tour-dates" onClick={scrollToTourDates}>Request availability</a>
+        <a className="offer-strip-cta" href="#tour-dates" onClick={scrollToTourDates}>See dates &amp; book</a>
       </section>}
 
 
@@ -1549,7 +1517,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
           {[
             {
               name: 'Irik · USA',
-              src: '/images/testimonial-irik-clawson.jpg',
+              src: '/images/testimonial-irik-clawson-sunset.jpg',
               alt: 'Robert Zaher smiling on horseback beside a river valley',
               quote: 'Endless riding from one plain to the next, across the Steppe, by the lakes…. Magical. What more is there in life?',
               objectPosition: 'center',
@@ -1563,10 +1531,10 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
             },
             {
               name: 'Fin · UK',
-              src: '/images/testimonial-fin-bennet.jpg',
-              alt: 'Fin Bennet with children beside a traditional ger in Mongolia',
+              src: '/images/testimonial-fin-bennet-host.jpg',
+              alt: 'Fin Bennet and his Mongolian host wearing traditional deels on the open steppe',
               quote: 'It couldn’t be further from back home and that makes me so excited.',
-              objectPosition: 'center',
+              objectPosition: 'center 42%',
             },
           ].map(testimonial => (
             <article className="testimonial-card reveal" key={testimonial.name}>
@@ -1773,7 +1741,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         <div className="reveal">
           <span className="section-eyebrow">Reserve Your Spot</span>
           <h2 className="section-title">Choose 2026<br /><em>or Plan 2027</em></h2>
-          <p className="section-body">Remaining 2026 departures stay visible while bookable. 2027 small-group dates are being planned, and private June–September 2027 departures are open by request. Total pricing is $1,799–$1,999 per person depending on group size. All 2027 requests are confirmed personally by Rob before payment.</p>
+          <p className="section-body">Remaining 2026 departures stay visible while bookable, and you can select one and pay online straight away. 2027 small-group dates are being planned, and private June–September 2027 departures are open by request. Total pricing is $1,799–$1,999 per person depending on group size. 2027 requests are confirmed personally by Rob before payment.</p>
           <div className="scarcity-pill">
             <span style={{width:'7px', height:'7px', borderRadius:'50%', background:'var(--rust)', display:'inline-block', flexShrink:0}}></span>
             <span>Small groups only — each departure capped at 8 guests</span>
@@ -1782,7 +1750,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
             <span className="price-badge">2026 Trips &amp; 2027 Requests — Limited Availability</span>
             <div className="price-amount">$1,799–$1,999</div>
             <div className="price-per">Per Person · 9 Days / 8 Nights · Group rates for 1–8 guests</div>
-            <div className="price-note">All official prices are in USD. Dates marked open can retain the standard 1–2 guest payment path. September 14–22 availability, groups of 3–8, and all request dates are personally confirmed before Rob sends the correct payment step.</div>
+            <div className="price-note">All official prices are in USD. Every fixed 2026 departure can be booked and paid online for 1–2 guests. Groups of 3–8 book together and Rob emails one personal invoice for the whole group. 2027 request options are personally confirmed before payment.</div>
             <div className="group-rate-table" aria-label="8 Lakes Tours private group rates">
               {GROUP_PRICING_TIERS.map(tier => (
                 <div className="group-rate-row" key={tier.label}>
@@ -1794,13 +1762,13 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
             <div className="payment-split" aria-label="How the 8 Lakes Tours payment is split">
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay online</span>
-                <span className="payment-split-amount">$999 pp</span>
-                <p className="payment-split-copy">After availability confirmation, reserves your place with 8 Lakes Tours.</p>
+                <span className="payment-split-amount">$899–$999 pp</span>
+                <p className="payment-split-copy">Reserves your place with 8 Lakes Tours.</p>
               </div>
               <div className="payment-split-arrow" aria-hidden="true">+</div>
               <div className="payment-split-card">
                 <span className="payment-split-label">Pay locally</span>
-                <span className="payment-split-amount">$800–$1,000 pp</span>
+                <span className="payment-split-amount">$900–$1,000 pp</span>
                 <p className="payment-split-copy">Clean USD cash paid directly to the nomadic host family in Mongolia.</p>
               </div>
             </div>
@@ -1808,8 +1776,9 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
               <summary className="payment-summary">How payment works</summary>
               <div className="payment-detail-body">
                 <p>Total trip price depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8.</p>
-                <p>The $999 per-guest online payment goes through 8 Lakes Tours after the relevant availability check. Dates marked open can retain the standard 1–2 guest payment path. September 14–22 availability, groups of 3–8, and all request dates are confirmed personally before Rob sends the correct payment link or custom order. The remaining local portion is paid directly in clean USD cash to the nomadic host families because they cannot reliably receive online transfers.</p>
-                <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. Within 3 weeks / 21 days, we&apos;ll still try to help with a date transfer, replacement traveller, or partial refund where costs have not already been committed.</p>
+                <p>Group discounts are shared evenly between 8 Lakes Tours and your host family, so the online payment and the family&apos;s cash both come down together: $999 online and $1,000 cash for 1–2 guests, $974/$975 for 3–4, $949/$950 for 5–6, and $899/$900 for 7–8. The family is never asked to absorb the whole reduction.</p>
+                <p>The online payment goes through 8 Lakes Tours. Every fixed 2026 departure can be booked and paid online for 1–2 guests. Groups of 3–8 booking together are sent one personal invoice covering every guest, so the group pays in a single step instead of individually. 2027 request options are confirmed personally before Rob sends the correct payment link or custom order. The remaining local portion is paid directly in clean USD cash to the nomadic host families because they cannot reliably receive online transfers.</p>
+                <p>If your plans change more than 3 weeks / 21 days before departure, the online amount is refundable minus unrecoverable Stripe/payment processing fees. If you cancel within 3 weeks / 21 days, you&apos;re entitled to 50% of the online booking payment back, minus unrecoverable Stripe/payment processing fees. We&apos;ll still try to help with a date transfer or a replacement traveller too, which can recover more than the 50%.</p>
                 <p>We&apos;ll include exact cash instructions and timing in your confirmation notes.</p>
               </div>
             </details>
@@ -1852,7 +1821,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         <div className="reveal reveal-delay-1" id="application">
           <span className="section-eyebrow">Booking Details</span>
           <h2 className="section-title" style={{fontSize:'2rem', marginBottom:'1rem'}}>Secure<br /><em>Your Place</em></h2>
-          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Choose a fixed date or a 2027 request option and tell us who&apos;s coming. Standard 1–2 guest fixed-date bookings can continue to payment after submitting. Groups of 3–8 and all 2027 requests are saved for personal availability confirmation before payment.</p>
+          <p className="section-body" style={{fontSize:'0.9rem', marginBottom:'2rem'}}>Choose a fixed date or a 2027 request option and tell us who&apos;s coming. Bookings of 1–2 guests on a fixed date continue straight to payment after submitting. Groups of 3–8 are invoiced personally so you can pay in one go, and 2027 requests are confirmed before payment.</p>
           <form className="booking-form" onFocusCapture={markBookingFormStarted} onSubmit={async e => { e.preventDefault(); await submitBooking(e.currentTarget); }}>
             <input type="hidden" name="display_currency" value={pricing.currency} />
             <input type="hidden" name="display_tour_price" value={pricing.tourPrice} />
@@ -1984,11 +1953,11 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
                 className="submit-btn"
                 style={{marginTop:'0.5rem', opacity: hasRequiredContact ? 1 : 0.4, transition:'opacity 0.3s', cursor: hasRequiredContact ? 'pointer' : 'not-allowed'}}
               >
-                {formSubmitting ? 'Saving your booking…' : requiresHumanConfirmation ? 'Submit Availability Request' : 'Continue to Secure Payment'}
+                {formSubmitting ? 'Saving your booking…' : awaitsGroupInvoice ? 'Request Your Group Invoice' : requiresHumanConfirmation ? 'Submit Availability Request' : 'Continue to Secure Payment'}
               </button>
             ) : (
               <div style={{marginTop:'0.5rem', padding:'0.9rem 1rem', background:'rgba(200,169,110,0.08)', border:'1px solid rgba(200,169,110,0.3)', borderRadius:'var(--radius-soft)', textAlign:'center'}}>
-                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>{requiresHumanConfirmation ? '✓ Request saved — Rob will confirm availability before payment' : '✓ Booking saved — complete your online booking payment below'}</p>
+                <p style={{fontSize:'0.7rem', letterSpacing:'0.2em', textTransform:'uppercase', color:'var(--gold)'}}>{awaitsGroupInvoice ? '✓ Group booking saved — Rob will email your invoice' : requiresHumanConfirmation ? '✓ Request saved — Rob will confirm availability before payment' : '✓ Booking saved — complete your online booking payment below'}</p>
                 {bookingReference && <p style={{fontSize:'0.68rem', color:'rgba(245,240,232,0.62)', marginTop:'0.4rem'}}>Reference: {bookingReference}</p>}
               </div>
             )}
@@ -1996,9 +1965,13 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
 
             <div className="payment-checkout-card">
               <p className="checkout-eyebrow">Online Reservation Payment</p>
-              {requiresHumanConfirmation ? (
+              {awaitsGroupInvoice ? (
                 <p className="checkout-copy">
-                  This selection requires personal confirmation. Rob will check the date, horses, guide, host-family capacity, group size, and any custom details before sending the correct Stripe payment link or custom order.
+                  Groups of 3–8 pay together on one invoice. Submit the form and Rob will email a personal invoice for <strong>{pricing.onlinePayment}</strong> covering all {groupPricing.guestCount} guests, so nobody has to pay separately.
+                </p>
+              ) : requiresHumanConfirmation ? (
+                <p className="checkout-copy">
+                  This selection requires personal confirmation. Rob will check the date, horses, guide, host-family capacity, and any custom details before sending the correct Stripe payment link or custom order.
                 </p>
               ) : (
                 <p className="checkout-copy">
@@ -2131,7 +2104,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
             {q:'What happens after I submit the form?', a:'For standard 1–2 guest bookings, you can continue to the online payment and receive confirmation once payment is complete. For groups of 3–8, Rob reviews the request, confirms availability, and sends the correct payment link or custom order before payment. Before arrival, Rob or the tour operator coordinates timing with you and the host-family pickup from Bat-Ulzii.'},
             {q:'Do I need riding experience?', a:'No experience necessary. Beginners are welcome — our local guides will teach you everything you need to know before the trek begins.'},
             {q:'What departure dates are available?', a:'Remaining 2026 fixed departures stay listed while bookable. 2027 small-group dates are being planned, and private 2027 departures can be requested for June through September. All 2027 options require Rob to confirm the host family, horses, guide and logistics before payment.'},
-            {q:'How does payment work?', a:'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Standard 1–2 guest bookings can pay the $999 online booking payment after the form. Groups of 3–8 submit a request first; Rob confirms availability and sends the correct payment link or custom order. The remaining local family portion is paid directly in clean USD cash to the nomadic host families in Mongolia.'},
+            {q:'How does payment work?', a:'All official prices are in USD. The 2026 rate depends on group size: $1,999 per person for 1–2 guests, $1,949 for 3–4, $1,899 for 5–6, and $1,799 for 7–8. Bookings of 1–2 guests on a fixed date pay the $999 per-guest online booking payment straight after the form. Groups of 3–8 book together and Rob emails one personal invoice covering every guest. Group discounts are shared evenly between 8 Lakes Tours and the host family, so the online payment runs $899–$999 per guest and the local family cash runs $900–$1,000 per guest. The family portion is paid directly in clean USD cash to the nomadic host families in Mongolia.'},
             {q:'What airport do I fly into?', a:"Fly into Chinggis Khaan International Airport in Ulaanbaatar (UB). From there you'll take a public bus to Bat-Ulzii — about an 8-hour ride through stunning countryside."},
             {q:'Do I need a visa?', a:'Many travellers can enter Mongolia visa-free for tourism, but the allowance depends on your passport. US and South Korean passport holders commonly receive up to 90 days; UK/EU, Australian, Canadian, Japanese, New Zealand, and many other passport holders commonly receive up to 30 days. Rules and temporary exemptions can change, so check the current Mongolian consular or e-visa guidance for your nationality before booking flights.'},
             {q:'Is there WiFi or cell service?', a:'Remote trek days are mostly offline, with little to no cell service. The host family camp has Starlink and solar-powered charging for phones, cameras, and essentials, so you can reconnect between riding days. For simple Mongolian communication, Grok has worked best for us so far; ChatGPT also works well for translation when you have signal.'},
