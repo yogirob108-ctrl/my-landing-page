@@ -44,4 +44,12 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/testimonial-fin-bennet-host.jpg', alt: 'Fin and his Mongolian host in traditional deels on the steppe', width: 724, height: 1086, orientation: 'portrait' },
   { src: '/images/ger-interior.jpg', alt: 'Inside a traditional ger', width: 2000, height: 1500, orientation: 'landscape' },
   { src: '/images/gallery-extra/heated-ger-interior.jpg', alt: 'Warm ger interior with beds and a wood stove', width: 1448, height: 1086, orientation: 'landscape' },
+  { src: '/images/gallery-extra/three-generations-in-deels.jpg', alt: 'Three generations of the host family in traditional deels below the hills', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/hosts-father-and-son-in-deels.jpg', alt: 'Father and son in dark deels with orange sashes on the summer steppe', width: 1333, height: 2000, orientation: 'portrait' },
+  { src: '/images/gallery-extra/host-on-horseback-at-dusk.jpg', alt: 'Host in a black deel mounted on his horse as the light drops', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/young-horseman-in-deel.jpg', alt: 'Young horseman in a green deel astride his horse at dusk', width: 1333, height: 2000, orientation: 'portrait' },
+  { src: '/images/gallery-extra/mother-and-child-in-deels.jpg', alt: 'Mother and small child in traditional deels beside the ger', width: 1333, height: 2000, orientation: 'portrait' },
+  { src: '/images/gallery-extra/guest-and-host-women-in-deels.jpg', alt: 'A guest and her host in traditional deels below the green hills', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/guests-on-horseback-in-deels.jpg', alt: 'Two guests in borrowed deels on horseback in the evening light', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/herder-with-motorbike.jpg', alt: 'Herder resting on his motorbike on the steppe at dusk', width: 2000, height: 1333, orientation: 'landscape' },
 ]
