@@ -24,31 +24,16 @@
   .cinematic:after{content:"";position:absolute;inset:0;z-index:-0;background:linear-gradient(180deg,rgba(8,7,5,.36) 0%,rgba(8,7,5,.05) 34%,rgba(8,7,5,.22) 57%,rgba(8,7,5,.94) 100%)}
   .cinematic .top{position:absolute;z-index:2;top:12mm;left:12mm;right:12mm;display:flex;justify-content:space-between;align-items:center;border-bottom:.25mm solid rgba(245,240,232,.55);padding-bottom:4mm}
   .cinematic .top .brand{font-size:10pt}.cinematic .top .micro{font-size:6pt}
-  .cinematic .copy{position:absolute;z-index:2;left:12mm;right:12mm;bottom:13mm}
+  .cinematic .copy{position:absolute;z-index:2;left:12mm;right:47mm;bottom:13mm}
   .cinematic .kicker{font-size:6.4pt;color:#ecd9ae;margin-bottom:4mm}
   .cinematic h2{margin:0 0 4mm;font:italic 400 39pt/.86 Georgia,serif;letter-spacing:-.035em;max-width:112mm}
-  .cinematic .lede{max-width:92mm;margin:0 0 7mm;font-size:10pt;line-height:1.42}
-  .cinematic .facts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm;padding-top:4mm;border-top:.25mm solid rgba(245,240,232,.38);max-width:104mm}
+  .cinematic .lede{margin:0 0 7mm;font-size:10pt;line-height:1.42}
+  .cinematic .facts{display:grid;grid-template-columns:1fr 1fr;gap:3mm;padding-top:4mm;border-top:.25mm solid rgba(245,240,232,.38)}
   .cinematic .facts strong{display:block;font:400 14pt Georgia,serif}.cinematic .facts span{font-size:5.8pt;letter-spacing:.09em;text-transform:uppercase}
-  .cinematic .action{position:absolute;z-index:2;right:12mm;bottom:13mm;display:grid;gap:2mm;justify-items:center;text-align:center}
+  .cinematic .action{position:absolute;z-index:2;right:12mm;bottom:13mm;width:31mm;padding:3mm 2mm;display:grid;gap:2mm;justify-items:center;text-align:center;background:rgba(8,7,5,.72);border:.25mm solid rgba(245,240,232,.42)}
+  .cinematic .action .qr{width:25mm;height:25mm}
   .cinematic .action span{font-size:5.8pt;text-transform:uppercase;letter-spacing:.11em;max-width:25mm}
 
-  /* B — family/editorial */
-  .family{background:#efe8da;padding:10mm 10mm 9mm;display:grid;grid-template-rows:auto 84mm 1fr auto;gap:6mm}
-  .family:before{content:"";position:absolute;inset:5mm;border:.25mm solid rgba(14,12,9,.35);pointer-events:none}
-  .family .mast{display:flex;justify-content:space-between;align-items:start}
-  .family .mast .brand{font-size:10pt}.family .issue{font-size:6pt;text-transform:uppercase;letter-spacing:.12em;text-align:right}
-  .family .photo-wrap{position:relative;background:white;padding:3mm 3mm 7mm;transform:rotate(-1.25deg);box-shadow:0 3mm 8mm rgba(32,26,17,.14)}
-  .family .photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 48%;filter:saturate(.85) contrast(.98)}
-  .family .photo-caption{position:absolute;left:4mm;bottom:2mm;font:italic 6.8pt Georgia,serif}
-  .family .editorial{display:grid;grid-template-columns:1fr 33mm;gap:8mm;align-items:end}
-  .family h2{margin:0 0 3mm;font:400 29pt/.9 Georgia,serif;letter-spacing:-.035em;text-transform:uppercase}
-  .family h2 em{color:var(--rust);font-weight:400;text-transform:none}
-  .family .body{font:400 9pt/1.45 Georgia,serif;margin:0;max-width:82mm}
-  .family .pull{border-left:.8mm solid var(--rust);padding-left:4mm;font:italic 12pt/1.15 Georgia,serif;color:#4b3027}
-  .family .bottom{display:grid;grid-template-columns:1fr auto;gap:5mm;align-items:end;border-top:.3mm solid var(--ink);padding-top:4mm}
-  .family .bottom strong{font:400 15pt Georgia,serif}.family .bottom p{margin:1mm 0 0;font-size:6.7pt;line-height:1.35}
-  .family .qr{border:.25mm solid var(--ink)}
 
   /* C — Amsterdam noticeboard */
   .amsterdam{background:#f2df2f;color:#111;padding:9mm;display:grid;grid-template-rows:auto 82mm auto 1fr auto;gap:4mm}
@@ -69,7 +54,7 @@
 
   /* D — horizon / minimal cinematic */
   .horizon{background:#10100e;color:#f4efe5}
-  .horizon .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% center;filter:saturate(.78) contrast(1.08)}
+  .horizon .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:24% center;filter:saturate(.78) contrast(1.08)}
   .horizon:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,8,.58),transparent 28%,transparent 56%,rgba(10,10,8,.94));z-index:1}
   .horizon .vertical{position:absolute;z-index:2;left:5mm;top:28mm;writing-mode:vertical-rl;transform:rotate(180deg);font:900 46pt/.78 Arial Black,Arial,sans-serif;letter-spacing:-.07em;color:rgba(245,240,232,.92)}
   .horizon .mast{position:absolute;z-index:2;top:11mm;left:12mm;right:12mm;display:flex;justify-content:space-between;border-bottom:.3mm solid rgba(255,255,255,.62);padding-bottom:3mm;font-size:6pt;text-transform:uppercase;letter-spacing:.15em}
@@ -77,16 +62,6 @@
   .horizon h2{margin:0 0 3mm;font:italic 400 30pt/.92 Georgia,serif}.horizon p{margin:0;font-size:8.5pt;line-height:1.4;max-width:82mm}
   .horizon .scan{display:grid;gap:2mm;justify-items:center;font-size:5.8pt;text-align:center;text-transform:uppercase;letter-spacing:.1em}
 
-  /* E — crossing / typographic block */
-  .crossing{background:#e5532f;color:#10100e;display:grid;grid-template-rows:88mm auto 1fr auto;padding:0 9mm 9mm;gap:5mm}
-  .crossing:after{content:"9 DAYS";position:absolute;left:8mm;bottom:21mm;font:900 52pt/.8 Arial Black,Arial,sans-serif;letter-spacing:-.07em;color:transparent;-webkit-text-stroke:.45mm rgba(16,16,14,.28);z-index:-0}
-  .crossing .photo{width:calc(100% + 18mm);height:88mm;margin-left:-9mm;object-fit:cover;object-position:center 58%;filter:grayscale(.15) contrast(1.16)}
-  .crossing .brandline{position:absolute;top:6mm;left:9mm;right:9mm;display:flex;justify-content:space-between;color:#fff;font-size:6pt;font-weight:900;text-transform:uppercase;letter-spacing:.16em;text-shadow:0 1px 4px #000}
-  .crossing h2{margin:-18mm 0 0;position:relative;background:#e5532f;padding:4mm 3mm 2mm 0;font:900 37pt/.79 Arial Black,Arial,sans-serif;text-transform:uppercase;letter-spacing:-.07em;max-width:121mm}
-  .crossing .detail{display:grid;grid-template-columns:1fr 36mm;gap:6mm;align-items:start}
-  .crossing .detail p{margin:0;font-size:9pt;line-height:1.42;max-width:78mm}.crossing .detail strong{display:block;font-size:7pt;text-transform:uppercase;letter-spacing:.1em;margin-top:3mm}
-  .crossing .scan{background:#10100e;color:#fff;padding:3mm;display:grid;justify-items:center;gap:1.5mm;text-align:center;font-size:6pt;text-transform:uppercase;font-weight:900;letter-spacing:.08em}
-  .crossing .dates{border-top:1mm solid #10100e;padding-top:3mm;display:flex;justify-content:space-between;font-size:6.5pt;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
 
   /* F — departures / information poster */
   .departures{background:#f4efe5;color:#111;padding:9mm;display:grid;grid-template-rows:auto 47mm auto 1fr auto;gap:5mm}
@@ -107,7 +82,7 @@
   .night .seal{position:absolute;z-index:2;right:7mm;bottom:8mm;width:27mm;display:grid;gap:2mm;text-align:center;justify-items:center;font-size:5.5pt;text-transform:uppercase;letter-spacing:.1em;color:#f5f0e8}
 
   /* H — paste-up / street collage */
-  .pasteup{background:#1767c5;color:#10100e;padding:8mm;display:grid;grid-template-rows:auto 106mm auto 1fr auto;gap:4mm}
+  .pasteup{background:#8d3525;color:#10100e;padding:8mm;display:grid;grid-template-rows:auto 106mm auto 1fr auto;gap:4mm}
   .pasteup .mast{display:flex;justify-content:space-between;align-items:center;color:#fff}.pasteup .mast .brand{font:bold 9pt Arial,sans-serif}.pasteup .mast span{font-size:6pt;font-weight:900;text-transform:uppercase;letter-spacing:.12em}
   .pasteup .collage{position:relative}.pasteup .collage img{position:absolute;object-fit:cover;border:1.4mm solid #111;box-shadow:2mm 2mm 0 #111}.pasteup .p1{left:0;top:0;width:73mm;height:93mm;transform:rotate(-2deg)}.pasteup .p2{right:0;top:4mm;width:60mm;height:53mm;transform:rotate(2deg)}.pasteup .p3{right:5mm;bottom:0;width:63mm;height:50mm;transform:rotate(-1deg)}
   .pasteup .tag{position:absolute;z-index:3;right:2mm;top:47mm;background:#f2df2f;border:1mm solid #111;padding:2mm 3mm;font-size:7pt;font-weight:900;text-transform:uppercase;letter-spacing:.08em;transform:rotate(3deg)}
@@ -127,7 +102,7 @@
 </style>
 </head>
 <body>
-  <header class="screen-intro"><h1>Amsterdam A5 flyer directions</h1><p>Eight front-only concepts using real 8 Lakes photography. A and C are the original favourites; D–H push further into cinematic and Amsterdam street-poster territory. Each QR code has its own attribution tag.</p></header>
+  <header class="screen-intro"><h1>Amsterdam A5 flyer shortlist</h1><p>Six revised directions using real 8 Lakes photography. Rejected concepts B and E have been removed; A, D, G and H incorporate the latest crop, QR and colour feedback.</p></header>
   <main class="board">
     <section class="mock"><div class="mock-label">A · Cinematic / premium</div>
       <article class="page cinematic">
@@ -137,23 +112,12 @@
           <div class="kicker">9 days · small groups · nomadic family hosted</div>
           <h2>Ride into the<br>endless steppe.</h2>
           <p class="lede">A horseback expedition through Mongolia’s Orkhon Valley and Eight Lakes—guided by local horsemen and open to beginner and intermediate riders.</p>
-          <div class="facts"><div><strong>9 days</strong><span>8 nights</span></div><div><strong>Max 8</strong><span>Guests</span></div><div><strong>From $1,799</strong><span>Per person</span></div></div>
+          <div class="facts"><div><strong>9 days</strong><span>8 nights</span></div><div><strong>Max 8</strong><span>Guests</span></div></div>
         </div>
         <div class="action"><img class="qr" src="qr-cinematic.png" alt="QR code to 8 Lakes Tours"><span>See dates & book online</span></div>
       </article>
     </section>
 
-    <section class="mock"><div class="mock-label">B · Human / editorial</div>
-      <article class="page family">
-        <header class="mast"><div class="brand">8 Lakes Tours</div><div class="issue">A family-hosted horse trek<br>in central Mongolia</div></header>
-        <div class="photo-wrap"><img src="../../../public/images/rob-family.jpg" alt="Robert with the Mongolian host family"><span class="photo-caption">The people behind the journey.</span></div>
-        <div class="editorial">
-          <div><h2>Not a resort.<br><em>A real welcome.</em></h2><p class="body">Ride across open steppe, sleep in traditional gers and share daily life with Ganbold’s family. Local horsemen guide the route. Every booking supports the hosts directly.</p></div>
-          <div class="pull">“You won’t be staying near the family—you’ll be living with them.”</div>
-        </div>
-        <footer class="bottom"><div><strong>9 days through Orkhon & Eight Lakes</strong><p>Beginners welcome · maximum 8 guests · two September 2026 departures open · 2027 dates being planned<br>8lakestours.com · info@8lakestours.com</p></div><img class="qr" src="qr-family.png" alt="QR code to 8 Lakes Tours"></footer>
-      </article>
-    </section>
 
     <section class="mock"><div class="mock-label">C · Amsterdam / bold noticeboard</div>
       <article class="page amsterdam">
@@ -167,22 +131,13 @@
 
     <section class="mock"><div class="mock-label">D · The horizon / minimal cinematic</div>
       <article class="page horizon">
-        <img class="photo" src="../../../public/images/gallery-extra/rainy-horseback-overlook.jpg" alt="Horseback riders overlooking Mongolia’s Orkhon Valley">
+        <img class="photo" src="../../../public/images/gallery-extra/rearing-horse-over-valley.jpg" alt="Mongolian rider overlooking a wide green valley">
         <div class="mast"><strong>8 Lakes Tours</strong><span>9-day horseback expedition</span></div>
         <div class="vertical">MONGOLIA</div>
         <div class="bottom"><div><h2>Very far from ordinary.</h2><p>Ride the Orkhon Valley and Eight Lakes with local horsemen. Stay with a nomadic family. Small groups, open country, no resort version.</p></div><div class="scan"><img class="qr" src="qr-horizon.png" alt="QR code to 8 Lakes Tours"><span>Dates & booking</span></div></div>
       </article>
     </section>
 
-    <section class="mock"><div class="mock-label">E · Beyond the roads / impact type</div>
-      <article class="page crossing">
-        <div class="brandline"><strong>8 Lakes Tours</strong><span>Orkhon Valley · Mongolia</span></div>
-        <img class="photo" src="../../../public/images/water-crossing.jpg" alt="Horse riders crossing a Mongolian river">
-        <h2>Beyond<br>the roads.</h2>
-        <div class="detail"><div><p>Nine days on horseback through open steppe, river crossings and the Eight Lakes region—hosted with a Mongolian nomadic family.</p><strong>Beginner & intermediate riders welcome · Max 8</strong></div><div class="scan"><img class="qr" src="qr-crossing.png" alt="QR code to 8 Lakes Tours"><span>Scan to ride</span></div></div>
-        <div class="dates"><span>From $1,799</span><span>September dates open</span><span>8lakestours.com</span></div>
-      </article>
-    </section>
 
     <section class="mock"><div class="mock-label">F · Two departures / information poster</div>
       <article class="page departures">
@@ -196,7 +151,7 @@
 
     <section class="mock"><div class="mock-label">G · Night frame / quiet premium</div>
       <article class="page night">
-        <div class="frame"><img class="photo" src="../../../public/images/gallery-extra/rider-mountain-clouds.jpg" alt="Horse rider beneath dramatic mountain clouds"><div class="mast"><strong>8 Lakes Tours</strong><span>Mongolia · 2026 / 2027</span></div><div class="copy"><h2>Go where the sky<br>has no end.</h2><p>A 9-day small-group horseback expedition through the Orkhon Valley and Eight Lakes, guided by local horsemen and hosted with a nomadic family.</p></div><div class="seal"><img class="qr" src="qr-night.png" alt="QR code to 8 Lakes Tours"><span>Explore dates<br>From $1,799</span></div></div>
+        <div class="frame"><img class="photo" src="../../../public/images/expedition-originals/river-horseman-silhouette-portrait.jpg" alt="Horseman silhouetted beside a river in Mongolia"><div class="mast"><strong>8 Lakes Tours</strong><span>Mongolia · 2026 / 2027</span></div><div class="copy"><h2>Go where the sky<br>has no end.</h2><p>A 9-day small-group horseback expedition through the Orkhon Valley and Eight Lakes, guided by local horsemen and hosted with a nomadic family.</p></div><div class="seal"><img class="qr" src="qr-night.png" alt="QR code to 8 Lakes Tours"><span>Explore dates<br>From $1,799</span></div></div>
       </article>
     </section>
 

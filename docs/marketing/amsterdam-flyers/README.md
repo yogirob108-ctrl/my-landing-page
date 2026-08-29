@@ -3,13 +3,11 @@
 ## Directions
 
 - **A · Cinematic / premium:** landscape-first, quiet luxury, strongest for travel shops, boutique cafés and design-conscious venues.
-- **B · Human / editorial:** family partnership and authenticity, strongest where trust and ethical travel matter.
 - **C · Amsterdam / bold noticeboard:** local hook and maximum stopping power, strongest for hostels, climbing gyms, universities, music venues and busy community boards.
 - **D · The horizon:** minimal full-bleed cinematic treatment with a vertical Mongolia wordmark.
-- **E · Beyond the roads:** hard-edged orange impact poster built around a river crossing.
 - **F · Two departures:** date-led information poster for places where people stop long enough to plan.
 - **G · Night frame:** dark, quiet premium treatment with a restrained gold frame.
-- **H · Paste-up:** blue Amsterdam street collage balancing landscapes, family life and a direct hook.
+- **H · Paste-up:** warm rust Amsterdam street collage balancing landscapes, family life and a direct hook.
 
 ## Shared facts
 
@@ -26,9 +24,8 @@ Each concept has a distinct `utm_content` value under the shared campaign `amste
 ## Slop diagnostic
 
 - **A: 0/10.** Full-bleed cinematic composition, brand-led typography, no generic UI patterns.
-- **B: 0/10.** Editorial asymmetry and real family photography; no decorative card/grid treatment.
 - **C: 0/10.** Purposeful noticeboard poster grammar; bold yellow and condensed typography are specific to the Amsterdam street context, not generic tech styling.
-- **D–H: 0/10.** Each uses a distinct print archetype—minimal horizon, impact block, departure bill, framed night image, and paste-up collage—rather than repeating a card grid or recolouring one layout.
+- **D, F, G, H: 0/10.** Each uses a distinct print archetype—minimal horizon, departure bill, framed night image, and paste-up collage—rather than repeating a card grid or recolouring one layout.
 
 ## Production caveat
 
