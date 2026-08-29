@@ -52,4 +52,8 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/gallery-extra/guest-and-host-women-in-deels.jpg', alt: 'A guest and her host in traditional deels below the green hills', width: 2000, height: 1333, orientation: 'landscape' },
   { src: '/images/gallery-extra/guests-on-horseback-in-deels.jpg', alt: 'Two guests in borrowed deels on horseback in the evening light', width: 2000, height: 1333, orientation: 'landscape' },
   { src: '/images/gallery-extra/herder-with-motorbike.jpg', alt: 'Herder resting on his motorbike on the steppe at dusk', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/horseman-with-saddled-horse-film.jpg', alt: 'Horseman in a deel and straw hat beside his saddled horse, shot on film', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/rider-silhouette-at-dusk-film.jpg', alt: 'Rider silhouetted on horseback against a pale dusk sky', width: 2000, height: 1333, orientation: 'landscape' },
+  { src: '/images/gallery-extra/rider-in-motion-monochrome.jpg', alt: 'Rider guiding a horse, caught mid-motion in black and white', width: 1334, height: 2000, orientation: 'portrait' },
+  { src: '/images/gallery-extra/motorbike-on-the-ridge-monochrome.jpg', alt: 'Rider pausing on a motorbike to look out across the ridgelines', width: 1333, height: 2000, orientation: 'portrait' },
 ]
