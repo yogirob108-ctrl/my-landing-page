@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Test whether a very small amount of high-intent Google Search traffic can produce a qualified enquiry for the remaining 2026 season. The realistic fixed-date opportunity is **September 14–22, 2026**. Ads ask about availability; they do not claim that places are confirmed.
+Test whether a small amount of high-intent Google Search traffic can produce a booking for the remaining 2026 season. The directly bookable fixed-date opportunities are **September 14–22, 2026** and **September 23–October 1, 2026**.
 
 ## Campaign settings
 
@@ -21,14 +21,14 @@ Test whether a very small amount of high-intent Google Search traffic can produc
 - Locations: United Kingdom; Netherlands; Germany
 - Location option: **Presence — people in or regularly in the targeted locations**
 - Match types: Exact and Phrase only
-- Bid strategy: Maximize Clicks with a **€2.50 maximum CPC limit** if Google exposes that control
-- Budget: **€3.00 per day**
-- Duration: **14 calendar days including activation day**
-- Latest permissible activation date: **August 31, 2026**. Do not activate after this date; the test must end before the September 14 departure starts.
-- Campaign end date: set the Google Ads campaign end date to **activation date + 13 days**, never later than **September 13, 2026**.
-- Total control: **€50 manual spend stop**. Pause immediately when account cost reaches €50 even if the campaign end date has not arrived.
+- Bid strategy: Maximize Clicks with a **$2.50 maximum CPC limit** if Google exposes that control
+- Budget: **$7.00 per day**
+- Duration: **7 calendar days including activation day**
+- Planned activation date: **August 30, 2026**
+- Campaign end date: **September 5, 2026**
+- Total control: **$55 manual spend stop**. Pause immediately when account cost reaches $55 even if the campaign end date has not arrived.
 
-Google daily budgets are not hard total caps. €3/day normally plans around €42 over 14 days but Google may spend more on individual days. The €50 ceiling therefore requires monitoring and a manual pause. The configured campaign end date provides the time stop; verify it in campaign settings after activation.
+Google daily budgets are not hard total caps. $7/day plans around $49 over seven days but Google may spend more on individual days. The $55 ceiling therefore requires monitoring and a manual pause. The configured campaign end date provides the time stop; verify it in campaign settings after activation.
 
 ## Conversion roles
 
@@ -44,31 +44,31 @@ Because this account has no reliable conversion history and the budget is tiny: 
 ## Activation checklist
 
 1. Henry completes Google Ads billing profile and payment method directly. Do not share card or identity details.
-2. Open normal Ads dashboard for client `285-034-4584`; verify Netherlands country; Amsterdam-compatible time zone; EUR currency.
+2. Open normal Ads dashboard for client `285-034-4584`; verify Rob's United States billing profile, account time zone, and USD currency.
 3. Link the exact GA4 web stream for `https://www.8lakestours.com/` with measurement ID `G-E9PW7T08LZ`.
 4. Import conversion actions with the roles above and check for duplicates.
 5. Create one Search campaign using this file and the three CSVs in this folder. Keep it PAUSED while building.
 6. Confirm the final homepage URL returns HTTP 200 and retains the UTM query string.
 7. Apply every negative before activation.
-8. Read back: €3/day; Maximize Clicks; €2.50 CPC cap where available; Search only; Search Partners off; Display off; English; UK/NL/DE; presence targeting; exact/phrase only.
+8. Read back: $7/day; Maximize Clicks; $2.50 CPC cap where available; Search only; Search Partners off; Display off; English; UK/NL/DE; presence targeting; exact/phrase only.
 9. Confirm no broad match; Performance Max; auto-created expansion; or recommendations were enabled.
-10. Before activation, verify today is no later than August 31, 2026. Set the campaign end date to activation date + 13 days, never later than September 13, 2026.
+10. Before activation, verify the planned run is August 30–September 5, 2026, inclusive.
 11. Activate once. Immediately reopen settings and verify the controls and campaign end date persisted.
 12. Record activation date and create a daily search-term review reminder.
-13. Pause earlier when account campaign cost reaches €50.
+13. Pause earlier when account campaign cost reaches $55.
 
 ## Daily optimization
 
 - Review search terms daily for the first seven days.
 - Add irrelevant searches as exact or phrase negatives immediately.
-- Pause a keyword after roughly €8–€10 spend without a relevant enquiry.
+- Pause a keyword after roughly $8–$10 spend without a relevant enquiry.
 - Prefer exact queries with clear tour-booking intent over informational destination research.
 - Judge success by qualified enquiries and payments rather than raw clicks.
-- Do not extend beyond €50 without a separate decision.
+- Do not extend beyond $55 without a separate decision.
 
 ## Honest offer guardrails
 
-- Say “Ask about September availability” rather than “places available.”
+- It is truthful to advertise both listed September 2026 departures as open while they remain directly bookable on the live site.
 - Do not use “last places” or a numerical scarcity claim without operational confirmation.
 - Total price is $1,799–$1,999 per person.
 - The $899–$999 per-guest online booking payment is not the total trip price.
