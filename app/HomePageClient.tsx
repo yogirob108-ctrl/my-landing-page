@@ -973,8 +973,11 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         .proof-item { background: var(--ink); padding: 1.2rem; text-align: center; }
         .proof-value { font-family: var(--font-cormorant), 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--gold); display: block; }
         .proof-label { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mist); opacity: 0.7; margin-top: 0.35rem; display: block; }
-        .instagram-link { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.45); }
-        .instagram-link:hover { color: var(--cream); border-color: var(--cream); }
+        .instagram-link { color: var(--gold); text-decoration: none; }
+        .instagram-link .instagram-glyph { width: 1.05em; height: 1.05em; vertical-align: -0.18em; margin-right: 0.35em; }
+        .instagram-link .instagram-handle { border-bottom: 1px solid rgba(200,169,110,0.45); }
+        .instagram-link:hover { color: var(--cream); }
+        .instagram-link:hover .instagram-handle { border-color: var(--cream); }
 
         .itinerary { background: var(--dark); }
         .itinerary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 4rem; }
@@ -1559,7 +1562,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
           <div className="proof-item"><span className="proof-value">Insurance</span><span className="proof-label">Required</span></div>
           <div className="proof-item"><span className="proof-value">Direct</span><span className="proof-label">Family partnership</span></div>
         </div>
-        <p className="section-body reveal" style={{textAlign:'center', margin:'2rem auto 0', maxWidth:'720px'}}>Follow the route, camp life and behind-the-scenes buildout on <a className="instagram-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer">Instagram @8lakestours</a>.</p>
+        <p className="section-body reveal" style={{textAlign:'center', margin:'2rem auto 0', maxWidth:'720px'}}>Follow the route, camp life and behind-the-scenes buildout on <a className="instagram-link" href="https://www.instagram.com/8lakestours" target="_blank" rel="noopener noreferrer"><svg className="instagram-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.6" cy="6.4" r="1.15" fill="currentColor" stroke="none" /></svg><span className="instagram-handle">Instagram @8lakestours</span></a>.</p>
       </section>
 
       {/* ITINERARY */}
