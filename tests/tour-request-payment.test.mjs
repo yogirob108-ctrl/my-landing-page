@@ -60,12 +60,35 @@ test('a fixed departure for one or two guests can retain the standard payment pa
   assert.equal(requiresManualPaymentLink('August 24 – September 1, 2026', 1), false);
 });
 
-test('late-season fixed departures are directly bookable for one or two guests', () => {
-  for (const date of ['September 14 – 22, 2026', 'September 23 – October 1, 2026']) {
+test('September through November stays full with two directly bookable departures per month', () => {
+  const expectedLateSeasonDates = [
+    'September 14 – 22, 2026',
+    'September 23 – October 1, 2026',
+    'October 7 – 15, 2026',
+    'October 21 – 29, 2026',
+    'November 4 – 12, 2026',
+    'November 18 – 26, 2026',
+  ];
+
+  const actualLateSeasonDates = TOUR_DATES
+    .filter(option => option.startDate >= '2026-09-01' && option.startDate <= '2026-11-30')
+    .map(option => option.date);
+
+  assert.deepEqual(actualLateSeasonDates, expectedLateSeasonDates);
+  for (const date of expectedLateSeasonDates) {
     assert.equal(isRequestOnlyTourDate(date), false);
     assert.equal(requiresManualPaymentLink(date, 1), false);
     assert.equal(requiresManualPaymentLink(date, 2), false);
   }
+});
+
+test('the 2026 private-date option remains available through November', () => {
+  const privateDate = TOUR_DATES.find(option => option.date === '2026 Private Group Date');
+
+  assert.ok(privateDate);
+  assert.equal(privateDate.availableUntil, '2026-11-30');
+  assert.match(privateDate.detail, /November 2026/);
+  assert.equal(privateDate.requiresConfirmation, true);
 });
 
 test('every fixed 2026 departure is free of the request-only gate', () => {
