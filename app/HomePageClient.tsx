@@ -1648,7 +1648,6 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
       {/* GETTING THERE */}
       <section className="riding-stay-section">
         <div style={{maxWidth:'980px', margin:'0 auto', border:'1px solid rgba(200,169,110,0.24)', borderRadius:'var(--radius-card)', background:'rgba(200,169,110,0.065)', padding:'2rem'}}>
-          <span className="section-eyebrow">Prefer More Riding?</span>
           <h2 className="section-title">Host-Family Stay<br /><em>&amp; Daily Horse Riding</em></h2>
           <p className="section-body" style={{maxWidth:'760px'}}>Some guests want the Mongolian horse experience without committing to the full camping trek to Eight Lakes. If you&apos;d rather stay with the host family, be looked after at the ger camp, and focus on daily riding lessons or shorter rides, email Rob and the team. We can discuss a custom hosted riding stay around your dates.</p>
           <a className="btn-primary" href="mailto:info@8lakestours.com?subject=Custom%20host-family%20riding%20stay" style={{marginTop:'1.4rem'}}>Ask About Riding-Only Stay</a>
