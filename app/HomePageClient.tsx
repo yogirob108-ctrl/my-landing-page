@@ -384,7 +384,6 @@ function WaiverModal({ onClose, onAgree }: { onClose: () => void; onAgree: () =>
 
 export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
   const lateSeasonDepartures = tourDates.filter(option => option.startDate && option.startDate >= '2026-09-01');
-  const lateSeasonDateLabel = lateSeasonDepartures.map(option => option.date.replace(', 2026', '')).join(' or ');
   const [showWaiver, setShowWaiver] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [waiverExpanded, setWaiverExpanded] = useState(false);
@@ -1422,7 +1421,7 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
       {lateSeasonDepartures.length > 0 && <section className="offer-strip" aria-label="Late-season 2026 expedition availability and price summary">
         <div>
           <p className="offer-strip-kicker">Still hoping to ride this season?</p>
-          <h2 className="offer-strip-title">Book {lateSeasonDateLabel}, 2026</h2>
+          <h2 className="offer-strip-title">Book September–November 2026</h2>
           <p className="offer-strip-note">Late-season places are open now — choose your date and reserve online.</p>
         </div>
         <div className="offer-strip-facts">

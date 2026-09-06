@@ -40,18 +40,25 @@ function parseCsv(source) {
   return rows;
 }
 
-test('homepage gives last-minute visitors a bookable late-season path', async () => {
+test('homepage gives late-season visitors a clear September–November booking path', async () => {
   const [source, tourDatesSource] = await Promise.all([
     readFile(new URL('../app/HomePageClient.tsx', import.meta.url), 'utf8'),
     readFile(new URL('../lib/tour-dates.mjs', import.meta.url), 'utf8'),
   ]);
 
-  // The strip is driven by live inventory rather than a hardcoded departure label.
   assert.match(source, /lateSeasonDepartures\.length > 0/);
-  assert.match(source, /option\.startDate >= '2026-09-01'/);
+  assert.match(source, /Book September–November 2026/);
+  assert.doesNotMatch(source, /lateSeasonDateLabel/);
   assert.doesNotMatch(source, /September places available|last places|only \d+ places/i);
 
-  for (const date of ['September 14 – 22, 2026', 'September 23 – October 1, 2026']) {
+  for (const date of [
+    'September 14 – 22, 2026',
+    'September 23 – October 1, 2026',
+    'October 7 – 15, 2026',
+    'October 21 – 29, 2026',
+    'November 4 – 12, 2026',
+    'November 18 – 26, 2026',
+  ]) {
     assert.match(tourDatesSource, new RegExp(`${date}[^\\n]+status: 'Open · max 8'`));
   }
   assert.doesNotMatch(tourDatesSource, /startDate:[^\n]+requiresConfirmation: true/);
