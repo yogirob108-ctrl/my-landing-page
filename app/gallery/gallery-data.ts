@@ -56,4 +56,13 @@ export const GALLERY_IMAGES: GalleryImage[] = [
   { src: '/images/gallery-extra/rider-silhouette-at-dusk-film.jpg', alt: 'Rider silhouetted on horseback against a pale dusk sky', width: 1944, height: 1277, orientation: 'landscape' },
   { src: '/images/gallery-extra/rider-in-motion-monochrome.jpg', alt: 'Rider guiding a horse, caught mid-motion in black and white', width: 1334, height: 2000, orientation: 'portrait' },
   { src: '/images/gallery-extra/motorbike-on-the-ridge-monochrome.jpg', alt: 'Rider pausing on a motorbike to look out across the ridgelines', width: 1333, height: 2000, orientation: 'portrait' },
+  { src: '/images/gallery-extra/horses-grazing-storm-monochrome.jpg', alt: 'Two horses grazing on the open steppe under heavy storm cloud, in black and white', width: 1620, height: 1080, orientation: 'landscape' },
+  { src: '/images/gallery-extra/herder-motorbike-valley-dusk.jpg', alt: 'Herder in a deel loading his motorbike above the valley at dusk', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/rider-in-larch-forest-rain.jpg', alt: 'Rider wrapped against the rain on horseback in the larch forest', width: 2048, height: 1366, orientation: 'landscape' },
+  { src: '/images/gallery-extra/saddled-horse-at-corral-monochrome.jpg', alt: 'Saddled horse and herder at the corral fence in backlit morning sun', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/herder-with-lasso-by-river.jpg', alt: 'Herder holding a lasso on horseback beside the river below the mountains', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/packhorses-grazing-by-stream.jpg', alt: 'Loaded pack horses grazing beside a mountain stream under blue sky', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/pack-train-on-forest-trail-rain.jpg', alt: 'Rider leading the pack train along a wet forest trail in the rain', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/horses-in-rocky-larch-forest.jpg', alt: 'Horses grazing among boulders in the larch forest', width: 1080, height: 1620, orientation: 'portrait' },
+  { src: '/images/gallery-extra/ger-interior-from-the-bed.jpg', alt: 'View across a ger interior from the bed, boots up, stove and open door beyond', width: 1536, height: 2048, orientation: 'portrait' },
 ]
