@@ -30,8 +30,8 @@ test('inquiries link customers and conversions without changing existing tables'
   assert.match(sql, /converted_booking_id uuid references public\.bookings\(id\) on delete restrict/i);
   assert.match(sql, /gmail_account_email text not null/i);
   assert.match(sql, /gmail_thread_id text not null/i);
-  assert.match(sql, /unique \(gmail_account_email, gmail_thread_id\)/i);
-  assert.match(sql, /idempotency_key text not null unique/i);
+  assert.match(sql, /unique \(project_id, gmail_account_email, gmail_thread_id\)/i);
+  assert.match(sql, /inquiries_project_idempotency_key_idx[\s\S]*\(project_id, idempotency_key\)/i);
   assert.match(sql, /first_inbound_at timestamptz/i);
   assert.match(sql, /last_inbound_at timestamptz/i);
   assert.match(sql, /first_outbound_at timestamptz/i);
@@ -48,10 +48,10 @@ test('inquiries link customers and conversions without changing existing tables'
 test('messages are idempotent Gmail records attached to an inquiry', async () => {
   const sql = await readMigration();
 
-  assert.match(sql, /create table public\.inquiry_messages\s*\([\s\S]*inquiry_id uuid not null,[\s\S]*foreign key \(inquiry_id, gmail_account_email, gmail_thread_id\)/i);
+  assert.match(sql, /create table public\.inquiry_messages\s*\([\s\S]*project_id uuid not null[\s\S]*inquiry_id uuid not null,[\s\S]*foreign key \(inquiry_id, project_id, gmail_account_email, gmail_thread_id\)/i);
   assert.match(sql, /gmail_message_id text not null/i);
-  assert.match(sql, /unique \(gmail_account_email, gmail_message_id\)/i);
-  assert.match(sql, /create unique index inquiry_messages_idempotency_key_idx[\s\S]*\(idempotency_key\)/i);
+  assert.match(sql, /unique \(project_id, gmail_account_email, gmail_message_id\)/i);
+  assert.match(sql, /create unique index inquiry_messages_idempotency_key_idx[\s\S]*\(project_id, idempotency_key\)/i);
   assert.match(sql, /direction text not null check \(direction in \('inbound', 'outbound'\)\)/i);
   assert.match(sql, /occurred_at timestamptz not null/i);
 });
@@ -71,10 +71,10 @@ test('drafts preserve editable content and enforce review before send', async ()
   assert.match(sql, /gmail_message_id text/i);
   assert.match(sql, /provider_message_id text/i);
   assert.match(sql, /unique \(inquiry_id, version\)/i);
-  assert.match(sql, /create unique index inquiry_drafts_gmail_draft_idx[\s\S]*\(gmail_account_email, gmail_draft_id\)/i);
-  assert.match(sql, /create unique index inquiry_drafts_gmail_message_idx[\s\S]*\(gmail_account_email, gmail_message_id\)/i);
+  assert.match(sql, /create unique index inquiry_drafts_gmail_draft_idx[\s\S]*\(project_id, gmail_account_email, gmail_draft_id\)/i);
+  assert.match(sql, /create unique index inquiry_drafts_gmail_message_idx[\s\S]*\(project_id, gmail_account_email, gmail_message_id\)/i);
   assert.match(sql, /constraint inquiry_drafts_sent_requires_approval[\s\S]*sent_at is null[\s\S]*approved_at is not null[\s\S]*reviewer is not null/i);
-  assert.match(sql, /create unique index inquiry_drafts_idempotency_key_idx[\s\S]*\(idempotency_key\)/i);
+  assert.match(sql, /create unique index inquiry_drafts_idempotency_key_idx[\s\S]*\(project_id, idempotency_key\)/i);
 });
 
 test('import runs support resumable idempotent Gmail synchronization', async () => {
@@ -83,7 +83,7 @@ test('import runs support resumable idempotent Gmail synchronization', async () 
   assert.match(sql, /create table public\.inquiry_import_runs\s*\([\s\S]*gmail_account_email text not null/i);
   assert.match(sql, /gmail_history_id_from text/i);
   assert.match(sql, /gmail_history_id_to text/i);
-  assert.match(sql, /idempotency_key text not null unique/i);
+  assert.match(sql, /inquiry_import_runs_project_idempotency_key_idx[\s\S]*\(project_id, idempotency_key\)/i);
   assert.match(sql, /status text not null check \(status in \('running', 'completed', 'failed'\)\)/i);
   assert.match(sql, /started_at timestamptz not null/i);
   assert.match(sql, /completed_at timestamptz/i);
@@ -96,7 +96,7 @@ test('draft sends are claimed and finalized transactionally without automatic re
   assert.match(sql, /send_error text/i);
   assert.match(sql, /sent_subject text/i);
   assert.match(sql, /sent_body_text text/i);
-  assert.match(sql, /create or replace function public\.claim_inquiry_draft_send\s*\(\s*p_draft_id uuid\s*\)/i);
+  assert.match(sql, /create or replace function public\.claim_inquiry_draft_send\s*\(\s*p_project_id uuid,\s*p_gmail_account_email text,\s*p_draft_id uuid\s*\)/i);
   assert.match(sql, /for update/i);
   assert.match(sql, /state\s*=\s*'sending'/i);
   assert.match(sql, /gen_random_uuid\(\)/i);
@@ -138,7 +138,7 @@ test('mailbox sync uses an exclusive lease and monotonic cursor RPCs', async () 
   const sql = await readMigration();
 
   assert.match(sql, /create table public\.inquiry_sync_state/i);
-  assert.match(sql, /primary key \(provider, gmail_account_email\)/i);
+  assert.match(sql, /primary key \(provider, project_id, gmail_account_email\)/i);
   assert.match(sql, /lease_token uuid/i);
   assert.match(sql, /lease_expires_at timestamptz/i);
   assert.match(sql, /create or replace function public\.claim_inquiry_sync/i);
@@ -151,9 +151,9 @@ test('mailbox sync uses an exclusive lease and monotonic cursor RPCs', async () 
 test('messages and drafts cannot cross Gmail account or thread boundaries', async () => {
   const sql = await readMigration();
 
-  assert.match(sql, /unique \(id, gmail_account_email, gmail_thread_id\)/i);
-  assert.match(sql, /foreign key \(inquiry_id, gmail_account_email, gmail_thread_id\)[\s\S]*references public\.inquiries\(id, gmail_account_email, gmail_thread_id\)/i);
-  assert.match(sql, /provider, gmail_account_email, provider_message_id/i);
+  assert.match(sql, /unique \(id, project_id, gmail_account_email, gmail_thread_id\)/i);
+  assert.match(sql, /foreign key \(inquiry_id, project_id, gmail_account_email, gmail_thread_id\)[\s\S]*references public\.inquiries\(id, project_id, gmail_account_email, gmail_thread_id\)/i);
+  assert.match(sql, /provider, project_id, gmail_account_email, provider_message_id/i);
 });
 
 test('booking conversion is explicit, unique, consistent and project-safe', async () => {
@@ -164,8 +164,8 @@ test('booking conversion is explicit, unique, consistent and project-safe', asyn
   assert.match(sql, /status = 'converted'[\s\S]*converted_booking_id is not null[\s\S]*converted_at is not null/i);
   assert.match(sql, /status <> 'converted'[\s\S]*converted_booking_id is null[\s\S]*converted_at is null/i);
   assert.match(sql, /create or replace function public\.convert_inquiry/i);
-  assert.match(sql, /v_booking\.project_id <> v_inquiry\.project_id/i);
-  assert.match(sql, /v_booking\.customer_id <> v_inquiry\.customer_id/i);
+  assert.match(sql, /where b\.id=p_booking_id and b\.project_id=p_project_id/i);
+  assert.match(sql, /v_booking\.customer_id<>v_inquiry\.customer_id/i);
 });
 
 test('updated timestamps and least-privilege grants are enforced centrally', async () => {
@@ -201,33 +201,33 @@ test('inquiry migration has a unique timestamp version and excludes cancellation
 test('sync claim targets its named primary-key constraint without PLpgSQL ambiguity', async () => {
   const sql = await readMigration();
 
-  assert.match(sql, /constraint inquiry_sync_state_pkey primary key \(provider, gmail_account_email\)/i);
+  assert.match(sql, /constraint inquiry_sync_state_pkey primary key \(provider, project_id, gmail_account_email\)/i);
   assert.match(sql, /on conflict on constraint inquiry_sync_state_pkey do update/i);
-  assert.doesNotMatch(sql, /on conflict \(provider, gmail_account_email\) do update/i);
+  assert.doesNotMatch(sql, /on conflict \(provider, project_id, gmail_account_email\) do update/i);
 });
 
 test('send finalization is replay-idempotent and rejects conflicting provider evidence', async () => {
   const sql = await readMigration();
 
-  assert.match(sql, /constraint inquiry_messages_provider_account_message_key\s+unique \(provider, gmail_account_email, provider_message_id\)/i);
+  assert.match(sql, /constraint inquiry_messages_provider_account_message_key\s+unique \(provider, project_id, gmail_account_email, provider_message_id\)/i);
   assert.match(sql, /on conflict on constraint inquiry_messages_provider_account_message_key do nothing/i);
-  assert.match(sql, /if v_draft\.state = 'sent' then[\s\S]*is distinct from[\s\S]*raise exception 'Conflicting provider evidence/i);
+  assert.match(sql, /if v_draft\.state='sent' then[\s\S]*is distinct from[\s\S]*raise exception 'Conflicting provider evidence/i);
   assert.match(sql, /create or replace function public\.reconcile_inquiry_draft_send\s*\(/i);
   assert.match(sql, /p_verified_by text[\s\S]*p_gmail_evidence jsonb/i);
-  assert.match(sql, /p_gmail_evidence ->> 'source'[\s\S]*gmail_api/i);
-  assert.match(sql, /p_gmail_evidence ->> 'gmail_account_email'[\s\S]*p_gmail_evidence ->> 'gmail_message_id'[\s\S]*p_gmail_evidence ->> 'gmail_thread_id'/i);
-  assert.match(sql, /v_draft\.send_claim_expires_at <= clock_timestamp\(\)/i);
+  assert.match(sql, /p_gmail_evidence->>'source'[\s\S]*gmail_api/i);
+  assert.match(sql, /p_gmail_evidence->>'gmail_account_email'[\s\S]*p_gmail_evidence->>'gmail_message_id'[\s\S]*p_gmail_evidence->>'gmail_thread_id'/i);
+  assert.match(sql, /send_claim_expires_at\s*<=\s*clock_timestamp\(\)/i);
 });
 
 test('finalization preserves advanced and terminal inquiry states while recording outbound evidence', async () => {
   const sql = await readMigration();
 
   assert.match(sql, /insert into public\.inquiry_messages[\s\S]*'outbound'/i);
-  assert.match(sql, /status = case[\s\S]*when i\.status in \('new', 'needs_review', 'drafted'\) then 'contacted'[\s\S]*else i\.status[\s\S]*end/i);
+  assert.match(sql, /status=case[\s\S]*when i\.status in \('new','needs_review','drafted'\) then 'contacted'[\s\S]*else i\.status[\s\S]*end/i);
   for (const status of ['replied', 'qualified', 'converted', 'lost', 'ignored']) {
     assert.match(sql, new RegExp(`else i\\.status`, 'i'), `finalization must preserve ${status}`);
   }
-  assert.match(sql, /next_follow_up_at = case[\s\S]*when i\.status in \('converted', 'lost', 'ignored'\) then null/i);
+  assert.match(sql, /next_follow_up_at=case[\s\S]*when i\.status in \('converted','lost','ignored'\) then null/i);
 });
 
 test('send outcomes distinguish definitive failure from unknown delivery and gate retries', async () => {
@@ -235,13 +235,13 @@ test('send outcomes distinguish definitive failure from unknown delivery and gat
 
   assert.match(sql, /'delivery_unknown'/i);
   assert.match(sql, /create or replace function public\.record_inquiry_draft_send_failure/i);
-  assert.match(sql, /last_failure_kind = 'pre_provider'/i);
+  assert.match(sql, /last_failure_kind='pre_provider'/i);
   assert.match(sql, /create or replace function public\.record_inquiry_draft_delivery_unknown/i);
-  assert.match(sql, /state = 'delivery_unknown'[\s\S]*last_failure_kind = 'delivery_unknown'/i);
+  assert.match(sql, /state='delivery_unknown'[\s\S]*last_failure_kind='delivery_unknown'/i);
   assert.match(sql, /create or replace function public\.reconcile_inquiry_draft_not_delivered/i);
   assert.match(sql, /create or replace function public\.authorize_inquiry_draft_retry/i);
-  assert.match(sql, /where d\.state = 'send_failed'/i);
-  assert.doesNotMatch(sql, /where d\.state in \('send_failed', 'delivery_unknown'\)/i);
+  assert.match(sql, /where d\.state='send_failed'/i);
+  assert.doesNotMatch(sql, /where d\.state in \('send_failed','delivery_unknown'\)/i);
   assert.match(sql, /p_authorized_by text[\s\S]*p_reason text/i);
 });
 
@@ -282,8 +282,8 @@ test('inquiry tables have operational indexes and stay private behind service-ro
 
   assert.match(sql, /create index inquiries_status_follow_up_idx on public\.inquiries \(status, next_follow_up_at\)/i);
   assert.match(sql, /create index inquiries_owner_status_idx on public\.inquiries \(owner, status\)/i);
-  assert.match(sql, /create index inquiry_messages_inquiry_occurred_idx\s+on public\.inquiry_messages \(inquiry_id, occurred_at desc\)/i);
-  assert.match(sql, /create index inquiry_drafts_review_queue_idx\s+on public\.inquiry_drafts \(state, created_at\)/i);
+  assert.match(sql, /create index inquiry_messages_inquiry_occurred_idx\s+on public\.inquiry_messages \(project_id, inquiry_id, occurred_at desc\)/i);
+  assert.match(sql, /create index inquiry_drafts_review_queue_idx\s+on public\.inquiry_drafts \(project_id, state, created_at\)/i);
 
   for (const table of ['inquiries', 'inquiry_messages', 'inquiry_drafts', 'inquiry_import_runs', 'inquiry_sync_state']) {
     assert.match(sql, new RegExp(`alter table public\\.${table} enable row level security`, 'i'));
@@ -291,4 +291,55 @@ test('inquiry tables have operational indexes and stay private behind service-ro
   assert.match(sql, /revoke all on table public\.inquiries,[\s\S]*public\.inquiry_sync_state from public, anon, authenticated/i);
   assert.match(sql, /grant select, insert, update, delete on public\.inquiries,[\s\S]*public\.inquiry_sync_state to service_role/i);
   assert.match(sql, /revoke insert, update, delete on public\.inquiry_sync_state from service_role/i);
+});
+
+test('Ops RPCs expose the exact project and normalized mailbox scoped signatures', async () => {
+  const sql = await readMigration();
+  const signatures = {
+    claim_inquiry_sync: 'p_provider text, p_project_id uuid, p_gmail_account_email text, p_lease_token uuid',
+    renew_inquiry_sync: 'p_provider text, p_project_id uuid, p_gmail_account_email text, p_lease_token uuid, p_lease_seconds integer',
+    finish_inquiry_sync: 'p_provider text, p_project_id uuid, p_gmail_account_email text, p_lease_token uuid, p_gmail_history_id text',
+    release_inquiry_sync_failure: 'p_provider text, p_project_id uuid, p_gmail_account_email text, p_lease_token uuid',
+    create_inquiry_draft: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_expected_status public.inquiry_status, p_subject text, p_body_text text, p_to_email text, p_created_by text, p_in_reply_to text, p_reference_message_ids text[], p_idempotency_key text',
+    save_inquiry_draft: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_draft_id uuid, p_expected_version integer, p_subject text, p_body_text text, p_to_email text',
+    submit_inquiry_draft_for_review: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_draft_id uuid, p_expected_version integer',
+    approve_inquiry_draft: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_draft_id uuid, p_expected_version integer, p_reviewer text',
+    update_inquiry_pipeline: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_expected_status public.inquiry_status, p_status public.inquiry_status, p_lost_reason text, p_follow_up_at timestamptz',
+    convert_inquiry: 'p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_booking_id uuid, p_expected_status public.inquiry_status',
+    claim_inquiry_draft_send: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid',
+    record_inquiry_draft_send_failure: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_claim_token uuid, p_error_code text, p_sent_subject text, p_sent_body text',
+    record_inquiry_draft_delivery_unknown: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_claim_token uuid, p_send_attempt_id uuid, p_rfc_message_id text, p_provider_message_id text, p_provider_thread_id text',
+    finalize_inquiry_draft_send: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_claim_token uuid, p_provider text, p_provider_message_id text, p_provider_thread_id text, p_sent_subject text, p_sent_body text',
+    get_inquiry_draft_send_reconciliation: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid',
+    reconcile_inquiry_draft_send_acceptance: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_claim_token uuid, p_send_attempt_id uuid, p_rfc_message_id text, p_provider text, p_provider_message_id text, p_provider_thread_id text, p_sent_subject text, p_sent_body text',
+    record_inquiry_draft_reconciliation_check: 'p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_claim_token uuid, p_send_attempt_id uuid, p_rfc_message_id text, p_match_count integer',
+  };
+  for (const [name, parameters] of Object.entries(signatures)) {
+    const pattern = parameters.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/, /g, '\\s*,\\s*').replace(/ /g, '\\s+');
+    assert.match(sql, new RegExp(`create or replace function public\\.${name}\\s*\\(\\s*${pattern}\\s*\\)`, 'i'), name);
+  }
+  assert.match(sql, /create or replace function public\.reconcile_inbound_inquiry_message\s*\([\s\S]*p_project_id uuid[\s\S]*p_message_idempotency_key text[\s\S]*\)/i);
+});
+
+test('scoped storage and send attempts carry project and immutable reconciliation evidence', async () => {
+  const sql = await readMigration();
+  for (const table of ['inquiry_messages', 'inquiry_drafts', 'inquiry_import_runs', 'inquiry_sync_state']) {
+    assert.match(sql, new RegExp(`create table public\\.${table}\\s*\\([\\s\\S]*project_id uuid not null`, 'i'), table);
+  }
+  assert.match(sql, /send_attempt_id uuid/i);
+  assert.match(sql, /rfc_message_id text/i);
+  assert.match(sql, /reconciliation_checked_at timestamptz/i);
+  assert.match(sql, /reconciliation_match_count integer/i);
+  assert.match(sql, /constraint inquiry_sync_state_pkey primary key \(provider, project_id, gmail_account_email\)/i);
+});
+
+test('all public Ops RPCs are service-role only and use a fixed safe search path', async () => {
+  const sql = await readMigration();
+  const functions = [...sql.matchAll(/create or replace function public\.([a-z0-9_]+)\s*\([\s\S]*?\n\)\nreturns/gi)].map((match) => match[1]);
+  for (const name of functions.filter((name) => !name.startsWith('guard_') && name !== 'set_inquiry_updated_at')) {
+    const body = sql.match(new RegExp(`create or replace function public\\.${name}[\\s\\S]*?\\$\\$;`, 'i'))?.[0] ?? '';
+    assert.match(body, /security definer/i, name);
+    assert.match(body, /set search_path = ''/i, name);
+    assert.match(sql, new RegExp(`revoke all on function public\\.${name}\\(`, 'i'), `${name} revoke`);
+  }
 });
