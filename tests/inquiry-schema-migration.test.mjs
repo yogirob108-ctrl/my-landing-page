@@ -1,11 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 
-const migrationUrl = new URL('../supabase/migrations/0006_inquiry_system.sql', import.meta.url);
+const migrationsUrl = new URL('../supabase/migrations/', import.meta.url);
+
+async function inquiryMigrationName() {
+  const names = (await readdir(migrationsUrl)).filter((name) => name.endsWith('_inquiry_system.sql'));
+  assert.equal(names.length, 1, `expected one inquiry migration, found: ${names.join(', ')}`);
+  return names[0];
+}
 
 async function readMigration() {
-  return readFile(migrationUrl, 'utf8');
+  return readFile(new URL(await inquiryMigrationName(), migrationsUrl), 'utf8');
 }
 
 test('migration creates the inquiry lifecycle and all inquiry tables', async () => {
@@ -99,7 +105,7 @@ test('draft sends are claimed and finalized transactionally without automatic re
   assert.match(sql, /create or replace function public\.finalize_inquiry_draft_send/i);
   assert.match(sql, /insert into public\.inquiry_messages/i);
   assert.match(sql, /direction[\s\S]*'outbound'/i);
-  assert.match(sql, /status\s*=\s*'contacted'/i);
+  assert.match(sql, /status = case[\s\S]*then 'contacted'[\s\S]*else i\.status/i);
   assert.match(sql, /security definer/i);
   assert.match(sql, /revoke all on function public\.claim_inquiry_draft_send/i);
   assert.match(sql, /grant execute on function public\.claim_inquiry_draft_send/i);
@@ -121,7 +127,7 @@ test('draft review freezes recipients and message content after approval', async
   assert.match(sql, /cc_emails text\[\] not null default '\{\}'/i);
   assert.match(sql, /cardinality\(to_emails\) > 0/i);
   assert.match(sql, /create or replace function public\.guard_inquiry_draft_transition/i);
-  assert.match(sql, /old\.state in \('approved', 'sending', 'send_failed', 'sent'\)/i);
+  assert.match(sql, /old\.state in \('approved', 'sending', 'delivery_unknown', 'send_failed', 'sent'\)/i);
   for (const field of ['subject', 'body_text', 'to_emails', 'cc_emails', 'gmail_account_email', 'gmail_thread_id', 'in_reply_to', 'reference_message_ids']) {
     assert.match(sql, new RegExp(`new\\.${field} is distinct from old\\.${field}`, 'i'));
   }
@@ -136,7 +142,7 @@ test('mailbox sync uses an exclusive lease and monotonic cursor RPCs', async () 
   assert.match(sql, /lease_token uuid/i);
   assert.match(sql, /lease_expires_at timestamptz/i);
   assert.match(sql, /create or replace function public\.claim_inquiry_sync/i);
-  assert.match(sql, /on conflict \(provider, gmail_account_email\) do update/i);
+  assert.match(sql, /on conflict on constraint inquiry_sync_state_pkey do update/i);
   assert.match(sql, /lease_expires_at < clock_timestamp\(\)/i);
   assert.match(sql, /create or replace function public\.finish_inquiry_sync/i);
   assert.match(sql, /gmail_history_id = p_gmail_history_id/i);
@@ -173,6 +179,104 @@ test('updated timestamps and least-privilege grants are enforced centrally', asy
   assert.match(sql, /grant select, insert, update, delete[\s\S]*to service_role/i);
 });
 
+test('draft claim and finalization load row variables with PostgreSQL-valid selects', async () => {
+  const sql = await readMigration();
+
+  assert.doesNotMatch(sql, /select\s+d\s*,\s*i\s+into\s+v_draft\s*,\s*v_inquiry/i);
+  assert.doesNotMatch(sql, /select\s+d\.\*\s*,\s*i\.\*\s+into\s+v_draft\s*,\s*v_inquiry/i);
+  assert.match(sql, /select d\.\*[\s\S]*into v_draft[\s\S]*select i\.\*[\s\S]*into v_inquiry/i);
+});
+
+test('inquiry migration has a unique timestamp version and excludes cancellation DDL', async () => {
+  const names = await readdir(migrationsUrl);
+  const inquiryName = await inquiryMigrationName();
+
+  assert.match(inquiryName, /^\d{14}_inquiry_system\.sql$/);
+  assert.ok(inquiryName > '0006_booking_cancellation_decisions.sql');
+  assert.ok(!names.includes('0006_inquiry_system.sql'));
+  assert.ok(!names.includes('0006_booking_cancellation_decisions.sql'));
+  assert.doesNotMatch(await readMigration(), /booking_cancellation|cancellation_decision/i);
+});
+
+test('sync claim targets its named primary-key constraint without PLpgSQL ambiguity', async () => {
+  const sql = await readMigration();
+
+  assert.match(sql, /constraint inquiry_sync_state_pkey primary key \(provider, gmail_account_email\)/i);
+  assert.match(sql, /on conflict on constraint inquiry_sync_state_pkey do update/i);
+  assert.doesNotMatch(sql, /on conflict \(provider, gmail_account_email\) do update/i);
+});
+
+test('send finalization is replay-idempotent and rejects conflicting provider evidence', async () => {
+  const sql = await readMigration();
+
+  assert.match(sql, /constraint inquiry_messages_provider_account_message_key\s+unique \(provider, gmail_account_email, provider_message_id\)/i);
+  assert.match(sql, /on conflict on constraint inquiry_messages_provider_account_message_key do nothing/i);
+  assert.match(sql, /if v_draft\.state = 'sent' then[\s\S]*is distinct from[\s\S]*raise exception 'Conflicting provider evidence/i);
+  assert.match(sql, /create or replace function public\.reconcile_inquiry_draft_send\s*\(/i);
+  assert.match(sql, /p_verified_by text[\s\S]*p_gmail_evidence jsonb/i);
+  assert.match(sql, /p_gmail_evidence ->> 'source'[\s\S]*gmail_api/i);
+  assert.match(sql, /p_gmail_evidence ->> 'gmail_account_email'[\s\S]*p_gmail_evidence ->> 'gmail_message_id'[\s\S]*p_gmail_evidence ->> 'gmail_thread_id'/i);
+  assert.match(sql, /v_draft\.send_claim_expires_at <= clock_timestamp\(\)/i);
+});
+
+test('finalization preserves advanced and terminal inquiry states while recording outbound evidence', async () => {
+  const sql = await readMigration();
+
+  assert.match(sql, /insert into public\.inquiry_messages[\s\S]*'outbound'/i);
+  assert.match(sql, /status = case[\s\S]*when i\.status in \('new', 'needs_review', 'drafted'\) then 'contacted'[\s\S]*else i\.status[\s\S]*end/i);
+  for (const status of ['replied', 'qualified', 'converted', 'lost', 'ignored']) {
+    assert.match(sql, new RegExp(`else i\\.status`, 'i'), `finalization must preserve ${status}`);
+  }
+  assert.match(sql, /next_follow_up_at = case[\s\S]*when i\.status in \('converted', 'lost', 'ignored'\) then null/i);
+});
+
+test('send outcomes distinguish definitive failure from unknown delivery and gate retries', async () => {
+  const sql = await readMigration();
+
+  assert.match(sql, /'delivery_unknown'/i);
+  assert.match(sql, /create or replace function public\.record_inquiry_draft_send_failure/i);
+  assert.match(sql, /last_failure_kind = 'pre_provider'/i);
+  assert.match(sql, /create or replace function public\.record_inquiry_draft_delivery_unknown/i);
+  assert.match(sql, /state = 'delivery_unknown'[\s\S]*last_failure_kind = 'delivery_unknown'/i);
+  assert.match(sql, /create or replace function public\.reconcile_inquiry_draft_not_delivered/i);
+  assert.match(sql, /create or replace function public\.authorize_inquiry_draft_retry/i);
+  assert.match(sql, /where d\.state = 'send_failed'/i);
+  assert.doesNotMatch(sql, /where d\.state in \('send_failed', 'delivery_unknown'\)/i);
+  assert.match(sql, /p_authorized_by text[\s\S]*p_reason text/i);
+});
+
+test('sync RPCs renew leases and reject expired ownership for all material writes and release paths', async () => {
+  const sql = await readMigration();
+
+  assert.match(sql, /create or replace function public\.renew_inquiry_sync\s*\(/i);
+  assert.match(sql, /p_lease_seconds integer/i);
+  assert.match(sql, /sync\.lease_token = p_lease_token[\s\S]*sync\.lease_expires_at > clock_timestamp\(\)/i);
+  assert.match(sql, /create or replace function public\.require_inquiry_sync_lease\s*\(/i);
+  assert.match(sql, /create or replace function public\.guard_inquiry_sync_write\s*\(/i);
+  assert.match(sql, /before insert or update on public\.inquiries[\s\S]*guard_inquiry_sync_write/i);
+  assert.match(sql, /before insert or update on public\.inquiry_messages[\s\S]*guard_inquiry_sync_write/i);
+  assert.match(sql, /before insert or update on public\.inquiry_import_runs[\s\S]*guard_inquiry_sync_write/i);
+
+  for (const fn of ['finish_inquiry_sync', 'release_inquiry_sync_failure']) {
+    const body = sql.match(new RegExp(`create or replace function public\\.${fn}[\\s\\S]*?\\$\\$;`, 'i'))?.[0] ?? '';
+    assert.match(body, /lease_expires_at > clock_timestamp\(\)/i, `${fn} must reject expired leases`);
+  }
+});
+
+test('approved review evidence and sent provider evidence are immutable', async () => {
+  const sql = await readMigration();
+
+  for (const field of ['reviewer', 'review_notes', 'submitted_for_review_at', 'reviewed_at', 'approved_at']) {
+    assert.match(sql, new RegExp(`new\\.${field} is distinct from old\\.${field}`, 'i'));
+  }
+  for (const field of ['provider', 'provider_message_id', 'gmail_message_id', 'gmail_thread_id', 'sent_subject', 'sent_body_text', 'sent_at', 'reconciled_by', 'reconciled_at', 'reconciliation_evidence']) {
+    assert.match(sql, new RegExp(`new\\.${field} is distinct from old\\.${field}`, 'i'));
+  }
+  assert.match(sql, /create or replace function public\.guard_inquiry_message_evidence/i);
+  assert.match(sql, /before update or delete on public\.inquiry_messages/i);
+  assert.match(sql, /create trigger inquiry_drafts_guard_evidence_delete[\s\S]*before delete on public\.inquiry_drafts/i);
+});
+
 test('inquiry tables have operational indexes and stay private behind service-role access', async () => {
   const sql = await readMigration();
 
@@ -186,4 +290,5 @@ test('inquiry tables have operational indexes and stay private behind service-ro
   }
   assert.match(sql, /revoke all on table public\.inquiries,[\s\S]*public\.inquiry_sync_state from public, anon, authenticated/i);
   assert.match(sql, /grant select, insert, update, delete on public\.inquiries,[\s\S]*public\.inquiry_sync_state to service_role/i);
+  assert.match(sql, /revoke insert, update, delete on public\.inquiry_sync_state from service_role/i);
 });
