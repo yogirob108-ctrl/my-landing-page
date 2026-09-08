@@ -239,10 +239,9 @@ test('send outcomes distinguish definitive failure from unknown delivery and gat
   assert.match(sql, /create or replace function public\.record_inquiry_draft_delivery_unknown/i);
   assert.match(sql, /state='delivery_unknown'[\s\S]*last_failure_kind='delivery_unknown'/i);
   assert.match(sql, /create or replace function public\.reconcile_inquiry_draft_not_delivered/i);
-  assert.match(sql, /create or replace function public\.authorize_inquiry_draft_retry/i);
-  assert.match(sql, /where d\.state='send_failed'/i);
+  assert.match(sql, /create or replace function public\.authorize_inquiry_draft_retry\([\s\S]*p_inquiry_id uuid[\s\S]*p_draft_id uuid[\s\S]*p_expected_version integer[\s\S]*p_authorized_by text[\s\S]*p_retry_reason text/i);
+  assert.match(sql, /where d\.state='send_failed'[\s\S]*d\.id=p_draft_id[\s\S]*d\.inquiry_id=p_inquiry_id[\s\S]*d\.version=p_expected_version/i);
   assert.doesNotMatch(sql, /where d\.state in \('send_failed','delivery_unknown'\)/i);
-  assert.match(sql, /p_authorized_by text[\s\S]*p_reason text/i);
 });
 
 test('sync RPCs renew leases and reject expired ownership for all material writes and release paths', async () => {
@@ -342,4 +341,31 @@ test('all public Ops RPCs are service-role only and use a fixed safe search path
     assert.match(body, /set search_path = ''/i, name);
     assert.match(sql, new RegExp(`revoke all on function public\\.${name}\\(`, 'i'), `${name} revoke`);
   }
+});
+
+test('inbound reconciliation and import-run writes require the caller-owned lease token', async () => {
+  const sql = await readMigration();
+  const reconcile = sql.match(/create or replace function public\.reconcile_inbound_inquiry_message[\s\S]*?\$\$;/i)?.[0] ?? '';
+  const guard = sql.match(/create or replace function public\.guard_inquiry_sync_write[\s\S]*?\$\$;/i)?.[0] ?? '';
+  assert.match(reconcile, /p_lease_token uuid/i);
+  assert.match(reconcile, /sync\.lease_token = p_lease_token/i);
+  assert.match(reconcile, /sync\.lease_expires_at > clock_timestamp\(\)/i);
+  assert.doesNotMatch(guard, /select sync\.lease_token into new\.lease_token/i);
+  assert.match(guard, /require_inquiry_sync_lease\(new\.provider, new\.project_id, new\.gmail_account_email, new\.lease_token\)/i);
+});
+
+test('approved draft evidence cannot be recycled through rejected into an editable version', async () => {
+  const sql = await readMigration();
+  const guard = sql.match(/create or replace function public\.guard_inquiry_draft_transition[\s\S]*?\$\$;/i)?.[0] ?? '';
+  assert.match(guard, /old\.approved_at is not null/i);
+  assert.doesNotMatch(guard, /old\.state = 'approved' and new\.state in \('sending', 'rejected'/i);
+});
+
+test('draft creation rechecks idempotency after locking the inquiry', async () => {
+  const sql = await readMigration();
+  const createDraft = sql.match(/create or replace function public\.create_inquiry_draft[\s\S]*?\$\$;/i)?.[0] ?? '';
+  const lockAt = createDraft.search(/for update/i);
+  const checks = [...createDraft.matchAll(/d\.idempotency_key=p_idempotency_key/gi)].map((match) => match.index ?? -1);
+  assert.ok(lockAt >= 0);
+  assert.ok(checks.some((index) => index > lockAt), 'idempotency must be rechecked after the inquiry lock');
 });

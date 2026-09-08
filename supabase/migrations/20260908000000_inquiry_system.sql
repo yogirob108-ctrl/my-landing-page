@@ -365,13 +365,7 @@ begin
       );
     end if;
   elsif tg_table_name = 'inquiry_import_runs' then
-    if tg_op = 'UPDATE' then
-      select sync.lease_token into new.lease_token
-      from public.inquiry_sync_state sync
-      where sync.provider = lower(btrim(new.provider))
-        and sync.project_id = new.project_id
-        and sync.gmail_account_email = lower(btrim(new.gmail_account_email))
-        and sync.lease_expires_at > clock_timestamp();
+    if tg_op in ('INSERT', 'UPDATE') then
       perform public.require_inquiry_sync_lease(new.provider, new.project_id, new.gmail_account_email, new.lease_token);
     end if;
   end if;
@@ -436,7 +430,7 @@ begin
     return new;
   end if;
 
-  if old.state in ('approved', 'sending', 'delivery_unknown', 'send_failed', 'sent') and (
+  if (old.approved_at is not null or old.state in ('sending', 'delivery_unknown', 'send_failed', 'sent')) and (
     new.project_id is distinct from old.project_id
     or new.inquiry_id is distinct from old.inquiry_id
     or new.version is distinct from old.version
@@ -456,7 +450,7 @@ begin
     raise exception 'Reviewed draft content, recipients, and source evidence are immutable; create a new version' using errcode = '23514';
   end if;
 
-  if old.state in ('approved', 'sending', 'delivery_unknown', 'send_failed', 'sent') and (
+  if (old.approved_at is not null or old.state in ('sending', 'delivery_unknown', 'send_failed', 'sent')) and (
     new.reviewer is distinct from old.reviewer
     or new.review_notes is distinct from old.review_notes
     or new.submitted_for_review_at is distinct from old.submitted_for_review_at
@@ -469,7 +463,7 @@ begin
   if new.state is distinct from old.state and not (
     (old.state = 'draft' and new.state in ('pending_review', 'cancelled'))
     or (old.state = 'pending_review' and new.state in ('draft', 'approved', 'rejected', 'cancelled'))
-    or (old.state = 'approved' and new.state in ('sending', 'rejected', 'cancelled'))
+    or (old.state = 'approved' and new.state in ('sending', 'cancelled'))
     or (old.state = 'sending' and new.state in ('delivery_unknown', 'send_failed', 'sent'))
     or (old.state = 'delivery_unknown' and new.state in ('send_failed', 'sent'))
     or (old.state = 'send_failed' and new.state = 'approved')
@@ -685,6 +679,7 @@ $$;
 create or replace function public.reconcile_inbound_inquiry_message(
   p_project_id uuid,
   p_gmail_account_email text,
+  p_lease_token uuid,
   p_gmail_thread_id text,
   p_gmail_message_id text,
   p_contact_name text,
@@ -718,7 +713,7 @@ begin
   end if;
   select sync.lease_token into v_lease from public.inquiry_sync_state sync
   where sync.provider = 'gmail' and sync.project_id = p_project_id and sync.gmail_account_email = v_mailbox
-    and sync.lease_token is not null and sync.lease_expires_at > clock_timestamp()
+    and sync.lease_token = p_lease_token and sync.lease_expires_at > clock_timestamp()
   for update;
   if v_lease is null then
     raise exception 'An active scoped Gmail sync lease is required' using errcode = '55000';
@@ -795,6 +790,15 @@ begin
   select i.* into v_inquiry from public.inquiries i where i.id=p_inquiry_id and i.project_id=p_project_id
     and i.gmail_account_email=v_mailbox and i.status=p_expected_status for update;
   if not found or v_inquiry.status not in ('new','needs_review','drafted') then return; end if;
+  select d.* into v_draft from public.inquiry_drafts d where d.project_id=p_project_id and d.gmail_account_email=v_mailbox
+    and d.inquiry_id=p_inquiry_id and d.idempotency_key=p_idempotency_key;
+  if found then
+    if v_draft.subject=p_subject and v_draft.body_text=p_body_text and v_draft.to_emails=array[lower(btrim(p_to_email))]
+      and v_draft.in_reply_to=p_in_reply_to and v_draft.reference_message_ids=coalesce(p_reference_message_ids,'{}'::text[]) then
+      return query select v_draft.id,v_draft.inquiry_id,v_draft.version,v_draft.state::text,v_draft.subject,v_draft.body_text,v_draft.to_emails;
+    end if;
+    return;
+  end if;
   insert into public.inquiry_drafts(project_id,inquiry_id,version,state,subject,body_text,to_emails,created_by,gmail_account_email,
     gmail_thread_id,in_reply_to,reference_message_ids,idempotency_key)
   values(p_project_id,p_inquiry_id,(select coalesce(max(d.version),0)+1 from public.inquiry_drafts d where d.inquiry_id=p_inquiry_id),
@@ -1077,16 +1081,18 @@ end;
 $$;
 
 create or replace function public.authorize_inquiry_draft_retry(
-  p_project_id uuid, p_gmail_account_email text, p_draft_id uuid, p_authorized_by text, p_reason text
+  p_project_id uuid, p_gmail_account_email text, p_inquiry_id uuid, p_draft_id uuid, p_expected_version integer,
+  p_authorized_by text, p_retry_reason text
 )
 returns table (draft_id uuid, inquiry_id uuid, state text)
 language plpgsql security definer set search_path = '' as $$
 begin
-  if length(btrim(coalesce(p_authorized_by,'')))=0 or length(btrim(coalesce(p_reason,'')))=0 then
+  if length(btrim(coalesce(p_authorized_by,'')))=0 or length(btrim(coalesce(p_retry_reason,'')))=0 then
     raise exception 'Retry authorizer and reason are required' using errcode='22023'; end if;
   return query update public.inquiry_drafts d set state='approved',retry_authorized_by=btrim(p_authorized_by),
-    retry_authorized_at=clock_timestamp(),retry_reason=left(btrim(p_reason),1000),send_attempt_id=null,rfc_message_id=null,updated_at=clock_timestamp()
-  where d.state='send_failed' and d.id=p_draft_id and d.project_id=p_project_id and d.gmail_account_email=lower(btrim(p_gmail_account_email))
+    retry_authorized_at=clock_timestamp(),retry_reason=left(btrim(p_retry_reason),1000),send_attempt_id=null,rfc_message_id=null,updated_at=clock_timestamp()
+  where d.state='send_failed' and d.id=p_draft_id and d.inquiry_id=p_inquiry_id and d.version=p_expected_version
+    and d.project_id=p_project_id and d.gmail_account_email=lower(btrim(p_gmail_account_email))
   returning d.id,d.inquiry_id,d.state::text;
 end;
 $$;
@@ -1125,8 +1131,8 @@ revoke all on function public.finish_inquiry_sync(text,uuid,text,uuid,text) from
 grant execute on function public.finish_inquiry_sync(text,uuid,text,uuid,text) to service_role;
 revoke all on function public.release_inquiry_sync_failure(text,uuid,text,uuid) from public,anon,authenticated;
 grant execute on function public.release_inquiry_sync_failure(text,uuid,text,uuid) to service_role;
-revoke all on function public.reconcile_inbound_inquiry_message(uuid,text,text,text,text,text,text[],text[],text,text,jsonb,timestamptz,text,text,text,text) from public,anon,authenticated;
-grant execute on function public.reconcile_inbound_inquiry_message(uuid,text,text,text,text,text,text[],text[],text,text,jsonb,timestamptz,text,text,text,text) to service_role;
+revoke all on function public.reconcile_inbound_inquiry_message(uuid,text,uuid,text,text,text,text,text[],text[],text,text,jsonb,timestamptz,text,text,text,text) from public,anon,authenticated;
+grant execute on function public.reconcile_inbound_inquiry_message(uuid,text,uuid,text,text,text,text,text[],text[],text,text,jsonb,timestamptz,text,text,text,text) to service_role;
 revoke all on function public.create_inquiry_draft(uuid,text,uuid,public.inquiry_status,text,text,text,text,text,text[],text) from public,anon,authenticated;
 grant execute on function public.create_inquiry_draft(uuid,text,uuid,public.inquiry_status,text,text,text,text,text,text[],text) to service_role;
 revoke all on function public.save_inquiry_draft(uuid,text,uuid,uuid,integer,text,text,text) from public,anon,authenticated;
@@ -1157,8 +1163,8 @@ revoke all on function public.reconcile_inquiry_draft_send(uuid,text,uuid,text,t
 grant execute on function public.reconcile_inquiry_draft_send(uuid,text,uuid,text,text,text,text,text,text,jsonb) to service_role;
 revoke all on function public.reconcile_inquiry_draft_not_delivered(uuid,text,uuid,text,jsonb) from public,anon,authenticated;
 grant execute on function public.reconcile_inquiry_draft_not_delivered(uuid,text,uuid,text,jsonb) to service_role;
-revoke all on function public.authorize_inquiry_draft_retry(uuid,text,uuid,text,text) from public,anon,authenticated;
-grant execute on function public.authorize_inquiry_draft_retry(uuid,text,uuid,text,text) to service_role;
+revoke all on function public.authorize_inquiry_draft_retry(uuid,text,uuid,uuid,integer,text,text) from public,anon,authenticated;
+grant execute on function public.authorize_inquiry_draft_retry(uuid,text,uuid,uuid,integer,text,text) to service_role;
 
 alter table public.inquiries enable row level security;
 alter table public.inquiry_messages enable row level security;

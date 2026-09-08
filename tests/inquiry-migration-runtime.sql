@@ -17,6 +17,7 @@ declare
   v_inquiry2 uuid;
   v_draft uuid;
   v_draft2 uuid;
+  v_run uuid;
   v_claim record;
   v_row record;
   v_lease uuid := gen_random_uuid();
@@ -28,8 +29,32 @@ begin
   select * into v_row from public.claim_inquiry_sync('gmail', v_project, ' OPS@EXAMPLE.COM ', v_lease);
   if v_row.gmail_account_email <> 'ops@example.com' then raise exception 'mailbox was not normalized'; end if;
 
+  begin
+    perform * from public.reconcile_inbound_inquiry_message(
+      v_project, 'ops@example.com', gen_random_uuid(), 'wrong-token-thread', 'wrong-token-message', 'RPC Test', 'rpc@example.com',
+      array['ops@example.com'], array[]::text[], 'Wrong token', 'Must not persist', '{}', clock_timestamp(),
+      'import', 'dates', 'wrong-token-inquiry-key', 'wrong-token-message-key');
+    raise exception 'wrong-token inbound reconciliation was accepted';
+  exception when sqlstate '55000' then null;
+  end;
+
+  begin
+    insert into public.inquiry_import_runs(project_id, gmail_account_email, lease_token, idempotency_key, status, dry_run)
+    values(v_project, 'ops@example.com', gen_random_uuid(), 'wrong-token-run', 'running', false);
+    raise exception 'wrong-token import run was accepted';
+  exception when sqlstate '55000' then null;
+  end;
+  insert into public.inquiry_import_runs(project_id, gmail_account_email, lease_token, idempotency_key, status, dry_run)
+  values(v_project, 'ops@example.com', v_lease, 'owned-run', 'running', false) returning id into v_run;
+  begin
+    update public.inquiry_import_runs set lease_token=gen_random_uuid() where id=v_run;
+    raise exception 'wrong-token import run update was accepted';
+  exception when sqlstate '55000' then null;
+  end;
+  update public.inquiry_import_runs set status='completed', completed_at=clock_timestamp(), lease_token=v_lease where id=v_run;
+
   select * into v_row from public.reconcile_inbound_inquiry_message(
-    v_project, ' OPS@EXAMPLE.COM ', 'thread-1', 'message-1', 'RPC Test', 'rpc@example.com',
+    v_project, ' OPS@EXAMPLE.COM ', v_lease, 'thread-1', 'message-1', 'RPC Test', 'rpc@example.com',
     array['ops@example.com'], array[]::text[], 'Hello', 'Body', '{"message_id":"<incoming@example.com>"}',
     clock_timestamp(), 'import', 'dates', 'inquiry-key-1', 'message-key-1');
   v_inquiry := v_row.inquiry_id;
@@ -38,7 +63,7 @@ begin
   end if;
 
   select * into v_row from public.reconcile_inbound_inquiry_message(
-    v_project, 'ops@example.com', 'thread-1', 'message-1', 'Changed', 'rpc@example.com',
+    v_project, 'ops@example.com', v_lease, 'thread-1', 'message-1', 'Changed', 'rpc@example.com',
     array['ops@example.com'], array[]::text[], 'Changed', 'Changed', '{}', clock_timestamp(),
     'review', 'price', 'different-inquiry-key', 'different-message-key');
   if not v_row.duplicate or v_row.message_imported or v_row.inquiry_created or v_row.terminal_label <> 'imported' then
@@ -51,6 +76,11 @@ begin
   if not exists (select 1 from public.save_inquiry_draft(v_project, 'ops@example.com', v_inquiry, v_draft, 1, 'Re: Hello', 'Draft two', 'rpc@example.com')) then raise exception 'draft save failed'; end if;
   if not exists (select 1 from public.submit_inquiry_draft_for_review(v_project, 'ops@example.com', v_inquiry, v_draft, 1)) then raise exception 'submit failed'; end if;
   if not exists (select 1 from public.approve_inquiry_draft(v_project, 'ops@example.com', v_inquiry, v_draft, 1, 'reviewer')) then raise exception 'approve failed'; end if;
+  begin
+    update public.inquiry_drafts set state='rejected' where id=v_draft;
+    raise exception 'approved draft was recycled to rejected';
+  exception when check_violation then null;
+  end;
 
   select * into v_claim from public.claim_inquiry_draft_send(v_project, ' OPS@EXAMPLE.COM ', v_draft);
   if v_claim.state <> 'sending' or v_claim.send_attempt_id is null or v_claim.rfc_message_id !~ '^<inquiry-[0-9a-f-]+@ops\.8lakestours\.com>$' or cardinality(v_claim.references) <> 1 then raise exception 'claim evidence invalid'; end if;
@@ -65,7 +95,7 @@ begin
   if (select status from public.inquiries where id = v_inquiry) <> 'contacted' then raise exception 'finalization status invalid'; end if;
 
   select * into v_row from public.reconcile_inbound_inquiry_message(
-    v_project, 'ops@example.com', 'thread-1', 'message-1b', 'RPC Test', 'rpc@example.com',
+    v_project, 'ops@example.com', v_lease, 'thread-1', 'message-1b', 'RPC Test', 'rpc@example.com',
     array['ops@example.com'], array[]::text[], 'Re: Hello', 'Reply', '{}', clock_timestamp() + interval '1 second',
     'import', 'followup', 'inquiry-key-1', 'message-key-1b');
   if (select status from public.inquiries where id=v_inquiry) <> 'replied' then raise exception 'post-outbound inbound did not advance to replied'; end if;
@@ -86,12 +116,17 @@ begin
   end;
 
   select inquiry_id into v_inquiry2 from public.reconcile_inbound_inquiry_message(
-    v_project, 'ops@example.com', 'thread-2', 'message-2', 'RPC Test', 'rpc@example.com',
+    v_project, 'ops@example.com', v_lease, 'thread-2', 'message-2', 'RPC Test', 'rpc@example.com',
     array['ops@example.com'], array[]::text[], 'Second', 'Body', '{}', clock_timestamp(),
     'import', 'dates', 'inquiry-key-2', 'message-key-2');
   select id into v_draft2 from public.create_inquiry_draft(v_project, 'ops@example.com', v_inquiry2, 'new', 'Re: Second', 'Direct send', 'rpc@example.com', 'ops', '<second@example.com>', array['<second@example.com>'], 'draft-key-2');
   perform public.submit_inquiry_draft_for_review(v_project, 'ops@example.com', v_inquiry2, v_draft2, 1);
   perform public.approve_inquiry_draft(v_project, 'ops@example.com', v_inquiry2, v_draft2, 1, 'reviewer');
+  select * into v_claim from public.claim_inquiry_draft_send(v_project, 'ops@example.com', v_draft2);
+  if not exists (select 1 from public.record_inquiry_draft_send_failure(v_project, 'ops@example.com', v_draft2, v_claim.claim_token, 'pre-provider-test', 'Re: Second', 'Direct send')) then raise exception 'pre-provider failure was not recorded'; end if;
+  if exists (select 1 from public.authorize_inquiry_draft_retry(v_project, 'ops@example.com', v_inquiry, v_draft2, 1, 'reviewer', 'wrong inquiry')) then raise exception 'retry accepted wrong inquiry'; end if;
+  if exists (select 1 from public.authorize_inquiry_draft_retry(v_project, 'ops@example.com', v_inquiry2, v_draft2, 2, 'reviewer', 'stale version')) then raise exception 'retry accepted stale version'; end if;
+  if not exists (select 1 from public.authorize_inquiry_draft_retry(v_project, 'ops@example.com', v_inquiry2, v_draft2, 1, 'reviewer', 'verified pre-provider failure')) then raise exception 'retry authorization failed'; end if;
   select * into v_claim from public.claim_inquiry_draft_send(v_project, 'ops@example.com', v_draft2);
   if exists (select 1 from public.finalize_inquiry_draft_send(v_project, 'wrong@example.com', v_draft2, v_claim.claim_token, 'gmail', 'provider-message-2', 'thread-2', 'Re: Second', 'Direct send')) then raise exception 'wrong account finalization accepted'; end if;
   if not exists (select 1 from public.finalize_inquiry_draft_send(v_project, 'ops@example.com', v_draft2, v_claim.claim_token, 'gmail', 'provider-message-2', 'thread-2', 'Re: Second', 'Direct send')) then raise exception 'direct finalization failed'; end if;
