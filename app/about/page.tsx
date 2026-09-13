@@ -8,14 +8,14 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://www.8lakestours.com/about' },
   openGraph: {
     title: 'About 8 Lakes Tours',
-    description: 'Meet the people and host-family relationship behind this Mongolia horse trekking expedition.',
+    description: 'Meet the people and host-family relationship behind this Mongolian horse trekking expedition.',
     url: 'https://www.8lakestours.com/about',
     images: [{ url: '/images/og-8-lakes-about-2026.jpg', width: 1200, height: 630, alt: 'Robert Zaher with the Mongolian host family behind 8 Lakes Tours' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About 8 Lakes Tours',
-    description: 'Meet the people and host-family relationship behind this Mongolia horse trekking expedition.',
+    description: 'Meet the people and host-family relationship behind this Mongolian horse trekking expedition.',
     images: ['/images/og-8-lakes-about-2026.jpg'],
   },
   robots: { index: true, follow: true },

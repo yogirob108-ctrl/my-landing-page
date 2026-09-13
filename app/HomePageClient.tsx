@@ -666,8 +666,8 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
       {
         '@type': 'TouristTrip',
         '@id': 'https://www.8lakestours.com/#trip',
-        name: '8 Lakes Tours — Nomadic Horse Trek Mongolia',
-        description: '9-day immersive horseback trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
+        name: '8 Lakes Tours — 9-Day Mongolian Horse Trekking Expedition',
+        description: '9-day immersive Mongolian horse trekking expedition through the Naiman Nuur (Eight Lakes) region and Orkhon Valley, Mongolia, hosted by the Sandagdorj nomadic family.',
         url: 'https://www.8lakestours.com',
         mainEntityOfPage: 'https://www.8lakestours.com',
         inLanguage: 'en',
@@ -1405,11 +1405,11 @@ export default function Home({ tourDates }: { tourDates: TourDateOption[] }) {
         </div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <p className="hero-eyebrow">9 Days · Orkhon Valley & Eight Lakes · Mongolia</p>
+          <p className="hero-eyebrow">Mongolian Horse Trekking · Orkhon Valley &amp; Eight Lakes</p>
           <h1 className="hero-title">Ride Into the<br /><em>Endless Steppe</em></h1>
           <p className="hero-sub">
-            <span className="mobile-line">A 9-day small-group horseback expedition in Mongolia — hosted with nomadic families and open to beginner/intermediate riders.</span>
-            <span className="desktop-line">A 9-day small-group horseback expedition through Mongolia&apos;s Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and open to beginner/intermediate riders who want the real thing.</span>
+            <span className="mobile-line">A 9-day small-group Mongolian horse trekking expedition — hosted with nomadic families and open to beginner/intermediate riders.</span>
+            <span className="desktop-line">A 9-day small-group Mongolian horse trekking expedition through the Orkhon Valley and Eight Lakes region — hosted with nomadic families, guided by local horsemen, and open to beginner/intermediate riders who want the real thing.</span>
           </p>
           <div className="hero-actions">
             <a href="#application" className="btn-primary">Reserve Online</a>

@@ -1,6 +1,6 @@
 # 8 Lakes Tours — Complete AI Reference
 
-8 Lakes Tours is a small-group horse trekking expedition in Mongolia. The trip is designed for travellers who want a real nomadic-family experience rather than a standard packaged tour.
+8 Lakes Tours is a small-group Mongolian horse trekking expedition in Mongolia. The trip is designed for travellers who want a real nomadic-family experience rather than a standard packaged tour.
 
 ## Core description
 

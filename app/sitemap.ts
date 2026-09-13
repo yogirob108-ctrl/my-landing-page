@@ -16,17 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         `${siteUrl}/images/rob-family.jpg`,
         `${siteUrl}/images/rob-zaher.jpg`,
         `${siteUrl}/images/lake.jpg`,
-      ],
-    },
-    {
-      url: `${siteUrl}/horse-trekking-mongolia`,
-      lastModified: new Date('2026-08-12'),
-      changeFrequency: 'weekly',
-      priority: 0.95,
-      images: [
-        `${siteUrl}/images/og-8-lakes-horseback-2026.jpg`,
         `${siteUrl}/images/gallery-extra/horseback-storm-valley-pov.jpg`,
-        `${siteUrl}/images/rob-family.jpg`,
       ],
     },
     {

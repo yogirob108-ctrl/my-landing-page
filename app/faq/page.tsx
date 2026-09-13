@@ -5,18 +5,18 @@ import FaqAccordion from './FaqAccordion';
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description: 'Frequently asked questions about 8 Lakes Tours, Mongolia horse trekking, pricing, cash payments to nomadic host families, insurance, and booking.',
+  description: 'Frequently asked questions about 8 Lakes Tours, Mongolian horse trekking, pricing, cash payments to nomadic host families, insurance, and booking.',
   alternates: { canonical: 'https://www.8lakestours.com/faq' },
   openGraph: {
     title: '8 Lakes Tours FAQ',
-    description: 'Answers about Mongolia horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
+    description: 'Answers about Mongolian horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
     url: 'https://www.8lakestours.com/faq',
     images: [{ url: '/images/og-8-lakes-horseback-2026.jpg', width: 1200, height: 630, alt: '8 Lakes Tours Mongolia horseback expedition' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '8 Lakes Tours FAQ',
-    description: 'Answers about Mongolia horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
+    description: 'Answers about Mongolian horse trekking dates, payment split, insurance, riding experience, food, safety, and booking.',
     images: ['/images/og-8-lakes-horseback-2026.jpg'],
   },
   robots: { index: true, follow: true },
@@ -77,7 +77,7 @@ export default function Page() {
       <div style={wrapperStyle}>
         <p style={eyebrowStyle}>FAQ</p>
         <h1 style={h1Style}>Common Questions</h1>
-        <p style={{...pStyle, fontSize: '1.05rem'}}>Clear answers for travellers comparing Mongolia horse trekking trips, checking payment structure, or asking an AI assistant to explain 8 Lakes Tours.</p>
+        <p style={{...pStyle, fontSize: '1.05rem'}}>Clear answers for travellers comparing Mongolian horse trekking trips, checking payment structure, or asking an AI assistant to explain 8 Lakes Tours.</p>
         <FaqAccordion items={FAQ_ITEMS} />
       </div>
       <footer style={footerStyle}>

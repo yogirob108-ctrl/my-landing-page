@@ -32,15 +32,18 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.8lakestours.com"),
   applicationName: "8 Lakes Tours",
   title: {
-    default: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
+    default: "Mongolian Horse Trekking in the Eight Lakes | 8 Lakes Tours",
     template: "%s | 8 Lakes Tours",
   },
-  description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Ride with a nomadic family, sleep in traditional gers, and experience the real Mongolian steppe.",
+  description: "A 9-day Mongolian horse trekking expedition through the Eight Lakes and Orkhon Valley — ride with a nomadic host family, sleep in traditional gers. Beginners welcome.",
   authors: [{ name: "8 Lakes Tours", url: "https://www.8lakestours.com" }],
   creator: "8 Lakes Tours",
   publisher: "8 Lakes Tours",
   category: "Adventure Travel",
   keywords: [
+    "Mongolian horse trekking",
+    "Mongolian horse trekking tour",
+    "horse trekking Mongolia",
     "Mongolia horse trekking",
     "Naiman Nuur tour",
     "Eight Lakes Mongolia",
@@ -68,8 +71,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
-    description: "Ride through the Naiman Nuur region and Orkhon Valley on a 9-day immersive journey hosted by a Mongolian nomadic family. Ethical, authentic, unforgettable.",
+    title: "Mongolian Horse Trekking in the Eight Lakes | 8 Lakes Tours",
+    description: "Mongolian horse trekking through the Naiman Nuur region and Orkhon Valley on a 9-day immersive journey hosted by a Mongolian nomadic family. Ethical, authentic, unforgettable.",
     type: "website",
     locale: "en_US",
     url: "https://www.8lakestours.com",
@@ -85,8 +88,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "8 Lakes Tours | Nomadic Horse Trekking in Mongolia",
-    description: "9-day horse trekking expedition through Mongolia's Eight Lakes region. Stay with a nomadic family, ride the steppe, experience real Mongolian life.",
+    title: "Mongolian Horse Trekking in the Eight Lakes | 8 Lakes Tours",
+    description: "A 9-day Mongolian horse trekking expedition through Mongolia's Eight Lakes region. Stay with a nomadic family, ride the steppe, experience real Mongolian life.",
     images: ["/images/og-8-lakes-horseback-2026.jpg"],
   },
   icons: {

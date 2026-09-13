@@ -4,18 +4,18 @@ import SiteNav from '../components/SiteNav';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Contact 8 Lakes Tours for Mongolia horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
+  description: 'Contact 8 Lakes Tours for Mongolian horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
   alternates: { canonical: 'https://www.8lakestours.com/contact' },
   openGraph: {
     title: 'Contact 8 Lakes Tours',
-    description: 'Ask about Mongolia horse trekking dates, private groups, payment, insurance, and trip preparation.',
+    description: 'Ask about Mongolian horse trekking dates, private groups, payment, insurance, and trip preparation.',
     url: 'https://www.8lakestours.com/contact',
     images: [{ url: '/images/og-8-lakes-horseback-2026.jpg', width: 1200, height: 630, alt: '8 Lakes Tours Mongolia horseback expedition' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Contact 8 Lakes Tours',
-    description: 'Ask about Mongolia horse trekking dates, private groups, payment, insurance, and trip preparation.',
+    description: 'Ask about Mongolian horse trekking dates, private groups, payment, insurance, and trip preparation.',
     images: ['/images/og-8-lakes-horseback-2026.jpg'],
   },
   robots: { index: true, follow: true },
@@ -37,7 +37,7 @@ export default function Page() {
     '@id': 'https://www.8lakestours.com/contact#contact-page',
     url: 'https://www.8lakestours.com/contact',
     name: 'Contact 8 Lakes Tours',
-    description: 'Contact 8 Lakes Tours for Mongolia horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
+    description: 'Contact 8 Lakes Tours for Mongolian horse trekking booking questions, group dates, payment questions, and pre-trip planning.',
     inLanguage: 'en',
     mainEntity: {
       '@type': ['Organization', 'TravelAgency'],

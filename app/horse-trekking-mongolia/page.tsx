@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Mongolia Horse Trekking | 9-Day Eight Lakes Expedition',
   description: 'Ride Mongolia’s Orkhon Valley and Naiman Nuur on a 9-day small-group horse trek with local horsemen and a nomadic host family. Beginners welcome. 2027 interest and private departures open by request.',
   alternates: { canonical },
+  // Paid-search landing page: live for Google Ads, kept out of the organic index so it
+  // does not compete with the homepage for "Mongolian horse trekking".
+  robots: { index: false, follow: true },
   openGraph: {
     title: '9-Day Mongolia Horse Trekking Expedition | 8 Lakes Tours',
     description: 'A small-group horse trek through the Orkhon Valley and Eight Lakes, hosted with a Mongolian nomadic family.',
@@ -198,6 +201,7 @@ export default function HorseTrekkingMongoliaPage() {
       <footer className={styles.footer}>
         <div><strong>8 Lakes Tours</strong><span>Horse trekking through Mongolia’s Orkhon Valley and Eight Lakes.</span></div>
         <nav aria-label="Landing page footer">
+          <Link href="/">Mongolian horse trekking</Link>
           <Link href="/about">About</Link>
           <Link href="/preparation">Preparation</Link>
           <Link href="/terms">Terms</Link>
